@@ -28,4 +28,4 @@ replay_pid*
 
 # Ignore Gradle build output directory
 build
-lib/bin/main/darts/automation/Library.class
+lib/bin/*
