@@ -20,7 +20,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -42,7 +41,6 @@ public class NavigationShared {
 
 	public NavigationShared(WebDriver driver) {
 		NavigationShared.driver = driver;
-		PageFactory.initElements(driver, this);
 		wait = new WaitUtils(driver);
 		GU = new GenUtils(driver);
 		log.info("Instance count: " + ++instanceCount);
@@ -135,30 +133,29 @@ public class NavigationShared {
 
 		switch (button) {
 		case "forward":
+			log.info("Pressing the browser forward button");
 			driver.navigate().forward();
-			log.info("Pressed forward button on browser");
 			waitForBrowserReadyState();
 			break;
 		case "backward":
+			log.info("Pressing the browser back button");
 			driver.navigate().back();
-			log.info("Pressed backward button on browser");
 			waitForBrowserReadyState();
 			break;
 		case "back":
+			log.info("Pressing back button on browser");
 			driver.navigate().back();
-			log.info("Pressed back button on browser");
 			waitForBrowserReadyState();
 			break;
 		case "refresh":
+			log.info("Refreshing the browser");
 			driver.navigate().refresh();
-			log.info("Refreshed the browser");
 			waitForBrowserReadyState();
 			break;
 		default:
 			throw new Error("You did not give me an expected value. I received =>" + button);
 		}
 
-//		return new NavigationShared(driver);
 		return this;
 	}
 
@@ -1432,7 +1429,7 @@ public class NavigationShared {
 			endKey = Keys.TAB;
 		} catch (Exception e) {
 			log.info("filter not found - try search");
-			searchInput = driver.findElement(By.xpath("//*[@id='searchBox'] | //*[@placeholder='Search...']"));
+			searchInput = driver.findElement(By.xpath("//*[@id='searchBox'] | //*[@placeholder='Search case...']"));
 			log.info("search found");
 			endKey = Keys.ENTER;
 		}
@@ -2052,10 +2049,7 @@ public class NavigationShared {
 
 
 	public void text_hasClass(String text, String className) {
-		wait.activateImplicitWait();
 		driver.findElement(By.xpath("//*[text()[contains(.,'"+text+"')] and contains(@class, '"+className+"')]"));		
-		wait.deactivateImplicitWait();  
-		////*[text()[contains(.,'1. User Details')] and contains(@class, 'completed')]")
 		
 		log.info("Found li element which has text =>"+text+"<= with class =>"+className);
 	}
