@@ -9,34 +9,8 @@ properties([
 
 def type = "java"
 def product = "darts"
-def component = "api"
-
-def secrets = [
-  'darts-${env}': [
-    secret('GovukNotifyTestApiKey', 'GOVUK_NOTIFY_API_KEY'),
-    secret('app-insights-connection-string', 'app-insights-connection-string'),
-    secret('AzureAdB2CTenantIdKey', 'AAD_B2C_TENANT_ID_KEY'),
-    secret('AzureAdB2CClientIdKey', 'AAD_B2C_CLIENT_ID_KEY'),
-    secret('AzureAdB2CClientSecretKey', 'AAD_B2C_CLIENT_SECRET_KEY'),
-    secret('api-FUNC-TEST-ROPC-USERNAME', 'FUNC_TEST_ROPC_USERNAME'),
-    secret('api-FUNC-TEST-ROPC-PASSWORD', 'FUNC_TEST_ROPC_PASSWORD')
-  ],
-]
-
-static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
-  [$class     : 'AzureKeyVaultSecret',
-   secretType : 'Secret',
-   name       : secretName,
-   version    : '',
-   envVariable: envVar
-  ]
-}
+def component = "automation"
 
 withNightlyPipeline(type, product, component) {
-  loadVaultSecrets(secrets)
   enableSlackNotifications('#darts-builds')
-
-   afterAlways('test') {
-    builder.gradle('jacocoTestReport')
-  }
 }

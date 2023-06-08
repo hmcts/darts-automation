@@ -2,10 +2,11 @@
 //noinspection GroovyUnusedAssignment
 @Library("Infrastructure") 
 
+def type = "java"
 def product = "darts"
 def component = "automation"
 
 
-withInfraPipeline(product, compnent) {
+withInfraPipeline(type, product, compnent) {
       enableSlackNotifications('#darts-builds')
 }
