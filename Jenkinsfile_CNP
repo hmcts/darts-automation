@@ -9,6 +9,6 @@ def product = "darts"
 def component = "automation"
 
 
-withInfraPipeline(type, product, compnent) {
+withInfraPipeline(type, product, component) {
       enableSlackNotifications('#darts-builds')
 }
