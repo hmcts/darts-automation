@@ -1,0 +1,8 @@
+java:
+  applicationPort: 4550
+  image: 'sdshmctspublic.azurecr.io/darts/automation:latest'
+  ingressHost: darts-automation.{{ .Values.global.environment }}.platform.hmcts.net
+  aadIdentityName: darts
+  
+
+
