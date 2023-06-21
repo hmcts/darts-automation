@@ -44,7 +44,7 @@ Examples:
 |externaluser1@gmail.com	|Password1!	|07911123456	|
 
 @DMP-455 @DMP-361 @DMP-435 @DMP-436 @DMP-451 @DMP-452
-Scenario Outline: External user logs in second time
+Scenario Outline: External user logs in second time/subsequent logins
 
 	Given I am on the landing page
 	When I see "Sign in the the DARTS Portal" on the page
