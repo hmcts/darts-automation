@@ -13,7 +13,7 @@ import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SharedDriver;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
-import uk.gov.hmcts.darts.automation.pageObjects.Portal;
+//import uk.gov.hmcts.darts.automation.pageObjects.Portal;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +22,7 @@ public class StepDef_portal extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_portal");
 //	private final WebDriver webDriver;
-	private Portal portal;
+//	private Portal portal;
 	
 	
 	public StepDef_portal(SharedDriver driver, NavigationShared ns) {
