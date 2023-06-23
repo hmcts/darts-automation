@@ -33,3 +33,10 @@ lib/bin/*
 
 #Ignore results
 lib/target/*
+
+### IntelliJ IDEA ###
+.idea
+/out
+*.iws
+*.iml
+*.ipr
