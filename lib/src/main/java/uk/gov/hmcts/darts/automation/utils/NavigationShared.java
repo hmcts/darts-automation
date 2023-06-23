@@ -63,7 +63,7 @@ public class NavigationShared {
 	 */
 	public boolean textIsPresentOnPage(String expected_text) throws Exception {
 		log.info("About to look for Expected Text =>" + expected_text);
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		String substitutedValue = DateUtils.substituteValue(expected_text);
 		String bodyText = driver.findElement(By.tagName("body")).getText();
 		boolean found = bodyText.contains(substitutedValue);
@@ -86,11 +86,11 @@ public class NavigationShared {
 	 */
 	public NavigationShared textPresentOnPage(String expected_text) throws Exception {
 		log.info("About to look for Expected Text =>" + expected_text);
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		String substitutedValue = DateUtils.substituteValue(expected_text);
-		String bodyText = driver.findElement(By.tagName("body")).getText();
+		int textCount = driver.findElements(By.xpath("//body[contains(normalize-space(.),\"" + substitutedValue +  "\")]")).size();
 		try {
-			Assertions.assertTrue(bodyText.contains(substitutedValue), "Text not found!");
+			Assertions.assertTrue(textCount > 0, "Text not found!");
 		} catch (AssertionError e) { // Refactor this
 			log.info("Did not find text in initial run, waiting for up to 10 seconds for text to appear");
 			try {
@@ -98,7 +98,7 @@ public class NavigationShared {
 			} catch (Exception eb) {
 				log.info("Exception on wait for page... Trying to continue to get caught by Assertions.");
 			}
-			bodyText = driver.findElement(By.tagName("body")).getText();
+			String bodyText = driver.findElement(By.tagName("body")).getText();
 			Assertions.assertTrue(bodyText.contains(expected_text), "Text not found! Expected =>" + substitutedValue);
 		}
 
@@ -109,7 +109,7 @@ public class NavigationShared {
 
 	public NavigationShared textNotPresentOnPage(String not_expected) throws Exception {
 		log.info("About to look for unexpected Text =>" + not_expected); 
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		String substitutedValue = DateUtils.substituteValue(not_expected);
 
 		String bodyText = driver.findElement(By.tagName("body")).getText();
@@ -428,7 +428,7 @@ public class NavigationShared {
 
 	public NavigationShared set_valueTo(String location_name1, String location_name2, String value) throws Exception {
 		log.info("About to Set input field with labels =>" + location_name1 + "<=>"+ location_name2 + "<= to =>" + value);
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		WebElement inputField = null;
 		try {
 			String xpathBit = "./descendant-or-self::*[text()[(normalize-space(.)=\"%s\")]]";
@@ -476,7 +476,7 @@ public class NavigationShared {
 
 	public WebElement findInputFieldByLabelText(String labelText) throws Exception {
 		WebElement targetElement = null;
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		try {
 			targetElement = find_inputBy_labelName(labelText);
 		} catch (Exception e) {
@@ -527,7 +527,7 @@ public class NavigationShared {
 
 	public NavigationShared set_select_valueTo(String location_name, String value) throws Exception {
 
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		WebElement childField;
 		try {
 			childField = find_inputBy_labelName(location_name);
@@ -583,7 +583,7 @@ public class NavigationShared {
 
 	public WebElement press_buttonByName(String button_name) throws Exception {
 		log.info("About to click on button =>" + button_name);
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		WebElement button = null;
 		
 		List<WebElement> buttons = driver.findElements(By.xpath(
@@ -678,7 +678,7 @@ public class NavigationShared {
 	public WebElement check_checkbox(String location_name) {
 		log.info("About to check checkbox if already not checked");
 		WebElement checkbox = null;
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		try {
 			checkbox = find_inputBy_labelName(location_name);
 			checkbox.click();
@@ -816,12 +816,12 @@ public class NavigationShared {
 			.until(ExpectedConditions.invisibilityOfElementLocated(by));
 	}
 
-	public void invisibilityOfElement() {
+	public void waitForLoadingIcon() {
 		// Assumed spinner
-		invisibilityOfElement(120);
+		waitForLoadingIcon(120);
 	}
 
-	public void invisibilityOfElement(int waitTime) {
+	public void waitForLoadingIcon(int waitTime) {
 		// Assumed spinner
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(waitTime));
 		invisibilityOfElement(By.cssSelector(LOADING_ICON_LOCATION), wait);
@@ -857,29 +857,6 @@ public class NavigationShared {
 			log.warn("Timed out waiting for ready state");
 		}
 	}
-/*
-	public void waitForAngularLoad() throws InterruptedException {
-		WebDriverWait wait = new WebDriverWait(driver, 15);
-		JavascriptExecutor jsExec = (JavascriptExecutor) driver;
-		try {
-			String angularReadyScript = "return angular.element(document).injector().get('$http').pendingRequests.length === 0";
-
-			ExpectedCondition<Boolean> angularLoad = driver -> Boolean
-					.valueOf(((JavascriptExecutor) driver).executeScript(angularReadyScript).toString());
-
-			boolean angularReady = Boolean.valueOf(jsExec.executeScript(angularReadyScript).toString());
-
-			if (!angularReady) {
-				Thread.sleep(10);
-				wait.until(angularLoad);
-			}
-			log.info("Page Loaded");
-		} catch (Exception e) {
-			log.info("Something went wrong when checking if Angular has loaded... Ignoring for now");
-		}
-
-	}
-*/
 	
 	public WebElement clickLink(WebElement link, String label) {
 		wait.waitForClickableElement(link);
@@ -925,7 +902,7 @@ public class NavigationShared {
 //		} catch (Exception e) {
 //			// pass
 //		}
-		invisibilityOfElement(15);
+		waitForLoadingIcon(15);
 		WebElement linkText;
 		try {
 			// linkText = driver.findElement(By.linkText(arg1));
@@ -997,7 +974,7 @@ public class NavigationShared {
 	public void linkText_visible(String arg1, boolean isExpected) {
 		log.info("Going to check whether link text =>" + arg1 + "<= is present on the page");
 		wait.deactivateImplicitWait();
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		boolean isVisible;
 		WebElement link;
 		try {
@@ -1222,7 +1199,7 @@ public class NavigationShared {
  */
 
 	public void tableRow_isChecked_byColumn(String expectedColumnValue, String expectedColumnName, String expectedState) throws Exception {
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		log.info("Going to check row =>" + expectedColumnValue + "<= column =>" + expectedColumnName
 				+ "<= to see whether there is something inside - expected =>" + expectedState);
 
@@ -1313,7 +1290,7 @@ public class NavigationShared {
 	}
 
 	public void tableRowsAreChecked_byColumn(String expectedColumnValues, String expectedColumnName) throws Exception {
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		String [] expectedColumnValueArray = expectedColumnValues.split(",");
 		if (expectedColumnValueArray.length == 0) 
 			return;
@@ -1598,7 +1575,7 @@ public class NavigationShared {
 	}
 
 	public void select_fromDropdown(String option) throws Exception {
-		invisibilityOfElement();
+		waitForLoadingIcon();
 		List<WebElement> dropdowns = driver.findElements(By.cssSelector("select"));
 		WebElement dropdown = return_oneVisibleFromList(dropdowns);
 

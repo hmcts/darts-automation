@@ -35,6 +35,11 @@ public class StepDef_portal extends StepDef_base {
 		NAV.navigateToUrl(ReadProperties.main("staging_url"));
 	}
 	
+	@Given("^I am on the landing page$")
+	public void onLandingPage() throws Exception {
+		NAV.navigateToUrl(ReadProperties.main("staging_url"));
+	}
+	
 //	@When("^I click the search button$")
 //	public void clickTheSearchButton() throws Exception {
 //		portal.clickTheSearchButton();
