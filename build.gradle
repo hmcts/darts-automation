@@ -1,16 +1,6 @@
 plugins {
-  id 'application'
-  id 'checkstyle'
-  id 'pmd'
-  id 'jacoco'
-  id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.springframework.boot' version '3.1.1'
-  id 'org.owasp.dependencycheck' version '8.3.1'
-  id 'com.github.ben-manes.versions' version '0.47.0'
-  id 'org.sonarqube' version '4.2.1.3168'
-  id "io.freefair.lombok" version "8.0.1"
-  id "org.openapi.generator" version "6.6.0"
-  id "org.flywaydb.flyway" version "9.20.0"
+    // Apply the java-library plugin for API and implementation separation.
+    id 'java-library'
 }
 
 group = 'uk.gov.hmcts'
@@ -22,38 +12,38 @@ java {
   }
 }
 
-sourceSets {
-  main {
-    java.srcDirs += 'build/generated/openapi/src/main/java'
-  }
+// sourceSets {
+//   main {
+//     java.srcDirs += 'build/generated/openapi/src/main/java'
+//   }
 
-  functionalTest {
-    java {
-      compileClasspath += main.output
-      runtimeClasspath += main.output
-      srcDir file('src/functionalTest/java')
-    }
-    resources.srcDir file('src/functionalTest/resources')
-  }
+//   functionalTest {
+//     java {
+//       compileClasspath += main.output
+//       runtimeClasspath += main.output
+//       srcDir file('src/functionalTest/java')
+//     }
+//     resources.srcDir file('src/functionalTest/resources')
+//   }
 
-  integrationTest {
-    java {
-      compileClasspath += main.output
-      runtimeClasspath += main.output
-      srcDir file('src/integrationTest/java')
-    }
-    resources.srcDir file('src/integrationTest/resources')
-  }
+//   integrationTest {
+//     java {
+//       compileClasspath += main.output
+//       runtimeClasspath += main.output
+//       srcDir file('src/integrationTest/java')
+//     }
+//     resources.srcDir file('src/integrationTest/resources')
+//   }
 
-  smokeTest {
-    java {
-      compileClasspath += main.output
-      runtimeClasspath += main.output
-      srcDir file('src/smokeTest/java')
-    }
-    resources.srcDir file('src/smokeTest/resources')
-  }
-}
+//   smokeTest {
+//     java {
+//       compileClasspath += main.output
+//       runtimeClasspath += main.output
+//       srcDir file('src/smokeTest/java')
+//     }
+//     resources.srcDir file('src/smokeTest/resources')
+//   }
+// }
 
 configurations {
   functionalTestImplementation.extendsFrom testImplementation
@@ -92,20 +82,6 @@ task functional(type: Test) {
   group = "Verification"
   testClassesDirs = sourceSets.functionalTest.output.classesDirs
   classpath = sourceSets.functionalTest.runtimeClasspath
-}
-
-task integration(type: Test) {
-  description = "Runs integration tests"
-  group = "Verification"
-  testClassesDirs = sourceSets.integrationTest.output.classesDirs
-  classpath = sourceSets.integrationTest.runtimeClasspath
-  failFast = true
-}
-
-task smoke(type: Test) {
-  description = "Runs Smoke Tests"
-  testClassesDirs = sourceSets.smokeTest.output.classesDirs
-  classpath = sourceSets.smokeTest.runtimeClasspath
 }
 
 checkstyle {
@@ -200,105 +176,60 @@ ext['snakeyaml.version'] = '2.0'
 ext['spring-security.version'] = '6.0.3' // https://spring.io/security/cve-2023-20862
 
 
-
-
-
-
 dependencies {
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 
-  implementation group: 'org.springframework.security', name: 'spring-security-oauth2-authorization-server', version: '1.1.1'
+	implementation(platform("org.apache.logging.log4j:log4j-bom:2.20.0"))
+	implementation 'org.apache.logging.log4j:log4j-api'
+	implementation 'org.apache.logging.log4j:log4j-core'
+//	testImplementation 'org.apache.logging.log4j:log4j-slf4j2-impl'
+	
+	implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
+	
+	implementation(platform("io.cucumber:cucumber-bom:7.12.1"))
+	implementation 'io.cucumber:cucumber-picocontainer'
+	implementation 'io.cucumber:cucumber-java'
+	implementation 'io.cucumber:cucumber-junit'
+	implementation 'io.cucumber:cucumber-core'
+	implementation 'io.cucumber:cucumber-junit-platform-engine'
+	implementation 'io.cucumber:cucumber-gherkin'
+	
+//	implementation(platform("org.hamcrest:hamcrest-bom:2.2"))
+	implementation "org.hamcrest:hamcrest:2.2"
+	implementation "org.hamcrest:hamcrest-core:2.2"
+	
+    implementation 'commons-io:commons-io:2.13.0'
 
-  implementation group: 'commons-io', name: 'commons-io', version: '2.13.0'
-  implementation 'org.apache.commons:commons-collections4:4.4'
-  implementation 'commons-validator:commons-validator:1.7'
-  implementation 'javax.annotation:javax.annotation-api:1.3.2'
-  implementation 'javax.validation:validation-api:2.0.1.Final'
-  compileOnly 'javax.servlet:servlet-api:2.5'
-  implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+	implementation(platform("org.junit:junit-bom:5.9.3"))
+	runtimeOnly    "org.junit.platform:junit-platform-launcher"
+	implementation "org.junit.platform:junit-platform-suite"
+	implementation "org.junit.jupiter:junit-jupiter-api"
+	implementation "org.junit.jupiter:junit-jupiter-engine"
+	implementation "org.junit.jupiter:junit-jupiter"
 
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.3'
+//	implementation "org.slf4j:slf4j-api:2.0.7"
+//	implementation "org.slf4j:slf4j-simple:2.0.7"
+//	implementation "org.slf4j:log4j-over-slf4j:2.0.7"
+	
+	implementation group: 'com.opencsv', name: 'opencsv', version: '5.7.1'
+	
+	implementation group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.19.0.0'	
+	
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
+	
+	// Rest assured
+	implementation 'io.rest-assured:rest-assured:5.3.1'
+	
+  // Use JUnit Jupiter for testing.
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
 
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '6.0.1'
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
-  implementation group: 'org.apache.commons', name: 'commons-exec', version: '1.3'
+  // This dependency is exported to consumers, that is to say found on their compile classpath.
+  api 'org.apache.commons:commons-math3:3.6.1'
 
-  implementation group: 'io.rest-assured', name: 'rest-assured'
-  implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.20.0'
-
-  //database
-  implementation 'org.postgresql:postgresql:42.6.0'
-  runtimeOnly 'org.hsqldb:hsqldb'
-
-  testImplementation 'com.h2database:h2:2.1.214'
-  testImplementation(platform('org.junit:junit-bom:5.9.3'))
-  testImplementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
-  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
-    exclude group: 'junit', module: 'junit'
-    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-  }
-  testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-stub-runner', version: '4.0.3'
-
-  
+  // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+  implementation 'com.google.guava:guava:32.0.1-jre'
 }
 
-mainClassName = 'uk.gov.hmcts.darts.Application'
-
-bootJar {
-  archiveFileName = "darts-api.jar"
-
-  manifest {
-    attributes('Implementation-Version': project.version.toString())
-  }
-}
-
-// Gradle 7.x issue, workaround from: https://github.com/gradle/gradle/issues/17236#issuecomment-894768083
-rootProject.tasks.named("processSmokeTestResources") {
-  duplicatesStrategy = 'include'
-}
-
-rootProject.tasks.named("processFunctionalTestResources") {
-  duplicatesStrategy = 'include'
-}
-
-rootProject.tasks.named("processIntegrationTestResources") {
-  duplicatesStrategy = 'include'
-}
 
 wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
-
-flyway {
-  url = System.getenv('FLYWAY_URL')
-  user = System.getenv('FLYWAY_USER')
-  password = System.getenv('FLYWAY_PASSWORD')
-  baselineOnMigrate = true
-  baselineVersion = '000'
-  cleanDisabled = false
-}
-
-task cleanPostgresDatabase(type: org.flywaydb.gradle.task.FlywayCleanTask) {
-  if (project.hasProperty("dburl")) {
-    url = "jdbc:postgresql://${dburl}"
-  }
-}
-
-task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
-  baselineOnMigrate = true
-  if (project.hasProperty("dburl")) {
-    url = "jdbc:postgresql://${dburl}"
-  }
-}
-
-migratePostgresDatabase.dependsOn cleanPostgresDatabase
