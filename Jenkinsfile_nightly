@@ -5,7 +5,6 @@ properties([
   pipelineTriggers([cron('H 05 * * 1-5')])
 ])
 
-
 @Library("Infrastructure")
 
 def type = "java"
@@ -13,5 +12,7 @@ def product = "darts"
 def component = "automation"
 
 withNightlyPipeline(product) {
+  nonServiceApp()
   enableSlackNotifications('#darts-builds')
+  enableFullFunctionalTest()
 }

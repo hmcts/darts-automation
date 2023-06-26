@@ -8,7 +8,7 @@ def type = "java"
 def product = "darts"
 def component = "automation"
 
-
 withPipeline(type, product, component) {
-      enableSlackNotifications('#darts-builds')
+  nonServiceApp()
+  enableSlackNotifications('#darts-builds')
 }
