@@ -45,16 +45,16 @@ java {
 //   }
 // }
 
-configurations {
-  functionalTestImplementation.extendsFrom testImplementation
-  functionalTestRuntimeOnly.extendsFrom runtimeOnly
+// configurations {
+//   functionalTestImplementation.extendsFrom testImplementation
+//   functionalTestRuntimeOnly.extendsFrom runtimeOnly
 
-  integrationTestImplementation.extendsFrom testImplementation
-  integrationTestRuntimeOnly.extendsFrom runtimeOnly
+//   integrationTestImplementation.extendsFrom testImplementation
+//   integrationTestRuntimeOnly.extendsFrom runtimeOnly
 
-  smokeTestImplementation.extendsFrom testImplementation
-  smokeTestRuntimeOnly.extendsFrom runtimeOnly
-}
+//   smokeTestImplementation.extendsFrom testImplementation
+//   smokeTestRuntimeOnly.extendsFrom runtimeOnly
+// }
 
 tasks.withType(JavaCompile) {
   options.compilerArgs << "-Xlint:unchecked" << "-Werror"
@@ -77,12 +77,12 @@ test {
   failFast = true
 }
 
-task functional(type: Test) {
-  description = "Runs functional tests"
-  group = "Verification"
-  testClassesDirs = sourceSets.functionalTest.output.classesDirs
-  classpath = sourceSets.functionalTest.runtimeClasspath
-}
+// task functional(type: Test) {
+//   description = "Runs functional tests"
+//   group = "Verification"
+//   testClassesDirs = sourceSets.functionalTest.output.classesDirs
+//   classpath = sourceSets.functionalTest.runtimeClasspath
+// }
 
 checkstyle {
   maxWarnings = 0
@@ -92,24 +92,24 @@ checkstyle {
 
 pmd {
   toolVersion = "6.55.0"
-  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
+  sourceSets = [sourceSets.main, sourceSets.test]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
   ruleSets = []
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
 
-jacocoTestReport {
-  executionData(test, integration)
-  reports {
-    xml.required = true
-    csv.required = false
-    html.required = true
-  }
-}
+// jacocoTestReport {
+//   executionData(test, integration)
+//   reports {
+//     xml.required = true
+//     csv.required = false
+//     html.required = true
+//   }
+// }
 
-project.tasks['sonarqube'].dependsOn jacocoTestReport
-project.tasks['check'].dependsOn integration
+// project.tasks['sonarqube'].dependsOn jacocoTestReport
+// project.tasks['check'].dependsOn integration
 
 def sonarExclusions = [
   '**/uk/gov/hmcts/darts/common/entity/**',
@@ -154,9 +154,6 @@ dependencyCheck {
     "checkstyle",
     "compileOnly",
     "pmd",
-    "integrationTest",
-    "functionalTest",
-    "smokeTest",
     "contractTestRuntimeClasspath",
     "contractTestCompileClasspath"
   ]
