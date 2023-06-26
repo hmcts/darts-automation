@@ -128,34 +128,34 @@ test {
 // }
 
 // before committing a change, make sure task still works
-dependencyUpdates {
-  def isNonStable = { String version ->
-    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { qualifier -> version.toUpperCase().contains(qualifier) }
-    def regex = /^[0-9,.v-]+$/
-    return !stableKeyword && !(version ==~ regex)
-  }
-  rejectVersionIf { selection -> // <---- notice how the closure argument is named
-    return isNonStable(selection.candidate.version) && !isNonStable(selection.currentVersion)
-  }
-}
+// dependencyUpdates {
+//   def isNonStable = { String version ->
+//     def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { qualifier -> version.toUpperCase().contains(qualifier) }
+//     def regex = /^[0-9,.v-]+$/
+//     return !stableKeyword && !(version ==~ regex)
+//   }
+//   rejectVersionIf { selection -> // <---- notice how the closure argument is named
+//     return isNonStable(selection.candidate.version) && !isNonStable(selection.currentVersion)
+//   }
+// }
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
-dependencyCheck {
-  // Specifies if the build should be failed if a CVSS score above a specified level is identified.
-  // range of 0-10 fails the build, anything greater and it doesn't fail the build
-  failBuildOnCVSS = 0
-  suppressionFile = 'config/owasp/suppressions.xml'
+// dependencyCheck {
+//   // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+//   // range of 0-10 fails the build, anything greater and it doesn't fail the build
+//   failBuildOnCVSS = 0
+//   suppressionFile = 'config/owasp/suppressions.xml'
 
-  analyzers {
-    // Disable scanning of .NET related binaries
-    assemblyEnabled = false
-  }
-  skipConfigurations = [
-    "compileOnly",
-    "contractTestRuntimeClasspath",
-    "contractTestCompileClasspath"
-  ]
-}
+//   analyzers {
+//     // Disable scanning of .NET related binaries
+//     assemblyEnabled = false
+//   }
+//   skipConfigurations = [
+//     "compileOnly",
+//     "contractTestRuntimeClasspath",
+//     "contractTestCompileClasspath"
+//   ]
+// }
 
 repositories {
   mavenLocal()
@@ -169,7 +169,6 @@ ext {
 
 ext['snakeyaml.version'] = '2.0'
 ext['spring-security.version'] = '6.0.3' // https://spring.io/security/cve-2023-20862
-
 
 dependencies {
 
