@@ -193,10 +193,6 @@ dependencies {
   implementation 'com.google.guava:guava:32.0.1-jre'
 }
 
-check {
-  dependsOn.clear()
-}
-
 wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
