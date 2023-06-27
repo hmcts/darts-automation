@@ -2,6 +2,8 @@ plugins {
   // Apply the java-library plugin for API and implementation separation.
   id 'java-library'
   id 'org.owasp.dependencycheck' version '8.2.1'
+  id 'org.sonarqube' version '4.2.1.3168'
+  id 'jacoco'
 }
 
 group = 'uk.gov.hmcts'
@@ -71,34 +73,28 @@ test {
 //   ruleSetFiles = files("config/pmd/ruleset.xml")
 // }
 
-// jacocoTestReport {
-//   executionData(test, integration)
-//   reports {
-//     xml.required = true
-//     csv.required = false
-//     html.required = true
-//   }
-// }
+jacocoTestReport {
+  // executionData(test, integration)
+  reports {
+    xml.required = true
+    csv.required = false
+    html.required = true
+  }
+}
 
-// project.tasks['sonarqube'].dependsOn jacocoTestReport
+project.tasks['sonarqube'].dependsOn jacocoTestReport
 
-// def sonarExclusions = [
-//   '**/uk/gov/hmcts/darts/common/entity/**',
-//   '**/uk/gov/hmcts/darts/**/model/**',
-//   '**/uk/gov/hmcts/darts/**/config/**',
-//   '**/uk/gov/hmcts/darts/authentication/util/AuthenticationType.java'
-// ]
+// exclude everything
+def sonarExclusions = [
+  '**/uk/gov/hmcts/darts/**',
+]
 
-// sonarqube {
-//   properties {
-//     property "sonar.projectName", "Reform :: darts-automation"
-//     property "sonar.projectKey", "uk.gov.hmcts.reform:darts-automation"
-//     property "sonar.exclusions", sonarExclusions.join(', ')
-//     property 'sonar.coverage.exclusions', "**/entity/*,**/dto/*"
-//   }
-// }
-
-task sonarqube() {
+sonarqube {
+  properties {
+    property "sonar.projectName", "Reform :: darts-automation"
+    property "sonar.projectKey", "uk.gov.hmcts.reform:darts-automation"
+    property "sonar.exclusions", sonarExclusions.join(', ')
+  }
 }
 
 // before committing a change, make sure task still works
