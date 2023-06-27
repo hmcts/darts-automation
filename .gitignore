@@ -29,10 +29,10 @@ replay_pid*
 
 # Ignore Gradle build output directory
 build
-lib/bin/*
+bin/*
 
 #Ignore results
-lib/target/*
+target/*
 
 ### IntelliJ IDEA ###
 .idea
