@@ -1,7 +1,7 @@
 plugins {
-    // Apply the java-library plugin for API and implementation separation.
-    id 'java-library'
-    id 'org.owasp.dependencycheck' version '8.2.1'
+  // Apply the java-library plugin for API and implementation separation.
+  id 'java-library'
+  id 'org.owasp.dependencycheck' version '8.2.1'
 }
 
 group = 'uk.gov.hmcts'
@@ -81,7 +81,6 @@ test {
 // }
 
 // project.tasks['sonarqube'].dependsOn jacocoTestReport
-// project.tasks['check'].dependsOn integration
 
 // def sonarExclusions = [
 //   '**/uk/gov/hmcts/darts/common/entity/**',
@@ -98,6 +97,9 @@ test {
 //     property 'sonar.coverage.exclusions', "**/entity/*,**/dto/*"
 //   }
 // }
+
+task sonarqube() {
+}
 
 // before committing a change, make sure task still works
 // dependencyUpdates {
@@ -163,7 +165,7 @@ dependencies {
 	implementation "org.hamcrest:hamcrest:2.2"
 	implementation "org.hamcrest:hamcrest-core:2.2"
 	
-    implementation 'commons-io:commons-io:2.13.0'
+  implementation 'commons-io:commons-io:2.13.0'
 
 	implementation(platform("org.junit:junit-bom:5.9.3"))
 	runtimeOnly    "org.junit.platform:junit-platform-launcher"
