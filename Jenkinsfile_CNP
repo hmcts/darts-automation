@@ -12,4 +12,40 @@ withPipeline(type, product, component) {
   disableLegacyDeployment()
   nonServiceApp()
   enableSlackNotifications('#darts-builds')
+
+  beforeAlways('sonarscan') {
+    builder.grade('sonarMaster')
+  }
+
+  afterAlways('test') {
+    builder.gradle('jacocoTestReport')
+
+    // publishHTML target: [
+    //   allowMissing         : true,
+    //   alwaysLinkToLastBuild: true,
+    //   keepAll              : true,
+    //   reportDir            : "build/reports/checkstyle",
+    //   reportFiles          : "main.html",
+    //   reportName           : "Checkstyle Main Report"
+    // ]
+
+    // publishHTML target: [
+    //   allowMissing         : true,
+    //   alwaysLinkToLastBuild: true,
+    //   keepAll              : true,
+    //   reportDir            : "build/reports/checkstyle",
+    //   reportFiles          : "test.html",
+    //   reportName           : "Checkstyle Test Report"
+    // ]
+
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/tests/test",
+      reportFiles          : "index.html",
+      reportName           : "Unit Tests Report"
+    ]
+  }
+
 }
