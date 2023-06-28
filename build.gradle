@@ -90,6 +90,7 @@ def sonarExclusions = [
 ]
 
 sonarqube {
+  skipProject = true
   properties {
     property "sonar.projectName", "Reform :: darts-automation"
     property "sonar.projectKey", "uk.gov.hmcts.reform:darts-automation"
