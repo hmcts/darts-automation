@@ -15,28 +15,6 @@ java {
   }
 }
 
-// sourceSets {
-//   functionalTest {
-//     java {
-//       compileClasspath += main.output
-//       runtimeClasspath += main.output
-//       srcDir file('src/test/java')
-//     }
-//     resources.srcDir file('src/test/resources')
-//   }
-// }
-
-// configurations {
-//   functionalTestImplementation.extendsFrom testImplementation
-//   functionalTestRuntimeOnly.extendsFrom runtimeOnly
-
-//   integrationTestImplementation.extendsFrom testImplementation
-//   integrationTestRuntimeOnly.extendsFrom runtimeOnly
-
-//   smokeTestImplementation.extendsFrom testImplementation
-//   smokeTestRuntimeOnly.extendsFrom runtimeOnly
-// }
-
 tasks.withType(JavaCompile) {
   options.compilerArgs << "-Xlint:unchecked" << "-Werror"
 }
@@ -69,23 +47,7 @@ test {
   failFast = true
 }
 
-// checkstyle {
-//   maxWarnings = 0
-//   toolVersion = '10.12.0'
-//   getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
-// }
-
-// pmd {
-//   toolVersion = "6.55.0"
-//   sourceSets = [sourceSets.main, sourceSets.test]
-//   reportsDir = file("$project.buildDir/reports/pmd")
-//   // https://github.com/pmd/pmd/issues/876
-//   ruleSets = []
-//   ruleSetFiles = files("config/pmd/ruleset.xml")
-// }
-
 jacocoTestReport {
-  // executionData(test, integration)
   reports {
     xml.required = true
     csv.required = false
@@ -118,18 +80,6 @@ sonarqube {
     property "sonar.exclusions", sonarExclusions.join(', ')
   }
 }
-
-// before committing a change, make sure task still works
-// dependencyUpdates {
-//   def isNonStable = { String version ->
-//     def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { qualifier -> version.toUpperCase().contains(qualifier) }
-//     def regex = /^[0-9,.v-]+$/
-//     return !stableKeyword && !(version ==~ regex)
-//   }
-//   rejectVersionIf { selection -> // <---- notice how the closure argument is named
-//     return isNonStable(selection.candidate.version) && !isNonStable(selection.currentVersion)
-//   }
-// }
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
 dependencyCheck {
