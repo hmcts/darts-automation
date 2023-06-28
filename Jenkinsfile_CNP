@@ -11,5 +11,6 @@ def component = "automation"
 withNightlyPipeline(type, product, component) {
   disableLegacyDeployment()
   nonServiceApp()
+  enableFullFunctionalTest()
   enableSlackNotifications('#darts-builds')
 }
