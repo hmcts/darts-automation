@@ -89,7 +89,7 @@ def sonarExclusions = [
   '**/uk/gov/hmcts/darts/**',
 ]
 
-sonarMaster {
+task sonarMaster() {
   sonarqube {
     properties {
       property "sonar.branch", "master"
