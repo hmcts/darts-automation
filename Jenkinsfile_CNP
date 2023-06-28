@@ -13,10 +13,6 @@ withPipeline(type, product, component) {
   nonServiceApp()
   enableSlackNotifications('#darts-builds')
 
-  before('sonarscan') {
-    builder.grade('sonarMaster')
-  }
-
   afterAlways('test') {
     builder.gradle('jacocoTestReport')
 
