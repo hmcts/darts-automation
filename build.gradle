@@ -1,7 +1,7 @@
 plugins {
   // Apply the java-library plugin for API and implementation separation.
   id 'java-library'
-  id 'org.owasp.dependencycheck' version '8.2.1'
+  id 'org.owasp.dependencycheck' version '8.3.1'
   id 'org.sonarqube' version '4.2.1.3168'
   id 'jacoco'
 }
@@ -24,6 +24,8 @@ tasks.withType(JavaExec).configureEach {
   javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
+// this functional task is here for the Jenkins pipeline which runs ./gradlew functional
+// it's a copy of what runs in the "test" task
 task functional(type: Test) {
   useJUnitPlatform()
 
