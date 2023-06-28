@@ -46,6 +46,17 @@ tasks.withType(JavaExec).configureEach {
   javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
+task functional(type: Test) {
+  useJUnitPlatform()
+
+  testLogging {
+    exceptionFormat = 'full'
+  }
+
+  description = "Runs functional tests"
+  group = "Verification"
+}
+
 tasks.withType(Test) {
   useJUnitPlatform()
 
