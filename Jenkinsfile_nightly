@@ -5,13 +5,15 @@ properties([
   pipelineTriggers([cron('H 05 * * 1-5')])
 ])
 
-
 @Library("Infrastructure")
 
 def type = "java"
 def product = "darts"
 def component = "automation"
 
+// this "Jenkinsfile_nightly" file defines the build to run "nightly"
+// here we run the same "withNightlyPipeline" as the Jenkinsfile_CNP
 withNightlyPipeline(product) {
   enableSlackNotifications('#darts-builds')
+  enableFullFunctionalTest()
 }

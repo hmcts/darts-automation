@@ -1,5 +1,4 @@
 #!groovy
-//noinspection GroovyUnusedAssignment
 @Library("Infrastructure") 
 
 import uk.gov.hmcts.contino.GradleBuilder
@@ -8,7 +7,10 @@ def type = "java"
 def product = "darts"
 def component = "automation"
 
-
-withPipeline(type, product, component) {
-      enableSlackNotifications('#darts-builds')
+// this "Jenkinsfile_CNP" file defines the build to run on PRs and master branch, not nightly
+// we are only using the "withNightlyPipeline" function here as it better suits the steps we require e.g. check, build and functional tests
+// but rest-assured this will not run nightly, that is defined by the "Jenkinsfile_nightly"
+withNightlyPipeline(type, product, component) {
+  enableFullFunctionalTest()
+  enableSlackNotifications('#darts-builds')
 }
