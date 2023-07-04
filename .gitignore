@@ -40,3 +40,6 @@ target/*
 *.iws
 *.iml
 *.ipr
+
+# Ignore test only logging
+src/test/resources/log4j2-test.properties
