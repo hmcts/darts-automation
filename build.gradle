@@ -112,7 +112,7 @@ dependencies {
 	
 	implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
 	
-	implementation(platform("io.cucumber:cucumber-bom:7.12.1"))
+	implementation(platform("io.cucumber:cucumber-bom:7.13.0"))
 	implementation 'io.cucumber:cucumber-picocontainer'
 	implementation 'io.cucumber:cucumber-java'
 	implementation 'io.cucumber:cucumber-junit'
