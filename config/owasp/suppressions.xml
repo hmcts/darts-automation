@@ -29,7 +29,10 @@
     <notes>Suppress as build is not deployed</notes>
     <cve>CVE-2023-35116</cve>
   </suppress>
-
+  <suppress>
+    <notes>Suppress as build is not deployed</notes>
+    <cve>CVE-2023-34462</cve>
+  </suppress>
   <!--Please add all the temporary suppression under the below section-->
 
   <!--End of temporary suppression section -->
