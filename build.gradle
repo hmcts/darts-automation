@@ -2,7 +2,7 @@ plugins {
   // Apply the java-library plugin for API and implementation separation.
   id 'java-library'
   id 'org.owasp.dependencycheck' version '8.3.1'
-  id 'org.sonarqube' version '4.2.1.3168'
+  id 'org.sonarqube' version '4.3.0.3225'
   id 'jacoco'
 }
 
