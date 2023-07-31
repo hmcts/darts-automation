@@ -5,13 +5,13 @@ Scenario Outline: External user logs in first time
 #Step def for landing on correct screen - confirm content on all screens even if not interacted with
 
 	Given I am on the landing page
-	When I see "Sign in the the DARTS Portal" on the page
-	And I select the "I work with the HM Courts and Tribunals Service" radio button
+	When I see "Sign in to the DARTS Portal" on the page
+	And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
 	And I see "I have an account for DARTS through my organisation." on the page
 	And I press the "Continue" button
-	Then I see "Sign in the the DARTS Portal" on the page
+	Then I see "Sign in to the DARTS portal" on the page
 	And I see "This sign in page is for users who do not work for HMCTS." on the page
-	And I see "There is a dedicated page for HMCTS employees to sign in to the DARTS portal." on the page
+	And I see "There is a dedicated page for HMCTS employees to sign into the portal." on the page
 	And I see "Forgotten your password?" on the page
 	And I see "Keep me signed in" on the page
 
@@ -34,7 +34,13 @@ Scenario Outline: External user logs in first time
 
 	When I enter the security code
 	And I press the "Continue" button
-	Then I see "Homepage" on the page
+	Then I see "Welcome to DARTS" on the page
+	And I see "Inbox" on the page
+	And I see "My Audios" on the page
+	And I see "My Transcriptions" on the page
+
+	When I click on the "Sign out" link
+	Then I see "Sign in to the DARTS Portal" on the page
 
 	#Last step will be to determine login was successful and landed on Homepage
 
@@ -46,10 +52,10 @@ Examples:
 Scenario Outline: External user logs in second time/subsequent logins
 
 	Given I am on the landing page
-	When I see "Sign in the the DARTS Portal" on the page
-	And I select the "I work with the HM Courts and Tribunals Service" radio button
+	When I see "Sign in to the DARTS Portal" on the page
+	And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
 	And I press the "Continue" button
-	Then I see "Sign in the the DARTS Portal" on the page
+	Then I see "Sign in to the DARTS portal" on the page
 	And I see "This sign in page is for users who do not work for HMCTS." on the page
 
 	When I set "Enter your email" to "<email>"
@@ -66,37 +72,42 @@ Scenario Outline: External user logs in second time/subsequent logins
 	And I see "Enter the x-digit security code sent to <phoneNum>" on the page
 	And I enter the security code
 	And I press the "Continue" button
-	And I see "Homepage" on the page
+	Then I see "Welcome to DARTS" on the page
 
 Examples:
 |email					|password	|phoneNum	|
 |externaluser1@gmail.com|Password1!	|07911123456|
 
-@DMP-455 @DMP-361 @DMP-436
+@DMP-455 @DMP-361 @DMP-436 @DMP-493 @DMP-494 @DMP-495
 Scenario Outline: External user forgotten password, existing account
 
 #Pre-existing user who has logged in before, consider new user too
 
 	Given I am on the landing page
-	When I see "Sign in the the DARTS Portal" on the page
-	And I select the "I work with the HM Courts and Tribunals Service" radio button
+	When I see "Sign in to the DARTS Portal" on the page
+	And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
 	And I press the "Continue" button
-	Then I see "Sign in the the DARTS Portal" on the page
+	Then I see "Sign in to the DARTS portal" on the page
 	And I see "This sign in page is for users who do not work for HMCTS." on the page
 
 	When I click on the "Forgotten your password?" link
 	Then I see "Reset your password" on the page
-	And I see "We will send you a code to reset your password. Enter the email address that you use with DARTS." on the page
+	And I see "Enter the email you use to sign in to DARTS Portal. We'll send you a code to reset your password." on the page
 
-	When I set "Enter your email" to "<email>"
+	When I set "Email address" to "<email>"
 	And I press the "Send code" button
 	Then I see "Reset your password" on the page
-	And I see "A verification code has been emailed to you. Enter it below." on the page
+	And I see "Enter the verification code sent to your email to reset your password" on the page
 
 	#Will need to find a way for auto to dig out the verification code and insert it into this field - Notify? New step def?
 
 	When I enter the verification code
 	And I press the "Verify" button
+	Then I see "Code accepted" on the page
+	And I see "You can continue to reset your password for account" on the page
+	And I see "<email>" on the page
+
+	When I press the "Continue" button
 	Then I see "Create a new password" on the page
 
 	#Assuming standard PW is Password1!, so changing to Password2!
@@ -107,7 +118,7 @@ Scenario Outline: External user forgotten password, existing account
 
 	#According to wireframes, takes you back to sign in page, no confirmation or message to confirm PW change was successful?
 
-	Then I see "Sign in the the DARTS Portal" on the page
+	Then I see "Sign in to the DARTS Portal" on the page
 	And I see "This sign in page is for users who do not work for HMCTS." on the page
 
 	#Sign back in with new password - decide if test finishes on next screen or at the end (homepage)
@@ -122,31 +133,36 @@ Examples:
 |email					|newPassword|
 |externaluser1@gmail.com|Password2!	|
 
-@DMP-455 @DMP-361 @DMP-436
+@DMP-455 @DMP-361 @DMP-436 @DMP-493 @DMP-494 @DMP-495
 Scenario Outline: External user forgotten password, new account
 
 #New user who has NOT logged in before
 
 	Given I am on the landing page
-	When I see "Sign in the the DARTS Portal" on the page
-	And I select the "I work with the HM Courts and Tribunals Service" radio button
+	When I see "Sign in to the DARTS Portal" on the page
+	And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
 	And I press the "Continue" button
-	Then I see "Sign in the the DARTS Portal" on the page
+	Then I see "Sign in to the DARTS portal" on the page
 	And I see "This sign in page is for users who do not work for HMCTS." on the page
 
 	When I click on the "Forgotten your password?" link
 	Then I see "Reset your password" on the page
-	And I see "We will send you a code to reset your password. Enter the email address that you use with DARTS." on the page
+	And I see "Enter the email you use to sign in to DARTS Portal. We'll send you a code to reset your password." on the page
 
-	When I set "Enter your email" to "<email>"
+	When I set "Email address" to "<email>"
 	And I press the "Send code" button
 	Then I see "Reset your password" on the page
-	And I see "A verification code has been emailed to you. Enter it below." on the page
+	And I see "Enter the verification code sent to your email to reset your password" on the page
 
 	#Will need to find a way for auto to dig out the verification code and insert it into this field - Notify? New step def?
 
 	When I enter the verification code
 	And I press the "Verify" button
+	Then I see "Code accepted" on the page
+	And I see "You can continue to reset your password for account" on the page
+	And I see "<email>" on the page
+
+	When I press the "Continue" button
 	Then I see "Create a new password" on the page
 
 	When I set "New password" to "<newPassword>"
@@ -155,7 +171,7 @@ Scenario Outline: External user forgotten password, new account
 
 	#According to wireframes, takes you back to sign in page, no confirmation or message to confirm PW change was successful?
 
-	Then I see "Sign in the the DARTS Portal" on the page
+	Then I see "Sign in to the DARTS Portal" on the page
 	And I see "This sign in page is for users who do not work for HMCTS." on the page
 
 	#Sign back in with new password - decide if test finishes on next screen or at the end (homepage)
@@ -170,21 +186,21 @@ Examples:
 |email					|newPassword|
 |externaluser1@gmail.com|Password2!	|
 
-@DMP-453 @DMP-552
+@DMP-436 @DMP-453 @DMP-552 @DMP-363
 Scenario Outline: Existing External User error message verification
 
 	Given I am on the landing page
-	When I see "Sign in the the DARTS Portal" on the page
+	When I see "Sign in to the DARTS Portal" on the page
 	And I press the "Continue" button
 	Then I see an error message "Select whether you are an employee of HM Courts and Tribunals Service or you work with HM Courts and Tribunals Service."
 
-	When I select the "I work with the HM Courts and Tribunals Service" radio button
+	When I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
 	And I press the "Continue" button
 	Then I see "This sign in page is for users who do not work for HMCTS." on the page
 
 	When I press the "Continue" button
-	Then I see an error message "Enter the email address you use to sign in to the DARTS Portal."
-	And I see an error message "Enter the password you use to sign in to the DARTS Portal."
+	Then I see an error message "You must enter the email address you use to sign in to the DARTS Portal."
+	And I see an error message "You must enter the password you use to sign in to the DARTS Portal."
 
 	#Wireframes for error message for username/password mismatch?
 
@@ -194,6 +210,12 @@ Scenario Outline: Existing External User error message verification
 	Then I see an error message "Your password is incorrect."
 
 	When I set "Enter your email" to "invalidemail@gmail.com"
+	And I set "Password" to "<password>"
+	And I press the "Continue" button
+	Then I see an error message "We can't seem to find your account."
+
+	When I set "Enter your email" to "invalidemail@gmail.com"
+	And I set "Password" to "WrongPassword"
 	And I press the "Continue" button
 	Then I see an error message "We can't seem to find your account."
 
@@ -206,13 +228,13 @@ Scenario Outline: Existing External User error message verification
 	Then I see "Check your phone" on the page
 
 	When I press the "Continue" button
-	Then I see an error message "The security code you have entered is either incorrect or expired."
-	And I see an error message "Check the security code and try again."
+	Then I see an error message "The security code you entered has not been recognised."
+	And I see an error message "Review the 6-digit code to check you have entered it correctly."
 
 	When I set "Enter security code" to "12345"
 	And I press the "Continue" button
-	Then I see an error message "The security code you have entered is either incorrect or expired."
-	And I see an error message "Check the security code and try again."
+	Then I see an error message "The security code you entered has not been recognised."
+	And I see an error message "Review the 6-digit code to check you have entered it correctly."
 
 	When I click on the "Back" link
 	And I click on the "Back" link
@@ -246,3 +268,8 @@ Scenario Outline: Existing External User error message verification
 Examples:
 |email					|password	|newPassword|
 |externaluser1@gmail.com|Password1!	|Password2!	|
+
+ 	#According to wireframes, there's an option to use email OR mobile, add email scenarios as well, especially if we can't auto texts
+ 	#Need to add/edit scenario for try again on "Check your phone" screen
+	#Add/edit scenario for too many login attempts
+	#Some errors might need changing
