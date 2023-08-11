@@ -139,7 +139,7 @@ dependencies {
 	
 	implementation group: 'com.opencsv', name: 'opencsv', version: '5.8'
 	
-	implementation group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.19.0.0'	
+	implementation group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.20.0.0'	
 	
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
 	
