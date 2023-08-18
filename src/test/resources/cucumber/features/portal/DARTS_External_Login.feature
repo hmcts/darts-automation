@@ -78,7 +78,7 @@ Examples:
 |email					|password	|phoneNum	|
 |externaluser1@gmail.com|Password1!	|07911123456|
 
-@DMP-455 @DMP-361 @DMP-436 @DMP-493 @DMP-494 @DMP-495
+@DMP-455 @DMP-361 @DMP-436 @DMP-493 @DMP-494 @DMP-495 @DMP-585
 Scenario Outline: External user forgotten password, existing account
 
 #Pre-existing user who has logged in before, consider new user too
@@ -133,7 +133,7 @@ Examples:
 |email					|newPassword|
 |externaluser1@gmail.com|Password2!	|
 
-@DMP-455 @DMP-361 @DMP-436 @DMP-493 @DMP-494 @DMP-495
+@DMP-455 @DMP-361 @DMP-436 @DMP-493 @DMP-494 @DMP-495 @DMP-585
 Scenario Outline: External user forgotten password, new account
 
 #New user who has NOT logged in before
@@ -186,7 +186,7 @@ Examples:
 |email					|newPassword|
 |externaluser1@gmail.com|Password2!	|
 
-@DMP-436 @DMP-453 @DMP-552 @DMP-363
+@DMP-436 @DMP-453 @DMP-552 @DMP-363 @DMP-681 @DMP-682
 Scenario Outline: Existing External User error message verification
 
 	Given I am on the landing page
@@ -207,17 +207,51 @@ Scenario Outline: Existing External User error message verification
 	When I set "Enter your email" to "<email>"
 	And I set "Enter your password" to "WrongPassword"
 	And I press the "Continue" button
-	Then I see an error message "Your password is incorrect."
+	Then I see an error message "Enter the password you use to sign in to the DARTS Portal."
 
-	When I set "Enter your email" to "invalidemail@gmail.com"
-	And I set "Password" to "<password>"
+	When I set "Enter your email" to "unknown@gmail.com"
+	And I set "Enter your password" to "<password>"
 	And I press the "Continue" button
-	Then I see an error message "We can't seem to find your account."
+	Then I see an error message "Enter the email address you use to sign in to the DARTS Portal."
 
-	When I set "Enter your email" to "invalidemail@gmail.com"
-	And I set "Password" to "WrongPassword"
+	When I set "Enter your email" to "unknown@gmail.com"
+	And I set "Enter your password" to "WrongPassword"
 	And I press the "Continue" button
-	Then I see an error message "We can't seem to find your account."
+	Then I see an error message "Enter the email address you use to sign in to the DARTS Portal."
+
+	When I set "Enter your email" to "invalid"
+	And I set "Enter your password" to "<password>"
+	And I press the "Continue" button
+	Then I see an error message "Please enter a valid email address."
+
+	#Testing DMP-682 with separate user, lockout mechanic
+
+	When I set "Enter your email" to "<emailTwo>"
+	And I set "Enter your Password" to "Wrongpassword"
+	And I press the "Continue" button
+	And I see an error message "Enter the password you use to sign in to the DARTS Portal."
+
+	When I set "Enter your email" to "<emailTwo>"
+	And I set "Enter your Password" to "Wrongpassword"
+	And I press the "Continue" button
+	And I see an error message "Enter the password you use to sign in to the DARTS Portal."
+
+	When I set "Enter your email" to "<emailTwo>"
+	And I set "Enter your Password" to "Wrongpassword"
+	And I press the "Continue" button
+	And I see an error message "Enter the password you use to sign in to the DARTS Portal."
+
+	When I set "Enter your email" to "<emailTwo>"
+	And I set "Enter your Password" to "Wrongpassword"
+	And I press the "Continue" button
+	And I see an error message "Enter the password you use to sign in to the DARTS Portal."
+
+	When I set "Enter your email" to "<emailTwo>"
+	And I set "Enter your Password" to "Wrongpassword"
+	And I press the "Continue" button
+	And I see an error message "Your account is temporarily locked to prevent unauthorized use. Try again later."
+
+	#Back to other tests
 
 	When I set "Enter your email" to "<email>"
 	And I set "Enter your password" to "<password>"
@@ -242,34 +276,42 @@ Scenario Outline: Existing External User error message verification
 	And I see "Reset your password" on the page
 	And I press the "Send code" button
 	Then I see an error message "Enter an email address in the correct format, like name@example.com"
-	#What about an email that doesn't exist or is invalid?
+
+	When I set "Enter your email" to "invalid"
+	And I press the "Send code" button
+	Then I see an error message "Enter an email address in the correct format, like name@example.com"
+	#What about an email that doesn't exist?
 
 	When I set "Enter your email" to "<email>"
 	And I press the "Send code" button
 	And I press the "Verify" button
-	Then I see an error message "The verification code you entered has expired; you'll have to request a new one."
+	Then I see an error message "You have not entered a verification code."
+	And I see "Enter the verification code sent to <email>" on the page
 
 	When I set "Enter verification code" to "12345"
 	And I press the "Verify" button
-	Then I see an error message "The verification code you entered has expired; you'll have to request a new one."
+	Then I see an error message "The verification code you have entered is not correct."
+	And I see an error message "Review the 6-digit code to check you have entered it correctly."
 
 	When I enter the verification code
 	And I press the "Verify" button
 	And I press the "Create new password" button
-	Then I see an error message "A password should be between 8 to 64 characters and have at least 3 lowercase letters, 3 uppercase letters, 3 digits, 3 symbols."
+	Then I see an error message "Create a new password."
+	And I see an error message "A password should be between 8 to 64 characters and have at least 3 lowercase letters, 3 uppercase letters, 3 digits, 3 symbols"
 
 	When I set "New password" to "<newPassword>"
 	And I set "Confirm new password" to "wrongpassword"
 	And I press the "Create new password" button
 	Then I see an error message "The passwords provided do not match. Enter and try again."
 
+	#Criteria error message needs to be added?
 	#Some of these error messages might be changed, will need to update if they do.
 
 Examples:
-|email					|password	|newPassword|
-|externaluser1@gmail.com|Password1!	|Password2!	|
+|email					|password	|newPassword|emailTwo				|
+|externaluser1@gmail.com|Password1!	|Password2!	|externaluser2@gmail.com|
 
  	#According to wireframes, there's an option to use email OR mobile, add email scenarios as well, especially if we can't auto texts
  	#Need to add/edit scenario for try again on "Check your phone" screen
-	#Add/edit scenario for too many login attempts
+	#DMP-490 Logout of FE Portal
 	#Some errors might need changing
