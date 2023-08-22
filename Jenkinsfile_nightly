@@ -13,7 +13,7 @@ def component = "automation"
 
 // this "Jenkinsfile_nightly" file defines the build to run "nightly"
 // here we run the same "withNightlyPipeline" as the Jenkinsfile_CNP
-withNightlyPipeline(product) {
+withNightlyPipeline(type, product, component) {
   enableSlackNotifications('#darts-builds')
   enableFullFunctionalTest()
 }
