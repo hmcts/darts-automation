@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 public class StepDef_hooks extends StepDef_base {
 
-	private static Logger log = LogManager.getLogger("StepDef_alerts");
+	private static Logger log = LogManager.getLogger("StepDef_hooks");
 		
 	public StepDef_hooks(SharedDriver driver, NavigationShared ns) {
 		super(driver, ns);

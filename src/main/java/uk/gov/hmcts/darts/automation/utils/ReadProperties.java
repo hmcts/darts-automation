@@ -12,6 +12,25 @@ import org.apache.logging.log4j.Logger;
 
 public class ReadProperties {
 	private static Logger log = LogManager.getLogger("ReadProperties");
+
+	public static String apiUserName = System.getProperty("FUNC_TEST_ROPC_USERNAME");
+	public static String apiPassword = System.getProperty("FUNC_TEST_ROPC_PASSWORD");
+	public static String apiClientId = System.getProperty("AAD_B2C_ROPC_CLIENT_ID_KEY");
+	public static String apiClientSecret = System.getProperty("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+
+	public static String apiDbSchema = System.getProperty("DARTS_API_DB_SCHEMA");
+//	public static String apiDbConnectionString = System.getProperty("AZURE_STORAGE_CONNECTION_STRING");
+	public static String apiDbUserName = System.getProperty("DARTS_API_DB_USERNAME");
+	public static String apiDbPassword = System.getProperty("DARTS_API_DB_PASSWORD");
+	public static String apiDbPort = System.getProperty("DARTS_API_DB_PORT");
+	public static String apiDbHost = System.getProperty("DARTS_API_DB_HOST");
+	public static String apiDbDatabase = System.getProperty("DARTS_API_DB_DATABASE");
+	
+	public static String apiAuthUri = "https://hmctsdartsb2csbox.b2clogin.com";
+	public static String apiAuthPath = "hmctsdartsb2csbox.onmicrosoft.com";
+	
+	
+	
 	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
 	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
 	private static String translationPropertiesParameterFileName = "src/test/resources/translation.properties";
