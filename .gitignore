@@ -18,6 +18,7 @@
 *.zip
 *.tar.gz
 *.rar
+*.bak
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
@@ -40,6 +41,10 @@ target/*
 *.iws
 *.iml
 *.ipr
+
+### Eclipse ###
+.settings
+.project
 
 # Ignore test only logging
 src/test/resources/log4j2-test.properties

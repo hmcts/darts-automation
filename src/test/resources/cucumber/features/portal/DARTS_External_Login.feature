@@ -60,18 +60,22 @@ Scenario Outline: External user logs in second time/subsequent logins
 
 	When I set "Enter your email" to "<email>"
 	And I set "Enter your password" to "<password>"
+	And I pause the test with message "enter userid & password"
 	And I press the "Continue" button
-	Then I see "Verify your identity" on the page
-	And I see "We'll send a security code to this mobile number." on the page
-	And I see "<phoneNum>" on the page
+	Then I see "Multi-factor authentication" on the page
+	And I see "We have the following number on record for you. We can send a code via SMS or phone to authenticate you" on the page
+	And I see phone number "<phoneNum>" on the page
 
-	When I click on the "I need to change this number" link
-	And I see "To change your number email support@darts.gov.uk" on the page
-	And I press the "Send code" button
-	Then I see "Check your phone" on the page
-	And I see "Enter the x-digit security code sent to <phoneNum>" on the page
-	And I enter the security code
-	And I press the "Continue" button
+#	When I click on the "I need to change this number" link
+#	And I see "To change your number email support@darts.gov.uk" on the page
+	And I press the "Send Code" button
+#	Then I see "Check your phone" on the page
+
+	And I see "Enter your verification code below, or" on the page
+	And I see "send a new code" on the page
+#	When I click on the "send a new code" link
+	When I enter the security code 
+	And I press the "Verify Code" button
 	Then I see "Welcome to DARTS" on the page
 
 Examples:

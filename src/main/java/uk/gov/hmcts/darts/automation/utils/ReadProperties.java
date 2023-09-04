@@ -37,7 +37,7 @@ public class ReadProperties {
 	static Properties workstationProperties = getProperties(workstationPropertiesParameterFileName);
 	static Properties environmentProperties = getProperties(environmentPropertiesParameterFileName);
 	static Properties translationProperties = getProperties(translationPropertiesParameterFileName);
-	static String os = System.getProperty("os.name").replace(" ", "_");
+	public static String os = System.getProperty("os.name").replace(" ", "_"); // .toUpperCase();
 	static String systemEnv = System.getProperty("envName");
 	static String environment = systemEnv;
 	static {

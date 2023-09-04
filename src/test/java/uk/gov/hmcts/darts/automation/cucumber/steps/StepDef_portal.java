@@ -8,7 +8,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-
+import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SharedDriver;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
@@ -22,11 +22,13 @@ public class StepDef_portal extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_portal");
 //	private final WebDriver webDriver;
-//	private Portal portal;
+//	private Portal portal;	
 	
+	private Prompt man;	
 	
 	public StepDef_portal(SharedDriver driver, NavigationShared ns) {
 		super(driver, ns);
+		man = new Prompt(webDriver);
 	}
 	
 	
@@ -38,6 +40,16 @@ public class StepDef_portal extends StepDef_base {
 	@Given("^I am on the landing page$")
 	public void onLandingPage() throws Exception {
 		NAV.navigateToUrl(ReadProperties.main("staging_url"));
+	}
+	
+	@When("^I enter the security code$")
+	public void enterSecurityCode() throws Exception {
+    	NAV.set_valueTo("Enter your verification code below", man.inputDialog("Enter Security Code"));
+	}
+	
+	@When("^I see phone number \"([^\"]*)\" on the page$")
+	public void seePhoneNumberOnThePage(String arg1) throws Exception {
+		NAV.textPresentOnPage("XXX-XXX-" + arg1.substring(arg1.length() - 5));
 	}
 	
 //	@When("^I click the search button$")
