@@ -26,10 +26,6 @@ public class ReadProperties {
 	public static String apiDbHost = System.getProperty("DARTS_API_DB_HOST");
 	public static String apiDbDatabase = System.getProperty("DARTS_API_DB_DATABASE");
 	
-	public static String apiAuthUri = "https://hmctsdartsb2csbox.b2clogin.com";
-	public static String apiAuthPath = "hmctsdartsb2csbox.onmicrosoft.com";
-	
-	
 	
 	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
 	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
@@ -49,6 +45,12 @@ public class ReadProperties {
 			log.info("Using system environment >"+systemEnv);
 		}
 	}
+	
+
+	
+	public static String jsonApiUri = "https://darts-api." + environment + ".platform.hmcts.net/";
+	public static String soapApiUri = "https://darts-api." + environment + ".platform.hmcts.net/ws/";
+	public static String portalUri = "https://darts-api." + environment + ".platform.hmcts.net/";
 
 	
 	static Properties getProperties(String parameterFileName) {

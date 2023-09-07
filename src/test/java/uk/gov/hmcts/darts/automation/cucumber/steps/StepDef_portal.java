@@ -11,6 +11,7 @@ import io.cucumber.java.Before;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 //import uk.gov.hmcts.darts.automation.pageObjects.Portal;
@@ -24,11 +25,11 @@ public class StepDef_portal extends StepDef_base {
 //	private final WebDriver webDriver;
 //	private Portal portal;	
 	
-	private Prompt man;	
+	private Prompt prompt;	
 	
-	public StepDef_portal(SharedDriver driver, NavigationShared ns) {
-		super(driver, ns);
-		man = new Prompt(webDriver);
+	public StepDef_portal(SharedDriver driver, TestData testdata, NavigationShared ns) {
+		super(driver, testdata, ns);
+		prompt = new Prompt(webDriver);
 	}
 	
 	
@@ -44,7 +45,7 @@ public class StepDef_portal extends StepDef_base {
 	
 	@When("^I enter the security code$")
 	public void enterSecurityCode() throws Exception {
-    	NAV.set_valueTo("Enter your verification code below", man.inputDialog("Enter Security Code"));
+    	NAV.set_valueTo("Enter your verification code below", prompt.inputDialog("Enter Security Code"));
 	}
 	
 	@When("^I see phone number \"([^\"]*)\" on the page$")

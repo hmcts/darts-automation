@@ -27,7 +27,7 @@ public class Api {
 	private static Logger log = LogManager.getLogger("Api");
     static Response response;
     String authorization;
-	String baseUri = "https://darts-gateway.staging.platform.hmcts.net/";
+	String baseUri = "https://darts-api.staging.platform.hmcts.net/";
 
 
 	public Api() {
@@ -65,9 +65,9 @@ public class Api {
 		String access_token = (response.jsonPath().getString("access_token"));
 		String token_type  = (response.jsonPath().getString("token_type"));
 
-    	System.out.println("post authentication response:");
-    	System.out.println("access_token: " + access_token);
-    	System.out.println("token_type:   " + token_type);
+//    	System.out.println("post authentication response:");
+//    	System.out.println("access_token: " + access_token);
+//    	System.out.println("token_type:   " + token_type);
     	return token_type + " " + access_token;
     	
     }
@@ -84,7 +84,7 @@ public class Api {
 						.header("Accept-Encoding", "gzip, deflate")
 						.header("Connection", "keep-alive")
 						.header("Authorization", authorization)
-						.baseUri("https://darts-api.staging.platform.hmcts.net/")
+						.baseUri(baseUri)
 						.basePath("")
 //				.body("1")
 						.log().everything()
@@ -206,7 +206,7 @@ public class Api {
 //    			+ "}");
 		System.out.println("get: courthouses");
 		api.getApi("courthouses");
-		System.out.println("put: courthouses");
+//		System.out.println("put: courthouses");
 //		api.putApi("courthouses/3", "{\n"
 //    			+ "  \"courthouse_name\": \"Leeds\",\n"
 //    			+ "  \"code\": 100\n"
@@ -220,11 +220,20 @@ public class Api {
 //    			+ "}");
 //		System.out.println("get2: courthouses");
 //    	getApi("courthouses");
-    	
-
- 
+		
+		System.out.println("post: events");
+		api.postApi("events", 	"{"
+				+	  "\"message_id\": \"18422\","
+				+	  "\"event_id\": \"1\","
+				+	  "\"type\": \"1000\","
+				+	  "\"sub_type\": \"1002\","
+				+	  "\"courthouse\": \"LEEDS\","
+				+	  "\"courtroom\": \"ROOM1_LEEDS461\","
+				+	  "\"case_numbers\": ["
+				+	    "\"174\""
+				+	  "],"
+				+	  "\"date_time\": \"2023-06-18T08:37:30.945Z\","
+				+	  "\"event_text\": \"some event text\""
+				+	"}");
 	}
-
-			
-
 }

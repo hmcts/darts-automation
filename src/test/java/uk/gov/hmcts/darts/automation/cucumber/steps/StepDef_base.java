@@ -15,18 +15,22 @@ import org.junit.jupiter.api.Assertions;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SharedDriver;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 
 
 public class StepDef_base {
 	
 	final WebDriver webDriver;
 	NavigationShared NAV;
+	TestData testdata;
 	
 	public StepDef_base(
-			SharedDriver webDriver, 
+			SharedDriver webDriver,
+			TestData testdata,
 			NavigationShared NAV
 			) {
 		this.webDriver = webDriver;
+		this.testdata = testdata;
 		this.NAV = NAV;
 	}	
 	

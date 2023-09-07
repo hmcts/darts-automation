@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
@@ -22,8 +23,8 @@ public class StepDef_navigation extends StepDef_base {
 //	private final WebDriver webDriver;
 	
 	
-	public StepDef_navigation(SharedDriver driver, NavigationShared ns) {
-		super(driver, ns);
+	public StepDef_navigation(SharedDriver driver, TestData testdata, NavigationShared ns) {
+		super(driver, testdata, ns);
 	}
 	
 	
