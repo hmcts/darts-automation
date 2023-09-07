@@ -12,10 +12,10 @@ import io.cucumber.docstring.DocString;
 
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.Postgres;
-//import uk.gov.hmcts.darts.automation.pageObjects.Portal;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,15 +29,15 @@ public class StepDef_db extends StepDef_base {
 	private Postgres DB;
 	
 	
-	public StepDef_db(SharedDriver driver, NavigationShared ns) {
-		super(driver, ns);
+	public StepDef_db(SharedDriver driver, TestData testdata, NavigationShared ns) {
+		super(driver, testdata, ns);
 		DB = new Postgres();
 	}
 	
 	@Given("I execute update sql:")
 	public void executeUpdateSql(String docString) throws Exception {
 		log.info("about to update sql", docString);
-		DB.updateTable(docString);
+		DB.updateRow(docString);
 	}
 	
 	@Given("I set table {} column {} to {} where {} = {}")
@@ -56,6 +56,11 @@ public class StepDef_db extends StepDef_base {
 	@Given("I execute select sql:")
 	public void executeSelectSql(String docString) throws Exception {
 		DB.returnSingleValue(docString);
+	}
+	
+	@Given("^Case (\\S*) exists in court \"([^\"]*)\"$")
+	public void caseExistsInCourt(String caseNumber, String courthouse) throws Exception {
+		DB.returnSingleValue("select count(1) from darts.court_case cc full outer join darts.courthouse cth on cc.cth_id = cth.cth_id where cc.case_number = ? and cth.courthouse_name = ?", caseNumber, courthouse);
 	}
 	
 

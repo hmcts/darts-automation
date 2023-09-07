@@ -35,12 +35,12 @@ public class StepDef_portal extends StepDef_base {
 	
 	@Given("^I am on the portal page$")
 	public void onPortalPage() throws Exception {
-		NAV.navigateToUrl(ReadProperties.main("staging_url"));
+		NAV.navigateToUrl(ReadProperties.main("portal_url"));
 	}
 	
 	@Given("^I am on the landing page$")
 	public void onLandingPage() throws Exception {
-		NAV.navigateToUrl(ReadProperties.main("staging_url"));
+		NAV.navigateToUrl(ReadProperties.main("portal_url"));
 	}
 	
 	@When("^I enter the security code$")
