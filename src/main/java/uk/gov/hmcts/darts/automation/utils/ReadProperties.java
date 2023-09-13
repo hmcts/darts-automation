@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.util.Properties;
 import java.net.InetAddress;
 
+import io.restassured.specification.RequestLogSpecification;
+import io.restassured.specification.ResponseLogSpecification;
+import io.restassured.filter.log.LogDetail;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +30,15 @@ public class ReadProperties {
 	public static String apiDbHost = System.getProperty("DARTS_API_DB_HOST");
 	public static String apiDbDatabase = System.getProperty("DARTS_API_DB_DATABASE");
 	
+	public static boolean runLocal = System.getProperty("RUN_LOCAL", "").equalsIgnoreCase("true");
+
+    public static LogDetail setupRequestLogLevel = LogDetail.URI;
+    public static LogDetail setupResponseLogLevel = LogDetail.STATUS;
+    public static LogDetail authRequestLogLevel = LogDetail.URI;
+    public static LogDetail authResponseLogLevel = LogDetail.STATUS;
+    public static LogDetail requestLogLevel = LogDetail.URI;
+    public static LogDetail responseLogLevel = LogDetail.STATUS;
+    
 	
 	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
 	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
@@ -44,6 +57,15 @@ public class ReadProperties {
 		} else {
 			log.info("Using system environment >"+systemEnv);
 		}
+		
+	    if (runLocal) {
+	        LogDetail setupRequestLogLevel = LogDetail.URI;
+	        LogDetail setupResponseLogLevel = LogDetail.STATUS;
+	        LogDetail authRequestLogLevel = LogDetail.ALL;
+	        LogDetail authResponseLogLevel = LogDetail.ALL;
+	        LogDetail requestLogLevel = LogDetail.ALL;
+	        LogDetail responseLogLevel = LogDetail.ALL;
+	    };
 	}
 	
 
@@ -68,13 +90,11 @@ public class ReadProperties {
 			} catch (IOException e) {
 				log.fatal("Error loading properties >"+parameterFileName);
 				e.printStackTrace();
-//				throw(e);
 				return null;
 			}
 		} catch (FileNotFoundException e) {
 			log.fatal("Error loading properties file >"+parameterFileName);
 			e.printStackTrace();
-//			throw(e);
 			return null;
 		}
 		
@@ -86,7 +106,7 @@ public class ReadProperties {
 			log.info("Returned property >"+property+"< value >"+returnValue);
 			return returnValue;
 		} catch (Exception e) {
-			log.fatal("Error loading properties >"+parameterFileName+"< for property >"+property);
+			log.fatal("Error accessing properties >"+parameterFileName+"< for property >"+property);
 			e.printStackTrace();
 			return null;
 		}
@@ -129,7 +149,7 @@ public class ReadProperties {
 	public static String main(String property) {
 		log.info("environment: " + environment);
 		try {
-			String returnValue = environmentProperties.getProperty(environment+"_"+property);
+			String returnValue = environmentProperties.getProperty(property+"_"+environment);
 			if (returnValue != null) {
 				log.info("Returned environment >"+environment+"< property >"+property+"< value >"+returnValue);
 				return returnValue;

@@ -17,61 +17,7 @@ import org.apache.logging.log4j.Logger;
 public class JsonUtils {
 	private static Logger log = LogManager.getLogger("JsonUtils");
 
-
 	public JsonUtils() {
-		
-	}
-
-	static class JsonString {
-		public String jsonString = "";
-		String sep = "";
-		public JsonString() {
-			jsonString = "{";
-			sep = "\r\n";
-		}
-    
-/*
- * Add field to json 
- * 
- */
-    public JsonString addJsonLine(String tag, String value) {
-    	if (!value.isBlank()) {
-    		if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
-    			value = "";
-    		}
-    		jsonString = jsonString + sep + "  \"" + tag + "\": \"" + value + "\""; 
-    		sep = ",\r\n";
-    	}
-    	return this;
-    }
-    
-    public JsonString addJsonSeq(String tag, String value) {
-    	if (!value.isBlank()) {
-    		if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
-    			value = "";
-    		}
-    		jsonString = jsonString + sep + "  \"" + tag + "\": [\r\n    \"" + value + "\"\r\n  ]"; 
-    		sep = ",\r\n";
-    	}
-    	return this;
-    }
-    
-    public JsonString addSubSequence(String name) {
-    	jsonString = jsonString + sep + "  \"" + name + "\": {\r\n"; 
-    	sep = "";
-    	return this;
-    }
-    
-    public JsonString endSubSequence() {
-    	jsonString = jsonString + "\r\n  }"; 
-		sep = ",\r\n";
-    	return this;
-    }
-    
-    public String jsonValue() {
-    	return jsonString + "\r\n}";
-    }
-		
 		
 	}
     
@@ -87,22 +33,39 @@ public class JsonUtils {
     		String caseRetentionFixedPolicy,
     		String caseTotalSentence) {
     	JsonString eventJson = new JsonString();
-    	eventJson.addJsonLine("message_id" , messageId);
-    	eventJson.addJsonLine("type" , type);
-    	eventJson.addJsonLine("sub_type" , subType);
-    	eventJson.addJsonLine("event_id" , eventId);
-    	eventJson.addJsonLine("courthouse" , courthouse);
-    	eventJson.addJsonLine("courtroom" , courtroom);
-    	eventJson.addJsonSeq("case_numbers" , caseNumbers);
-    	eventJson.addJsonLine("event_text" , eventText);
-    	eventJson.addJsonLine("date_time" , dateTime);
+    	eventJson.addJsonLine("message_id", messageId);
+    	eventJson.addJsonLine("type", type);
+    	eventJson.addJsonLine("sub_type", subType);
+    	eventJson.addJsonLine("event_id", eventId);
+    	eventJson.addJsonLine("courthouse", courthouse);
+    	eventJson.addJsonLine("courtroom", courtroom);
+    	eventJson.addJsonSeq("case_numbers", caseNumbers);
+    	eventJson.addJsonLine("event_text", eventText);
+    	eventJson.addJsonLine("date_time", dateTime);
     	if (!caseRetentionFixedPolicy.isBlank() || !caseTotalSentence.isBlank() ) {
     		eventJson.addSubSequence("retention_policy");
-	    	eventJson.addJsonLine("case_retention_fixed_policy" , caseRetentionFixedPolicy);
-	    	eventJson.addJsonLine("case_total_sentence" , caseTotalSentence);
+	    	eventJson.addJsonLine("case_retention_fixed_policy", caseRetentionFixedPolicy);
+	    	eventJson.addJsonLine("case_total_sentence", caseTotalSentence);
     		eventJson.endSubSequence();
     	}
 		return eventJson.jsonValue();
+    }
+    
+    public static String buildCaseJson(String courthouse,
+    		String caseNumber,
+    		String defendant,
+    		String judge,
+    		String prosecutor,
+    		String defender) {
+    	JsonString jsonString = new JsonString();
+    	jsonString.addJsonLine("courthouse", courthouse);
+    	jsonString.addJsonLine("case_number", caseNumber);
+    	
+    	jsonString.addJsonSeq("defendants", defendant);
+    	jsonString.addJsonSeq("judges", judge);
+    	jsonString.addJsonSeq("prosecutors", prosecutor);
+    	jsonString.addJsonSeq("defenders", defender);
+		return jsonString.jsonValue();
     }
     
     @Test

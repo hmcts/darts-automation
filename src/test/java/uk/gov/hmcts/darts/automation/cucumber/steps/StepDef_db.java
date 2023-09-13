@@ -24,8 +24,6 @@ import org.junit.jupiter.api.Assertions;
 public class StepDef_db extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_db");
-//	private final WebDriver webDriver;
-//	private Portal portal;
 	private Postgres DB;
 	
 	
@@ -56,11 +54,6 @@ public class StepDef_db extends StepDef_base {
 	@Given("I execute select sql:")
 	public void executeSelectSql(String docString) throws Exception {
 		DB.returnSingleValue(docString);
-	}
-	
-	@Given("^Case (\\S*) exists in court \"([^\"]*)\"$")
-	public void caseExistsInCourt(String caseNumber, String courthouse) throws Exception {
-		DB.returnSingleValue("select count(1) from darts.court_case cc full outer join darts.courthouse cth on cc.cth_id = cth.cth_id where cc.case_number = ? and cth.courthouse_name = ?", caseNumber, courthouse);
 	}
 	
 

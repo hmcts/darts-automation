@@ -1,11 +1,17 @@
 package uk.gov.hmcts.darts.automation.utils;
 
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.http.Cookie;
 import io.restassured.http.Cookies;
 import io.restassured.response.*;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
+
 import static io.restassured.RestAssured.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,18 +33,28 @@ public class Api {
 	private static Logger log = LogManager.getLogger("Api");
     static Response response;
     String authorization;
-	String baseUri = "https://darts-api.staging.platform.hmcts.net/";
+	static String baseUri = ReadProperties.main("jsonApiUri");
 
 
 	public Api() {
 		
 	}
 
+    public static RequestSpecification requestLogLevel(LogDetail loggingLevel){
+        RequestSpecification requestSpec = new RequestSpecBuilder().log(loggingLevel).build();
+        return requestSpec;
+    }
+
+    public static ResponseSpecification responseLogLevel(LogDetail loggingLevel){
+        ResponseSpecification loglevel = new ResponseSpecBuilder().log(loggingLevel).build();
+        return loglevel;
+    }
     
     public String authenticate() {
     	log.info("authentication");
     	response  = 
     		given()
+    			.spec(requestLogLevel(ReadProperties.authRequestLogLevel))
     			.header("Content-Type","application/x-www-form-urlencoded")  
     			.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
     			.header("Accept", "application/json, text/plain, */*")
@@ -51,148 +67,173 @@ public class Api {
     					"username", ReadProperties.apiUserName,
     					"password", ReadProperties.apiPassword,
     					"client_id", ReadProperties.apiClientId,
-    					"scope", "https://" + ReadProperties.apiAuthPath + "/" + ReadProperties.apiClientId + "/Functional.Test")
-    			.baseUri(ReadProperties.apiAuthUri)
-    			.basePath(ReadProperties.apiAuthPath)
-    			.log().everything()
+    					"scope", "https://" + ReadProperties.main("apiAuthPath") + "/" + ReadProperties.apiClientId + "/Functional.Test")
+    			.baseUri(ReadProperties.main("apiAuthUri"))
+    			.basePath(ReadProperties.main("apiAuthPath"))
     		.when()
-    			.post("/B2C_1_ropc_darts_signin/oauth2/v2.0/token")
+    			.post(ReadProperties.main("apiAuthEndpoint"))
 			.then()
-				.log().everything()
+				.spec(responseLogLevel(ReadProperties.authResponseLogLevel))
 				.assertThat().statusCode(200)
 				.extract().response()
     			;
 		String access_token = (response.jsonPath().getString("access_token"));
 		String token_type  = (response.jsonPath().getString("token_type"));
-
-//    	System.out.println("post authentication response:");
-//    	System.out.println("access_token: " + access_token);
-//    	System.out.println("token_type:   " + token_type);
     	return token_type + " " + access_token;
     	
     }
 
 	public void getApi(String endpoint) {
 
-		log.info("get: " + endpoint);
     	authorization = authenticate();
+		log.info("get: " + endpoint);
 		response =
 				given()
-						.accept("application/json, text/plain, */*")
-						.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-						.header("Accept", "application/json, text/plain, */*")
-						.header("Accept-Encoding", "gzip, deflate")
-						.header("Connection", "keep-alive")
-						.header("Authorization", authorization)
-						.baseUri(baseUri)
-						.basePath("")
-//				.body("1")
-						.log().everything()
-						.when()
-						.get(endpoint)
-						.then()
-						.log().everything()
-						.assertThat().statusCode(200)
-						.extract().response();
+    				.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept("application/json, text/plain, */*")
+					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
+					.header("Accept", "application/json, text/plain, */*")
+					.header("Accept-Encoding", "gzip, deflate")
+					.header("Connection", "keep-alive")
+					.header("Authorization", authorization)
+					.baseUri(baseUri)
+					.basePath("")
+				.body("1")
+				.when()
+					.get(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.log().everything()
+					.assertThat().statusCode(200)
+					.extract().response();
 	}
 
-	public void getApi(String endpoint, Map<String, String> formParams) {
+	public Response getApiWithFormParams(String endpoint, Map<String, String> formParams) {
 
-		log.info("get: " + endpoint);
     	authorization = authenticate();
+		log.info("get: " + endpoint);
 		response =
 				given()
-						.accept("application/json, text/plain, */*")
-						.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-						.header("Accept", "application/json, text/plain, */*")
-						.header("Accept-Encoding", "gzip, deflate")
-						.header("Connection", "keep-alive")
-						.header("Authorization", authorization)
-						.baseUri(baseUri)
-						.basePath("")
-						.formParams(formParams)
-						.log().everything()
-						.when()
-						.get(endpoint)
-						.then()
-						.log().everything()
-						.assertThat().statusCode(200)
-						.extract().response();
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept("application/json, text/plain, */*")
+					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
+					.header("Accept", "application/json, text/plain, */*")
+					.header("Accept-Encoding", "gzip, deflate")
+					.header("Connection", "keep-alive")
+					.header("Authorization", authorization)
+					.baseUri(baseUri)
+					.basePath("")
+					.formParams(formParams)
+				.when()
+					.get(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(200)
+					.extract().response();
+		return response;
+	}
+
+	public Response getApiWithQueryParams(String endpoint, Map<String, String> queryParams) {
+
+    	authorization = authenticate();
+		log.info("get: " + endpoint);
+		response =
+				given()
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept("application/json, text/plain, */*")
+					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
+					.header("Accept", "application/json, text/plain, */*")
+					.header("Accept-Encoding", "gzip, deflate")
+					.header("Connection", "keep-alive")
+					.header("Authorization", authorization)
+					.baseUri(baseUri)
+					.basePath("")
+					.queryParams(queryParams)
+				.when()
+					.get(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(200)
+					.extract().response();
+		return response;
 	}
     
-    public void postApi(String endpoint, String body) {
+    public Response postApi(String endpoint, String body) {
 
+    	authorization = authenticate();
     	log.info("post: " + endpoint);
     	log.info(body);
-    	authorization = authenticate();
 		response = 
 				given()
-				.accept("application/json, text/plain, */*")
-				.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-				.header("Accept", "application/json, text/plain, */*")
-				.header("Accept-Encoding", "gzip, deflate")
-				.header("Content-Type", "application/json")
-				.header("Connection", "keep-alive")
-				.header("Authorization", authorization)
-				.baseUri(baseUri)
-				.basePath("")
-				.body(body)
-				.log().everything()
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept("application/json, text/plain, */*")
+					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
+					.header("Accept", "application/json, text/plain, */*")
+					.header("Accept-Encoding", "gzip, deflate")
+					.header("Content-Type", "application/json")
+					.header("Connection", "keep-alive")
+					.header("Authorization", authorization)
+					.baseUri(baseUri)
+					.basePath("")
+					.body(body)
 				.when()
-				.post(endpoint)
-			.then()
-				.log().everything()
-				.assertThat().statusCode(201)
-				.extract().response();
+					.post(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(201)
+					.extract().response();
+		return response;
     }
     
-    public void putApi(String endpoint, String body) {
+    public Response putApi(String endpoint, String body) {
 
-    	log.info("put: " + endpoint);
     	authorization = authenticate();
+    	log.info("put: " + endpoint);
 		response = 
 				given()
-				.accept("application/json, text/plain, */*")
-				.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-				.header("Accept", "application/json, text/plain, */*")
-				.header("Accept-Encoding", "gzip, deflate")
-				.header("Content-Type", "application/json")
-				.header("Connection", "keep-alive")
-				.header("Authorization", authorization)
-				.baseUri(baseUri)
-				.basePath("")
-				.body(body)
-				.log().everything()
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept("application/json, text/plain, */*")
+					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
+					.header("Accept", "application/json, text/plain, */*")
+					.header("Accept-Encoding", "gzip, deflate")
+					.header("Content-Type", "application/json")
+					.header("Connection", "keep-alive")
+					.header("Authorization", authorization)
+					.baseUri(baseUri)
+					.basePath("")
+					.body(body)
 				.when()
-				.put(endpoint)
-			.then()
-				.log().everything()
-				.assertThat().statusCode(204)
-				.extract().response();
+					.put(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(204)
+					.extract().response();
+		return response;
     }
     
-    public void deleteApi(String endpoint, String body) {
+    public Response deleteApi(String endpoint, String body) {
 
     	log.info("delete: " + endpoint);
     	authorization = authenticate();
 		response = 
 				given()
-				.accept("application/json, text/plain, */*")
-				.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-				.header("Accept", "application/json, text/plain, */*")
-				.header("Accept-Encoding", "gzip, deflate")
-				.header("Content-Type", "application/json")
-				.header("Connection", "keep-alive")
-				.header("Authorization", authorization)
-				.baseUri(baseUri)
-				.basePath("")
-				.log().everything()
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept("application/json, text/plain, */*")
+					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
+					.header("Accept", "application/json, text/plain, */*")
+					.header("Accept-Encoding", "gzip, deflate")
+					.header("Content-Type", "application/json")
+					.header("Connection", "keep-alive")
+					.header("Authorization", authorization)
+					.baseUri(baseUri)
+					.basePath("")
 				.when()
-				.delete(endpoint)
-			.then()
-				.log().everything()
-				.assertThat().statusCode(204)
-				.extract().response();
+					.delete(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(204)
+					.extract().response();
+		return response;
     }
     
 

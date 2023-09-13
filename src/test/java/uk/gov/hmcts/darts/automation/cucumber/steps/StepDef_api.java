@@ -1,5 +1,6 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +61,7 @@ public class StepDef_api extends StepDef_base {
 	}
 
 	@When("^I call POST events API for id (\\S*) type (\\S*) (\\S*) with \"([^\"]*)\"$")
-	public void callEventApi(String id, String type, String subType, String args) throws Exception {
+	public void callPostEventApi(String id, String type, String subType, String args) throws Exception {
 		testdata.setProperty("message_id", id);
 		testdata.setProperty("type", type);
 		testdata.setProperty("sub_type", subType);
@@ -79,11 +80,6 @@ public class StepDef_api extends StepDef_base {
 		api.postApi("events", json);
 	}
 	
-//	@When("I call POST event API for type {word}")
-//	public void callEventApi(String type, List<Map<String, String>> dataTable) {
-//		callEventApi(type, "", dataTable);
-//	}
-	
 	@When("I call POST {word} API using json body:")
 	public void callPostApiWithJsonBody(String endPoint, String docString) throws Exception {
 		api.postApi(endPoint, docString);
@@ -92,6 +88,19 @@ public class StepDef_api extends StepDef_base {
 	@When("I call GET {word} API")
 	public void callGetApiWithJsonBody(String endPoint) throws Exception {
 		api.getApi(endPoint);
+	}
+
+// sample cucumber:
+//	When I call GET case-hearings API with terms:
+//	| case_number  | courthouse  | courtroom  | judge_name | defendant_name | date_from | date_to | event_text_contains |
+//	|              | Leeds		 |            |            |                |           |         |                     |
+
+	@When("^I call GET case-hearings API with terms:$")
+	public void callGetCaseHearingsApi(List<Map<String, String>> dataTable) throws Exception {
+		for (Map<String, String> map : dataTable) {
+			map.get("case_number");
+			api.getApi("cases/search", map);
+		}
 	}
 	
 

@@ -1,5 +1,12 @@
 package uk.gov.hmcts.darts.automation.utils;
 
+/*
+ * Functions to access postgres database
+ * 
+ * Consider adding case-insensitive calls using iLike('%<value>%')
+ * 
+ */
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -109,12 +116,12 @@ public class Postgres {
 		}
 	}
 
-	public String returnSingleValue(String sql, String key1, String key2) throws Exception {
-		log.info("database select: " + sql);
+	public String returnSingleValue(String sql, String keyVal1, String keyVal2) throws Exception {
+		log.info("database select: " + sql + " : " + keyVal1 + " : " + keyVal2);
 		connect();
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-			stmt.setString(1, key1);
-			stmt.setString(2, key2);
+			stmt.setString(1, keyVal1);
+			stmt.setString(2, keyVal2);
 			try (ResultSet rs = stmt.executeQuery()) {
 				return extractSingleValueFromResultSet(rs);
 			} catch (Exception e) {
@@ -127,8 +134,16 @@ public class Postgres {
 	public String returnSingleValue(String table, String keyCol, String keyVal, String returnCol) throws Exception {
 		String sql = "select " + returnCol
 				+ " from " + ReadProperties.apiDbSchema + "." + table
-				+ " where " + keyCol + " = ?";
-		return returnSingleValue(sql, keyVal);
+				+ " where " + keyCol + " = " + delimitedValue(table, keyCol, keyVal);
+		return returnSingleValue(sql);
+	}
+
+	public String returnSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String returnCol) throws Exception {
+		String sql = "select " + returnCol
+				+ " from " + ReadProperties.apiDbSchema + "." + table
+				+ " where " + keyCol1 + " = " + delimitedValue(table, keyCol1, keyVal1)
+				+ " and " + keyCol2 + " = " + delimitedValue(table, keyCol2, keyVal2);
+		return returnSingleValue(sql);
 	}
 
 	public ResultSet executeSql(String sql) throws Exception {
@@ -141,7 +156,7 @@ public class Postgres {
 
 	public int deleteRow(String table, String key, String keyVal) throws Exception {
 		log.info("Database delete: " + table + " " + key + " " + keyVal);
-		String sql = "delete from " + table + " where " + key + " = " + keyVal;
+		String sql = "delete from " + table + " where " + key + " = " +  delimitedValue(table, key, keyVal);
 		return deleteRow(sql);
 	}
 
@@ -165,6 +180,22 @@ public class Postgres {
 		}
 		return deleteCount;
 	}
+	
+	String delimitedValue(String table, String column, String value) throws Exception {
+		String columnType = returnSingleValue("select pg_typeof(" + column + ") "
+				+ "from darts." + table
+				+ " LIMIT 1");
+		String delimiter = "";
+		switch(columnType.split(" ")[0].toLowerCase()) {
+		case "character": 
+		case "string": 
+		case "date": 
+				delimiter = "'";
+				break;
+		default : delimiter = "";
+		};
+		return delimiter + value + delimiter;
+	}
 
 	public int deleteRows(String sql) throws Exception {
 		int deleteCount = 0;
@@ -184,15 +215,16 @@ public class Postgres {
 		return deleteCount;
 	}
 
-	public int updateRow(String table, String key, String keyVal, String col, String newVal) throws Exception {
-		log.info("Database update: " + table + " " + key + " " + keyVal + " " + col + " " + newVal);
-		String sql = "update darts." + table + " set " + col + " = " + newVal + " where " + key + " = ?";
+	public int updateRow(String table, String keyCol, String keyVal, String UpdateCol, String newVal) throws Exception {
+		log.info("Database update: " + table + " " + keyCol + " " + keyVal + " " + UpdateCol + " " + newVal);
+		String sql = "update darts." + table 
+				+ " set " + UpdateCol + " = " + delimitedValue(table, UpdateCol, newVal)
+				+ " where " + keyCol + " = "  + delimitedValue(table, keyCol, keyVal);
 		int updateCount = 0;
 		connect();
 		conn.setAutoCommit(false);
 		log.info("Database update: " + sql);
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-			stmt.setString(1, keyVal);
 			updateCount = stmt.executeUpdate();
 			if (updateCount == 1) {
 				conn.commit();
@@ -232,9 +264,6 @@ public class Postgres {
 
 	public String setSingleValue(String table, String keyCol, String keyVal, String updateCol, String updateVal) throws Exception {
 		String initialValue = returnSingleValue(table, keyCol, keyVal, updateCol);
-		String sql = "update " + ReadProperties.apiDbSchema + "." + table
-				+ " set " + updateCol + " = " + updateVal
-				+ " where " + keyCol + " = ?";
 		updateRow(table, keyCol, keyVal, updateCol, updateVal);
 		return initialValue;
 	}
@@ -242,15 +271,19 @@ public class Postgres {
 	@Test
 	public void test() throws Exception {
 		Postgres pg = new Postgres();
+		System.out.println(pg.delimitedValue("court_case", "case_number", "12"));
+		System.out.println(pg.delimitedValue("court_case", "case_closed", "12"));
+		System.out.println(pg.delimitedValue("court_case", "cas_id", "12"));
+		System.out.println(pg.delimitedValue("court_case", "cth_id", "12"));
 		System.out.println(pg.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"));
 		System.out.println(pg.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"));
 		System.out.println(pg.returnSingleValue("select case_number from darts.court_case where case_number = '174'"));
-		System.out.println(pg.setSingleValue("court_case", "case_number", "174", "case_closed", "null"));
+		System.out.println(pg.setSingleValue("court_case", "case_number", "174", "case_closed", null));
 		System.out.println(pg.returnSingleValue("court_case", "case_number", "174", "case_number"));
 		System.out.println(pg.returnSingleValue("court_case", "case_number", "174", "cas_id"));
 		System.out.println(pg.returnSingleValue("court_case", "case_number", "174", "case_closed"));
-//		System.out.println(pg.returnSingleValue("court_case", "cas_id", "81", "case_number"));
-//		System.out.println(pg.returnSingleValue("court_case", "cth_id", "2", "case_number"));
+		System.out.println(pg.returnSingleValue("court_case", "cas_id", "81", "case_number"));
+		System.out.println(pg.returnSingleValue("court_case", "cth_id", "2", "case_number"));
 	}
 
 

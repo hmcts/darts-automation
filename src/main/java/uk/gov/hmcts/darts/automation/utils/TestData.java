@@ -100,6 +100,8 @@ public class TestData {
  * 
  * Get property unique per run
  * 
+ * increment some default values
+ * 
  */
 	public String getProperty(String property) {
 		String returnValue;
@@ -108,6 +110,22 @@ public class TestData {
 			if (returnValue == null) {
 				returnValue = readProperty(property);
 				if (returnValue != null) {
+					switch(property) {
+						case "case_number": 
+							String courtHouse = getProperty("courthouse");
+							if (!courtHouse.isBlank()) {
+								String caseType = getProperty("case_type");
+								if (!caseType.isBlank()) {
+									returnValue = getNextCaseNumber(getProperty("courthouse"), getProperty("case_tyoe"));
+								}
+							}
+							break;
+						case "event_id":
+						case "courthouse_code":
+							returnValue = increment(returnValue);
+							saveProperty(property, returnValue);
+							break;
+					}
 					properties.put(property, returnValue);
 					log.info("value for " + property + " from properties file - returning " + returnValue);
 				} else {
