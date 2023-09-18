@@ -1,6 +1,11 @@
 Feature: Portal Tests
 
 @smoketest
+Scenario: External logon
+	Given I am logged on to DARTS as an external user
+	Then  I see "Welcome to DARTS" on the page
+
+@DMP-407
 Scenario: navigate
 	Given I am on the landing page
 	Then  I see "This is a new service – your feedback will help us to improve it." on the page

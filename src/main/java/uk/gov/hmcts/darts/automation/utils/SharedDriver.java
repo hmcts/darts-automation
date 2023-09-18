@@ -72,16 +72,10 @@ public class SharedDriver extends EventFiringWebDriver {
 			} else {
 				// Assuming no proxy
 			}
-//			firefoxOptions.setHeadless(true);
 			firefoxOptions.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
-//			firefoxOptions.setProfile(firefoxProfile);				// nothing in profile at the moment ....
 			REAL_DRIVER = new FirefoxDriver(firefoxOptions);
 			REAL_DRIVER.manage().window().maximize();
 			REAL_DRIVER.manage().window().setSize(new Dimension(1920, 1080));
-			break;
-		case "htmlunit":
-			//REAL_DRIVER = new  HtmlUnitDriver(true);
-			//REAL_DRIVER.manage().timeouts().implicitlyWait(10,  TimeUnit.SECONDS);
 			break;
 
 		case "grid":
@@ -91,7 +85,6 @@ public class SharedDriver extends EventFiringWebDriver {
 		case "ie":
 		case "internet explorer":
 			InternetExplorerOptions ieOptions = new InternetExplorerOptions();
-//			System.setProperty("webdriver.ie.driver", ReadProperties.machine("ieDriverLocation"));
 			System.setProperty("webdriver.ie.driver", ReadProperties.getHostProperty("ieDriverLocation"));
 			if (usingProxy.equals("1")) {
 				ieOptions.setCapability("network.proxy.type", 1);
@@ -108,7 +101,6 @@ public class SharedDriver extends EventFiringWebDriver {
 			break;
 		case "edge":
 			EdgeOptions edgeOptions = new EdgeOptions();
-//			System.setProperty("webdriver.edge.driver", ReadProperties.machine("edgeDriverLocation"));
 			System.setProperty("webdriver.edge.driver", ReadProperties.getHostProperty("edgeDriverLocation"));
 			if (usingProxy.equals("1")) {
 				edgeOptions.setCapability("network.proxy.type", 1);
@@ -125,7 +117,6 @@ public class SharedDriver extends EventFiringWebDriver {
 			break;
 
 		case "chrome":
-//			System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver.exe");
 
 			String downloadFilepath = ReadProperties.getDownloadFilepath();
 			log.info("Download File Path being set to =>"+downloadFilepath);
@@ -146,21 +137,12 @@ public class SharedDriver extends EventFiringWebDriver {
 			if (headlessChrome.equalsIgnoreCase("true")) {	
 				chromeOptions.setHeadless(true);
 			} else {
-				//options.addArguments("--start-maximized");
 			}
 			try {
 				log.info("Starting chrome driver");
 				REAL_DRIVER = new ChromeDriver(chromeOptions);
 			} catch (Exception e) {
 				log.info("Setting driver location and Starting chrome driver");
-//				String version = System.getProperty("chromeVersion");
-//				if (version != null) {
-//					log.info("Using driver for chrome version >"+version);
-//					System.setProperty("webdriver.chrome.driver", ReadProperties.machine("chromeDriverLocation", version));
-//				} else {
-//					log.info("Using default chrome driver");
-//					System.setProperty("webdriver.chrome.driver", ReadProperties.machine("chromeDriverLocation"));
-//				}
 				System.setProperty("webdriver.chrome.driver", ReadProperties.getHostProperty("chromeDriverLocation"));
 				REAL_DRIVER = new ChromeDriver(chromeOptions);
 			}
@@ -173,10 +155,8 @@ public class SharedDriver extends EventFiringWebDriver {
 			log.fatal("Invalid browser type specified" + usingDriver);
 		}
 
-//		REAL_DRIVER.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 		REAL_DRIVER.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 
-		// REAL_DRIVER.manage().window().setSize(new Dimension(1024,728));
 		Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
 	}
 

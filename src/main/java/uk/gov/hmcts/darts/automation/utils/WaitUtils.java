@@ -57,7 +57,6 @@ public class WaitUtils {
 	}
 	
 	public void waitForTextOnPage(String text, int wait_time) {
-		//By byXpath = By.xpath("//*[contains(normalize-space(text()),'"
 		By byXpath = By.xpath("//*[contains(.,'" // This resolves issues where elements are parallel to text
 				+ text
 				+ "')]"); 
@@ -107,7 +106,6 @@ public class WaitUtils {
  */
 	public void activateImplicitWait() {
 		log.info("Don't Activate Implicit wait");
-//		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(35)); // Activate implicitlyWait()
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0)); // Activate implicitlyWait()														
 	}
 
