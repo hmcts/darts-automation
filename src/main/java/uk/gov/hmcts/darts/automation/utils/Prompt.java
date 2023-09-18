@@ -42,14 +42,15 @@ public class Prompt {
 	}
 	
 	public boolean isLocal() {
-		return (ReadProperties.os.substring(0, 3).equalsIgnoreCase("MAC")
-				|| ReadProperties.os.substring(0, 7).equalsIgnoreCase("WINDOWS"));
+		return (ReadProperties.runLocal);
 	}
 	
 	public void displayPopup(String message, String title) {
 		if (isLocal()) { 
 			log.info("Display Popup => " + title + " : " + message);
 			JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);
+		} else {
+			log.info("Popup not displayed " + title + " : " + message);
 		}
 	}
 	
@@ -67,6 +68,8 @@ public class Prompt {
 	    	log.info("Going to get input =>"+message);
 	    	returnString = JOptionPane.showInputDialog(message);
 	    	log.info("Got input at =>"+message+"<= value =>"+returnString);
+		} else {
+			log.warn("Could not prompt for input at =>" + message);
 		}
     	return returnString;
 	}

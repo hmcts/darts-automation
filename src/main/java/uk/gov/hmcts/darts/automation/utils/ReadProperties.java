@@ -23,22 +23,16 @@ public class ReadProperties {
 	public static String apiClientSecret = System.getProperty("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
 
 	public static String apiDbSchema = System.getProperty("DARTS_API_DB_SCHEMA");
-//	public static String apiDbConnectionString = System.getProperty("AZURE_STORAGE_CONNECTION_STRING");
+//	n.b.  System.getProperty("AZURE_STORAGE_CONNECTION_STRING"); defined but not used
 	public static String apiDbUserName = System.getProperty("DARTS_API_DB_USERNAME");
 	public static String apiDbPassword = System.getProperty("DARTS_API_DB_PASSWORD");
 	public static String apiDbPort = System.getProperty("DARTS_API_DB_PORT");
 	public static String apiDbHost = System.getProperty("DARTS_API_DB_HOST");
 	public static String apiDbDatabase = System.getProperty("DARTS_API_DB_DATABASE");
+	public static String automationUserId = System.getProperty("AutomationTestUserName", "");
+	public static String automationPassword = System.getProperty("AutomationTestPassword", "");
 	
-	public static boolean runLocal = System.getProperty("RUN_LOCAL", "").equalsIgnoreCase("true");
-
-    public static LogDetail setupRequestLogLevel = LogDetail.URI;
-    public static LogDetail setupResponseLogLevel = LogDetail.STATUS;
-    public static LogDetail authRequestLogLevel = LogDetail.URI;
-    public static LogDetail authResponseLogLevel = LogDetail.STATUS;
-    public static LogDetail requestLogLevel = LogDetail.URI;
-    public static LogDetail responseLogLevel = LogDetail.STATUS;
-    
+	public static boolean runLocal = System.getProperty("RUN_LOCAL", "false").equalsIgnoreCase("true");    
 	
 	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
 	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
@@ -48,24 +42,23 @@ public class ReadProperties {
 	static Properties translationProperties = getProperties(translationPropertiesParameterFileName);
 	public static String os = System.getProperty("os.name").replace(" ", "_"); // .toUpperCase();
 	static String systemEnv = System.getProperty("envName");
-	static String environment = systemEnv;
+	static String environment = systemEnv == null ? environmentProperties.getProperty("defaultEnv") : systemEnv;
+	
+	static LogDetail setupRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	static LogDetail setupResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+	static LogDetail authRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	static LogDetail authResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+	static LogDetail requestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	static LogDetail responseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+    
 	static {
 		log.info("OS =>" + os);
 		if (systemEnv == null) {
-			environment = environmentProperties.getProperty("defaultEnv");
 			log.info("Using default environment >"+environment);
 		} else {
 			log.info("Using system environment >"+systemEnv);
 		}
-		
-	    if (runLocal) {
-	        LogDetail setupRequestLogLevel = LogDetail.URI;
-	        LogDetail setupResponseLogLevel = LogDetail.STATUS;
-	        LogDetail authRequestLogLevel = LogDetail.ALL;
-	        LogDetail authResponseLogLevel = LogDetail.ALL;
-	        LogDetail requestLogLevel = LogDetail.ALL;
-	        LogDetail responseLogLevel = LogDetail.ALL;
-	    };
+
 	}
 	
 

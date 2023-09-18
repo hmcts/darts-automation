@@ -33,20 +33,6 @@ public class TestData {
 	Properties propFile; // = new Properties();
 	Properties properties; // = new Properties();
 	
-//	static {
-//		try(FileInputStream inStream = new FileInputStream(new File(parameterFileName))) {
-//			try {
-//				propFile.load(inStream);
-//			} catch (Exception e) {
-//				log.fatal("Error loading properties >"+parameterFileName);
-//				e.printStackTrace();
-//			}
-//		} catch (Exception e) {
-//			log.fatal("Error loading properties file >"+parameterFileName);
-//			e.printStackTrace();
-//		}
-//	}
-	
 	public TestData() {
 		propFile = new Properties();
 		properties = new Properties();
@@ -63,12 +49,7 @@ public class TestData {
 		}
 	}
 
-//	public String courthouse;
-//	public String courtroom;
-//	public String caseNumber;
-//	public String eventType;
-//	public String eventSubtype;
-	
+
 /*
  * 
  * Read property from properties file

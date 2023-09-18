@@ -14,7 +14,6 @@ import uk.gov.hmcts.darts.automation.utils.SharedDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
-//import uk.gov.hmcts.darts.automation.pageObjects.Portal;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,8 +21,6 @@ import org.apache.logging.log4j.Logger;
 public class StepDef_portal extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_portal");
-//	private final WebDriver webDriver;
-//	private Portal portal;	
 	
 	private Prompt prompt;	
 	
@@ -32,6 +29,24 @@ public class StepDef_portal extends StepDef_base {
 		prompt = new Prompt(webDriver);
 	}
 	
+	@Given("I am logged on to DARTS as an {word} user")
+	public void logonInternal(String type) throws Exception {
+		NAV.navigateToUrl(ReadProperties.main("portal_url"));
+		switch (type.toUpperCase()) {
+		case "INTERNAL":
+		NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
+			break;
+		case "EXTERNAL":
+			NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
+			break;
+		default:
+			log.fatal("Unknown type - expected internal or external");
+		}
+		NAV.press_buttonByName("Continue");
+		NAV.set_valueTo("Enter your email", ReadProperties.automationUserId);
+		NAV.set_valueTo("Enter your password", ReadProperties.automationPassword);
+		NAV.press_buttonByName("Continue");
+	}
 	
 	@Given("^I am on the portal page$")
 	public void onPortalPage() throws Exception {
@@ -53,9 +68,5 @@ public class StepDef_portal extends StepDef_base {
 		NAV.textPresentOnPage("XXX-XXX-" + arg1.substring(arg1.length() - 5));
 	}
 	
-//	@When("^I click the search button$")
-//	public void clickTheSearchButton() throws Exception {
-//		portal.clickTheSearchButton();
-//	}
 	
 }

@@ -9,7 +9,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.docstring.DocString;
-import uk.gov.hmcts.darts.automation.utils.Api;
+import uk.gov.hmcts.darts.automation.utils.JsonApi;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonString;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
@@ -27,13 +27,13 @@ public class StepDef_testData extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_testData");
 	private Database DB;
-	private Api api;
+	private JsonApi jsonApi;
 	
 	
 	public StepDef_testData(SharedDriver driver, TestData testdata, NavigationShared ns) {
 		super(driver, testdata, ns);
 		DB = new Database();
-		api = new Api();
+		jsonApi = new JsonApi();
 	}
 	
 	@Given("I use {word} {word}")
@@ -48,7 +48,7 @@ public class StepDef_testData extends StepDef_base {
 	    	JsonString jsonString = new JsonString();
 	    	jsonString.addJsonLine("courthouse_name", courtHouse);
 	    	jsonString.addJsonLine("code", testdata.getProperty("courthouse_code"));
-	    	api.postApi("courthouses", jsonString.jsonValue());
+	    	jsonApi.postApi("courthouses", jsonString.jsonValue());
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class StepDef_testData extends StepDef_base {
 				"judge for " + caseNumber,
 				"prosecutor for" + caseNumber,
 				"defender for " + caseNumber);
-		api.postApi("courthouses", json);
+		jsonApi.postApi("courthouses", json);
 		}	
 	}
 		
