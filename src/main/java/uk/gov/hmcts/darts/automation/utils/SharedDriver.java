@@ -134,7 +134,8 @@ public class SharedDriver extends EventFiringWebDriver {
 			chromeOptions.addArguments("--window-size=1920,1080");
 			chromeOptions.setExperimentalOption("prefs", chromePrefs);
 
-			if (headlessChrome.equalsIgnoreCase("true")) {	
+			if (headlessChrome.equalsIgnoreCase("true") 
+					|| !ReadProperties.runLocal) {	
 				chromeOptions.setHeadless(true);
 			} else {
 			}
