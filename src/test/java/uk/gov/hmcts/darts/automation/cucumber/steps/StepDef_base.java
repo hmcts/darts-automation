@@ -21,6 +21,7 @@ public class StepDef_base {
 	
 	final WebDriver webDriver;
 	NavigationShared NAV;
+	searchCase SRCH;
 	
 	public StepDef_base(
 			SharedDriver webDriver, 
@@ -28,8 +29,15 @@ public class StepDef_base {
 			) {
 		this.webDriver = webDriver;
 		this.NAV = NAV;
-	}	
-	
+	}
+
+	public StepDef_base(
+			SharedDriver webDriver,
+			searchCase SRCH
+	) {
+		this.webDriver = webDriver;
+		this.SRCH = SRCH;
+	}
 	
 }
 
