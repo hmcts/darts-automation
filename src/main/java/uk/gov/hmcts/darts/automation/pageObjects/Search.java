@@ -1,4 +1,4 @@
-package uk.gov.hmcts.darts.automation.utils;
+package uk.gov.hmcts.darts.automation.pageObjects;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -11,16 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class searchCase {
+public class Search {
 
     private static WebDriver webDriver;
 
-    //public searchCase(WebDriver driver)   {
-    //    searchCase.webDriver = driver;
-    //}
-
-    public searchCase(WebDriver driver) {
-        searchCase.webDriver = driver;
+    public Search(WebDriver driver) {
+        Search.webDriver = driver;
 
     }
 
