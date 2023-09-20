@@ -58,6 +58,7 @@ public class ReadProperties {
 		} else {
 			log.info("Using system environment >"+systemEnv);
 		}
+		log.info(apiUserName);
 
 	}
 	
