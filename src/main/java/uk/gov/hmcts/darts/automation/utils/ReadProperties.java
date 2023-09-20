@@ -17,22 +17,24 @@ import org.apache.logging.log4j.Logger;
 public class ReadProperties {
 	private static Logger log = LogManager.getLogger("ReadProperties");
 
-	public static String apiUserName = System.getProperty("FUNC_TEST_ROPC_USERNAME", "NONE");
-	public static String apiPassword = System.getProperty("FUNC_TEST_ROPC_PASSWORD", "");
-	public static String apiClientId = System.getProperty("AAD_B2C_ROPC_CLIENT_ID_KEY");
-	public static String apiClientSecret = System.getProperty("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+// get azure secrets as environment vars
+	public static String apiUserName = System.getenv("FUNC_TEST_ROPC_USERNAME");
+	public static String apiPassword = System.getenv("FUNC_TEST_ROPC_PASSWORD");
+	public static String apiClientId = System.getenv("AAD_B2C_ROPC_CLIENT_ID_KEY");
+	public static String apiClientSecret = System.getenv("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
 
-	public static String apiDbSchema = System.getProperty("DARTS_API_DB_SCHEMA");
+	public static String apiDbSchema = System.getenv("DARTS_API_DB_SCHEMA");
 //	n.b.  System.getProperty("AZURE_STORAGE_CONNECTION_STRING"); defined but not used
-	public static String apiDbUserName = System.getProperty("DARTS_API_DB_USERNAME");
-	public static String apiDbPassword = System.getProperty("DARTS_API_DB_PASSWORD");
-	public static String apiDbPort = System.getProperty("DARTS_API_DB_PORT");
-	public static String apiDbHost = System.getProperty("DARTS_API_DB_HOST");
-	public static String apiDbDatabase = System.getProperty("DARTS_API_DB_DATABASE");
-	public static String automationUserId = System.getProperty("AUTOMATION_USERNAME", "NONE");
-	public static String automationPassword = System.getProperty("AUTOMATION_PASSWORD", "");
+	public static String apiDbUserName = System.getenv("DARTS_API_DB_USERNAME");
+	public static String apiDbPassword = System.getenv("DARTS_API_DB_PASSWORD");
+	public static String apiDbPort = System.getenv("DARTS_API_DB_PORT");
+	public static String apiDbHost = System.getenv("DARTS_API_DB_HOST");
+	public static String apiDbDatabase = System.getenv("DARTS_API_DB_DATABASE");
+	public static String automationUserId = System.getenv("AUTOMATION_USERNAME");
+	public static String automationPassword = System.getenv("AUTOMATION_PASSWORD");
+	public static String isRunLocal = System.getenv("RUN_LOCAL");
 	
-	public static boolean runLocal = System.getProperty("RUN_LOCAL", "false").equalsIgnoreCase("true");    
+	public static boolean runLocal = isRunLocal != null && isRunLocal.equalsIgnoreCase("true");    
 	
 	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
 	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
