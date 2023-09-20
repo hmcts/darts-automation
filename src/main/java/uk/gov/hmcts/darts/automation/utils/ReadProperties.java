@@ -29,8 +29,8 @@ public class ReadProperties {
 	public static String apiDbPort = System.getProperty("DARTS_API_DB_PORT");
 	public static String apiDbHost = System.getProperty("DARTS_API_DB_HOST");
 	public static String apiDbDatabase = System.getProperty("DARTS_API_DB_DATABASE");
-	public static String automationUserId = System.getProperty("AUTOMATION_USERNAME", "NONE");
-	public static String automationPassword = System.getProperty("AUTOMATION_PASSWORD", "");
+	public static String automationUserId = System.getenv("AUTOMATION_USERNAME");
+	public static String automationPassword = System.getenv("AUTOMATION_PASSWORD");
 	
 	public static boolean runLocal = System.getProperty("RUN_LOCAL", "false").equalsIgnoreCase("true");    
 	
