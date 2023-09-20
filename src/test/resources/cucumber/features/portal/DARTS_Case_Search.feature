@@ -37,7 +37,7 @@ Scenario: Simple case search and result verification
 	And I press the "Search" button
 	Then I can see search results table
 		| CaseID     	 | Courthouse     	| Courtroom   		 |Judges | Defendants |
-		| DMP461_Case40 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L    |       |            |
+		| DMP461_Case40  | LIVERPOOL_DMP461 | ROOM_B_DMP461_L    |       |            |
 		| DMP461_Case400 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L    |       |            |
 		| DMP461_Case402 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L    |       |            |
 		| DMP461_Case404 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L    |       |            |

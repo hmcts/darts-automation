@@ -1,4 +1,4 @@
-package uk.gov.hmcts.darts.automation.cucumber.steps;
+package uk.gov.hmcts.darts.automation.utils;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +15,22 @@ public class searchCase {
 
     private static WebDriver webDriver;
 
-    public searchCase(WebDriver driver)   {
+    //public searchCase(WebDriver driver)   {
+    //    searchCase.webDriver = driver;
+    //}
+
+    public searchCase(WebDriver driver) {
         searchCase.webDriver = driver;
+
+    }
+
+    public enum SearchResultsEnum {
+        CASEID,
+        COURTHOUSE,
+        COURTROOM,
+        JUDGES,
+        DEFENDANTS,
+        INVALID
     }
 
     public Table<Integer, Integer, String> scrapeTableData(WebElement table)
@@ -230,4 +245,3 @@ public class searchCase {
     }
 
 }
-

@@ -1,13 +1,18 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
 import io.cucumber.java.en.Then;
+import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.searchCase;
+
 import java.util.List;
 import java.util.Map;
 
-public class caseSearchStepDefs extends StepDef_base{
-    public caseSearchStepDefs(SharedDriver driver, searchCase sc) {
-    super(driver, sc);
+public class StepDef_search extends StepDef_base{
+    private searchCase SRCH;
+    public StepDef_search(SharedDriver driver, NavigationShared ns) {
+        super(driver, ns);
+        SRCH = new searchCase(webDriver);
     }
 
     @Then("I can see search results table")
