@@ -49,11 +49,10 @@ public class Search {
         return tableObject;
     }
 
-    //used to validate table search result
     public void validateExactSearchResults(List<Map<String, String>> expectedSearchResults) {
 
         WebElement searchResultsTable = getSearchResultsTable();
-        //get table rows
+
         Table<Integer, Integer, String> searchTable = scrapeTableData(searchResultsTable);
 
         List<List<String>> expectedSearchRowList = new ArrayList<>();
@@ -70,30 +69,25 @@ public class Search {
                     cellsList.add(judges);
                     String defendants = expectedTableRow.get("Defendants");
                     cellsList.add(defendants);
-                    //add row
+
                     expectedSearchRowList.add(cellsList);
                 });
 
-        //start with rowCounter = 0 as expected table doesn't have header row
         for (int rowCounter = 0; rowCounter < expectedSearchRowList.size(); rowCounter++) {
-            int actualRowCounter = rowCounter+1;//skip header row
+            int actualRowCounter = rowCounter+1;
             String actualCaseId = searchTable.get(actualRowCounter, SearchResultsEnum.CASEID.ordinal());
-            //"Case Id" is first, so use index "0"
             String expectedCaseId = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.CASEID.ordinal());
 
             Assert.assertEquals("Case Id is incorrect in row " + rowCounter, expectedCaseId,actualCaseId);
             String actualCourthouse = searchTable.get(actualRowCounter, SearchResultsEnum.COURTHOUSE.ordinal());
-            //"Courthouse" is second, so use index "1"
             String expectedCourthouse = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.COURTHOUSE.ordinal());
             Assert.assertEquals("Courthouse is incorrect in row " + rowCounter, expectedCourthouse, actualCourthouse);
 
             String actualCourtRoom = searchTable.get(actualRowCounter, SearchResultsEnum.COURTROOM.ordinal());
-            //"CourtRoom" is third, so use index "2"
             String expectedCourtRoom = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.COURTROOM.ordinal());
             Assert.assertEquals("CourtRoom is incorrect in row " + rowCounter, expectedCourtRoom,actualCourtRoom);
 
             String actualJudges = searchTable.get(actualRowCounter, SearchResultsEnum.JUDGES.ordinal());
-            //"Judges" is 4th, so use index "3"
             String expectedJudges = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.JUDGES.ordinal());
             if(expectedJudges == null)
             {
@@ -103,7 +97,6 @@ public class Search {
                 Assert.assertEquals("Judges is incorrect in row " + rowCounter, expectedJudges, actualJudges);
             }
             String actualDefendants = searchTable.get(actualRowCounter, SearchResultsEnum.DEFENDANTS.ordinal());
-            //"Defendants" is 5th, so use index "4"
             String expectedDefendants = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.DEFENDANTS.ordinal());
             if(expectedJudges == null)
             {
@@ -120,7 +113,6 @@ public class Search {
 
     public void validateSearchField(String searchField, String searchString) {
         WebElement searchResultsTable = getSearchResultsTable();
-        //get table rows
         Table<Integer, Integer, String> searchTable = scrapeTableData(searchResultsTable);
 
         SearchResultsEnum field;
@@ -152,7 +144,7 @@ public class Search {
 
         int rowsCountExcludingHeaders = searchTable.rowMap().size()-1;
         for (int rowCounter = 0; rowCounter < rowsCountExcludingHeaders; rowCounter++) {
-            int actualRowCounter = rowCounter+1;//skip headder row
+            int actualRowCounter = rowCounter+1;
             String actualField = searchTable.get(actualRowCounter, field.ordinal());
             Assert.assertTrue(searchField + " is incorrect in row " + rowCounter + "; actual field: " + actualField, actualField.contains(searchString));
 
@@ -164,7 +156,6 @@ public class Search {
     public void validateSearchResultsContainsOneRow(List<Map<String, String>> expectedSearchResults) {
 
         WebElement searchResultsTable = getSearchResultsTable();
-        //get table rows
         Table<Integer, Integer, String> searchTable = scrapeTableData(searchResultsTable);
 
         List<List<String>> expectedSearchRowList = new ArrayList<>();
@@ -181,34 +172,28 @@ public class Search {
                     cellsList.add(judges);
                     String defendants = expectedTableRow.get("Defendants");
                     cellsList.add(defendants);
-                    //add row
                     expectedSearchRowList.add(cellsList);
                 });
 
         Assert.assertTrue("Only one row should be provided for validation, but was " + expectedSearchRowList.size(), expectedSearchRowList.size() == 1);
-        //start with rowCounter = 0 as expected table doesn't have header row
 
         int rowsCountExcludingHeaders = searchTable.rowMap().size()-1;
         for (int i = 1; i < rowsCountExcludingHeaders; i++) {
             int rowCounter = 0;
-            int actualRowCounter = rowCounter+1;//skip headder row
+            int actualRowCounter = rowCounter+1;
             String actualCaseId = searchTable.get(actualRowCounter, SearchResultsEnum.CASEID.ordinal());
-            //"Case Id" is first, so use index "0"
             String expectedCaseId = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.CASEID.ordinal());
 
             Assert.assertEquals("Case Id is incorrect in row " + rowCounter, expectedCaseId,actualCaseId);
             String actualCourthouse = searchTable.get(actualRowCounter, SearchResultsEnum.COURTHOUSE.ordinal());
-            //"Courthouse" is second, so use index "1"
             String expectedCourthouse = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.COURTHOUSE.ordinal());
             Assert.assertEquals("Courthouse is incorrect in row " + rowCounter, expectedCourthouse, actualCourthouse);
 
             String actualCourtRoom = searchTable.get(actualRowCounter, SearchResultsEnum.COURTROOM.ordinal());
-            //"CourtRoom" is third, so use index "2"
             String expectedCourtRoom = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.COURTROOM.ordinal());
             Assert.assertEquals("CourtRoom is incorrect in row " + rowCounter, expectedCourtRoom,actualCourtRoom);
 
             String actualJudges = searchTable.get(actualRowCounter, SearchResultsEnum.JUDGES.ordinal());
-            //"Judges" is 4th, so use index "3"
             String expectedJudges = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.JUDGES.ordinal());
             if(expectedJudges == null)
             {
@@ -218,7 +203,6 @@ public class Search {
                 Assert.assertEquals("Judges is incorrect in row " + rowCounter, expectedJudges, actualJudges);
             }
             String actualDefendants = searchTable.get(actualRowCounter, SearchResultsEnum.DEFENDANTS.ordinal());
-            //"Defendants" is 5th, so use index "4"
             String expectedDefendants = expectedSearchRowList.get(rowCounter).get(SearchResultsEnum.DEFENDANTS.ordinal());
             if(expectedJudges == null)
             {
