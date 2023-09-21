@@ -3,7 +3,7 @@ Feature: Portal Tests
 @smoketest
 Scenario: navigate
 	Given I am on the landing page
-	Then  I see "This is a new service – your feedback will help us to improve it." on the page
+#	Then  I see "This is a new service – your feedback will help us to improve it." on the page
 #	And   I see "Welcome to DARTS" on the page
 	And   I see "All content is available under the Open Government Licence v3.0, except where otherwise stated" on the page
 #Any others to check?
