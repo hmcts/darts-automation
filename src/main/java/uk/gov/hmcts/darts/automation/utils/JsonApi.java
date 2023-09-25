@@ -240,6 +240,10 @@ public class JsonApi {
     
 
 @Test
+// Following code is for debugging purposes - data may have to be changed each time
+// Tests may fail if underlying data is changed
+// Commented out code is to allow tests to be run after changes have been made
+
 	public void test() {
     	JsonApi jsonApi = new JsonApi();
 //		System.out.println("post: courthouses");

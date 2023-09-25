@@ -61,12 +61,7 @@ public class Soap {
     			;
 		String access_token = (response.jsonPath().getString("access_token"));
 		String token_type  = (response.jsonPath().getString("token_type"));
-
-//    	System.out.println("post authentication response:");
-//    	System.out.println("access_token: " + access_token);
-//    	System.out.println("token_type:   " + token_type);
     	return token_type + " " + access_token;
-    	
     }
     
     public void postSoap(String endpoint, String body) {
@@ -143,6 +138,7 @@ public class Soap {
 	}
 
 @Test
+// Following code is for debugging & may fail if data changes
 	public void test() {
     	Soap soap = new Soap();
 
