@@ -14,7 +14,7 @@ import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SharedDriver;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
-import uk.gov.hmcts.darts.automation.utils.Api;
+import uk.gov.hmcts.darts.automation.utils.JsonApi;
 //import uk.gov.hmcts.darts.automation.pageObjects.Portal;
 
 import org.apache.logging.log4j.LogManager;
@@ -25,12 +25,12 @@ public class StepDef_api extends StepDef_base {
 	private static Logger log = LogManager.getLogger("StepDef_api");
 //	private final WebDriver webDriver;
 //	private Portal portal;
-	private Api api;
+	private JsonApi jsonApi;
 	
 	
 	public StepDef_api(SharedDriver driver, NavigationShared ns) {
 		super(driver, ns);
-		api = new Api();
+		jsonApi = new JsonApi();
 	}
 	
 //	@Given("I call <string> API using json body:")
@@ -40,12 +40,12 @@ public class StepDef_api extends StepDef_base {
 	
 	@Given("I call POST {} API using json body:")
 	public void callPostApiWithJsonBody(String endPoint, String docString) throws Exception {
-		api.postApi(endPoint, docString);
+		jsonApi.postApi(endPoint, docString);
 	}
 	
 	@Given("I call GET {} API")
 	public void callGetApiWithJsonBody(String endPoint) throws Exception {
-		api.getApi(endPoint);
+		jsonApi.getApi(endPoint);
 	}
 	
 

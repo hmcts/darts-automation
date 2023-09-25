@@ -16,7 +16,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
@@ -131,14 +131,14 @@ public class Postgres {
 @Test
 	public void test() throws Exception {
 	   Postgres pg = new Postgres();
-	   System.out.println(pg.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"));
-	   System.out.println(pg.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"));
-	   System.out.println(pg.returnSingleValue("select case_number from darts.court_case where case_number = '174'"));
-	   System.out.println(pg.setSingleValue("court_case", "case_number", "'174'", "case_closed", "null"));
-	   System.out.println(pg.returnSingleValue("court_case", "case_number", "'174'", "cas_id"));
-	   System.out.println(pg.returnSingleValue("court_case", "case_number", "'174'", "case_closed"));
-	   System.out.println(pg.returnSingleValue("court_case", "cas_id", "81", "case_number"));
-	   System.out.println(pg.returnSingleValue("court_case", "cth_id", "2", "case_number"));
+	   Assertions.assertEquals(pg.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
+	   Assertions.assertEquals(pg.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
+	   Assertions.assertEquals(pg.returnSingleValue("select case_number from darts.court_case where case_number = '174'"), "174");
+	   Assertions.assertEquals(pg.setSingleValue("court_case", "case_number", "'174'", "case_closed", "null"), "null");
+	   Assertions.assertEquals(pg.returnSingleValue("court_case", "case_number", "'174'", "cas_id"), "81");
+	   Assertions.assertEquals(pg.returnSingleValue("court_case", "case_number", "'174'", "case_closed"), "null");
+	   Assertions.assertEquals(pg.returnSingleValue("court_case", "cas_id", "81", "case_number"), "174");
+	   Assertions.assertEquals(pg.returnSingleValue("court_case", "cth_id", "2", "case_number"), "461_Case1");
    }
    
 

@@ -36,7 +36,6 @@ public class NavigationShared {
 	private WaitUtils wait;
 	private String LOADING_ICON_LOCATION = "#spinner, app-cp-spinner";
 	private GenUtils GU;
-//	private static DateUtils DateUtils;
 	private static int instanceCount = 0;
 
 	public NavigationShared(WebDriver driver) {
@@ -172,9 +171,6 @@ public class NavigationShared {
 		wait.deactivateImplicitWait();
 		try {
 			parentLocation = driver.findElement(By.xpath(
-					// "//label[contains(normalize-space(text()), '"+location_name+"')]"))
-					// "//button[text()[contains(., '"+location_name+"')]]"))
-//					"//label[text()[contains(., '" + location_name + "')]]")).findElement(By.xpath(".."));
 					"//*[./label[text()[contains(., '" + location_name + "')]]]"));
 			wait.activateImplicitWait();
 			log.info("element found - try 1");
@@ -182,8 +178,6 @@ public class NavigationShared {
 			log.info("element not found - try 2");
 			wait.activateImplicitWait();
 			parentLocation = driver
-//					.findElement(By.xpath("//label[contains(normalize-space(text()), '" + location_name + "')]"))
-//					.findElement(By.xpath(".."));
 					.findElement(By.xpath("//*[./label[contains(normalize-space(text()), '" + location_name + "')]]"));
 			log.info("element found - try 2");
 		}
@@ -276,7 +270,6 @@ public class NavigationShared {
 	}
 	
 	public boolean getElementEnabled(WebElement webElement) throws Exception {
-//		if (webElement.isDisplayed() || !webElement.getCssValue("display").equalsIgnoreCase("none")) {
 		if (webElement.isDisplayed() 
 				|| (webElement.getTagName().equalsIgnoreCase("input")
 						&& (webElement.getAttribute("type").equalsIgnoreCase("radio") 
@@ -369,6 +362,13 @@ public class NavigationShared {
 		}
 	}
 	
+	public void checkRadioButton(String label) throws Exception {
+		log.info("About to Check radio button with label =>" + label);
+		WebElement webElement = findInputFieldByLabelText(label);
+		set_unset_checkbox(webElement, "CHECK");
+		waitForPageLoad();
+	}
+	
 	public void set_unset_checkbox(WebElement webElement, String action) throws Exception {
 		boolean isChecked = webElement.isSelected();
 		switch (action.toUpperCase()) {
@@ -378,7 +378,6 @@ public class NavigationShared {
 			} else {
 				log.info("about to check checkbox");
 				webElement.click();
-//				webElement.sendKeys(Keys.TAB);		// this would work now - had located td not checkbox
 				clickAway(webElement);
 				waitForBrowserReadyState();
 				if (!webElement.isSelected()) {
@@ -501,16 +500,9 @@ public class NavigationShared {
 
 	public NavigationShared set_valueTo(String location_name, String value) throws Exception {
 		log.info("About to Set input field with label =>" + location_name + "<= to =>" + value);
-		// WebElement parentLocation = find_locationParent(location_name);
-		// WebElement childField = parentLocation.findElement(By.cssSelector("input"));
 		WebElement targetElement = findInputFieldByLabelText(location_name);
-//		childField.clear();
-//		String substitutedValue = DateUtils.substituteValue(value);
-//		childField.sendKeys(substitutedValue);
-//
 		String substitutedValue = setElementValueTo(targetElement, value);
 		log.info("Set input field with label =>" + location_name + "<= to =>" + substitutedValue);
-//		waitForBrowserReadyState();
 
 		return this;
 	}
@@ -540,26 +532,18 @@ public class NavigationShared {
 		}
 		log.info("About to click on element");
 		childField.click();
-//		childField.clear();
-//		childField.findElement(By.xpath("//span[class='ng-clear']")).click();
 		log.info("About to type contents");
 		childField.findElement(By.tagName("input")).sendKeys(value);
 		childField.findElement(By.tagName("input")).sendKeys(Keys.RETURN);
 		childField.findElement(By.tagName("input")).sendKeys(Keys.TAB);
-//		log.info("About to click on list entry");
-//		WebElement item = childField.findElement(By.xpath("//span[text()[contains(., \"" + value + "\")]]"));
-//		item.click();
-//		childField.findElement(By.xpath("//span[text()[contains(., \"" + value + "\")]]")).click();
 
 		log.info("Set input field with label =>" + location_name + "<= to =>" + value);
 		waitForBrowserReadyState();
 
-//		return new NavigationShared(driver);
 		return this;
 	}
 
-	public void compare_valueTo(String location_name, String expected_value) throws Exception {
-		// WebElement parentLocation = find_locationParent(location_name);
+	public void compare_valueTo(String location_name, String expected_value) throws Exception {		// WebElement parentLocation = find_locationParent(location_name);
 		// This assumes we are checking inputs - May need to amend
 		String current_value;
 		try {
@@ -591,14 +575,11 @@ public class NavigationShared {
 
 		try {
 			button = return_oneVisibleFromList(buttons);
-//			wait.waitForClickableElement(buttons.get(0), 10);
 			wait.waitForClickableElement(button, 10);
 			log.info("element found - try 1");
 		} catch (Error | Exception e) {
 			log.info("element not found - try 2");
 			buttons = driver.findElements(By.xpath(
-//					"//button[text()[contains(., '" + button_name + "')]]" + "|"
-//					+ "//button//span[text()[contains(., '" + button_name + "')]]"));
 					"//button/descendant-or-self::*[text()[contains(., \"" + button_name + "\")]]" ));
 			button = return_oneVisibleFromList(buttons);
 			log.info("element found - try 2");
@@ -620,7 +601,6 @@ public class NavigationShared {
 
 		waitForPageLoad();
 		
-//		return new NavigationShared(driver);
 		return button;
 	}
 
@@ -707,9 +687,6 @@ public class NavigationShared {
 			try {
 				log.info("Unable to click on checkbox - Trying to do via action builder");
 
-				// Actions action = new Actions(driver);
-				// action.moveToElement(parentLocation).build().perform();
-
 				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox_location);
 
 				checkbox_location.click();
@@ -718,7 +695,6 @@ public class NavigationShared {
 			} catch (Exception ea) {
 				log.info(ea);
 				log.info("Exception on checkbox click - Going to use JS to attempt the click");
-				// $("label:contains('I can confirm')").parent().find("input").click()
 
 				GU.setAttributeValue(checkbox_location, "id", "tempIDForCheckbox");
 
@@ -743,7 +719,6 @@ public class NavigationShared {
 			throw new Error("Did not change the checkbox value as expected");
 		waitForBrowserReadyState();
 
-//		return new NavigationShared(driver);
 		return checkbox;
 	}
 
@@ -761,21 +736,8 @@ public class NavigationShared {
 	 * @param waitTime
 	 */
 	public void waitForPageLoad(int initialWait, int postWait) {
-//		try {
-//
-//			log.info("Waiting 1 sec for alert to appear");
-//			WebDriverWait wait = new WebDriverWait(driver, 1);
-//			wait.until(ExpectedConditions.alertIsPresent());
-//			log.info("Saw Alert - returning");
-//			return;
-//		} catch (Exception e) {
-//			log.info("No Alert - continuing");
-//		}
 		log.info("Waiting for Loading Icon to become visible");
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(initialWait));
-//TODO is the following line required or was this to be part of the next wait inside the try?
-//		wait.ignoring(UnhandledAlertException.class);
-//TODO should .ignoring(UnhandledAlertException.class) be in the following line?
 		try {
 			wait.ignoring(UnhandledAlertException.class)
 				.pollingEvery(Duration.ofMillis(200))
@@ -792,9 +754,6 @@ public class NavigationShared {
 			log.info("Waiting for Loading Icon to become hidden");
 			try {
 			wait = new WebDriverWait(driver, Duration.ofSeconds(postWait));
-//TODO is the following line required or was this to be part of the next wait inside the try?
-//				wait.ignoring(UnhandledAlertException.class);
-//TODO should .ignoring(UnhandledAlertException.class) be in the following line?
 				wait.ignoring(UnhandledAlertException.class)
 					.pollingEvery(Duration.ofMillis(200))
 					.until(ExpectedConditions.or
@@ -837,8 +796,6 @@ public class NavigationShared {
 	public void waitForBrowserReadyState() {
 		log.info("Wait for document.readyState");
 		log.info("Waiting for NOT ready state");
-//	    new WebDriverWait(driver, 1).until((ExpectedCondition<Boolean>) wd ->
-//        !(((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete")));
 		try {
 //	reduced wait from 1000 to 250 mS 2023-05-24
 		    new WebDriverWait(driver, Duration.ofMillis(250), Duration.ofMillis(50))
@@ -894,31 +851,15 @@ public class NavigationShared {
 	
 	public void click_link_by_text(String arg1) throws Exception {
 		log.info("About to clicked on link with link text =>" + arg1);
-//		wait.activateImplicitWait();
-//		try {
-//			WebDriverWait wait = new WebDriverWait(driver, 15);
-//			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(LOADING_ICON_LOCATION)));
-//			log.info("No Spinner up - Continuing");
-//		} catch (Exception e) {
-//			// pass
-//		}
 		waitForLoadingIcon(15);
 		WebElement linkText;
 		try {
-			// linkText = driver.findElement(By.linkText(arg1));
 			log.info("try 1 - linkText");
-//			linkText = return_oneVisibleFromList(driver.findElements(By.linkText("'" + arg1 + "'")));
 			linkText = return_oneVisibleFromList(driver.findElements(By.linkText(arg1)));
 			log.info("link found on try 1");
 			clickLink(linkText, arg1);
 		} catch (Exception e1) {
 			try {
-//				log.info("element not found on try 1 so try 2 - partialLinkText");
-//				wait.activateImplicitWait();
-////				linkText = return_oneVisibleFromList(driver.findElements(By.partialLinkText("'" + arg1 + "'")));
-//				linkText = return_oneVisibleFromList(driver.findElements(By.partialLinkText(arg1)));
-//				log.info("element found on try 2");
-//				clickLink(linkText, arg1);
 				log.info("element not found on try 1 so try 2 - xpath =text or xpath = lower case text");
 				linkText = return_oneVisibleFromList(driver.findElements(By.xpath("//*[text()[(normalize-space(.)=\"" + arg1
 						+ "\")]]" + "|" + "//*[text()[(normalize-space(.)=\"" + arg1.toLowerCase() + "\")]]")));
@@ -926,14 +867,8 @@ public class NavigationShared {
 				clickLink(linkText, arg1);
 			} catch (Exception e2) {
 				try {
-//				log.info("element not found on try 2 so try 3 - xpath =text or xpath = lower case text");
-//				linkText = return_oneVisibleFromList(driver.findElements(By.xpath("//*[text()[(normalize-space(.)=\"" + arg1
-//						+ "\")]]" + "|" + "//*[text()[(normalize-space(.)=\"" + arg1.toLowerCase() + "\")]]")));
-//				log.info("element found on try 3");
-//				clickLink(linkText, arg1);
 				log.info("element not found on try 2 so try 3 - partialLinkText");
 				wait.activateImplicitWait();
-//				linkText = return_oneVisibleFromList(driver.findElements(By.partialLinkText("'" + arg1 + "'")));
 				linkText = return_oneVisibleFromList(driver.findElements(By.partialLinkText(arg1)));
 				log.info("element found on try 3");
 				clickLink(linkText, arg1);
@@ -945,18 +880,6 @@ public class NavigationShared {
 				}
 			}
 		}
-//		wait.waitForClickableElement(linkText);
-//		try {
-//			linkText.click();
-//			log.info("link clicked");
-//		} catch (Exception e) {
-//			log.info("Failed to click on element, even though it is clickable - Going to try click using javascript");
-//			JavascriptExecutor executor = (JavascriptExecutor) driver;
-//			executor.executeScript("arguments[0].click();", linkText);
-//		}
-//		waitForPageLoad();
-//
-//		log.info("Clicked on URL with link text =>" + arg1);
 	}
 
 
@@ -1006,7 +929,6 @@ public class NavigationShared {
 		if (!targetColumn.isEmpty()) {
 			String tdXpath = String.format("./tbody/tr[.//*[contains(text(),\"%s\")]]//td[%s]", searchText, targetColumn);
 			return table.findElement(By.xpath(tdXpath));
-			//table/tbody/tr[.//*[contains(text(),'CP2.167.newUser@gmail.com')]]//td[1]//descendant-or-self::*
 			
 		}
 		return null;
@@ -1023,7 +945,6 @@ public class NavigationShared {
 		if (!idColumn.isEmpty() && !targetColumn.isEmpty()) {
 			String tdXpath = String.format("./tbody/tr[.//td[%s]/descendant-or-self::*[contains(text(),\"%s\")]]//td[%s]", idColumn, searchText, targetColumn);
 			return table.findElement(By.xpath(tdXpath));
-			//table/tbody/tr[.//td[2]/descendant-or-self::*[contains(text(),'CP2.167.newUser@gmail.com')]]//td[1]//descendant-or-self::*
 			
 		}
 		return null;
@@ -1083,7 +1004,6 @@ public class NavigationShared {
 
 	public List<WebElement> returnHeaderCellsOfTable(WebElement table, String text) throws Exception {
 		log.info("called returnHeaderCellsOfTable for =>" + text);
-//		log.info(this.toString());
 		List<WebElement> tableHeaders = table.findElements(By.xpath("./thead/tr[1]/th"));
 		if (tableHeaders.size() == 0) {
 			tableHeaders = table.findElements(By.xpath("./thead/tr[1]/td"));
@@ -1131,25 +1051,23 @@ public class NavigationShared {
 		return tables.get(0);
 	}
 
+// column names to be updated as required
 	public String columnColumnName_groupsManager(String expectedColumnName, String defaultColumn, String columnName,
 			WebElement table) throws Exception {
 		switch (expectedColumnName.toUpperCase()) {
 		case "CL":
 		case "COURT LISTS":
-//			defaultColumn = "2";
 			defaultColumn = "0";
 			columnName = "Court Lists";
 			break;
 		case "CR":
 		case "COURT REGISTERS":
-//			defaultColumn = "3";
 			defaultColumn = "0";
 			columnName = "Court Registers";
 			break;
 		case "ON":
 		case "O&N":
 		case "ORDERS & NOTICES":
-//			defaultColumn = "4";
 			defaultColumn = "0";
 			columnName = "Orders & Notices";
 			break;
@@ -1166,27 +1084,6 @@ public class NavigationShared {
 			columnName = expectedColumnName;
 			defaultColumn = "0";
 		}
-			
-// TODO work out a proper fix for the hack below - 
-/*
- * 
- * Destinations heading has been moved from above checkbox to above 
- * the actual destination.
- * 
- * Other headings are above the checkbox column
- * 
- * temp fix is to always return "2" for destinations column
- * 
- * others still use dynamic column search
- * 
- */
-//			return "2";
-//		}
-//		else
-//			columnName = expectedColumnName;
-
-//		return returnColumnNumber_againColumnHeader(table, columnName, column);
-//		return returnColumnNumber_againColumnHeader(table, columnName, "0");
 		return returnColumnNumber_againColumnHeader(table, columnName, defaultColumn);
 	}
 	
@@ -1203,21 +1100,6 @@ public class NavigationShared {
 		log.info("Going to check row =>" + expectedColumnValue + "<= column =>" + expectedColumnName
 				+ "<= to see whether there is something inside - expected =>" + expectedState);
 
-		// Looking for tables - Assuming 1 per screen
-		
-//		List<WebElement> tables = driver.findElements(By.cssSelector("table"));
-//
-//		if (tables.size() > 1) {
-//			tables = driver.findElements(
-//					By.xpath("//*[text()[(normalize-space(.)=\"" + expectedColumnValue + "\")]]//ancestor::table"));
-//			if (tables.size() > 1) {
-//				log.info("Found more than one button with this name - We dont know which one to use");
-//				throw new Error("Which button do you want me to press?");
-//			}
-//		}
-//
-//		WebElement table = tables.get(0);
-
 		WebElement table = findTableContainingText(expectedColumnValue);
 
 		String column = "1";
@@ -1229,15 +1111,12 @@ public class NavigationShared {
 			case "unchecked":
 				log.error("Column not found when expected to be =>" + expectedState);
 				throw new Error("Column not found when expected to be =>" + expectedState);
-//				break;
 			default:
 				log.info("Column not found as expected");
 				return;
 			}
 		}
 
-		// arg1 = arg1.replace("'", "\\'");
-//		WebElement row = table.findElement(By.xpath("//td[contains(text(),\"" + expectedColumnValue + "\")]/.."));
 		WebElement row = table.findElement(By.xpath("//tr[./td/descendant-or-self::*[contains(text(),\"" + expectedColumnValue + "\")]]"));
 		log.info("Found row with text  =>" + expectedColumnValue);
 
@@ -1274,7 +1153,6 @@ public class NavigationShared {
 				log.info("Did not find input field - Going to check if instead we have a favicon cross");
 				cell.findElement(By.xpath("//span[contains(@class, 'fa-times-circle')]"
 						+ "| //img[contains(@src, 'times-circle.svg')]"));
-//TODO line above need to be times-circle or similar - temp fix until changed
 				log.info("Saw that we have a favicon with a cross - Assuming we are on a read-only view and this is expected, continuing");
 			}
 			break;
@@ -1296,27 +1174,6 @@ public class NavigationShared {
 			return;
 		log.info("Going to check row =>" + expectedColumnValueArray[0] + "<= column =>" + expectedColumnName
 				+ "<= to see whether there is something inside - expected checked");
-
-		// Looking for tables - Assuming 1 per screen
-
-//		List<WebElement> tables = driver.findElements(By.cssSelector("table"));
-//
-//		if (tables.size() > 1) {
-//			tables = driver.findElements(
-//					By.xpath("//*[text()[(normalize-space(.)=\"" + expectedColumnValueArray[0] + "\")]]//ancestor::table"));
-//			if (tables.size() > 1) {
-//				log.info("Found more than one table with this data - We dont know which one to use");
-//				throw new Error("Which table do you want me to use?");
-//			}
-//		}
-//		if (tables.size() == 1) {
-//			log.info("found 1 table");
-//		} else {
-//			log.info("Did not find a (matching) table");
-//			throw new Error("Table not found");
-//		}
-//
-//		WebElement table = tables.get(0);
 
 		WebElement table = findTableContainingText(expectedColumnValueArray[0]);
 
@@ -1372,11 +1229,8 @@ public class NavigationShared {
 		String elementType = selectElement.getTagName(); 
 		log.info("select element type is >"+elementType);
 		if (elementType.equalsIgnoreCase("select")) {
-			// WebElement dropdown_location = find_inputBy_labelName(dropdown_name);
-//			WebElement child = find_locationParent(dropdown_name).findElement(By.cssSelector("select"));
 	
 			log.info("Found dropdown with name =>" + dropdown_name);
-//			log.info("elements " + selectElement.getText());
 			Select select = new Select(selectElement);
 			select.selectByVisibleText(option_value);
 			log.info("Selected =>" + option_value + "<= from the dropdown with name =>" + dropdown_name);
@@ -1422,7 +1276,6 @@ public class NavigationShared {
 	public void generic_filterResults(String filterText) {
 		WebElement filterInput;
 		try {
-//			filterInput = driver.findElement(By.xpath("//*[@id='userSearch'] | //*[@id='userSearch'] | //div[@id='orgSummaryTable_filter']//input "));
 			filterInput = find_inputBy_labelName("Filter:");
 			log.info("filter field found - try 1");
 		} catch (Exception e) {
@@ -1435,7 +1288,6 @@ public class NavigationShared {
 // TODO - remove hack for @ sign not working in automation
 		filterInput.sendKeys(filterText.split("@")[0]);
 		filterInput.sendKeys(Keys.TAB);
-//		filterInput.sendKeys(Keys.ENTER);
 		log.info("Found filter field and sent it =>" + filterText);
 		waitForPageLoad();
 
@@ -1482,7 +1334,6 @@ public class NavigationShared {
 		checkboxId = "//a[text()[contains(., '" + rowText + "')]]/../../.." + checkboxId;
 		log.info(checkboxId);
 		WebElement checkbox = driver.findElement(By.xpath(checkboxId));
-		// dcheckbox.click();
 		click_onElement(checkbox);
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
@@ -1522,7 +1373,6 @@ public class NavigationShared {
 		radioButtonId = "//tr[./td[text()[contains(., '" + rowText + "')]]]" + radioButtonId;
 		log.info(radioButtonId);
 		WebElement checkbox = driver.findElement(By.xpath(radioButtonId));
-		// dcheckbox.click();
 		click_onElement(checkbox);
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
@@ -1564,7 +1414,6 @@ public class NavigationShared {
 
 		WebElement checkbox = driver.findElement(By.xpath(checkboxId));
 
-		// WebElement checkbox = textMatches.get(0).findElement(checkboxId);
 		if (checkbox.isSelected() && checkedUnchecked.equalsIgnoreCase("checked")) {
 
 		} else if (!checkbox.isSelected() && !checkedUnchecked.equalsIgnoreCase("checked")) {
@@ -1747,16 +1596,11 @@ public class NavigationShared {
 		try {
 			String pagesText = driver.findElement(By.xpath("//*[starts-with(normalize-space(text()),'Showing 1 to ')]")).getText();
 			log.info("Found: " + pagesText);
-//			return getCount(pagesText, "Showing 1 to ", "of");
 			int firstCount = getCount(pagesText, "Showing 1 to", "of");
 			int maxCount = getCount(pagesText, "of", "entries");
 			int pages = (firstCount + maxCount - 1) / firstCount;
 			log.info("Number of pages in " + firstCount + " to " + maxCount + " =>" + pages);
-//			if (maxCount == firstCount) {
-//				return 1;
-//			} else {
 				return pages;
-//			}
 					
 		} catch (Exception e) {
 			if (driver.findElements(By.xpath("//*[contains(normalize-space(text()), 'Showing 0 to 0 of 0 entries')]")).isEmpty())
@@ -1845,13 +1689,6 @@ public class NavigationShared {
 	public void clickText_inSameRow_asText(String clickText, String nextToText) throws Exception {
 		log.info("Going to click on text =>"+clickText+"<= in a row that contains text =>"+nextToText);
 		wait.activateImplicitWait();
-		/*
-		WebElement click_text = findRow_withText(nextToText).findElement(By.xpath(
-				"//td[text()[contains(., \""+clickText+"\")]]"
-				+ " | "
-				+ "//td//a[text()[contains(., \""+clickText+"\")]]"
-				));
-		*/
 		/**
 		 * 
 		 * TODO - Refactor this block
@@ -1887,15 +1724,10 @@ public class NavigationShared {
 	public void clickOnLink_forLabel(String linkText, String text) {
 		log.info("On label with text =>"+text+"<= about to click on link =>"+linkText);
 		wait.activateImplicitWait();
-//		WebElement summary = driver.findElement(By.xpath("//div[./dl//dd[text()[normalize-space(.)=\""+ text + "\"]]]//a[text()[normalize-space(.)=\""+ linkText + "\"]]"));
 		WebElement summary = driver.findElement(By.xpath(String.format(
 				"//div[./dl//dd/descendant-or-self::*[text()[normalize-space(.)=\"%s\"]]]//a[text()[normalize-space(.)=\"%s\"]]"
 				, text, linkText)));
-		//WebElement summary = driver.findElement(By.xpath("//div[contains(@class, 'request-summary') and contains(text(),' + text + "')];
-			//	By.xpath("//div[contains(text(),'"+text+"')]//ancestor::div[contains(@class, 'govuk-link')]"));
-				//By.xpath("//div[contains(@class, 'request-summary')]//div[contains(,'"+text+"')]//ancestor::div[contains(@class, 'govuk-link')]"));
 		log.info("Found text =>"+text);
-		//summary.findElement(By.linkText(linkText)).click();
 		summary.click();
 		waitForBrowserReadyState();
 		log.info("Under text =>"+text+"<= clicked on link =>"+linkText);
@@ -1945,7 +1777,6 @@ public class NavigationShared {
 		while (webElement.getAttribute("value").length() > 0) {
 			webElement.sendKeys(Keys.BACK_SPACE);
 		}
-//		webElement.sendKeys(Keys.TAB);
 		waitForBrowserReadyState();
 	}
 	
@@ -1987,7 +1818,7 @@ public class NavigationShared {
 		String value = "";
 		log.info("About to Get input field in =>" + location + "<= with label =>" + labelText + "<=");
 		WebElement targetElement = findFieldByLabelInLocation(location, labelText);
-//
+
 		value = targetElement.getAttribute("value");
 		log.info("Value of field in =>" + location + "<= with label =>" + labelText + "<= is =>" + value);
 
@@ -2006,7 +1837,6 @@ public class NavigationShared {
 		String elementType = find_inputBy_labelName(labelText).getTagName(); 
 		log.info("select element type is >"+elementType);
 		if (elementType.equalsIgnoreCase("select")) {
-			// WebElement dropdown_location = find_inputBy_labelName(dropdown_name);
 			WebElement child = find_locationParent(labelText).findElement(By.cssSelector("select"));
 	
 			log.info("Found dropdown with name =>" + labelText);
