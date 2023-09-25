@@ -7,29 +7,34 @@ import java.io.IOException;
 import java.util.Properties;
 import java.net.InetAddress;
 
+import io.restassured.specification.RequestLogSpecification;
+import io.restassured.specification.ResponseLogSpecification;
+import io.restassured.filter.log.LogDetail;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ReadProperties {
 	private static Logger log = LogManager.getLogger("ReadProperties");
 
-	public static String apiUserName = System.getProperty("FUNC_TEST_ROPC_USERNAME");
-	public static String apiPassword = System.getProperty("FUNC_TEST_ROPC_PASSWORD");
-	public static String apiClientId = System.getProperty("AAD_B2C_ROPC_CLIENT_ID_KEY");
-	public static String apiClientSecret = System.getProperty("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+// get azure secrets as environment vars
+	public static String apiUserName = System.getenv("FUNC_TEST_ROPC_USERNAME");
+	public static String apiPassword = System.getenv("FUNC_TEST_ROPC_PASSWORD");
+	public static String apiClientId = System.getenv("AAD_B2C_ROPC_CLIENT_ID_KEY");
+	public static String apiClientSecret = System.getenv("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
 
-	public static String apiDbSchema = System.getProperty("DARTS_API_DB_SCHEMA");
-//	public static String apiDbConnectionString = System.getProperty("AZURE_STORAGE_CONNECTION_STRING");
-	public static String apiDbUserName = System.getProperty("DARTS_API_DB_USERNAME");
-	public static String apiDbPassword = System.getProperty("DARTS_API_DB_PASSWORD");
-	public static String apiDbPort = System.getProperty("DARTS_API_DB_PORT");
-	public static String apiDbHost = System.getProperty("DARTS_API_DB_HOST");
-	public static String apiDbDatabase = System.getProperty("DARTS_API_DB_DATABASE");
+	public static String apiDbSchema = System.getenv("DARTS_API_DB_SCHEMA");
+//	n.b.  System.getProperty("AZURE_STORAGE_CONNECTION_STRING"); defined but not used
+	public static String apiDbUserName = System.getenv("DARTS_API_DB_USERNAME");
+	public static String apiDbPassword = System.getenv("DARTS_API_DB_PASSWORD");
+	public static String apiDbPort = System.getenv("DARTS_API_DB_PORT");
+	public static String apiDbHost = System.getenv("DARTS_API_DB_HOST");
+	public static String apiDbDatabase = System.getenv("DARTS_API_DB_DATABASE");
+	public static String automationUserId = System.getenv("AUTOMATION_USERNAME");
+	public static String automationPassword = System.getenv("AUTOMATION_PASSWORD");
+	public static String isRunLocal = System.getenv("RUN_LOCAL");
 	
-	public static String apiAuthUri = "https://hmctsdartsb2csbox.b2clogin.com";
-	public static String apiAuthPath = "hmctsdartsb2csbox.onmicrosoft.com";
-	
-	
+	public static boolean runLocal = isRunLocal != null && isRunLocal.equalsIgnoreCase("true");    
 	
 	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
 	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
@@ -39,16 +44,29 @@ public class ReadProperties {
 	static Properties translationProperties = getProperties(translationPropertiesParameterFileName);
 	public static String os = System.getProperty("os.name").replace(" ", "_"); // .toUpperCase();
 	static String systemEnv = System.getProperty("envName");
-	static String environment = systemEnv;
+	static String environment = systemEnv == null ? environmentProperties.getProperty("defaultEnv") : systemEnv;
+	
+	static LogDetail setupRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	static LogDetail setupResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+	static LogDetail authRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	static LogDetail authResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+	static LogDetail requestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	static LogDetail responseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+    
 	static {
 		log.info("OS =>" + os);
 		if (systemEnv == null) {
-			environment = environmentProperties.getProperty("defaultEnv");
 			log.info("Using default environment >"+environment);
 		} else {
 			log.info("Using system environment >"+systemEnv);
 		}
 	}
+	
+
+	
+	public static String jsonApiUri = "https://darts-api." + environment + ".platform.hmcts.net/";
+	public static String soapApiUri = "https://darts-api." + environment + ".platform.hmcts.net/ws/";
+	public static String portalUri = "https://darts-api." + environment + ".platform.hmcts.net/";
 
 	
 	static Properties getProperties(String parameterFileName) {
@@ -66,13 +84,11 @@ public class ReadProperties {
 			} catch (IOException e) {
 				log.fatal("Error loading properties >"+parameterFileName);
 				e.printStackTrace();
-//				throw(e);
 				return null;
 			}
 		} catch (FileNotFoundException e) {
 			log.fatal("Error loading properties file >"+parameterFileName);
 			e.printStackTrace();
-//			throw(e);
 			return null;
 		}
 		
@@ -84,7 +100,7 @@ public class ReadProperties {
 			log.info("Returned property >"+property+"< value >"+returnValue);
 			return returnValue;
 		} catch (Exception e) {
-			log.fatal("Error loading properties >"+parameterFileName+"< for property >"+property);
+			log.fatal("Error accessing properties >"+parameterFileName+"< for property >"+property);
 			e.printStackTrace();
 			return null;
 		}
@@ -127,7 +143,7 @@ public class ReadProperties {
 	public static String main(String property) {
 		log.info("environment: " + environment);
 		try {
-			String returnValue = environmentProperties.getProperty(environment+"_"+property);
+			String returnValue = environmentProperties.getProperty(property+"_"+environment);
 			if (returnValue != null) {
 				log.info("Returned environment >"+environment+"< property >"+property+"< value >"+returnValue);
 				return returnValue;

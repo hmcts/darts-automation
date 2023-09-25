@@ -222,7 +222,6 @@ public class StepDef_navigation extends StepDef_base {
 	    NAV.generic_filterResults(arg1);
 	};
 	
-//next 2 added by trev 2020-12-07
 
 	@Then("^I see the \"([^\"]*)\" ([^\"]*) in \"([^\"]*)\" area is ([^\"]*)$")
 	public void verifyCheckboxState(String labelText, String element, String header, String expected) throws Exception {
@@ -258,6 +257,11 @@ public class StepDef_navigation extends StepDef_base {
 	@When("^I select the \"([^\"]*)\" checkbox for \"([^\"]*)\"$")
 	public void selectCheckbox_forRowWithText(String column, String rowText) {
 	    NAV.selectCheckbox_forRowWithText(column, rowText);
+	}
+	
+	@When("^I select the \"([^\"]*)\" radio button$")
+	public void selectRadioButton(String label) throws Exception {
+	    NAV.checkRadioButton(label);
 	};
 	
 	@When("^I select the \"([^\"]*)\" radio button for \"([^\"]*)\"$")
