@@ -21,13 +21,12 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-//import org.openqa.selenium.internal.BuildInfo;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 
 public class GenUtils {
 	private static WebDriver driver;
@@ -78,11 +77,8 @@ public class GenUtils {
 		ProcessBuilder pb;
 		Process pr = null;
 		try {
-//			pb = new ProcessBuilder(command);
 			pb = new ProcessBuilder();
-			pb.command("bash", "-c", command);		// 1
-//			pb.command("shell", command);		
-//			pb.command(command);
+			pb.command("bash", "-c", command);		
 			pb.redirectErrorStream(true);
 			pr = pb.start();
 			log.info("Started command: >"+command);
@@ -116,13 +112,9 @@ public class GenUtils {
 			log.info("OS =>" + os);
 			switch (usingDriver.toLowerCase()) {
 			case "firefox":
-				version = SharedDriver.capabilities.getBrowserVersion();
+				version = SeleniumWebDriver.capabilities.getBrowserVersion();
 				log.info("Browser Version: " + version);
 				break;
-			case "htmlunit":
-				break;
-//			case "phantomjs":
-//				break;
 			case "grid":
 				break;
 			case "ie":
@@ -140,7 +132,7 @@ public class GenUtils {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String caps = SharedDriver.capabilities.toString();
+				String caps = SeleniumWebDriver.capabilities.toString();
 				int pos1 = caps.indexOf("browserVersion: ")+16;
 				int pos2 = caps.indexOf(",", pos1);
 				version = caps.substring(pos1, pos2) ;
@@ -165,8 +157,6 @@ public class GenUtils {
 	public String seleniumVersion() {
 		String version = "?";
 		try {
-//			BuildInfo info = new BuildInfo();
-//			log.info("rev >"+info.getBuildRevision()+"< rel >"+info.getReleaseLabel());
 			version = driver.toString();
 			log.info("Chrome info: "+version);
 		} finally {

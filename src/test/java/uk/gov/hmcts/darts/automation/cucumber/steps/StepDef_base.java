@@ -13,22 +13,22 @@ import io.cucumber.java.Before;
 import org.junit.jupiter.api.Assertions;
 
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 
 
 public class StepDef_base {
 	
-	final WebDriver webDriver;
-	NavigationShared NAV;
+	public WebDriver webDriver;
+	public NavigationShared NAV;
 	
 	public StepDef_base(
-			SharedDriver webDriver, 
-			NavigationShared NAV
+			SeleniumWebDriver webDriver
 			) {
-		this.webDriver = webDriver;
-		this.NAV = NAV;
-	}
+		this.webDriver = webDriver.webDriver;
+		NAV = new NavigationShared(this.webDriver);
+	}	
+	
 	
 }
 

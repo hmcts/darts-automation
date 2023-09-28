@@ -2,7 +2,7 @@ package uk.gov.hmcts.darts.automation.cucumber.steps;
 
 import io.cucumber.java.en.Then;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.pageObjects.Search;
 
 import java.util.List;
@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class StepDef_search extends StepDef_base{
     private Search SRCH;
-    public StepDef_search(SharedDriver driver, NavigationShared ns) {
-        super(driver, ns);
+    public StepDef_search(SeleniumWebDriver driver) {
+        super(driver);
         SRCH = new Search(webDriver);
     }
 
