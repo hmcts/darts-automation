@@ -30,11 +30,6 @@ public class StepDef_api extends StepDef_base {
 		jsonApi = new JsonApi();
 	}
 	
-//	@Given("I call <string> API using json body:")
-//	public void callApiWithJsonBody(String endpoint, DocString docString) throws Exception {
-//		api.postApi(endpoint, docString.toString());
-//	}
-	
 	@Given("I call POST {} API using json body:")
 	public void callPostApiWithJsonBody(String endPoint, String docString) throws Exception {
 		jsonApi.postApi(endPoint, docString);
