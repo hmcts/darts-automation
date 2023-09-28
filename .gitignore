@@ -34,6 +34,7 @@ bin/*
 
 #Ignore results
 target/*
+reports/*
 
 ### IntelliJ IDEA ###
 .idea
