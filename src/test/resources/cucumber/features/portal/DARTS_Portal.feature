@@ -9,28 +9,28 @@ Scenario: External logon
 
 @DMP-407 @smoketest
 Scenario: Search - Verify link
-#	Given I am logged on to DARTS as an external user
+	Given I am logged on to DARTS as an external user
 	When  I click on the "Search" link
 	Then  I see "Search for a case" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
 @DMP-407 @smoketest
 Scenario: My Audios - Verify link
-#	Given I am logged on to DARTS as an external user
+	Given I am logged on to DARTS as an external user
 	When  I click on the "My Audios" link
 	Then  I see "My Audios" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
 @DMP-407 @smoketest
 Scenario: My Transcriptions - Verify link
-#	Given I am logged on to DARTS as an external user
+	Given I am logged on to DARTS as an external user
 	When  I click on the "My Transcriptions" link
 	Then  I see "My Transcriptions" on the page
 	And  I do not see "Welcome to DARTS" on the page
 
 @DMP-407 @smoketest
 Scenario: Logout
-#	Given I am logged on to DARTS as an external user
+	Given I am logged on to DARTS as an external user
 	When  I click on the "Sign out" link
 	Then  I see "Sign in to the DARTS Portal" on the page
 	And  I do not see "Welcome to DARTS" on the page

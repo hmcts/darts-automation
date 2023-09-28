@@ -10,7 +10,7 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 
@@ -23,8 +23,8 @@ public class StepDef_portal extends StepDef_base {
 	
 	private Prompt prompt;	
 	
-	public StepDef_portal(SharedDriver driver, NavigationShared ns) {
-		super(driver, ns);
+	public StepDef_portal(SeleniumWebDriver driver) {
+		super(driver);
 		prompt = new Prompt(webDriver);
 	}
 	

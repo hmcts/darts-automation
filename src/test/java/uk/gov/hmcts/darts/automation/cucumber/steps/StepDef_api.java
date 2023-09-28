@@ -11,11 +11,10 @@ import io.cucumber.java.Before;
 import io.cucumber.docstring.DocString;
 
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.JsonApi;
-//import uk.gov.hmcts.darts.automation.pageObjects.Portal;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,20 +22,13 @@ import org.apache.logging.log4j.Logger;
 public class StepDef_api extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_api");
-//	private final WebDriver webDriver;
-//	private Portal portal;
 	private JsonApi jsonApi;
 	
 	
-	public StepDef_api(SharedDriver driver, NavigationShared ns) {
-		super(driver, ns);
+	public StepDef_api(SeleniumWebDriver driver) {
+		super(driver);
 		jsonApi = new JsonApi();
 	}
-	
-//	@Given("I call <string> API using json body:")
-//	public void callApiWithJsonBody(String endpoint, DocString docString) throws Exception {
-//		api.postApi(endpoint, docString.toString());
-//	}
 	
 	@Given("I call POST {} API using json body:")
 	public void callPostApiWithJsonBody(String endPoint, String docString) throws Exception {

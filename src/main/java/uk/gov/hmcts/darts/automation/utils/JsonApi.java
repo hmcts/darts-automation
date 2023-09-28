@@ -100,7 +100,6 @@ public class JsonApi {
 					.header("Authorization", authorization)
 					.baseUri(baseUri)
 					.basePath("")
-				.body("1")
 				.when()
 					.get(endpoint)
 				.then()
@@ -237,50 +236,4 @@ public class JsonApi {
 					.extract().response();
 		return response;
     }
-    
-
-@Test
-// Following code is for debugging purposes - data may have to be changed each time
-// Tests may fail if underlying data is changed
-// Commented out code is to allow tests to be run after changes have been made
-
-	public void test() {
-    	JsonApi jsonApi = new JsonApi();
-//		System.out.println("post: courthouses");
-//		api.postApi("courthouses", "{\n"
-//    			+ "  \"courthouse_name\": \"Newcastle\",\n"
-//    			+ "  \"code\": 400\n"
-//    			+ "}");
-		System.out.println("get: courthouses");
-		jsonApi.getApi("courthouses");
-//		System.out.println("put: courthouses");
-//		api.putApi("courthouses/3", "{\n"
-//    			+ "  \"courthouse_name\": \"Leeds\",\n"
-//    			+ "  \"code\": 100\n"
-//    			+ "}");
-//		System.out.println("get2: courthouses");
-//		api.getApi("courthouses");
-//		System.out.println("delete: courthouses");
-//		deleteApi("courthouses/2", "{\n"
-//    			+ "  \"courthouse_name\": \"Leeds\",\n"
-//    			+ "  \"code\": 100\n"
-//    			+ "}");
-//		System.out.println("get2: courthouses");
-//    	getApi("courthouses");
-		
-		System.out.println("post: events");
-		jsonApi.postApi("events", 	"{"
-				+	  "\"message_id\": \"18422\","
-				+	  "\"event_id\": \"1\","
-				+	  "\"type\": \"1000\","
-				+	  "\"sub_type\": \"1002\","
-				+	  "\"courthouse\": \"LEEDS\","
-				+	  "\"courtroom\": \"ROOM1_LEEDS461\","
-				+	  "\"case_numbers\": ["
-				+	    "\"174\""
-				+	  "],"
-				+	  "\"date_time\": \"2023-06-18T08:37:30.945Z\","
-				+	  "\"event_text\": \"some event text\""
-				+	"}");
-	}
 }

@@ -7,7 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
@@ -21,8 +21,8 @@ public class StepDef_prompt extends StepDef_base {
 	
 	private Prompt man;
 	
-	public StepDef_prompt(SharedDriver driver, NavigationShared ns) {
-		super(driver, ns);
+	public StepDef_prompt(SeleniumWebDriver driver) {
+		super(driver);
 		man = new Prompt(webDriver);
 	}
 	
