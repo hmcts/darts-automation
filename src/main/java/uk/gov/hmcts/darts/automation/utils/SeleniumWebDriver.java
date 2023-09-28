@@ -43,7 +43,7 @@ public class SeleniumWebDriver {
 		log.info("started");
 		String usingDriver = ReadProperties.machine("usingDriver");
 		String usingProxy = ReadProperties.machine("usingProxy");
-		String headlessChrome = ReadProperties.machine("headlessChrome");
+		String runHeadless = ReadProperties.machine("run_Headless");
 		log.info("browser =>" + usingDriver);
 		String os = System.getProperty("os.name");
 		log.info("OS =>" + os);
@@ -59,6 +59,10 @@ public class SeleniumWebDriver {
 				firefoxOptions.addPreference("network.proxy.socks_version", 5);
 			} else {
 				// Assuming no proxy
+			}
+
+			if (runHeadless.equalsIgnoreCase("true") || !ReadProperties.runLocal) {	
+				firefoxOptions.addArguments("-headless");
 			}
 			firefoxOptions.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
 			webDriver = new FirefoxDriver(firefoxOptions);
@@ -93,6 +97,10 @@ public class SeleniumWebDriver {
 			} else {
 				// Assuming no proxy
 			}
+
+			if (runHeadless.equalsIgnoreCase("true") || !ReadProperties.runLocal) {	
+				edgeOptions.addArguments("-headless");
+			}
 			edgeOptions.setCapability("unhandledPromptBehavior", UnexpectedAlertBehaviour.IGNORE);
 			webDriver = new EdgeDriver(edgeOptions);
 			webDriver.manage().window().maximize();
@@ -117,10 +125,8 @@ public class SeleniumWebDriver {
 			chromeOptions.addArguments("--window-size=1920,1080");
 			chromeOptions.setExperimentalOption("prefs", chromePrefs);
 
-			if (headlessChrome.equalsIgnoreCase("true") 
-					|| !ReadProperties.runLocal) {	
-				chromeOptions.setHeadless(true);
-			} else {
+			if (runHeadless.equalsIgnoreCase("true") || !ReadProperties.runLocal) {	
+				chromeOptions.addArguments("--headless");
 			}
 			try {
 				log.info("Starting chrome driver");
