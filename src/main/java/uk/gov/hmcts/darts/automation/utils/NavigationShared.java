@@ -318,6 +318,14 @@ public class NavigationShared {
 		verifyElementEnabledDisabled(webElement, expected);
 	}
 	
+	public void checkUncheckCheckboxInTableRow(String rowData1, String rowData2, String action) throws Exception {
+		String xpathBit = "(./td[text()=\"%s\"])";
+		WebElement checkbox = driver.findElement(By.xpath(String.format("//table//tr[" + xpathBit + " and " + xpathBit + "]//input[@type='checkbox']",
+				rowData1,
+				rowData2)));
+		set_unset_checkbox(checkbox, action);
+	}
+	
 	public void checkUncheckCheckboxInTable(String rowData, String header, String action) throws Exception {
 		WebElement checkbox = returnCellFromColumnByValue(findTableContainingText(rowData), rowData, header).findElement(By.xpath("./descendant::input[@type='checkbox']"));
 		set_unset_checkbox(checkbox, action);
