@@ -15,17 +15,17 @@ Scenario: Search - Verify link
 	And   I do not see "Welcome to DARTS" on the page
 
 @DMP-407 @smoketest
-Scenario: My Audios - Verify link
+Scenario: Your Audio - Verify link
 	Given I am logged on to DARTS as an external user
-	When  I click on the "My Audios" link
-	Then  I see "My Audios" on the page
+	When  I click on the "Your Audio" link
+	Then  I see "Your Audio" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
 @DMP-407 @smoketest
-Scenario: My Transcriptions - Verify link
+Scenario: Your Transcripts - Verify link
 	Given I am logged on to DARTS as an external user
-	When  I click on the "My Transcriptions" link
-	Then  I see "My Transcriptions" on the page
+	When  I click on the "Your Transcripts" link
+	Then  I see "Your Transcripts" on the page
 	And  I do not see "Welcome to DARTS" on the page
 
 @DMP-407 @smoketest
