@@ -34,6 +34,9 @@ public class JsonApi {
     static Response response;
     String authorization;
 	static String baseUri = ReadProperties.main("jsonApiUri");
+	
+	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
+	static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
 
 
 	public JsonApi() {
@@ -55,9 +58,11 @@ public class JsonApi {
     	response  = 
     		given()
     			.spec(requestLogLevel(ReadProperties.authRequestLogLevel))
-    			.header("Content-Type","application/x-www-form-urlencoded")  
+				.accept(ACCEPT_JSON_STRING)
+				.contentType("application/x-www-form-urlencoded")
+				
     			.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-    			.header("Accept", "application/json, text/plain, */*")
+//    			.header("Accept", ACCEPT_JSON_STRING)
     			.header("Accept-Encoding", "gzip, deflate, br")
     			.header("X-Requested-With", "XMLHttpRequest")
     			.header("Accept-Language", "en-GB,en;q=0.5")
@@ -92,9 +97,9 @@ public class JsonApi {
 		response =
 				given()
     				.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Connection", "keep-alive")
 					.header("Authorization", authorization)
@@ -116,9 +121,9 @@ public class JsonApi {
 		response =
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Connection", "keep-alive")
 					.header("Authorization", authorization)
@@ -141,9 +146,9 @@ public class JsonApi {
 		response =
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Connection", "keep-alive")
 					.header("Authorization", authorization)
@@ -167,9 +172,9 @@ public class JsonApi {
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Content-Type", "application/json")
 					.header("Connection", "keep-alive")
@@ -193,9 +198,9 @@ public class JsonApi {
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Content-Type", "application/json")
 					.header("Connection", "keep-alive")
@@ -219,9 +224,9 @@ public class JsonApi {
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Content-Type", "application/json")
 					.header("Connection", "keep-alive")

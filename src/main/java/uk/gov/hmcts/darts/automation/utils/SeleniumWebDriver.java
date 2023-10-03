@@ -21,11 +21,7 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
-import org.openqa.selenium.support.events.EventFiringDecorator;
-import org.openqa.selenium.support.events.WebDriverListener;
+
 
 
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
@@ -136,9 +132,9 @@ public class SeleniumWebDriver {
 				System.setProperty("webdriver.chrome.driver", ReadProperties.getHostProperty("chromeDriverLocation"));
 				webDriver = new ChromeDriver(chromeOptions);
 			}
-			capabilities = ((ChromeDriver)((RemoteWebDriver)webDriver)).getCapabilities();
+			capabilities = ((ChromeDriver)webDriver).getCapabilities();
 			log.info(capabilities.toString());
-			log.info(((ChromeDriver)((RemoteWebDriver)webDriver)).getCapabilities().toString());
+			log.info(((ChromeDriver)webDriver).getCapabilities().toString());
 			break;
 			
 		default:      

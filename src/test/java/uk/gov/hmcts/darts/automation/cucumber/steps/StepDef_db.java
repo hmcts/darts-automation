@@ -12,6 +12,7 @@ import io.cucumber.docstring.DocString;
 
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.Postgres;
@@ -26,15 +27,15 @@ public class StepDef_db extends StepDef_base {
 	private Postgres DB;
 	
 	
-	public StepDef_db(SeleniumWebDriver driver) {
-		super(driver);
+	public StepDef_db(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 		DB = new Postgres();
 	}
 	
 	@Given("I execute update sql:")
 	public void executeUpdateSql(String docString) throws Exception {
 		log.info("about to update sql", docString);
-		DB.updateTable(docString);
+		DB.updateRow(docString);
 	}
 	
 	@Given("I set table {} column {} to {} where {} = {}")

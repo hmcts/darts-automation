@@ -14,14 +14,14 @@ Scenario: Search - Verify link
 	Then  I see "Search for a case" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest
+@DMP-407 @DMP-860 @smoketest
 Scenario: Your Audio - Verify link
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Your Audio" link
 	Then  I see "Your Audio" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest
+@DMP-407 @DMP-860 @smoketest
 Scenario: Your Transcripts - Verify link
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Your Transcripts" link

@@ -15,6 +15,7 @@ import io.cucumber.java.Before;
 
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,8 +25,8 @@ public class StepDef_hooks extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_hooks");
 		
-	public StepDef_hooks(SeleniumWebDriver driver) {
-		super(driver);
+	public StepDef_hooks(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 	}
 	
 	static Scenario scenario;

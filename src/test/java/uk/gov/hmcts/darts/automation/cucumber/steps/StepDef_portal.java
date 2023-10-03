@@ -11,6 +11,7 @@ import io.cucumber.java.Before;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 
@@ -23,8 +24,8 @@ public class StepDef_portal extends StepDef_base {
 	
 	private Prompt prompt;	
 	
-	public StepDef_portal(SeleniumWebDriver driver) {
-		super(driver);
+	public StepDef_portal(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 		prompt = new Prompt(webDriver);
 	}
 	
@@ -33,7 +34,7 @@ public class StepDef_portal extends StepDef_base {
 		NAV.navigateToUrl(ReadProperties.main("portal_url"));
 		switch (type.toUpperCase()) {
 		case "INTERNAL":
-			NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
+		NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
 			break;
 		case "EXTERNAL":
 			NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");

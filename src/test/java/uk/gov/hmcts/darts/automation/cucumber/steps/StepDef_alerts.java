@@ -8,6 +8,7 @@ import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.Alerts;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
@@ -21,8 +22,8 @@ public class StepDef_alerts extends StepDef_base {
 	
 	private Alerts ALR;
 	
-	public StepDef_alerts(SeleniumWebDriver driver) {
-		super(driver);
+	public StepDef_alerts(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 		ALR = new Alerts(webDriver);
 	}
 		
