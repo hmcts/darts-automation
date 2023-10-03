@@ -13,7 +13,7 @@ import uk.gov.hmcts.darts.automation.utils.JsonApi;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonString;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
@@ -30,8 +30,8 @@ public class StepDef_testData extends StepDef_base {
 	private JsonApi jsonApi;
 	
 	
-	public StepDef_testData(SharedDriver driver, TestData testdata, NavigationShared ns) {
-		super(driver, testdata, ns);
+	public StepDef_testData(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 		DB = new Database();
 		jsonApi = new JsonApi();
 	}

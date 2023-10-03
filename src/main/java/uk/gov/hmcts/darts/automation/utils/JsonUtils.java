@@ -3,6 +3,8 @@ package uk.gov.hmcts.darts.automation.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -70,8 +72,39 @@ public class JsonUtils {
     
     @Test
 	public void testJson() {
-		System.out.println(buildEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11"));
-		System.out.println(buildEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "blank", ""));
+		Assertions.assertEquals(buildEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11"), "{\r\n"
+				+ "  \"message_id\": \"string1\",\r\n"
+				+ "  \"type\": \"string2\",\r\n"
+				+ "  \"sub_type\": \"string3\",\r\n"
+				+ "  \"event_id\": \"string4\",\r\n"
+				+ "  \"courthouse\": \"string5\",\r\n"
+				+ "  \"courtroom\": \"string6\",\r\n"
+				+ "  \"case_numbers\": [\r\n"
+				+ "    \"string7\"\r\n"
+				+ "  ],\r\n"
+				+ "  \"event_text\": \"string8\",\r\n"
+				+ "  \"date_time\": \"string9\",\r\n"
+				+ "  \"retention_policy\": {\r\n"
+				+ "  \"case_retention_fixed_policy\": \"string10\",\r\n"
+				+ "  \"case_total_sentence\": \"string11\"\r\n"
+				+ "  }\r\n"
+				+ "}");
+		Assertions.assertEquals(buildEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "blank", ""), "{\r\n"
+				+ "  \"message_id\": \"string1\",\r\n"
+				+ "  \"type\": \"string2\",\r\n"
+				+ "  \"sub_type\": \"string3\",\r\n"
+				+ "  \"event_id\": \"string4\",\r\n"
+				+ "  \"courthouse\": \"string5\",\r\n"
+				+ "  \"courtroom\": \"string6\",\r\n"
+				+ "  \"case_numbers\": [\r\n"
+				+ "    \"string7\"\r\n"
+				+ "  ],\r\n"
+				+ "  \"event_text\": \"string8\",\r\n"
+				+ "  \"date_time\": \"string9\",\r\n"
+				+ "  \"retention_policy\": {\r\n"
+				+ "  \"case_retention_fixed_policy\": \"\"\r\n"
+				+ "  }\r\n"
+				+ "}");
 		
 	}
 

@@ -7,10 +7,50 @@ def type = "java"
 def product = "darts"
 def component = "automation"
 
+
+
+def secrets = [
+  'darts-${env}': [
+    secret('api-FUNC-TEST-ROPC-PASSWORD', 'FUNC_TEST_ROPC_USERNAME'),
+    secret('api-FUNC-TEST-ROPC-USERNAME', 'FUNC_TEST_ROPC_PASSWORD'),
+    secret('AzureAdB2CTenantIdKey', 'AAD_B2C_TENANT_ID_KEY'),
+    secret('AzureAdB2CClientIdKey', 'AAD_B2C_CLIENT_ID_KEY'),
+    secret('AzureAdB2CClientSecretKey', 'AAD_B2C_CLIENT_SECRET_KEY'),
+    secret('api-FUNC-TEST-ROPC-USERNAME', 'FUNC_TEST_ROPC_USERNAME'),
+    secret('api-FUNC-TEST-ROPC-PASSWORD', 'FUNC_TEST_ROPC_PASSWORD'),
+    secret('AzureAdB2CFuncTestROPCClientIdKey', 'AAD_B2C_ROPC_CLIENT_ID_KEY'),
+    secret('AzureAdB2CFuncTestROPCClientSecretKey', 'AAD_B2C_ROPC_CLIENT_SECRET_KEY'),
+    secret('api-POSTGRES-SCHEMA', 'DARTS_API_DB_SCHEMA'),
+    secret('api-POSTGRES-HOST', 'DARTS_API_DB_HOST'),
+    secret('api-POSTGRES-DATABASE', 'DARTS_API_DB_DATABASE'),
+    secret('api-POSTGRES-PORT', 'DARTS_API_DB_PORT'),
+    secret('api-POSTGRES-USER', 'DARTS_API_DB_USERNAME'),
+    secret('api-POSTGRES-PASS', 'DARTS_API_DB_PASSWORD'),
+    secret('AzureStorageConnectionString', 'AZURE_STORAGE_CONNECTION_STRING'),
+    secret('AzureADTenantId', 'AAD_TENANT_ID'),
+    secret('AzureADClientId', 'AAD_CLIENT_ID'),
+    secret('AzureADClientSecret', 'AAD_CLIENT_SECRET'),
+    secret('AutomationTestUserName', 'AUTOMATION_USERNAME'),
+    secret('AutomationTestPassword', 'AUTOMATION_PASSWORD')
+  ],
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [$class     : 'AzureKeyVaultSecret',
+   secretType : 'Secret',
+   name       : secretName,
+   version    : '',
+   envVariable: envVar
+  ]
+}
+
+GradleBuilder builder = new GradleBuilder(this, product)
+
 // this "Jenkinsfile_CNP" file defines the build to run on PRs and master branch, not nightly
 // we are only using the "withNightlyPipeline" function here as it better suits the steps we require e.g. check, build and functional tests
 // but rest-assured this will not run nightly, that is defined by the "Jenkinsfile_nightly"
 withNightlyPipeline(type, product, component) {
+  loadVaultSecrets(secrets)
   enableFullFunctionalTest()
   enableSlackNotifications('#darts-builds')
 }

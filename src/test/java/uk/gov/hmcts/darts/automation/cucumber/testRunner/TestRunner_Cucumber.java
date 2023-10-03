@@ -24,7 +24,7 @@ import static io.cucumber.junit.platform.engine.Constants.EXECUTION_DRY_RUN_PROP
 
 @Suite
 @IncludeEngines("cucumber")
-@IncludeTags(value = "API_TEST")
+@IncludeTags(value = "smoketest")
 //@IncludeTags(value = "smoketest | DMP-407")
 @ExcludeTags(value = "broken")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
@@ -34,8 +34,8 @@ import static io.cucumber.junit.platform.engine.Constants.EXECUTION_DRY_RUN_PROP
 @ConfigurationParameter(key = EXECUTION_DRY_RUN_PROPERTY_NAME, value = "false")
 @SelectClasspathResource(value = "cucumber/features")
 
-@ConfigurationParameter(key = PARALLEL_EXECUTION_ENABLED_PROPERTY_NAME, value = "false")	// false or dynamic
-@ConfigurationParameter(key = PARALLEL_CONFIG_STRATEGY_PROPERTY_NAME, value = "fixed")
+@ConfigurationParameter(key = PARALLEL_EXECUTION_ENABLED_PROPERTY_NAME, value = "false")	// false or true
+@ConfigurationParameter(key = PARALLEL_CONFIG_STRATEGY_PROPERTY_NAME, value = "fixed") // fixed or dynamic
 @ConfigurationParameter(key = PARALLEL_CONFIG_DYNAMIC_FACTOR_PROPERTY_NAME, value = "8")
 @ConfigurationParameter(key = PARALLEL_CONFIG_FIXED_PARALLELISM_PROPERTY_NAME, value = "8")
 @ConfigurationParameter(key = EXECUTION_MODE_FEATURE_PROPERTY_NAME, value = "concurrent")	// same_thread or concurrent
@@ -44,7 +44,6 @@ import static io.cucumber.junit.platform.engine.Constants.EXECUTION_DRY_RUN_PROP
 public class TestRunner_Cucumber {
 }
 /*
- * Try1
  * 
  * Regression | DMP-407
  * 

@@ -11,7 +11,7 @@ import io.cucumber.java.Before;
 import io.cucumber.docstring.DocString;
 
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
@@ -27,8 +27,8 @@ public class StepDef_db extends StepDef_base {
 	private Postgres DB;
 	
 	
-	public StepDef_db(SharedDriver driver, TestData testdata, NavigationShared ns) {
-		super(driver, testdata, ns);
+	public StepDef_db(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 		DB = new Postgres();
 	}
 	

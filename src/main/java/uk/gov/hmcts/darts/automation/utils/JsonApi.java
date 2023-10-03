@@ -34,6 +34,9 @@ public class JsonApi {
     static Response response;
     String authorization;
 	static String baseUri = ReadProperties.main("jsonApiUri");
+	
+	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
+	static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
 
 
 	public JsonApi() {
@@ -55,9 +58,11 @@ public class JsonApi {
     	response  = 
     		given()
     			.spec(requestLogLevel(ReadProperties.authRequestLogLevel))
-    			.header("Content-Type","application/x-www-form-urlencoded")  
+				.accept(ACCEPT_JSON_STRING)
+				.contentType("application/x-www-form-urlencoded")
+				
     			.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-    			.header("Accept", "application/json, text/plain, */*")
+//    			.header("Accept", ACCEPT_JSON_STRING)
     			.header("Accept-Encoding", "gzip, deflate, br")
     			.header("X-Requested-With", "XMLHttpRequest")
     			.header("Accept-Language", "en-GB,en;q=0.5")
@@ -92,15 +97,14 @@ public class JsonApi {
 		response =
 				given()
     				.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Connection", "keep-alive")
 					.header("Authorization", authorization)
 					.baseUri(baseUri)
 					.basePath("")
-				.body("1")
 				.when()
 					.get(endpoint)
 				.then()
@@ -117,9 +121,9 @@ public class JsonApi {
 		response =
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Connection", "keep-alive")
 					.header("Authorization", authorization)
@@ -142,9 +146,9 @@ public class JsonApi {
 		response =
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Connection", "keep-alive")
 					.header("Authorization", authorization)
@@ -168,9 +172,9 @@ public class JsonApi {
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Content-Type", "application/json")
 					.header("Connection", "keep-alive")
@@ -194,9 +198,9 @@ public class JsonApi {
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Content-Type", "application/json")
 					.header("Connection", "keep-alive")
@@ -220,9 +224,9 @@ public class JsonApi {
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("application/json, text/plain, */*")
+					.accept(ACCEPT_JSON_STRING)
 					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-					.header("Accept", "application/json, text/plain, */*")
+//					.header("Accept", ACCEPT_JSON_STRING)
 					.header("Accept-Encoding", "gzip, deflate")
 					.header("Content-Type", "application/json")
 					.header("Connection", "keep-alive")
@@ -237,46 +241,4 @@ public class JsonApi {
 					.extract().response();
 		return response;
     }
-    
-
-@Test
-	public void test() {
-    	JsonApi jsonApi = new JsonApi();
-//		System.out.println("post: courthouses");
-//		api.postApi("courthouses", "{\n"
-//    			+ "  \"courthouse_name\": \"Newcastle\",\n"
-//    			+ "  \"code\": 400\n"
-//    			+ "}");
-		System.out.println("get: courthouses");
-		jsonApi.getApi("courthouses");
-//		System.out.println("put: courthouses");
-//		api.putApi("courthouses/3", "{\n"
-//    			+ "  \"courthouse_name\": \"Leeds\",\n"
-//    			+ "  \"code\": 100\n"
-//    			+ "}");
-//		System.out.println("get2: courthouses");
-//		api.getApi("courthouses");
-//		System.out.println("delete: courthouses");
-//		deleteApi("courthouses/2", "{\n"
-//    			+ "  \"courthouse_name\": \"Leeds\",\n"
-//    			+ "  \"code\": 100\n"
-//    			+ "}");
-//		System.out.println("get2: courthouses");
-//    	getApi("courthouses");
-		
-		System.out.println("post: events");
-		jsonApi.postApi("events", 	"{"
-				+	  "\"message_id\": \"18422\","
-				+	  "\"event_id\": \"1\","
-				+	  "\"type\": \"1000\","
-				+	  "\"sub_type\": \"1002\","
-				+	  "\"courthouse\": \"LEEDS\","
-				+	  "\"courtroom\": \"ROOM1_LEEDS461\","
-				+	  "\"case_numbers\": ["
-				+	    "\"174\""
-				+	  "],"
-				+	  "\"date_time\": \"2023-06-18T08:37:30.945Z\","
-				+	  "\"event_text\": \"some event text\""
-				+	"}");
-	}
 }

@@ -15,24 +15,34 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ReadProperties {
+	static String getSystemValue(String name) {
+		String value = System.getenv(name);
+		if (value != null && !value.equals(name)) {
+			return value;
+		}
+		return System.getProperty(name);
+	}
+	
 	private static Logger log = LogManager.getLogger("ReadProperties");
 
-	public static String apiUserName = System.getProperty("FUNC_TEST_ROPC_USERNAME");
-	public static String apiPassword = System.getProperty("FUNC_TEST_ROPC_PASSWORD");
-	public static String apiClientId = System.getProperty("AAD_B2C_ROPC_CLIENT_ID_KEY");
-	public static String apiClientSecret = System.getProperty("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+// get azure secrets as environment vars
+	public static String apiUserName = getSystemValue("FUNC_TEST_ROPC_USERNAME");
+	public static String apiPassword = getSystemValue("FUNC_TEST_ROPC_PASSWORD");
+	public static String apiClientId = getSystemValue("AAD_B2C_ROPC_CLIENT_ID_KEY");
+	public static String apiClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
 
-	public static String apiDbSchema = System.getProperty("DARTS_API_DB_SCHEMA");
+	public static String apiDbSchema = getSystemValue("DARTS_API_DB_SCHEMA");
 //	n.b.  System.getProperty("AZURE_STORAGE_CONNECTION_STRING"); defined but not used
-	public static String apiDbUserName = System.getProperty("DARTS_API_DB_USERNAME");
-	public static String apiDbPassword = System.getProperty("DARTS_API_DB_PASSWORD");
-	public static String apiDbPort = System.getProperty("DARTS_API_DB_PORT");
-	public static String apiDbHost = System.getProperty("DARTS_API_DB_HOST");
-	public static String apiDbDatabase = System.getProperty("DARTS_API_DB_DATABASE");
-	public static String automationUserId = System.getProperty("AutomationTestUserName", "");
-	public static String automationPassword = System.getProperty("AutomationTestPassword", "");
+	public static String apiDbUserName = getSystemValue("DARTS_API_DB_USERNAME");
+	public static String apiDbPassword = getSystemValue("DARTS_API_DB_PASSWORD");
+	public static String apiDbPort = getSystemValue("DARTS_API_DB_PORT");
+	public static String apiDbHost = getSystemValue("DARTS_API_DB_HOST");
+	public static String apiDbDatabase = getSystemValue("DARTS_API_DB_DATABASE");
+	public static String automationUserId = getSystemValue("AUTOMATION_USERNAME");
+	public static String automationPassword = getSystemValue("AUTOMATION_PASSWORD");
+	public static String isRunLocal = getSystemValue("RUN_LOCAL");
 	
-	public static boolean runLocal = System.getProperty("RUN_LOCAL", "false").equalsIgnoreCase("true");    
+	public static boolean runLocal = isRunLocal != null && isRunLocal.equalsIgnoreCase("true");    
 	
 	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
 	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
@@ -58,7 +68,6 @@ public class ReadProperties {
 		} else {
 			log.info("Using system environment >"+systemEnv);
 		}
-
 	}
 	
 

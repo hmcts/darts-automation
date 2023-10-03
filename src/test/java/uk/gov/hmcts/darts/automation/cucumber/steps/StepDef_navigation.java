@@ -3,12 +3,11 @@ package uk.gov.hmcts.darts.automation.cucumber.steps;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
-//import io.cucumber.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.SharedDriver;
+import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -20,11 +19,10 @@ import org.apache.logging.log4j.Logger;
 public class StepDef_navigation extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_navigation");
-//	private final WebDriver webDriver;
 	
 	
-	public StepDef_navigation(SharedDriver driver, TestData testdata, NavigationShared ns) {
-		super(driver, testdata, ns);
+	public StepDef_navigation(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 	}
 	
 	
@@ -257,7 +255,7 @@ public class StepDef_navigation extends StepDef_base {
 	@When("^I select the \"([^\"]*)\" checkbox for \"([^\"]*)\"$")
 	public void selectCheckbox_forRowWithText(String column, String rowText) {
 	    NAV.selectCheckbox_forRowWithText(column, rowText);
-	};
+	}
 	
 	@When("^I select the \"([^\"]*)\" radio button$")
 	public void selectRadioButton(String label) throws Exception {
@@ -320,7 +318,6 @@ public class StepDef_navigation extends StepDef_base {
 	@Then("^the \"([^\"]*)\" ([^\"]*) is disabled$")
 	public void confirmElementByLabelIsDisabled (String label, String element) throws Exception{
 		if (element.equalsIgnoreCase("button")) {
-//			NAV.confirmElementByLabelIsDisabled(label);
 			NAV.confirmButtonByText_isDisabled(label);
 		} else {
 			NAV.confirmElementByLabelIsDisabled(label);
@@ -337,7 +334,6 @@ public class StepDef_navigation extends StepDef_base {
 	    NAV.hoverOverText_seeText(hoverOverText, hoverText);
 	};
 	
-	//KC Code
 	@When("^I uncheck the checkbox for \"([^\"]*)\"$")
 	public void uncheck_checkbox(String checkbox_name) throws Exception {
 		try {
