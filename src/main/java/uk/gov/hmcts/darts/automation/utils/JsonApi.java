@@ -14,6 +14,8 @@ import io.restassured.specification.ResponseSpecification;
 
 import static io.restassured.RestAssured.*;
 
+import uk.gov.hmcts.darts.automation.utils.ApiResponse;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,23 +34,30 @@ import org.junit.jupiter.api.Test;
 public class JsonApi {
 	private static Logger log = LogManager.getLogger("JsonApi");
     static Response response;
-    String authorization;
+    static String authorization;
 	static String baseUri = ReadProperties.main("jsonApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
-	static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
+	static final String CONTENT_TYPE = "Content-Type";
+	static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
+	static final String USER_AGENT = "User-Agent";
+	static final String USER_AGENT_STRING = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0";
+	static final String ACCEPT_ENCODING = "Accept-Encoding";
+	static final String ACCEPT_ENCODING_STRING = "gzip, deflate";
+	static final String CONNECTION = "Connection";
+	static final String CONNECTION_STRING = "keep-alive";
+	static final String AUTHORIZATION = "Authorization";
 
 
 	public JsonApi() {
-		
 	}
 
-    public static RequestSpecification requestLogLevel(LogDetail loggingLevel){
+    public RequestSpecification requestLogLevel(LogDetail loggingLevel){
         RequestSpecification requestSpec = new RequestSpecBuilder().log(loggingLevel).build();
         return requestSpec;
     }
 
-    public static ResponseSpecification responseLogLevel(LogDetail loggingLevel){
+    public ResponseSpecification responseLogLevel(LogDetail loggingLevel){
         ResponseSpecification loglevel = new ResponseSpecBuilder().log(loggingLevel).build();
         return loglevel;
     }
@@ -61,8 +70,7 @@ public class JsonApi {
 				.accept(ACCEPT_JSON_STRING)
 				.contentType("application/x-www-form-urlencoded")
 				
-    			.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-//    			.header("Accept", ACCEPT_JSON_STRING)
+    			.header(USER_AGENT, USER_AGENT_STRING) 
     			.header("Accept-Encoding", "gzip, deflate, br")
     			.header("X-Requested-With", "XMLHttpRequest")
     			.header("Accept-Language", "en-GB,en;q=0.5")
@@ -90,7 +98,7 @@ public class JsonApi {
     
     
 
-	public void getApi(String endpoint) {
+	public ApiResponse getApi(String endpoint) {
 
     	authorization = authenticate();
 		log.info("get: " + endpoint);
@@ -98,11 +106,10 @@ public class JsonApi {
 				given()
     				.spec(requestLogLevel(ReadProperties.requestLogLevel))
 					.accept(ACCEPT_JSON_STRING)
-					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-//					.header("Accept", ACCEPT_JSON_STRING)
-					.header("Accept-Encoding", "gzip, deflate")
-					.header("Connection", "keep-alive")
-					.header("Authorization", authorization)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
 					.basePath("")
 				.when()
@@ -112,9 +119,11 @@ public class JsonApi {
 					.log().everything()
 					.assertThat().statusCode(200)
 					.extract().response();
+		
+		return new ApiResponse(response.statusCode(), response.asString());
 	}
 
-	public Response getApiWithFormParams(String endpoint, Map<String, String> formParams) {
+	public ApiResponse getApiWithFormParams(String endpoint, Map<String, String> formParams) {
 
     	authorization = authenticate();
 		log.info("get: " + endpoint);
@@ -122,11 +131,10 @@ public class JsonApi {
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
 					.accept(ACCEPT_JSON_STRING)
-					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-//					.header("Accept", ACCEPT_JSON_STRING)
-					.header("Accept-Encoding", "gzip, deflate")
-					.header("Connection", "keep-alive")
-					.header("Authorization", authorization)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
 					.basePath("")
 					.formParams(formParams)
@@ -134,12 +142,11 @@ public class JsonApi {
 					.get(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.assertThat().statusCode(200)
 					.extract().response();
-		return response;
+		return new ApiResponse(response.statusCode(), response.asString());
 	}
 
-	public Response getApiWithQueryParams(String endpoint, Map<String, String> queryParams) {
+	public ApiResponse getApiWithQueryParams(String endpoint, Map<String, String> queryParams) {
 
     	authorization = authenticate();
 		log.info("get: " + endpoint);
@@ -147,11 +154,10 @@ public class JsonApi {
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
 					.accept(ACCEPT_JSON_STRING)
-					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0")
-//					.header("Accept", ACCEPT_JSON_STRING)
-					.header("Accept-Encoding", "gzip, deflate")
-					.header("Connection", "keep-alive")
-					.header("Authorization", authorization)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
 					.basePath("")
 					.queryParams(queryParams)
@@ -159,12 +165,11 @@ public class JsonApi {
 					.get(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.assertThat().statusCode(200)
 					.extract().response();
-		return response;
+		return new ApiResponse(response.statusCode(), response.asString());
 	}
     
-    public Response postApi(String endpoint, String body) {
+	public ApiResponse postApi(String endpoint, String body) {
 
     	authorization = authenticate();
     	log.info("post: " + endpoint);
@@ -173,12 +178,11 @@ public class JsonApi {
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
 					.accept(ACCEPT_JSON_STRING)
-					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-//					.header("Accept", ACCEPT_JSON_STRING)
-					.header("Accept-Encoding", "gzip, deflate")
-					.header("Content-Type", "application/json")
-					.header("Connection", "keep-alive")
-					.header("Authorization", authorization)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
 					.basePath("")
 					.body(body)
@@ -186,12 +190,11 @@ public class JsonApi {
 					.post(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.assertThat().statusCode(201)
 					.extract().response();
-		return response;
+		return new ApiResponse(response.statusCode(), response.asString());
     }
     
-    public Response putApi(String endpoint, String body) {
+	public ApiResponse putApi(String endpoint, String body) {
 
     	authorization = authenticate();
     	log.info("put: " + endpoint);
@@ -199,12 +202,11 @@ public class JsonApi {
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
 					.accept(ACCEPT_JSON_STRING)
-					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-//					.header("Accept", ACCEPT_JSON_STRING)
-					.header("Accept-Encoding", "gzip, deflate")
-					.header("Content-Type", "application/json")
-					.header("Connection", "keep-alive")
-					.header("Authorization", authorization)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
 					.basePath("")
 					.body(body)
@@ -212,12 +214,11 @@ public class JsonApi {
 					.put(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.assertThat().statusCode(204)
 					.extract().response();
-		return response;
+		return new ApiResponse(response.statusCode(), response.asString());
     }
     
-    public Response deleteApi(String endpoint, String body) {
+	public ApiResponse deleteApi(String endpoint, String body) {
 
     	log.info("delete: " + endpoint);
     	authorization = authenticate();
@@ -225,20 +226,18 @@ public class JsonApi {
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
 					.accept(ACCEPT_JSON_STRING)
-					.header("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0") 
-//					.header("Accept", ACCEPT_JSON_STRING)
-					.header("Accept-Encoding", "gzip, deflate")
-					.header("Content-Type", "application/json")
-					.header("Connection", "keep-alive")
-					.header("Authorization", authorization)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
 					.basePath("")
 				.when()
 					.delete(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.assertThat().statusCode(204)
 					.extract().response();
-		return response;
+		return new ApiResponse(response.statusCode(), response.asString());
     }
 }

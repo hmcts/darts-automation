@@ -11,12 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Search {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-    private static WebDriver webDriver;
+public class Search {
+	private static Logger log = LogManager.getLogger("Search");
+
+    private WebDriver webDriver;
 
     public Search(WebDriver driver) {
-        Search.webDriver = driver;
+        this.webDriver = driver;
 
     }
 
@@ -219,7 +223,7 @@ public class Search {
 
     }
 
-    private static WebElement getSearchResultsTable() {
+    private WebElement getSearchResultsTable() {
         WebElement searchResultsTable = webDriver.findElement(By.className("govuk-table"));
         return searchResultsTable;
     }

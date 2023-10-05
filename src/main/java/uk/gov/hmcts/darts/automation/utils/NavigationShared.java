@@ -31,7 +31,7 @@ import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.DateUtils;
 
 public class NavigationShared {
-	private static WebDriver driver;
+	private WebDriver driver;
 	private static Logger log = LogManager.getLogger("NavigationShared");
 	private WaitUtils wait;
 	private String LOADING_ICON_LOCATION = "#spinner, app-cp-spinner";
@@ -39,7 +39,7 @@ public class NavigationShared {
 	private static int instanceCount = 0;
 
 	public NavigationShared(WebDriver driver) {
-		NavigationShared.driver = driver;
+		this.driver = driver;
 		wait = new WaitUtils(driver);
 		GU = new GenUtils(driver);
 		log.info("Instance count: " + ++instanceCount);

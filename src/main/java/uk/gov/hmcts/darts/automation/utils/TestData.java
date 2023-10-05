@@ -32,6 +32,8 @@ public class TestData {
 	static String currentYear =  Year.now().toString();
 	Properties propFile; // = new Properties();
 	Properties properties; // = new Properties();
+	public String statusCode = "";
+	public String responseString = "";
 	
 	public TestData() {
 		propFile = new Properties();

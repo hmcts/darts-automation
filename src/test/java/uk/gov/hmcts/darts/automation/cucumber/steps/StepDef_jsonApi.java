@@ -21,20 +21,22 @@ import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.JsonApi;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
+import uk.gov.hmcts.darts.automation.utils.ApiResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StepDef_api extends StepDef_base {
+public class StepDef_jsonApi extends StepDef_base {
 
-	private static Logger log = LogManager.getLogger("StepDef_api");
+	private static Logger log = LogManager.getLogger("StepDef_jsonApi");
 	private static String eventFields = "|message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|";
 	private JsonApi jsonApi;
 	
 	
-	public StepDef_api(SeleniumWebDriver driver, TestData testdata) {
+	public StepDef_jsonApi(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
 		jsonApi = new JsonApi();
 	}
@@ -77,17 +79,23 @@ public class StepDef_api extends StepDef_base {
 				testdata.getProperty("date_time"),
 				testdata.getProperty("case_retention_fixed_policy"),
 				testdata.getProperty("case_total_sentence"));
-		jsonApi.postApi("events", json);
+		ApiResponse apiResponse = jsonApi.postApi("events", json);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST {word} API using json body:")
 	public void callPostApiWithJsonBody(String endPoint, String docString) throws Exception {
-		jsonApi.postApi(endPoint, docString);
+		ApiResponse apiResponse = jsonApi.postApi(endPoint, docString);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call GET {word} API")
 	public void callGetApiWithJsonBody(String endPoint) throws Exception {
-		jsonApi.getApi(endPoint);
+		ApiResponse apiResponse = jsonApi.getApi(endPoint);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
 	}
 
 // sample cucumber:
@@ -99,8 +107,15 @@ public class StepDef_api extends StepDef_base {
 	public void callGetCaseHearingsApi(List<Map<String, String>> dataTable) throws Exception {
 		for (Map<String, String> map : dataTable) {
 			map.get("case_number");
-			jsonApi.getApiWithQueryParams("cases/search", map);
+			ApiResponse apiResponse = jsonApi.getApiWithQueryParams("cases/search", map);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
 		}
+	}
+	
+	@Then("the status code is {int}")
+	public void verifyStatusCode(int expected) {
+		Assertions.assertEquals(String.valueOf(expected), testdata.statusCode, "Invalid status code");
 	}
 	
 
