@@ -121,3 +121,24 @@ Scenario: Case details and Hearing details
 	And I see "DMP-695-1" on the page
 	And I see "DMP-695-01 Courtroom" on the page
 	And I see "DMP-695-01 Judge" on the page
+
+	@DMP-963
+	Scenario: Last Search results are retrievable on clicking Search in the breadcrumb trail
+		Given I am logged on to DARTS as an external user
+		And I click on the "Search" link
+		And I see "Search for a case" on the page
+		And I set "Case ID" to "Case1009"
+		And I press the "Search" button
+		Then I can see search results table
+			| CaseID   | Courthouse | Courtroom | Judges   | Defendants |
+			| CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs |
+		And I see "Restriction: Judge directed on reporting restrictions" on the page
+       #Case Details
+		When I click on "CASE1009" in the same row as "Swansea"
+		Then I click on the breadcrumb link "Search"
+		And I can see search results table
+			| CaseID   | Courthouse | Courtroom | Judges   | Defendants |
+			| CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs |
+		And I see "Restriction: Judge directed on reporting restrictions" on the page
+
+
