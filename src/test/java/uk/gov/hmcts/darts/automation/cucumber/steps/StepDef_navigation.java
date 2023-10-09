@@ -345,6 +345,16 @@ public class StepDef_navigation extends StepDef_base {
 		
 	}
 	
+// Check / uncheck a checkbox in an html table in the same row as other data
+
+	@When ("^I ([^\"]*) the checkbox in the same row as \"([^\"]*)\" \"([^\"]*)\"$")
+	public void checkUncheckCheckboxInTableRowContainingString(String action, String rowData1, String rowData2) throws Exception {
+		NAV.checkUncheckCheckboxInTableRow(rowData1, rowData2, action);
+	}
+
+
+// Check / uncheck a checkbox in a specified column of an html table in the same row as other data
+
 	@When ("^I ([^\"]*) the \"([^\"]*)\" checkbox in the same row as \"([^\"]*)\"$")
 	public void checkUncheckCheckboxInTable(String action, String header, String rowData) throws Exception {
 		NAV.checkUncheckCheckboxInTable(rowData, header, action);

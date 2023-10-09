@@ -13,6 +13,7 @@ import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
+import uk.gov.hmcts.darts.automation.pageObjects.Portal;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,12 +21,13 @@ import org.apache.logging.log4j.Logger;
 public class StepDef_portal extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_portal");
-	
+	private Portal portal;
 	private Prompt prompt;	
 	
 	public StepDef_portal(SeleniumWebDriver driver) {
 		super(driver);
 		prompt = new Prompt(webDriver);
+		portal = new Portal(webDriver); 
 	}
 	
 	@Given("I am logged on to DARTS as an {word} user")
@@ -65,6 +67,11 @@ public class StepDef_portal extends StepDef_base {
 	@When("^I see phone number \"([^\"]*)\" on the page$")
 	public void seePhoneNumberOnThePage(String arg1) throws Exception {
 		NAV.textPresentOnPage("XXX-XXX-" + arg1.substring(arg1.length() - 5));
+	}
+	
+	@When("^I click on the breadcrumb link \"([^\"]*)\"$")
+	public void clickOnBreadcrumbLink(String link) {
+		portal.clickOnBreadcrumbLink(link);
 	}
 	
 	
