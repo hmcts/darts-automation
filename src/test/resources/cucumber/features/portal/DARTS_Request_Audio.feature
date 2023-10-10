@@ -143,15 +143,11 @@ Feature: Request Audio
     And I click on the "Back to search results" link
     And I see "Search for a case" on the page
 
-  @DMP-695   #Manually enter in Start Time and End Time
+  @DMP-695  #Manually enter in Start Time and End Time
   Scenario Outline: Request Audio by setting Start Time and End Time
     When I select the "Audio preview and events" radio button
-    And I set "Hour" in "Start Time" to "<Hour>"
-    And I set "Minutes" in "Start Time" to "<Minutes>"
-    And I set "Seconds" in "Start Time" to "<Seconds>"
-    And I set "Hour" in "End Time" to "<Hour>"
-    And I set "Minutes" in "End Time" to "<Minutes>"
-    And I set "Seconds" in "End Time" to "<Seconds>"
+    And I set the time fields of "Start Time" to "<StartTime>"
+    And I set the time fields of "End Time" to "<EndTime>"
     And I select the "Playback Only" radio button
     And I press the "Get Audio" button
   #Confirm your Order
@@ -176,8 +172,8 @@ Feature: Request Audio
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to" on the page
     Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Hour | Minutes | Seconds |
-      | CASE1009 | Swansea    | Jow Bloggs | 2023-08-15  | 13:07:33  | 13:07:33 | 13   | 07      | 33      |
+      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  |
+      | CASE1009 | Swansea    | Jow Bloggs | 2023-08-15  | 13:07:33  | 13:07:33 |
 
   @DMP-658
   Scenario Outline: Request Audio Events only available for hearing

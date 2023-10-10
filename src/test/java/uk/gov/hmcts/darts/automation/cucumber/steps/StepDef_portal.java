@@ -80,5 +80,13 @@ public class StepDef_portal extends StepDef_base {
 		portal.clickOnBreadcrumbLink(link);
 	}
 	
+	@When("^I set the time fields of \"([^\"]*)\" to \"([^\"]*)\"$")
+	public void setTimeFields(String header, String time) throws Exception {
+		String [] timeSplit = time.split(":");
+		NAV.setValueByLabelInLocationTo(header, "Hour", timeSplit[0]);
+		NAV.setValueByLabelInLocationTo(header, "Minutes", timeSplit[1]);
+		NAV.setValueByLabelInLocationTo(header, "Seconds", timeSplit[2]);
+	}
+	
 	
 }
