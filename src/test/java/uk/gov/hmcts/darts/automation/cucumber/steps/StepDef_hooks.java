@@ -89,7 +89,10 @@ public class StepDef_hooks extends StepDef_base {
 		scenario.attach(("Scenario: " + scenario.getName()+"-"+scenario.getId()).getBytes(), "text/plain", "Details");
 		scenario.attach(("Scenario: " + scenario.getName()+"-"+scenario.getId()).getBytes().toString()
 				+ " Thread Id: " + Thread.currentThread().getId(), "text/plain", "Thread");
-		webDriver.quit();
+		if (webDriver != null) {
+			log.info("closing browser");
+			webDriver.close();
+		}
 	}
 	
 	@Before

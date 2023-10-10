@@ -344,6 +344,16 @@ public class StepDef_navigation extends StepDef_base {
 	    }
 		
 	}
+
+	@When ("^I see \"([^\"]*)\" in the same row as \"([^\"]*)\" \"([^\"]*)\"$")
+	public void verifyTextInTableRow(String text, String rowData1, String rowData2) throws Exception {
+		NAV.verifyTextInTableRow(text, rowData1, rowData2);
+	}
+
+	@When ("^I press the \"([^\"]*)\" button in the same row as \"([^\"]*)\" \"([^\"]*)\"$")
+	public void clickButtonInTableRow(String buttonText, String rowData1, String rowData2) throws Exception {
+		NAV.clickButtonInTableRow(buttonText, rowData1, rowData2);
+	}
 	
 // Check / uncheck a checkbox in an html table in the same row as other data
 
