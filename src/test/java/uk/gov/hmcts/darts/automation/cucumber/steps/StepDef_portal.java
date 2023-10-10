@@ -35,9 +35,15 @@ public class StepDef_portal extends StepDef_base {
 		NAV.navigateToUrl(ReadProperties.main("portal_url"));
 		switch (type.toUpperCase()) {
 		case "INTERNAL":
+		case "REQUESTER":
+		case "APPROVER":
+		case "JUDGE":
+		case "ADMINISTRATOR":
 			NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
 			break;
 		case "EXTERNAL":
+		case "TRANSCRIBER":
+		case "INTERPRETER_QA_AUDITOR":
 			NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
 			break;
 		default:
