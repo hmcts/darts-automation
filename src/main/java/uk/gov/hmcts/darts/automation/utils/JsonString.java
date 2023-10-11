@@ -19,7 +19,7 @@ public class JsonString {
 * 
 */
 	public JsonString addJsonLine(String tag, String value) {
-		if (!value.isBlank()) {
+		if (value != null && !value.isBlank()) {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
@@ -40,7 +40,7 @@ public class JsonString {
  * 
  */
 	public JsonString addJsonValue(String tag, String value) {
-		if (!value.isBlank()) {
+		if (value != null && !value.isBlank()) {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
@@ -51,7 +51,7 @@ public class JsonString {
 	}
 	
 	public JsonString addJsonSeq(String tag, String value) {
-		if (!value.isBlank()) {
+		if (value != null && !value.isBlank()) {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}

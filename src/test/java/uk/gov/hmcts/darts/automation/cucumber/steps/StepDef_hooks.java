@@ -50,8 +50,8 @@ public class StepDef_hooks extends StepDef_base {
 	
 	@After
 	public void afterScenario(Scenario scenario) {
-		log.info("End of scenario: "+scenario.getId()+" Thread Id: " + Thread.currentThread().getId());
 		if (scenario.isFailed()) {	
+			log.info("End of Scenario - Scenario Failed: " + scenario.getId() + " Thread Id: " + Thread.currentThread().getId());
 			try {
 				JavascriptExecutor jse = (JavascriptExecutor)webDriver;
 			    jse.executeScript("document.body.style.zoom = '50%';");
@@ -60,6 +60,8 @@ public class StepDef_hooks extends StepDef_base {
 			} catch (Exception e) {
 				log.info("Failed getting screenshot");
 			}			
+		} else {
+			log.info("End of Scenario - Scenario Passed: " + scenario.getId() + " Thread Id: " + Thread.currentThread().getId());
 		}
 		try {
 		    try {
