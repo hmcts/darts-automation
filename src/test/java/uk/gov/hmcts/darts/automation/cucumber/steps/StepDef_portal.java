@@ -37,14 +37,19 @@ public class StepDef_portal extends StepDef_base {
             case "EXTERNAL":
             case "TRANSCRIBER":
             case "INTERPRETER_QA_AUDITOR":
-                // temporarily moved to external login
-                //case "REQUESTER":
-                //case "APPROVER":
-                //case "JUDGE":
-                //case "ADMINISTRATOR":
+// temporarily moved to external login
+            case "REQUESTER":
+            case "APPROVER":
+            case "JUDGE":
+            case "ADMINISTRATOR":
                 NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
                 break;
             case "INTERNAL":
+// temporarily moved to external login
+//            case "REQUESTER":
+//            case "APPROVER":
+//            case "JUDGE":
+//            case "ADMINISTRATOR":
                 NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
                 break;
             default:
