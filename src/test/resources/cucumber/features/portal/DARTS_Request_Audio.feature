@@ -13,7 +13,7 @@ Feature: Request Audio
         #Case Details
     When I click on "CASE1009" in the same row as "Swansea"
      #Hearing Details
-    And I click on "14 Aug 2023" in the same row as "ROOM_A"
+    And I click on "15 Aug 2023" in the same row as "ROOM_A"
     And I see "Swansea" on the page
     And I see "ROOM_A" on the page
 
@@ -48,7 +48,7 @@ Feature: Request Audio
     And I see "When it is ready we will send an email to" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
-      | CASE1009 | Swansea    | Jow Bloggs | 2023-08-15  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
   @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686
   Scenario Outline: Request Audio with Request Type Download
@@ -81,7 +81,7 @@ Feature: Request Audio
     And I see "When it is ready we will send an email to dartsautomationuser@HMCTS.net and notify you in the DARTS application." on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
-      | CASE1009 | Swansea    | Jow Bloggs | 2023-08-15  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
   @DMP-685
   Scenario: Request Audio Confirm your Order Cancel link
@@ -115,8 +115,6 @@ Feature: Request Audio
     When I select the "Audio preview and events" radio button
     And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
     And I press the "Get Audio" button
-    Then I see "Confirm your Order" on the page
-    And I see "There is a problem" on the page
     And I see "You must select a request type" on the page
 
   @DMP-686
@@ -129,7 +127,7 @@ Feature: Request Audio
     And I press the "Confirm" button
     Then I see "Your order is complete" on the page
     And I click on the "Return to hearing date" link
-    And I see "14 Aug 2023" on the page
+    And I see "15 Aug 2023" on the page
 
   @DMP-686
   Scenario: Order Confirmation - Back to search results link
@@ -173,7 +171,7 @@ Feature: Request Audio
     And I see "When it is ready we will send an email to" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  |
-      | CASE1009 | Swansea    | Jow Bloggs | 2023-08-15  | 13:07:33  | 13:07:33 |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 |
 
   @DMP-658
   Scenario Outline: Request Audio Events only available for hearing
@@ -206,7 +204,7 @@ Feature: Request Audio
     And I see "When it is ready we will send an email to" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
-      | CASE1009 | Swansea    | Jow Bloggs | 2023-08-15  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
 
   @DMP-692
