@@ -15,7 +15,7 @@ import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
-import uk.gov.hmcts.darts.automation.utils.Postgres;
+import uk.gov.hmcts.darts.automation.utils.Database;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,12 +24,12 @@ import org.junit.jupiter.api.Assertions;
 public class StepDef_db extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_db");
-	private Postgres DB;
+	private Database DB;
 	
 	
 	public StepDef_db(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
-		DB = new Postgres();
+		DB = new Database();
 	}
 	
 	@Given("I execute update sql:")
@@ -43,17 +43,31 @@ public class StepDef_db extends StepDef_base {
 		log.info("about to update field " + table + " " + keyCol + " " + keyVal + " " + updateCol + " " + updateVal);
 		DB.setSingleValue(table, keyCol, keyVal, updateCol, updateVal);
 	}
-	
-	@Given("I see table {} column {} where {} = {} is {}")
-	public void verifyTableValue(String table, String col, String keyCol, String keyVal, String expectedVal) throws Exception {
+
+//	@Given("^I see table (\\S) column (\\S) is \"([^\"]*)\" where (\\S) = (\\S)$")
+	@Then("I see table {word} column {word} is {string} where {word} = {string}")
+	public void verifyTableValue(String table, String col, String expectedVal, String keyCol, String keyVal) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol + " " + keyVal + " " + col + " " + expectedVal);
 		String returnVal = DB.returnSingleValue(table, keyCol, keyVal, col);
 		Assertions.assertEquals(expectedVal, returnVal);
 	}
+
+	@Then("I see table {word} column {word} is {string} where {word} = {string} and {word} = {string}")
+	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2) throws Exception {
+		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2 + " " + col + " " + expectedVal);
+		String returnVal = DB.returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, col);
+		Assertions.assertEquals(expectedVal, returnVal);
+	}
 	
-	@Given("I execute select sql:")
+	@Then("I execute select sql:")
 	public void executeSelectSql(String docString) throws Exception {
 		DB.returnSingleValue(docString);
+	}
+	
+	@Then("I see sql returns value \"([^\"]*)\"")
+	public void executeSelectSql(String expectedVal, String docString) throws Exception {
+		String returnVal = DB.returnSingleValue(docString);
+		Assertions.assertEquals(expectedVal, returnVal);
 	}
 	
 

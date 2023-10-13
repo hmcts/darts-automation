@@ -133,14 +133,14 @@ public class Postgres {
 
 	public String returnSingleValue(String table, String keyCol, String keyVal, String returnCol) throws Exception {
 		String sql = "select " + returnCol
-				+ " from " + ReadProperties.apiDbSchema + "." + table
+				+ " from " + table
 				+ " where " + keyCol + " = " + delimitedValue(table, keyCol, keyVal);
 		return returnSingleValue(sql);
 	}
 
 	public String returnSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String returnCol) throws Exception {
 		String sql = "select " + returnCol
-				+ " from " + ReadProperties.apiDbSchema + "." + table
+				+ " from " + table
 				+ " where " + keyCol1 + " = " + delimitedValue(table, keyCol1, keyVal1)
 				+ " and " + keyCol2 + " = " + delimitedValue(table, keyCol2, keyVal2);
 		return returnSingleValue(sql);
@@ -183,7 +183,7 @@ public class Postgres {
 	
 	String delimitedValue(String table, String column, String value) throws Exception {
 		String columnType = returnSingleValue("select pg_typeof(" + column + ") "
-				+ "from darts." + table
+				+ "from " + table
 				+ " LIMIT 1");
 		String delimiter = "";
 		if (value == null || value.equalsIgnoreCase("null")) {
@@ -275,26 +275,26 @@ public class Postgres {
 	@Test
 	public void test() throws Exception {
 		Postgres pg = new Postgres();
-		Assertions.assertEquals(pg.delimitedValue("court_case", "case_number", "12"), "'12'");
-		Assertions.assertEquals(pg.delimitedValue("court_case", "case_number", null), "null");
-		Assertions.assertEquals(pg.delimitedValue("court_case", "case_number", "null"), "null");
-		Assertions.assertEquals(pg.delimitedValue("court_case", "case_closed", "12"), "12");
-		Assertions.assertEquals(pg.delimitedValue("court_case", "cas_id", "12"), "12");
-		Assertions.assertEquals(pg.delimitedValue("court_case", "cth_id", "12"), "12");
-		Assertions.assertEquals(pg.delimitedValue("court_case", "cth_id", "null"), "null");
-		Assertions.assertEquals(pg.delimitedValue("court_case", "cth_id", null), "null");
+		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "case_number", "12"), "'12'");
+		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "case_number", null), "null");
+		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "case_number", "null"), "null");
+		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "case_closed", "12"), "12");
+		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cas_id", "12"), "12");
+		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", "12"), "12");
+		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", "null"), "null");
+		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", null), "null");
 		Assertions.assertEquals(pg.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
 		Assertions.assertEquals(pg.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
 		Assertions.assertEquals(pg.returnSingleValue("select case_number from darts.court_case where case_number = '174'"), "174");
-		String originalValue = pg.setSingleValue("court_case", "case_number", "174", "case_closed", "true");
+		String originalValue = pg.setSingleValue("darts.court_case", "case_number", "174", "case_closed", "true");
 		Assertions.assertEquals(originalValue, "null");
-		Assertions.assertEquals(pg.setSingleValue("court_case", "case_number", "174", "case_closed", originalValue), "t");
-		Assertions.assertEquals(pg.returnSingleValue("court_case", "case_number", "174", "case_closed"), "null");
-		Assertions.assertEquals(pg.returnSingleValue("court_case", "case_number", "174", "case_number"), "174");
-		Assertions.assertEquals(pg.returnSingleValue("court_case", "case_number", "174", "cas_id"), "81");
-		Assertions.assertEquals(pg.returnSingleValue("court_case", "case_number", "174", "case_closed"), "null");
-		Assertions.assertEquals(pg.returnSingleValue("court_case", "cas_id", "81", "case_number"), "174");
-		Assertions.assertEquals(pg.returnSingleValue("court_case", "cth_id", "2", "case_number"), "461_Case1");
+		Assertions.assertEquals(pg.setSingleValue("darts.court_case", "case_number", "174", "case_closed", originalValue), "t");
+		Assertions.assertEquals(pg.returnSingleValue("darts.court_case", "case_number", "174", "case_closed"), "null");
+		Assertions.assertEquals(pg.returnSingleValue("darts.court_case", "case_number", "174", "case_number"), "174");
+		Assertions.assertEquals(pg.returnSingleValue("darts.court_case", "case_number", "174", "cas_id"), "81");
+		Assertions.assertEquals(pg.returnSingleValue("darts.court_case", "case_number", "174", "case_closed"), "null");
+		Assertions.assertEquals(pg.returnSingleValue("darts.court_case", "cas_id", "81", "case_number"), "174");
+		Assertions.assertEquals(pg.returnSingleValue("darts.court_case", "cth_id", "2", "case_number"), "461_Case1");
 	}
 
 

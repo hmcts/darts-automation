@@ -230,7 +230,6 @@ public class TestData {
 	 * 
 	 */
 	public static String incrementCaseNumber(String currentCaseNumber) {
-//		int currentLength = currentCaseNumber.length();
 		String caseYear = currentCaseNumber.substring(1, 5);
 		int caseNum = Integer.parseInt(currentCaseNumber.substring(5));
 		if (!caseYear.equals(currentYear)) {
@@ -250,9 +249,6 @@ public class TestData {
 		log.info(increment("A1A123"));
 		log.info(increment("0"));
 		log.info(increment("000"));
-//		log.info(increment("A"));
-//		log.info(increment(""));
-//		log.info(increment(null));
 		log.info(incrementCaseNumber("A20201234"));
 		log.info(incrementCaseNumber("A20239999"));
 		log.info(incrementCaseNumber("A202310000"));
@@ -273,10 +269,8 @@ public class TestData {
 	@Test
 	public void testparse() throws Exception {
 		parseArgument("aaa=1,bbb=2,ccc=my o my", "|aaa|bbb|ccc|");
-//		parseArgument("aaa=1,bbb,ccc=my o my=q,ddd=d", "");
 		parseArgument("", "");
 		parseArgument("", "|aaa|bbb|ccc|");
-//		parseArgument("aaa=1,bbb=2,ccc=my o my", "|aaa|bbb|");
 	}
 
 }

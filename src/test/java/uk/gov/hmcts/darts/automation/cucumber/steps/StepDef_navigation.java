@@ -421,7 +421,6 @@ public class StepDef_navigation extends StepDef_base {
 	
 	@When("^I clear the \"([^\"]*)\" field$")
 	public void clearField(String label) throws Exception {
-//	   NAV.set_valueTo(label, Keys.chord(Keys.CONTROL, "a") + Keys.BACK_SPACE);
 	   NAV.clearInputFieldByLabelText(label);
 	};
 	
