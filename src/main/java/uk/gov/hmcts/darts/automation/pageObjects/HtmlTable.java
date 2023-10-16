@@ -14,6 +14,7 @@ public class HtmlTable {
 
     private static Logger log = LogManager.getLogger("HtmlTable");
     private WebDriver webDriver;
+    int errorCount = 0;
 
     public HtmlTable(WebDriver driver) {
         this.webDriver = driver;
@@ -26,7 +27,8 @@ public class HtmlTable {
 
         // Check number of rows in Datatable and html table are equal
         Assert.assertEquals("Datatable rows should match the HtmlTable rows", dataTableRows.size(), rowElements.size());
-
+        errorCount = 0;
+        
         //Verify table header
         if (isFirstRowHeader) {
             List<WebElement> headerElements = rowElements.get(0).findElements(By.xpath(".//th")); //get all the headers from the row WebElement
@@ -38,34 +40,32 @@ public class HtmlTable {
         for (int i = startIndex; i <= rowElements.size(); i++) {
             List<String> dataTableColumns = dataTableRows.get(i);
             WebElement rowElem = rowElements.get(i - startIndex);
-
-
-
             List<WebElement> cellElements = rowElem.findElements(By.xpath(".//td"));
             compareTableData(cellElements, dataTableColumns, i, rowElem.findElements(By.xpath(".//td")).size());
         }
+        Assert.assertEquals(0,errorCount);
+        log.error("Html Table and Datatable don't match with error count {}", errorCount);
     }
 
-    public void compareTableData(List<WebElement> cellElements, List<String> dataTableColumns, int rowIdx, int tdSize) {
-        int errorCount = 0;
-        for (int cellIdx = 0; cellIdx < dataTableColumns.size(); cellIdx++) { //loop through every cell in the current DataTable row
-            String expectedCell = dataTableColumns.get(cellIdx);
-            String actualCell = cellElements.get(cellIdx).getText().trim();
-            actualCell = (actualCell != null) ? actualCell : "";
+    private void compareTableData(List<WebElement> cellElements, List<String> dataTableColumns, int rowIdx, int tdSize) {
+        int htmlIndex = 0;
+        for (int dataTableIndex = 0; dataTableIndex < dataTableColumns.size(); dataTableIndex++) { //loop through every cell in the current DataTable row
+            String expectedCell = dataTableColumns.get(dataTableIndex);
             expectedCell = (expectedCell != null) ? expectedCell : "";
-
-            if (!expectedCell.equals(actualCell)) {
-                log.error("Value mismatch at Row: {} Column: {}. Expected: '{}', Actual: '{}'",
-                        rowIdx, cellIdx, expectedCell, actualCell);
-                errorCount++;
-            } else {
-                log.info("Values match at Row: {} Column: {}. Expected: '{}', Actual: '{}'",
-                        rowIdx, cellIdx, expectedCell, actualCell);
+            if (!expectedCell.equalsIgnoreCase("*IGNORE*") && !expectedCell.equalsIgnoreCase("*SKIP*")) {
+	            String actualCell = cellElements.get(htmlIndex).getText().trim();
+	            actualCell = (actualCell != null) ? actualCell : "";
+	
+	            if (!expectedCell.equals(actualCell)) {
+	                log.error("Value mismatch at Row: {} Column: {}. Expected: '{}', Actual: '{}'",
+	                        rowIdx, dataTableIndex, expectedCell, actualCell);
+	                errorCount++;
+	            } else {
+	                log.info("Values match at Row: {} Column: {}. Expected: '{}', Actual: '{}'",
+	                        rowIdx, dataTableIndex, expectedCell, actualCell);
+	            }
+	            htmlIndex++;
             }
-
-            if(tdSize==1) break;
         }
-        //Assert.assertEquals(0,errorCount);
-        //log.error("Html Table and Datatable don't match with error count {}", errorCount);
     }
 }

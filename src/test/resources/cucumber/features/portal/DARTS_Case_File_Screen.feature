@@ -7,9 +7,9 @@ Feature: Case File Screen
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | CaseID                                                                | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
-      | !\nRestriction\nRestriction: Judge directed on reporting restrictions |            |           |          |               |
+      | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
       | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
 
   Scenario: Case File Screen
