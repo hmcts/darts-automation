@@ -24,7 +24,7 @@ public class StepDef_portal extends StepDef_base {
     private static Logger log = LogManager.getLogger("StepDef_portal");
     private Portal portal;
     private Prompt prompt;
-
+  
 	public StepDef_portal(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
         prompt = new Prompt(webDriver);
