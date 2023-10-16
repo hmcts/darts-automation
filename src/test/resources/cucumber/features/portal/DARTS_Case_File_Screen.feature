@@ -6,9 +6,12 @@ Feature: Case File Screen
     And I see "Search for a case" on the page
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
-    Then I can see search results table
-      | CaseID   | Courthouse | Courtroom | Judges   | Defendants |
-      | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs |
+    Then I verify the HTML table contains the following values
+      | CaseID                                                                | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
+      | !\nRestriction\nRestriction: Judge directed on reporting restrictions |            |           |          |               |
+      | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
+
   Scenario: Case File Screen
     Given I click on "CASE1009" in the same row as "Swansea"
     Then I verify the HTML table contains the following values
