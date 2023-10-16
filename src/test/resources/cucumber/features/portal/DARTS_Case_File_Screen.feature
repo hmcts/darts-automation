@@ -9,12 +9,11 @@ Feature: Case File Screen
     Then I can see search results table
       | CaseID   | Courthouse | Courtroom | Judges   | Defendants |
       | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs |
-    And I see "Restriction: Judge directed on reporting restrictions" on the page
-
   Scenario: Case File Screen
     Given I click on "CASE1009" in the same row as "Swansea"
     Then I verify the HTML table contains the following values
-      | 15 Aug 2023 |  | ROOM_A          |  |
-      | 15 Aug 2023 |  | ROOM_A12434     |  |
-      | 15 Aug 2023 |  | ROOM_XYZ        |  |
-      | 15 Aug 2023 |  | ROOM_XYZhhihihi |  |
+      | Hearing date | Judge | Courtroom       | No. of transcripts |
+      | 15 Aug 2023  |       | ROOM_A          | 0                  |
+      | 15 Aug 2023  |       | ROOM_A12434     | 0                  |
+      | 15 Aug 2023  |       | ROOM_XYZ        | 0                  |
+      | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |

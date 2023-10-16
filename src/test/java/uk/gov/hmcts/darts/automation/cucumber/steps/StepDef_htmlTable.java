@@ -17,6 +17,6 @@ public class StepDef_htmlTable  extends StepDef_base {
     @Then("I verify the HTML table contains the following values")
     public void i_verify_the_html_table_contains_the_following_values(DataTable dataTable) {
         HtmlTable htmlTable = new HtmlTable(webDriver);
-        htmlTable.verifyHtmlTableData(dataTable);
+        htmlTable.verifyHtmlTableData(dataTable, true);
     }
 }

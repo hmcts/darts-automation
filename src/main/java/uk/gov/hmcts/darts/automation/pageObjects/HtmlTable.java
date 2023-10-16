@@ -1,7 +1,6 @@
 package uk.gov.hmcts.darts.automation.pageObjects;
 
 import io.cucumber.datatable.DataTable;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -9,54 +8,58 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class HtmlTable {
 
-    private static Logger log = LogManager.getLogger("HTML Table");
+    private static Logger log = LogManager.getLogger("HtmlTable");
     private WebDriver webDriver;
 
     public HtmlTable(WebDriver driver) {
         this.webDriver = driver;
     }
 
-    public void verifyHtmlTableData(DataTable dataTable) {
-        WebElement htmlTableElement = webDriver.findElement(By.xpath("//table[@class='govuk-table']"));
+    public void verifyHtmlTableData(DataTable dataTable, boolean isFirstRowHeader) {
+        WebElement htmlTableElement = webDriver.findElement(By.cssSelector(".govuk-table"));
         List<WebElement> rowElements = htmlTableElement.findElements(By.tagName("tr"));
-        //rowElements.remove(0);
-
         List<List<String>> dataTableRows = dataTable.asLists(); //outer List<> is rows, inner List<> is cells
-        for (List<String> row : dataTableRows) { //loop through every row in the DataTable input
-            int rowIdx = dataTableRows.indexOf(row);
-            System.out.println("rowIdx:"+rowIdx);
-            WebElement rowElem = rowElements.get(rowIdx); //get the row WebElement based on the index of the current row in the DataTable
-            List<WebElement> headerElements = rowElem.findElements(By.xpath(".//th")); //get all the headers from the row WebElement
-            List<WebElement> tdElements = rowElem.findElements(By.xpath(".//td")); //get all the cells from the row WebElement
-            List<WebElement> cellElements = new ArrayList<>();
-            cellElements.addAll(headerElements);
-            cellElements.addAll(tdElements);
-            for (String expectedCell : row) { //loop through every cell in the current DataTable row
-                int cellIdx = row.indexOf(expectedCell);
-                String actualCell = cellElements.get(cellIdx).getText();
 
-                if(expectedCell==null){
-                    expectedCell=   nullToString(expectedCell);
-                    System.out.println("expectedCell::"+expectedCell);
-                }
+        // Check number of rows in Datatable and html table are equal
+        Assert.assertEquals("Datatable rows should match the HtmlTable rows", dataTableRows.size(), rowElements.size());
 
-                System.out.println("DataTable row " + rowIdx + ", cell " + cellIdx + ": " + expectedCell);
-                System.out.println("Actual value on the page: " + actualCell);
+        //Verify table header
+        if (isFirstRowHeader) {
+            List<WebElement> headerElements = rowElements.get(0).findElements(By.xpath(".//th")); //get all the headers from the row WebElement
+            compareTableData(headerElements, dataTableRows.get(0),0);
+            rowElements.remove(0);
+        }
 
-                Assert.assertEquals("Expected value of cell should match actual value of cell", expectedCell, actualCell);
-            }
+        int startIndex = isFirstRowHeader ? 1 : 0; // Skip the first row if it's a header
+        for (int i = startIndex; i <= rowElements.size(); i++) {
+            List<String> dataTableColumns = dataTableRows.get(i);
+            WebElement rowElem = rowElements.get(i-startIndex);
+            List<WebElement> cellElements = rowElem.findElements(By.xpath(".//td"));
+            compareTableData(cellElements, dataTableColumns, i);
         }
     }
+    public void compareTableData(List<WebElement> cellElements, List<String> dataTableColumns, int rowIdx) {
+        int errorCount =0;
+        for (int cellIdx=0;cellIdx < dataTableColumns.size(); cellIdx++) { //loop through every cell in the current DataTable row
+            String expectedCell = dataTableColumns.get(cellIdx);
+            String actualCell = cellElements.get(cellIdx).getText();
+            actualCell = (actualCell != null) ? actualCell : "";
+            expectedCell = (expectedCell != null) ? expectedCell : "";
 
-    public String nullToString(String cell) {
-        return Objects.isNull(cell) ? StringUtils.EMPTY : cell;
+            if (!expectedCell.equals(actualCell)){
+                errorCount++;
+                log.error("Value mismatch at Row: {} Column: {}. Expected: {}, Actual: {}",
+                        rowIdx, cellIdx, expectedCell, actualCell);
+            }
+            else {
+                log.info("Values match at Row: {} Column: {}. Expected: {}, Actual: {}",
+                        rowIdx, + cellIdx, expectedCell, actualCell);
+            }
+        }
+        Assert.assertEquals("Html Table and Datatable don't match with error count {} ", errorCount, 0);
     }
-
-
 }
