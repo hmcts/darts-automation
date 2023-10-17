@@ -1,20 +1,11 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
-import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
-import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.pageObjects.Portal;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

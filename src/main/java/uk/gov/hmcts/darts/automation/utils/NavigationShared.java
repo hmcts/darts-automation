@@ -765,7 +765,7 @@ public class NavigationShared {
 	/**
 	 * Overloading with wait time passed - For increased waiting when required
 	 * 
-	 * @param waitTime
+	 * @param// waitTime
 	 */
 	public void waitForPageLoad(int initialWait, int postWait) {
 		log.info("Waiting for Loading Icon to become visible");
@@ -1745,7 +1745,6 @@ public class NavigationShared {
 	}
 	
 	public void clickOnElementWithId(String id) {
-		
 		WebElement element = driver.findElement(By.id(id));
 		wait.waitForClickableElement(element);
 		click_onElement(element);
@@ -1886,11 +1885,8 @@ public class NavigationShared {
 		
 	}
 
-
 	public void text_hasClass(String text, String className) {
-		driver.findElement(By.xpath("//*[text()[contains(.,'"+text+"')] and contains(@class, '"+className+"')]"));		
-		
+		driver.findElement(By.xpath("//*[text()[contains(.,'"+text+"')] and contains(@class, '"+className+"')]"));
 		log.info("Found li element which has text =>"+text+"<= with class =>"+className);
 	}
-	
 }

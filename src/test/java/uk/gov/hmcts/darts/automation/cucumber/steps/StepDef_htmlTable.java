@@ -9,14 +9,16 @@ import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 
 public class StepDef_htmlTable  extends StepDef_base {
     private static Logger log = LogManager.getLogger("StepDef_htmlTable");
-
     public StepDef_htmlTable(SeleniumWebDriver driver) {
         super(driver);
     }
-
+    HtmlTable htmlTable = new HtmlTable(webDriver);
     @Then("I verify the HTML table contains the following values")
-    public void i_verify_the_html_table_contains_the_following_values(DataTable dataTable) {
-        HtmlTable htmlTable = new HtmlTable(webDriver);
+    public void verify_html_table_contains_the_following_values(DataTable dataTable) {
         htmlTable.verifyHtmlTableData(dataTable, true);
+    }
+    @Then("^I click on \"([^\"]*)\" in the table header$")
+    public void i_click_on_in_the_table_header(String tableHeaderText) throws Exception{
+        htmlTable.clickOnTableHeader(tableHeaderText);
     }
 }
