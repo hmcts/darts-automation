@@ -97,7 +97,7 @@ Scenario: Advanced case search and result verification
 		| DMP1128-case1  | London  			    | Multiple  		  |  			   |  					|
 
 	When I click on the "Clear search" link
-	And I set "Courthouse" to "Courthouse"
+	And I set "Courthouse" to "Courthouse" and click away
 	And I press the "Search" button
 	Then I see "There are more than 500 results" on the page
 	And I see "Refine your search by:" on the page

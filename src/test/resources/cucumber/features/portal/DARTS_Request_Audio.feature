@@ -46,8 +46,29 @@ Feature: Request Audio
     And I see "<EndTime>" on the page
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to" on the page
+
+    #Extending the above to complete E2E flow - There might be issues with auto running faster than processing time
+
+    When I click on the "Return to search results" link
+    And I click on the "Your audio" link
+	#Then I see "<CaseID>" under In progress - New step def needed for under in progress/ready?
+
+    When I am logged on to DARTS as an external user
+    And I click on the "Your audio" link
+	#Then I see "<CaseID>" under Ready - New step def needed for under in progress/ready?
+
+    When I click on "View" in the same row as "<CaseID>"
+    Then I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<StartTime>" on the page
+    And I see "<EndTime>" on the page
+
+  #Verify audio player for playback?
+
     Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
+      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime   | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
   @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686
@@ -79,6 +100,29 @@ Feature: Request Audio
     And I see "<EndTime>" on the page
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to dartsautomationuser@HMCTS.net and notify you in the DARTS application." on the page
+
+    #Extending the above to complete E2E flow - There might be issues with auto running faster than processing time
+
+    When I click on the "Return to search results" link
+    And I click on the "Your audio" link
+	#Then I see "<CaseID>" under In progress - New step def needed for under in progress/ready?
+
+    When I am logged on to DARTS as an external user
+    And I click on the "Your audio" link
+	#Then I see "<CaseID>" under Ready - New step def needed for under in progress/ready?
+
+    When I click on "View" in the same row as "<CaseID>"
+    Then I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<StartTime>" on the page
+    And I see "<EndTime>" on the page
+
+#Anything after pressing download button?
+
+    When I press the "Download audio file" button
+
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
@@ -170,7 +214,7 @@ Feature: Request Audio
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to" on the page
     Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  |
+      | CaseID   | Courthouse | Defendants | HearingDate  | StartTime | EndTime  |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 |
 
   @DMP-658
@@ -203,7 +247,7 @@ Feature: Request Audio
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to" on the page
     Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
+      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime   | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
 

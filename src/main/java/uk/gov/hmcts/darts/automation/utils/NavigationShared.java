@@ -1892,5 +1892,14 @@ public class NavigationShared {
 		
 		log.info("Found li element which has text =>"+text+"<= with class =>"+className);
 	}
-	
+
+	public NavigationShared set_value_clickaway(String location_name, String value) throws Exception {
+		log.info("About to Set input field with label =>" + location_name + "<= to =>" + value);
+		WebElement targetElement = findInputFieldByLabelText(location_name);
+		String substitutedValue = setElementValueTo(targetElement, value);
+		log.info("Set input field with label =>" + location_name + "<= to =>" + substitutedValue);
+		clickAway(targetElement);
+		return this;
+	}
+
 }
