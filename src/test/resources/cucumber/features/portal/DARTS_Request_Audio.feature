@@ -1,15 +1,17 @@
 @DMP-1048-RequestAudio
 Feature: Request Audio
+
   Background:
     Given I am logged on to DARTS as an external user
     And I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
-    Then I can see search results table
-      | CaseID   | Courthouse | Courtroom | Judges   | Defendants |
-      | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs |
-    And I see "Restriction: Judge directed on reporting restrictions" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
+      | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
+      | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
         #Case Details
     When I click on "CASE1009" in the same row as "Swansea"
      #Hearing Details
@@ -48,7 +50,7 @@ Feature: Request Audio
     And I see "When it is ready we will send an email to" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
   @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686
   Scenario Outline: Request Audio with Request Type Download
@@ -171,7 +173,7 @@ Feature: Request Audio
     And I see "When it is ready we will send an email to" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 |
 
   @DMP-658
   Scenario Outline: Request Audio Events only available for hearing
@@ -204,14 +206,30 @@ Feature: Request Audio
     And I see "When it is ready we will send an email to" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
-
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
   @DMP-692
   Scenario Outline: Preview Audio Player Loading
     When I select the "Audio preview and events" radio button
     And I press the "Preview Audio" button in the same row as "<StartTime>" "<EndTime>"
     Then I see "<Text>" in the same row as "<StartTime>" "<EndTime>"
-   Examples:
-     | StartTime            | EndTime            | Text                                 | 
-     | Start time: 10:00:00 | End time: 11:14:05 | Loading Audio Preview... Please Wait |  
+    Examples:
+      | StartTime            | EndTime            | Text                                 |
+      | Start time: 10:00:00 | End time: 11:14:05 | Loading Audio Preview... Please Wait |
+
+  @DMP-966
+  Scenario: Hearing table sorted with time
+    Then I verify the HTML table contains the following values
+      | *NO-CHECK* | Time                 | Event                | Text                    |
+      | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+      | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+      | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+      | *NO-CHECK* | Start time: 10:00:00 | Preview Audio        | End time: 11:14:05      |
+    Then I click on "Time" in the table header
+    Then I verify the HTML table contains the following values
+      | *NO-CHECK* | Time                 | Event                | Text                    |
+      | *NO-CHECK* | Start time: 10:00:00 | Preview Audio        | End time: 11:14:05      |
+      | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+      | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+      | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+

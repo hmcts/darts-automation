@@ -63,7 +63,9 @@ public class HtmlTable {
         for (int dataTableIndex = 0; dataTableIndex < dataTableColumns.size(); dataTableIndex++) { //loop through every cell in the current DataTable row
             String expectedCell = dataTableColumns.get(dataTableIndex);
             expectedCell = (expectedCell != null) ? expectedCell : "";
-            if (!expectedCell.equalsIgnoreCase("*IGNORE*") && !expectedCell.equalsIgnoreCase("*SKIP*")) {
+            if (expectedCell.equalsIgnoreCase("*NO-CHECK*")) {
+                htmlIndex++;
+            } else if (!expectedCell.equalsIgnoreCase("*IGNORE*") && !expectedCell.equalsIgnoreCase("*SKIP*")) {
                 String actualCell = cellElements.get(htmlIndex).getText().trim();
                 actualCell = (actualCell != null) ? actualCell : "";
 
