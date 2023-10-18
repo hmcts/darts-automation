@@ -1,4 +1,4 @@
-package uk.gov.hmcts.darts.automation.pageObjects;
+package uk.gov.hmcts.darts.automation.utils;
 
 import io.cucumber.datatable.DataTable;
 import org.apache.logging.log4j.LogManager;

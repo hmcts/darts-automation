@@ -4,7 +4,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uk.gov.hmcts.darts.automation.pageObjects.HtmlTable;
+import uk.gov.hmcts.darts.automation.utils.HtmlTable;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 
 public class StepDef_htmlTable  extends StepDef_base {
