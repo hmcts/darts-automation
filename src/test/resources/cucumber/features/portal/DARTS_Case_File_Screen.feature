@@ -19,36 +19,43 @@ Feature: Case File Screen
       | 15 Aug 2023  |       | ROOM_XYZ        | 0                  |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
 
-@DMP-965
+  @DMP-965
   Scenario: Case File Screen Sort with Hearing Table
-    Then I click on "Hearing date" in the table header
+    When I click on "Hearing date" in the table header
+    Then "Hearing date" has sort "descending" icon
     Then I verify the HTML table contains the following values
       | Hearing date | Judge | Courtroom       | No. of transcripts |
       | 15 Aug 2023  |       | ROOM_A          | 0                  |
       | 15 Aug 2023  |       | ROOM_A12434     | 0                  |
       | 15 Aug 2023  |       | ROOM_XYZ        | 0                  |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
+
   @DMP-965
   Scenario: Case File Screen Sort with Courtroom
-    Then I click on "Courtroom" in the table header
+    When I click on "Courtroom" in the table header
+    Then "Courtroom" has sort "descending" icon
     Then I verify the HTML table contains the following values
       | Hearing date | Judge | Courtroom       | No. of transcripts |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
       | 15 Aug 2023  |       | ROOM_XYZ        | 0                  |
       | 15 Aug 2023  |       | ROOM_A12434     | 0                  |
       | 15 Aug 2023  |       | ROOM_A          | 0                  |
+
   @DMP-965
   Scenario: Case File Screen Sort with No. of transcripts
-    Then I click on "No. of transcripts" in the table header
+    When I click on "No. of transcripts" in the table header
+    Then "No. of transcripts" has sort "descending" icon
     Then I verify the HTML table contains the following values
       | Hearing date | Judge | Courtroom       | No. of transcripts |
       | 15 Aug 2023  |       | ROOM_A          | 0                  |
       | 15 Aug 2023  |       | ROOM_A12434     | 0                  |
       | 15 Aug 2023  |       | ROOM_XYZ        | 0                  |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
+
   @DMP-965
   Scenario: Case File Screen Sort with Judge
-    Then I click on "Judge" in the table header
+    When I click on "Judge" in the table header
+    Then "Judge" has sort "descending" icon
     Then I verify the HTML table contains the following values
       | Hearing date | Judge | Courtroom       | No. of transcripts |
       | 15 Aug 2023  |       | ROOM_A          | 0                  |

@@ -4,14 +4,13 @@ import io.cucumber.datatable.DataTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 
 import java.time.Duration;
 import java.util.List;
@@ -82,24 +81,35 @@ public class HtmlTable {
         }
     }
 
-    public void clickOnTableHeader(String tableHeaderText){
-        log.info("Going to click on Table header =>"+tableHeaderText);
-        if (tableHeaderText == null || tableHeaderText.isEmpty()) {
+    public void clickOnTableHeader(String tableheaderText) {
+        log.info("Going to click on Table header =>" + tableheaderText);
+        if (tableheaderText == null || tableheaderText.isEmpty()) {
             log.error("Invalid table header text provided");
             throw new IllegalArgumentException("Invalid table header text");
         }
 
-        String tableHeaderPath = "//button[normalize-space()='"+tableHeaderText+"']";
+        String tableHeaderPath = "//button[normalize-space()='" + tableheaderText + "']";
         try {
             WebElement element = new WebDriverWait(webDriver, Duration.ofSeconds(3))
                     .until(ExpectedConditions.elementToBeClickable(By.xpath(tableHeaderPath)));
             NAV.click_onElement(element);
         } catch (TimeoutException e) {
-            log.error("Table header element with text '" + tableHeaderText + "' was not clickable within the specified time");
-
+            log.error("Table header element with text '" + tableheaderText + "' was not clickable within the specified time");
         }
         NAV.waitForBrowserReadyState();
 
-        log.info("Clicked on the Table header =>"+tableHeaderText+"<= successfully");
+        log.info("Clicked on the Table header =>" + tableheaderText + "<= successfully");
+    }
+
+    public void hasSortIcon(String tableheaderText, String sortOrder_attribute) {
+        String tableHeaderPath = "//table//th[normalize-space()='" + tableheaderText + "']";
+        try {
+            WebElement element = new WebDriverWait(webDriver, Duration.ofSeconds(3))
+                    .until(ExpectedConditions.elementToBeClickable(By.xpath(tableHeaderPath)));
+            Assertions.assertEquals(sortOrder_attribute, element.getAttribute("aria-sort"));
+            log.info("Table header element with text '" + tableheaderText + "' have " + sortOrder_attribute);
+        } catch (TimeoutException e) {
+            log.error("Table header element with text '" + tableheaderText + "' does not have " + sortOrder_attribute);
+        }
     }
 }

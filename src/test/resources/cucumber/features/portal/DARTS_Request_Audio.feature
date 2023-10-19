@@ -12,9 +12,9 @@ Feature: Request Audio
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
       | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
-        #Case Details
+    #Case Details
     When I click on "CASE1009" in the same row as "Swansea"
-     #Hearing Details
+    #Hearing Details
     And I click on "15 Aug 2023" in the same row as "ROOM_A"
     And I see "Swansea" on the page
     And I see "ROOM_A" on the page
