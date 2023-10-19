@@ -46,7 +46,7 @@ public class StepDef_soapApi extends StepDef_base {
 		testdata.responseString = apiResponse.responseString;
 	}
 	
-	@When("I call POST {word} SOAP API using soap body:")
+	@When("I call POST {word} SOAP API using soap action {word} and body:")
 	public void callGetApiWithJsonBody(String endPoint, String soapAction, String docString) throws Exception {
 		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, docString);
 		testdata.statusCode = apiResponse.statusCode;
