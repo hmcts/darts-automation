@@ -109,13 +109,13 @@ public class SoapApi {
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_XML)
 					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
-				.basePath("")
-				.body(addSoapHeader(body))
+					.basePath("")
+					.body(addSoapHeader(body))
 				.when()
-				.post(endpoint)
-			.then()
-				.spec(responseLogLevel(ReadProperties.responseLogLevel))
-				.extract().response();
+					.post(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
     }
 
@@ -132,13 +132,13 @@ public class SoapApi {
 	    			.header(CONNECTION, CONNECTION_STRING)
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_XML)
 					.header(AUTHORIZATION, authorization)
-						.header("SOAPAction", soapAction)
-						.baseUri(baseUri)
-						.basePath("")
-						.body(addSoapHeader(soapAction, body))
-						.when()
-						.post()
-						.then()
+					.header("SOAPAction", soapAction)
+					.baseUri(baseUri)
+					.basePath("")
+					.body(addSoapHeader(soapAction, body))
+				.when()
+					.post(endpoint)
+				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
 					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
