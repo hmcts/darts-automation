@@ -46,7 +46,7 @@ Feature: Request Audio for transcribers
     And I see "<StartTime>" on the page
     And I see "<EndTime>" on the page
     And I see "We are preparing your audio." on the page
-    And I see "When it is ready we will send an email to" on the page
+    And I see "When it is ready we will send an email to Transcriber and notify you in the DARTS application." on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
@@ -79,7 +79,7 @@ Feature: Request Audio for transcribers
     And I see "<StartTime>" on the page
     And I see "<EndTime>" on the page
     And I see "We are preparing your audio." on the page
-    And I see "When it is ready we will send an email to dartsautomationuser@HMCTS.net and notify you in the DARTS application." on the page
+    And I see "When it is ready we will send an email to Transcriber and notify you in the DARTS application." on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
