@@ -10,14 +10,14 @@ Feature: Request Audio
       | CaseID   | Courthouse | Courtroom | Judges   | Defendants |
       | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs |
     And I see "Restriction: Judge directed on reporting restrictions" on the page
-        #Case Details
+    #Case Details
     When I click on "CASE1009" in the same row as "Swansea"
-     #Hearing Details
+    #Hearing Details
     And I click on "15 Aug 2023" in the same row as "ROOM_A"
     And I see "Swansea" on the page
     And I see "ROOM_A" on the page
 
-  @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686
+  @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-697 @DMP-730 @DMP-836 @DMP-837 @DMP-859
   Scenario Outline: Request Audio with Request Type Playback Only
     When I select the "Audio preview and events" radio button
     And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
@@ -51,11 +51,13 @@ Feature: Request Audio
 
     When I click on the "Return to search results" link
     And I click on the "Your audio" link
-	#Then I see "<CaseID>" under In progress - New step def needed for under in progress/ready?
+	#TODO: Then I see "<CaseID>" under in progress - Need Preksha's new tables to implement
 
     When I am logged on to DARTS as an external user
+    #TODO: And I see a new audio blob - Need visibility of icon to check ID and implement
     And I click on the "Your audio" link
-	#Then I see "<CaseID>" under Ready - New step def needed for under in progress/ready?
+	#TODO: Then I see "<CaseID>" under ready - Need Preksha's new tables to implement
+    #TODO: And I see a new case audio blob - Need visibility of icon to check ID and implement
 
     When I click on "View" in the same row as "<CaseID>"
     Then I see "<CaseID>" on the page
@@ -67,17 +69,57 @@ Feature: Request Audio
 
   #Verify audio player for playback?
 
-    Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime   | Restriction                                           |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
+    When I click on the breadcrumb link "Your audio"
+    #Then I see "<CaseID>" under ready
+    #And I do not see a new audio blob
+    #And I do not see a new case audio blob
 
-  @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686
+  #Now delete the requested audio
+
+    When I check the "<CaseID>" checkbox
+    And I press the "Delete" button
+    And I see "Are you sure you want to delete this item?" on the page
+    And I click on the "Cancel" link
+    #Then I see "<CaseID>" under ready
+
+    When I check the "<CaseID>" checkbox
+    And I press the "Delete" button
+    And I see "Are you sure you want to delete this item?" on the page
+    And I press the "Yes - delete" button
+    Then I do not see "<CaseID>" on the page
+
+    #TODO: At start of test, set up expired audio/cases available for next part, using Preksha's table for verify
+
+    When I click on the "Expired" link
+    Then I verify the HTML table contains the following values
+      | Case ID         | Court    | Hearing date | Start time | End time | Request ID | Expiry date | Status  |
+      | EXPIRED_CASE_ID | *IGNORE* | *IGNORE*     | *IGNORE*   | *IGNORE* | *IGNORE*   | *IGNORE*    | EXPIRED |
+
+    When I check the "<EXPIRED_CASE_ID>" checkbox
+    And I press the "Delete" button
+    And I see "Are you sure you want to delete this item?" on the page
+    And I click on the "Cancel" link
+    Then I verify the HTML table contains the following values
+      | Case ID         | Court    | Hearing date | Start time | End time | Request ID | Expiry date | Status  |
+      | EXPIRED_CASE_ID | *IGNORE* | *IGNORE*     | *IGNORE*   | *IGNORE* | *IGNORE*   | *IGNORE*    | EXPIRED |
+
+    When I check the "<EXPIRED_CASE_ID>" checkbox
+    And I press the "Delete" button
+    And I see "Are you sure you want to delete this item?" on the page
+    And I press the "Yes - delete" button
+    Then I do not see "<EXPIRED_CASE_ID>" on the page
+
+    Examples:
+      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
+
+  @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-697 @DMP-859
   Scenario Outline: Request Audio with Request Type Download
     When I select the "Audio preview and events" radio button
     And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
     And I select the "Download" radio button
     And I press the "Get Audio" button
-     #Confirm your Order
+    #Confirm your Order
     Then I see "Confirm your Order" on the page
     And I see "<Restriction>" on the page
     Then I see "Case details" on the page
@@ -105,11 +147,11 @@ Feature: Request Audio
 
     When I click on the "Return to search results" link
     And I click on the "Your audio" link
-	#Then I see "<CaseID>" under In progress - New step def needed for under in progress/ready?
+	#Then I see "<CaseID>" under in progress - New step def needed for under in progress/ready?
 
     When I am logged on to DARTS as an external user
     And I click on the "Your audio" link
-	#Then I see "<CaseID>" under Ready - New step def needed for under in progress/ready?
+	#Then I see "<CaseID>" under ready - New step def needed for under in progress/ready?
 
     When I click on "View" in the same row as "<CaseID>"
     Then I see "<CaseID>" on the page
@@ -214,8 +256,8 @@ Feature: Request Audio
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to" on the page
     Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate  | StartTime | EndTime  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 |
+      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 |
 
   @DMP-658
   Scenario Outline: Request Audio Events only available for hearing
@@ -247,8 +289,8 @@ Feature: Request Audio
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to" on the page
     Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime   | Restriction                                           |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023  | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
+      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
 
   @DMP-692
@@ -257,5 +299,5 @@ Feature: Request Audio
     And I press the "Preview Audio" button in the same row as "<StartTime>" "<EndTime>"
     Then I see "<Text>" in the same row as "<StartTime>" "<EndTime>"
    Examples:
-     | StartTime            | EndTime            | Text                                 | 
+     | StartTime            | EndTime            | Text                                 |
      | Start time: 10:00:00 | End time: 11:14:05 | Loading Audio Preview... Please Wait |  
