@@ -22,9 +22,7 @@ public class StepDef_base {
 	public WebDriver webDriver;
 	public NavigationShared NAV;
 	
-	public StepDef_base(
-			SeleniumWebDriver webDriver
-			) {
+	public StepDef_base(SeleniumWebDriver webDriver) {
 		this.webDriver = webDriver.webDriver;
 		NAV = new NavigationShared(this.webDriver);
 	}	

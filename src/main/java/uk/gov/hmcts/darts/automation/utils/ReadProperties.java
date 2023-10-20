@@ -40,6 +40,16 @@ public class ReadProperties {
 	public static String apiDbDatabase = getSystemValue("DARTS_API_DB_DATABASE");
 	public static String automationUserId = getSystemValue("AUTOMATION_USERNAME");
 	public static String automationPassword = getSystemValue("AUTOMATION_PASSWORD");
+
+	public static String automationTranscriberUserId = getSystemValue("AUTOMATION_TRANSCRIBER_USERNAME");
+	public static String automationLanguageShopTestUserId = getSystemValue("AUTOMATION_LANGUAGE_SHOP_TEST_USERNAME");
+	public static String automationExternalPassword = getSystemValue("AUTOMATION_EXTERNAL_PASSWORD");
+	public static String automationJudgeTestUserId = getSystemValue("AUTOMATION_JUDGE_TEST_USERNAME");
+	public static String automationRequesterTestUserId = getSystemValue("AUTOMATION_REQUESTER_TEST_USERNAME");
+	public static String automationApproverTestUserId = getSystemValue("AUTOMATION_APPROVER_TEST_USERNAME");
+	public static String automationAppealCourtTestUserId = getSystemValue("AUTOMATION_APPEAL_COURT_TEST_USERNAME");
+	public static String automationInternalUserTestPassword = getSystemValue("AUTOMATION_INTERNAL_PASSWORD");
+
 	public static String isRunLocal = getSystemValue("RUN_LOCAL");
 	
 	public static boolean runLocal = isRunLocal != null && isRunLocal.equalsIgnoreCase("true");    

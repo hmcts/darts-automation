@@ -21,37 +21,6 @@ public class StepDef_portal extends StepDef_base {
         portal = new Portal(webDriver);
     }
 
-    @Given("I am logged on to DARTS as an {word} user")
-    public void logonInternal(String type) throws Exception {
-        NAV.navigateToUrl(ReadProperties.main("portal_url"));
-        switch (type.toUpperCase()) {
-            case "EXTERNAL":
-            case "TRANSCRIBER":
-            case "INTERPRETER_QA_AUDITOR":
-// temporarily moved to external login
-            case "REQUESTER":
-            case "APPROVER":
-            case "JUDGE":
-            case "ADMINISTRATOR":
-                NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
-                break;
-            case "INTERNAL":
-// temporarily moved to external login
-//            case "REQUESTER":
-//            case "APPROVER":
-//            case "JUDGE":
-//            case "ADMINISTRATOR":
-                NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
-                break;
-            default:
-                log.fatal("Unknown type - expected internal or external");
-        }
-        NAV.press_buttonByName("Continue");
-        NAV.set_valueTo("Enter your email", ReadProperties.automationUserId);
-        NAV.set_valueTo("Enter your password", ReadProperties.automationPassword);
-        NAV.press_buttonByName("Continue");
-    }
-
     @Given("^I am on the portal page$")
     public void onPortalPage() throws Exception {
         NAV.navigateToUrl(ReadProperties.main("portal_url"));

@@ -36,7 +36,15 @@ def secrets = [
     secret('AzureADClientId', 'AAD_CLIENT_ID'),
     secret('AzureADClientSecret', 'AAD_CLIENT_SECRET'),
     secret('AutomationTestUserName', 'AUTOMATION_USERNAME'),
-    secret('AutomationTestPassword', 'AUTOMATION_PASSWORD')
+    secret('AutomationTestPassword', 'AUTOMATION_PASSWORD'),
+    secret('DartsTranscriberTestUsername','AUTOMATION_TRANSCRIBER_USERNAME'),
+    secret('DartsLanguageShopTestUsername','AUTOMATION_LANGUAGE_SHOP_TEST_USERNAME'),
+    secret('DartsExternalUsersTestPassword','AUTOMATION_EXTERNAL_PASSWORD'),
+    secret('DartsJudgeTestUsername','AUTOMATION_JUDGE_TEST_USERNAME'),
+    secret('DartsRequesterTestUsername','AUTOMATION_REQUESTER_TEST_USERNAME'),
+    secret('DartsApproverTestUsername','AUTOMATION_APPROVER_TEST_USERNAME'),
+    secret('DartsAppealCourtTestUsername','AUTOMATION_APPEAL_COURT_TEST_USERNAME'),
+    secret('DartsInternalUserTestPassword','AUTOMATION_INTERNAL_PASSWORD')
   ],
 ]
 
