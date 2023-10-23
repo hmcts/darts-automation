@@ -31,8 +31,8 @@ public class Database extends Postgres {
 	
 	final String courtCaseJoin = 
 			"darts.court_case cas\r\n" +
-			"inner join darts.courthouse ctr\r\n" +
-			"on ctr.ctr_id = cas.ctr_id";
+			"inner join darts.courthouse cth\r\n" +
+			"on cth.cth_id = cas.cth_id";
 	
 	final String eventJoin = 
 			"darts.court_case cas\r\n" +
@@ -83,15 +83,27 @@ public class Database extends Postgres {
 	}
 	
 	public int updateRow(String table, String keyCol, String keyVal, String UpdateCol, String newVal) throws Exception {
-		return super.updateRow(table, keyCol, keyVal, UpdateCol, newVal);
+		return super.updateRow(tableName(table), keyCol, keyVal, UpdateCol, newVal);
+	}
+	
+	public int updateRow(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String UpdateCol, String newVal) throws Exception {
+		return super.updateRow(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, UpdateCol, newVal);
 	}
 	
 	public String setSingleValue(String table, String keyCol, String keyVal, String updateCol, String updateVal) throws Exception {
-		return super.setSingleValue(table, keyCol, keyVal, updateCol, updateVal);
+		return super.setSingleValue(tableName(table), keyCol, keyVal, updateCol, updateVal);
+	}
+	
+	public String setSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String updateCol, String updateVal) throws Exception {
+		return super.setSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, updateCol, updateVal);
+	}
+	
+	public String returnSingleValue(String table, String keyCol1, String keyVal1, String returnCol) throws Exception {
+		return super.returnSingleValue(tableName(table), keyCol1, keyVal1, returnCol);
 	}
 	
 	public String returnSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String returnCol) throws Exception {
-		return super.returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, returnCol);
+		return super.returnSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, returnCol);
 	}
 
 	@Test

@@ -44,15 +44,14 @@ public class StepDef_db extends StepDef_base {
 		DB.setSingleValue(table, keyCol, keyVal, updateCol, updateVal);
 	}
 
-//	@Given("^I see table (\\S) column (\\S) is \"([^\"]*)\" where (\\S) = (\\S)$")
-	@Then("I see table {word} column {word} is {string} where {word} = {string}")
+	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\"$")
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol, String keyVal) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol + " " + keyVal + " " + col + " " + expectedVal);
 		String returnVal = DB.returnSingleValue(table, keyCol, keyVal, col);
 		Assertions.assertEquals(expectedVal, returnVal);
 	}
 
-	@Then("I see table {word} column {word} is {string} where {word} = {string} and {word} = {string}")
+	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2 + " " + col + " " + expectedVal);
 		String returnVal = DB.returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, col);
