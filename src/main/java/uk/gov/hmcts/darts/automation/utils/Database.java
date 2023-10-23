@@ -34,7 +34,7 @@ public class Database extends Postgres {
 			"inner join darts.courthouse ctr\r\n" +
 			"on ctr.ctr_id = cas.ctr_id";
 	
-	final String eventjoin = 
+	final String eventJoin = 
 			"darts.court_case cas\r\n" +
 			"left join darts.hearing hea\r\n" +
 			"--on hea.cas_id = cas.cas_id\r\n" +
@@ -63,7 +63,7 @@ public class Database extends Postgres {
 		case "COURTCASE":
 			return courtCaseJoin;
 		case "EVENT":
-			return eventjoin;
+			return eventJoin;
 		case "COURTROOM":
 			return courtroomJoin;
 		default:
@@ -105,6 +105,7 @@ public class Database extends Postgres {
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", "12"), "12");
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", "null"), "null");
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", null), "null");
+// following tests rely on data existing in tables
 		Assertions.assertEquals(db.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
 		Assertions.assertEquals(db.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
 		Assertions.assertEquals(db.returnSingleValue("select case_number from darts.court_case where case_number = '174'"), "174");

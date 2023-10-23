@@ -138,7 +138,8 @@ public class Postgres {
 		return returnSingleValue(sql);
 	}
 
-	public String returnSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String returnCol) throws Exception {
+	public String returnSingleValue(String table, String keyCol1, String keyVal1, 
+			String keyCol2, String keyVal2, String returnCol) throws Exception {
 		String sql = "select " + returnCol
 				+ " from " + table
 				+ " where " + keyCol1 + " = " + delimitedValue(table, keyCol1, keyVal1)
@@ -154,9 +155,17 @@ public class Postgres {
 		}
 	}
 
-	public int deleteRow(String table, String key, String keyVal) throws Exception {
-		log.info("Database delete: " + table + " " + key + " " + keyVal);
-		String sql = "delete from " + table + " where " + key + " = " +  delimitedValue(table, key, keyVal);
+	public int deleteRow(String table, String keyCol, String keyVal) throws Exception {
+		log.info("Database delete: " + table + " " + keyCol + " " + keyVal);
+		String sql = "delete from " + table + " where " + keyCol + " = " +  delimitedValue(table, keyCol, keyVal);
+		return deleteRow(sql);
+	}
+
+	public int deleteRow(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2) throws Exception {
+		log.info("Database delete: " + table + " " + keyCol1 + " " + keyVal1 + " " + keyCol2 + " " + keyVal2);
+		String sql = "delete from " + table + 
+				" where " + keyCol1 + " = " +  delimitedValue(table, keyCol1, keyVal1) + 
+				" and " + keyCol2 + " = " +  delimitedValue(table, keyCol2, keyVal2);
 		return deleteRow(sql);
 	}
 
@@ -224,24 +233,16 @@ public class Postgres {
 		String sql = "update darts." + table 
 				+ " set " + UpdateCol + " = " + delimitedValue(table, UpdateCol, newVal)
 				+ " where " + keyCol + " = "  + delimitedValue(table, keyCol, keyVal);
-		int updateCount = 0;
-		connect();
-		conn.setAutoCommit(false);
-		log.info("Database update: " + sql);
-		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-			updateCount = stmt.executeUpdate();
-			if (updateCount == 1) {
-				conn.commit();
-			} else {
-				conn.rollback();
-				if (updateCount == 0) {
-					throw new Exception("No rows updated");
-				} else {
-					throw new Exception("Excess rows updated " + updateCount);
-				}
-			}
-		}
-		return updateCount;
+		return updateRow(sql);
+	}
+
+	public int updateRow(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String UpdateCol, String newVal) throws Exception {
+		log.info("Database update: " + table + " " + keyCol1 + " " + keyVal1 + " " + keyCol2 + " " + keyVal2 + " " + UpdateCol + " " + newVal);
+		String sql = "update darts." + table 
+				+ " set " + UpdateCol + " = " + delimitedValue(table, UpdateCol, newVal)
+				+ " where " + keyCol1 + " = "  + delimitedValue(table, keyCol1, keyVal1)
+				+ " and " + keyCol2 + " = "  + delimitedValue(table, keyCol2, keyVal2);
+		return updateRow(sql);
 	}
 	
 
@@ -272,6 +273,14 @@ public class Postgres {
 		return initialValue;
 	}
 
+	public String setSingleValue(String table, String keyCol1, String keyVal1, 
+			String keyCol2, String keyVal2, 
+			String updateCol, String updateVal) throws Exception {
+		String initialValue = returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, updateCol);
+		updateRow(table, keyCol1, keyVal1, keyCol2, keyVal2, updateCol, updateVal);
+		return initialValue;
+	}
+
 	@Test
 	public void test() throws Exception {
 		Postgres pg = new Postgres();
@@ -283,6 +292,7 @@ public class Postgres {
 		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", "12"), "12");
 		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", "null"), "null");
 		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", null), "null");
+// following relies on existing table data & may break
 		Assertions.assertEquals(pg.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
 		Assertions.assertEquals(pg.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
 		Assertions.assertEquals(pg.returnSingleValue("select case_number from darts.court_case where case_number = '174'"), "174");

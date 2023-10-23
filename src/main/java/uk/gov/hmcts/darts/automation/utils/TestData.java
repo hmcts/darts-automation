@@ -75,7 +75,7 @@ public class TestData {
 		try {
 			propFile.store(new FileWriter(parameterFileName), "values to substitute in scenarios");
 		} catch (IOException e) {
-			Assertions.fail("Error saving proprty: " + property);
+			Assertions.fail("Error saving property: " + property);
 		}
 	}
 	
@@ -99,7 +99,7 @@ public class TestData {
 							if (!courtHouse.isBlank()) {
 								String caseType = getProperty("case_type");
 								if (!caseType.isBlank()) {
-									returnValue = getNextCaseNumber(getProperty("courthouse"), getProperty("case_tyoe"));
+									returnValue = getNextCaseNumber(getProperty("courthouse"), getProperty("case_type"));
 								}
 							}
 							break;
