@@ -1,5 +1,6 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
@@ -55,4 +56,8 @@ public class StepDef_portal extends StepDef_base {
     }
 
 
+    @And("I see the transcription-count is \"([^\"]*)\"$")
+    public void iSeeTheTranscriptionCountIs(String count) {
+        portal.TranscriptionCountOnPage(count);
+    }
 }
