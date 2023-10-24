@@ -34,7 +34,7 @@ public class NavigationShared {
 	private WebDriver driver;
 	private static Logger log = LogManager.getLogger("NavigationShared");
 	private WaitUtils wait;
-	private String LOADING_ICON_LOCATION = "#spinner, app-cp-spinner";
+	private String LOADING_ICON_LOCATION = "div.govuk-spinner";
 	private GenUtils GU;
 	private static int instanceCount = 0;
 
