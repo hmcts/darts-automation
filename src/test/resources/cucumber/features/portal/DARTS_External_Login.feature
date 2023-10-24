@@ -319,3 +319,35 @@ Examples:
  	#Need to add/edit scenario for try again on "Check your phone" screen
 	#DMP-490 Logout of FE Portal
 	#Some errors might need changing
+
+  @DMP-1245
+  Scenario: Change Password Error - Invalid email address
+	  Given I am on the landing page
+	  When I see "Sign in to the DARTS Portal" on the page
+	  And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
+	  And I see "I have an account for DARTS through my organisation." on the page
+	  And I press the "Continue" button
+	  Then I see "Sign in to the DARTS portal" on the page
+	  When I click on the "Forgotten your password?" link
+	  Then I see "Reset your password" on the page
+	  And I see "Enter the email you use to sign in to DARTS Portal. We'll send you a code to reset your password." on the page
+	  And I set "Email address" to "test"
+	  Then I see "Enter an email address in the correct format, like name@example.com" on the page
+
+	@DMP-1245
+	Scenario: Change Password Error - No email address
+		Given I am on the landing page
+		When I see "Sign in to the DARTS Portal" on the page
+		And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
+		And I see "I have an account for DARTS through my organisation." on the page
+		And I press the "Continue" button
+		Then I see "Sign in to the DARTS portal" on the page
+		When I click on the "Forgotten your password?" link
+		Then I see "Reset your password" on the page
+		And I see "Enter the email you use to sign in to DARTS Portal. We'll send you a code to reset your password." on the page
+		And I press the "Send code" button
+		Then I see "Email address is required." on the page
+
+
+
+
