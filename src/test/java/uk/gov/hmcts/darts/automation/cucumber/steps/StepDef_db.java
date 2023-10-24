@@ -32,16 +32,22 @@ public class StepDef_db extends StepDef_base {
 		DB = new Database();
 	}
 	
-	@Given("I execute update sql:")
+	@When("I execute update sql:")
 	public void executeUpdateSql(String docString) throws Exception {
 		log.info("about to update sql", docString);
 		DB.updateRow(docString);
 	}
 	
-	@Given("I set table {} column {} to {} where {} = {}")
+	@When("^I set table ([^\"]*) column ([^\"]*) to \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\"$")
 	public void setSingleValue(String table, String updateCol, String updateVal, String keyCol, String keyVal) throws Exception {
 		log.info("about to update field " + table + " " + keyCol + " " + keyVal + " " + updateCol + " " + updateVal);
 		DB.setSingleValue(table, keyCol, keyVal, updateCol, updateVal);
+	}
+	
+	@When("^I set table ([^\"]*) column ([^\"]*) to \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
+	public void setSingleValue(String table, String updateCol, String updateVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2) throws Exception {
+		log.info("about to update field " + table + " " + keyCol1 + " " + keyVal1 + " " + keyCol2 + " " + keyVal2 + " " + updateCol + " " + updateVal);
+		DB.setSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, updateCol, updateVal);
 	}
 
 	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\"$")
@@ -55,6 +61,13 @@ public class StepDef_db extends StepDef_base {
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2 + " " + col + " " + expectedVal);
 		String returnVal = DB.returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, col);
+		Assertions.assertEquals(expectedVal, returnVal);
+	}
+
+	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
+	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3) throws Exception {
+		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2  + " " + keyCol3 + " " + keyVal3 + " " + col + " " + expectedVal);
+		String returnVal = DB.returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, col);
 		Assertions.assertEquals(expectedVal, returnVal);
 	}
 	

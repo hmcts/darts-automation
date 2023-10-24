@@ -74,6 +74,10 @@ public class Postgres {
 		}
 	}
 	
+	String sqlCondition(String table, String column, String value) throws Exception {
+		return column + (value.strip().equalsIgnoreCase("NULL") ? " is " : " = ") + delimitedValue(table, column, value);
+	}
+	
 	String extractSingleValueFromResultSet(ResultSet rs) throws Exception {
 		if (rs.next()) {
 			String returnString = rs.getString(1);
@@ -134,16 +138,31 @@ public class Postgres {
 	public String returnSingleValue(String table, String keyCol, String keyVal, String returnCol) throws Exception {
 		String sql = "select " + returnCol
 				+ " from " + table
-				+ " where " + keyCol + " = " + delimitedValue(table, keyCol, keyVal);
+				+ " where " + sqlCondition(table, keyCol, keyVal);
 		return returnSingleValue(sql);
 	}
 
-	public String returnSingleValue(String table, String keyCol1, String keyVal1, 
-			String keyCol2, String keyVal2, String returnCol) throws Exception {
+	public String returnSingleValue(String table, 
+			String keyCol1, String keyVal1, 
+			String keyCol2, String keyVal2, 
+			String returnCol) throws Exception {
 		String sql = "select " + returnCol
 				+ " from " + table
-				+ " where " + keyCol1 + " = " + delimitedValue(table, keyCol1, keyVal1)
-				+ " and " + keyCol2 + " = " + delimitedValue(table, keyCol2, keyVal2);
+				+ " where " + sqlCondition(table, keyCol1, keyVal1)
+				+ " and " + sqlCondition(table, keyCol2, keyVal2);
+		return returnSingleValue(sql);
+	}
+
+	public String returnSingleValue(String table, 
+			String keyCol1, String keyVal1, 
+			String keyCol2, String keyVal2, 
+			String keyCol3, String keyVal3, 
+			String returnCol) throws Exception {
+		String sql = "select " + returnCol
+				+ " from " + table
+				+ " where " + sqlCondition(table, keyCol1, keyVal1)
+				+ " and " + sqlCondition(table, keyCol2, keyVal2)
+				+ " and " + sqlCondition(table, keyCol3, keyVal3);
 		return returnSingleValue(sql);
 	}
 
@@ -164,8 +183,18 @@ public class Postgres {
 	public int deleteRow(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2) throws Exception {
 		log.info("Database delete: " + table + " " + keyCol1 + " " + keyVal1 + " " + keyCol2 + " " + keyVal2);
 		String sql = "delete from " + table + 
-				" where " + keyCol1 + " = " +  delimitedValue(table, keyCol1, keyVal1) + 
-				" and " + keyCol2 + " = " +  delimitedValue(table, keyCol2, keyVal2);
+				" where " + " = " +  delimitedValue(table, keyCol1, keyVal1) + 
+				" and " + " = " +  delimitedValue(table, keyCol2, keyVal2);
+		return deleteRow(sql);
+	}
+
+
+	public int deleteRow(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3) throws Exception {
+		log.info("Database delete: " + table + " " + keyCol1 + " " + keyVal1 + " " + keyCol2 + " " + keyVal2 + " " + keyCol3 + " " + keyVal3);
+		String sql = "delete from " + table + 
+				" where " + " = " +  delimitedValue(table, keyCol1, keyVal1) + 
+				" and " + sqlCondition(table, keyCol2, keyVal2) +
+				" and " + sqlCondition(table, keyCol3, keyVal3);
 		return deleteRow(sql);
 	}
 
@@ -230,18 +259,28 @@ public class Postgres {
 
 	public int updateRow(String table, String keyCol, String keyVal, String UpdateCol, String newVal) throws Exception {
 		log.info("Database update: " + table + " " + keyCol + " " + keyVal + " " + UpdateCol + " " + newVal);
-		String sql = "update darts." + table 
+		String sql = "update " + table 
 				+ " set " + UpdateCol + " = " + delimitedValue(table, UpdateCol, newVal)
-				+ " where " + keyCol + " = "  + delimitedValue(table, keyCol, keyVal);
+				+ " where " + sqlCondition(table, keyCol, keyVal);
 		return updateRow(sql);
 	}
 
 	public int updateRow(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String UpdateCol, String newVal) throws Exception {
 		log.info("Database update: " + table + " " + keyCol1 + " " + keyVal1 + " " + keyCol2 + " " + keyVal2 + " " + UpdateCol + " " + newVal);
-		String sql = "update darts." + table 
+		String sql = "update " + table 
 				+ " set " + UpdateCol + " = " + delimitedValue(table, UpdateCol, newVal)
-				+ " where " + keyCol1 + " = "  + delimitedValue(table, keyCol1, keyVal1)
-				+ " and " + keyCol2 + " = "  + delimitedValue(table, keyCol2, keyVal2);
+				+ " where " + sqlCondition(table, keyCol1, keyVal1)
+				+ " and " + sqlCondition(table, keyCol2, keyVal2);
+		return updateRow(sql);
+	}
+
+	public int updateRow(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3, String UpdateCol, String newVal) throws Exception {
+		log.info("Database update: " + table + " " + keyCol1 + " " + keyVal1 + " " + keyCol2 + " " + keyVal2 + " " + keyCol3 + " " + keyVal3 + " " + UpdateCol + " " + newVal);
+		String sql = "update " + table 
+				+ " set " + UpdateCol + " = " + delimitedValue(table, UpdateCol, newVal)
+				+ " where " + sqlCondition(table, keyCol1, keyVal1)
+				+ " and " + sqlCondition(table, keyCol2, keyVal2)
+				+ " and " + sqlCondition(table, keyCol3, keyVal3);
 		return updateRow(sql);
 	}
 	
@@ -278,6 +317,15 @@ public class Postgres {
 			String updateCol, String updateVal) throws Exception {
 		String initialValue = returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, updateCol);
 		updateRow(table, keyCol1, keyVal1, keyCol2, keyVal2, updateCol, updateVal);
+		return initialValue;
+	}
+
+	public String setSingleValue(String table, String keyCol1, String keyVal1, 
+			String keyCol2, String keyVal2, 
+			String keyCol3, String keyVal3, 
+			String updateCol, String updateVal) throws Exception {
+		String initialValue = returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, updateCol);
+		updateRow(table, keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, updateCol, updateVal);
 		return initialValue;
 	}
 

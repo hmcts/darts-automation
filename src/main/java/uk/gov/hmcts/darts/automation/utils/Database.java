@@ -90,6 +90,10 @@ public class Database extends Postgres {
 		return super.updateRow(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, UpdateCol, newVal);
 	}
 	
+	public int updateRow(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3, String UpdateCol, String newVal) throws Exception {
+		return super.updateRow(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, UpdateCol, newVal);
+	}
+	
 	public String setSingleValue(String table, String keyCol, String keyVal, String updateCol, String updateVal) throws Exception {
 		return super.setSingleValue(tableName(table), keyCol, keyVal, updateCol, updateVal);
 	}
@@ -98,12 +102,20 @@ public class Database extends Postgres {
 		return super.setSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, updateCol, updateVal);
 	}
 	
+	public String setSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3, String updateCol, String updateVal) throws Exception {
+		return super.setSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, updateCol, updateVal);
+	}
+	
 	public String returnSingleValue(String table, String keyCol1, String keyVal1, String returnCol) throws Exception {
 		return super.returnSingleValue(tableName(table), keyCol1, keyVal1, returnCol);
 	}
 	
 	public String returnSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String returnCol) throws Exception {
 		return super.returnSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, returnCol);
+	}
+	
+	public String returnSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3, String returnCol) throws Exception {
+		return super.returnSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, returnCol);
 	}
 
 	@Test
