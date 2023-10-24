@@ -793,7 +793,7 @@ public class NavigationShared {
 								ExpectedConditions.alertIsPresent()));
 				log.info("Loading icon now gone - Continuing");
 			} catch (Exception e) {
-				log.info("Loading icon still here? After " + postWait
+				log.error("Loading icon still here? After " + postWait
 						+ " seconds - Something has gone wrong, but going to continue");
 			}
 			waitForBrowserReadyState();
