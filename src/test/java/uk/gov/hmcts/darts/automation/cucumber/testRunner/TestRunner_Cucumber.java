@@ -26,7 +26,7 @@ import static io.cucumber.junit.platform.engine.Constants.EXECUTION_DRY_RUN_PROP
 @IncludeEngines("cucumber")
 @IncludeTags(value = "smoketest")
 //@IncludeTags(value = "smoketest | DMP-407")
-@ExcludeTags(value = "broken")
+@ExcludeTags(value = "broken | obsolete")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "html:reports/html/results.html, junit:reports/junit/cucumber.xml")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "uk/gov/hmcts/darts/automation/cucumber/steps")

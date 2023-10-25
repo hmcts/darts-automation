@@ -29,7 +29,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 
 public class GenUtils {
-	private static WebDriver driver;
+	private WebDriver driver;
 	private static int TIME_IN_SECONDS = 60;
 	private static Logger log = LogManager.getLogger("GenUtils");
 

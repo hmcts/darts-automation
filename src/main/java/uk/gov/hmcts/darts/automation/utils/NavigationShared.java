@@ -31,15 +31,15 @@ import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.DateUtils;
 
 public class NavigationShared {
-	private static WebDriver driver;
+	private WebDriver driver;
 	private static Logger log = LogManager.getLogger("NavigationShared");
 	private WaitUtils wait;
-	private String LOADING_ICON_LOCATION = "#spinner, app-cp-spinner";
+	private String LOADING_ICON_LOCATION = "div.govuk-spinner";
 	private GenUtils GU;
 	private static int instanceCount = 0;
 
 	public NavigationShared(WebDriver driver) {
-		NavigationShared.driver = driver;
+		this.driver = driver;
 		wait = new WaitUtils(driver);
 		GU = new GenUtils(driver);
 		log.info("Instance count: " + ++instanceCount);
@@ -803,7 +803,7 @@ public class NavigationShared {
 								ExpectedConditions.alertIsPresent()));
 				log.info("Loading icon now gone - Continuing");
 			} catch (Exception e) {
-				log.info("Loading icon still here? After " + postWait
+				log.error("Loading icon still here? After " + postWait
 						+ " seconds - Something has gone wrong, but going to continue");
 			}
 			waitForBrowserReadyState();

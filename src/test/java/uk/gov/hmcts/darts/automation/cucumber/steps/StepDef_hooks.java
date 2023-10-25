@@ -15,6 +15,7 @@ import io.cucumber.java.Before;
 
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,8 +25,8 @@ public class StepDef_hooks extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_hooks");
 		
-	public StepDef_hooks(SeleniumWebDriver driver) {
-		super(driver);
+	public StepDef_hooks(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 	}
 	
 	static Scenario scenario;
@@ -49,8 +50,8 @@ public class StepDef_hooks extends StepDef_base {
 	
 	@After
 	public void afterScenario(Scenario scenario) {
-		log.info("End of scenario: "+scenario.getId()+" Thread Id: " + Thread.currentThread().getId());
 		if (scenario.isFailed()) {	
+			log.info("End of Scenario - Scenario Failed: " + scenario.getId() + " Thread Id: " + Thread.currentThread().getId());
 			try {
 				JavascriptExecutor jse = (JavascriptExecutor)webDriver;
 			    jse.executeScript("document.body.style.zoom = '50%';");
@@ -59,6 +60,8 @@ public class StepDef_hooks extends StepDef_base {
 			} catch (Exception e) {
 				log.info("Failed getting screenshot");
 			}			
+		} else {
+			log.info("End of Scenario - Scenario Passed: " + scenario.getId() + " Thread Id: " + Thread.currentThread().getId());
 		}
 		try {
 		    try {
