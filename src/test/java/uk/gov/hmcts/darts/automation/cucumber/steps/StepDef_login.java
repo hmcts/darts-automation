@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.Login;
 
 public class StepDef_login extends StepDef_base{
@@ -14,8 +15,8 @@ public class StepDef_login extends StepDef_base{
     public Login login;
     private WaitUtils WAIT;
 
-    public StepDef_login(SeleniumWebDriver driver) {
-        super(driver);
+    public StepDef_login(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
         login = new Login(webDriver);
         WAIT = new WaitUtils(webDriver);
     }
