@@ -1743,7 +1743,7 @@ public class NavigationShared {
 		waitForBrowserReadyState();
 		log.info("Clicked on =>"+clickText+"<= successfully");
 	}
-	
+
 	public void clickOnElementWithId(String id) {
 
 		WebElement element = driver.findElement(By.id(id));
@@ -1892,4 +1892,5 @@ public class NavigationShared {
 
 		log.info("Found li element which has text =>"+text+"<= with class =>"+className);
 	}
+
 }
