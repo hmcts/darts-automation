@@ -11,6 +11,7 @@ import io.cucumber.java.Before;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.pageObjects.Portal;
@@ -23,16 +24,21 @@ public class StepDef_portal extends StepDef_base {
     private static Logger log = LogManager.getLogger("StepDef_portal");
     private Portal portal;
     private Prompt prompt;
-
-    public StepDef_portal(SeleniumWebDriver driver) {
-        super(driver);
+    private WaitUtils WAIT;
+  
+	public StepDef_portal(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
         prompt = new Prompt(webDriver);
         portal = new Portal(webDriver);
+        WAIT = new WaitUtils(webDriver);
     }
 
     @Given("I am logged on to DARTS as an {word} user")
     public void logonInternal(String type) throws Exception {
         NAV.navigateToUrl(ReadProperties.main("portal_url"));
+        NAV.waitForBrowserReadyState();
+        WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
+        WAIT.waitForTextOnPage("except where otherwise stated");
         switch (type.toUpperCase()) {
             case "EXTERNAL":
             case "TRANSCRIBER":
@@ -56,6 +62,8 @@ public class StepDef_portal extends StepDef_base {
                 log.fatal("Unknown type - expected internal or external");
         }
         NAV.press_buttonByName("Continue");
+        NAV.waitForBrowserReadyState();
+        WAIT.waitForTextOnPage("This sign in page is for users who do not work for HMCTS.");
         NAV.set_valueTo("Enter your email", ReadProperties.automationUserId);
         NAV.set_valueTo("Enter your password", ReadProperties.automationPassword);
         NAV.press_buttonByName("Continue");

@@ -51,15 +51,15 @@ public class ReadProperties {
 	static Properties environmentProperties = getProperties(environmentPropertiesParameterFileName);
 	static Properties translationProperties = getProperties(translationPropertiesParameterFileName);
 	public static String os = System.getProperty("os.name").replace(" ", "_"); // .toUpperCase();
-	static String systemEnv = System.getProperty("envName");
-	static String environment = systemEnv == null ? environmentProperties.getProperty("defaultEnv") : systemEnv;
+	public static String systemEnv = System.getProperty("envName");
+	public static String environment = systemEnv == null ? environmentProperties.getProperty("defaultEnv") : systemEnv;
 	
-	static LogDetail setupRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
-	static LogDetail setupResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
-	static LogDetail authRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
-	static LogDetail authResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
-	static LogDetail requestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
-	static LogDetail responseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+	public static LogDetail setupRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	public static LogDetail setupResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+	public static LogDetail authRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	public static LogDetail authResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
+	public static LogDetail requestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
+	public static LogDetail responseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
     
 	static {
 		log.info("OS =>" + os);

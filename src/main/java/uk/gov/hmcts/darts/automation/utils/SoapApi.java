@@ -30,16 +30,16 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 
-
-public class JsonApi {
-	private static Logger log = LogManager.getLogger("JsonApi");
+public class SoapApi {
+	private static Logger log = LogManager.getLogger("SoapApi");
     static Response response;
-    static String authorization;
-	static String baseUri = ReadProperties.main("jsonApiUri");
+	static String authorization;
+	static String baseUri = ReadProperties.main("soapApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
+	static final String ACCEPT_XML_STRING = "application/xml, text/plain, */*";
 	static final String CONTENT_TYPE = "Content-Type";
-	static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
+	static final String CONTENT_TYPE_APPLICATION_XML = "application/xml";
 	static final String USER_AGENT = "User-Agent";
 	static final String USER_AGENT_STRING = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0";
 	static final String ACCEPT_ENCODING = "Accept-Encoding";
@@ -49,7 +49,8 @@ public class JsonApi {
 	static final String AUTHORIZATION = "Authorization";
 
 
-	public JsonApi() {
+	public SoapApi() {
+		
 	}
 
     public RequestSpecification requestLogLevel(LogDetail loggingLevel){
@@ -68,8 +69,7 @@ public class JsonApi {
     		given()
     			.spec(requestLogLevel(ReadProperties.authRequestLogLevel))
 				.accept(ACCEPT_JSON_STRING)
-				.contentType("application/x-www-form-urlencoded")
-				
+				.contentType("application/x-www-form-urlencoded") 
     			.header(USER_AGENT, USER_AGENT_STRING) 
     			.header(ACCEPT_ENCODING, "gzip, deflate, br")
     			.header("X-Requested-With", "XMLHttpRequest")
@@ -93,99 +93,24 @@ public class JsonApi {
 		String access_token = (response.jsonPath().getString("access_token"));
 		String token_type  = (response.jsonPath().getString("token_type"));
     	return token_type + " " + access_token;
-    	
     }
     
-    
+    public ApiResponse postSoap(String endpoint, String body) {
 
-	public ApiResponse getApi(String endpoint) {
-
+		log.info("post soap request: " + endpoint);
     	authorization = authenticate();
-		log.info("get: " + endpoint);
-		response =
-				given()
-    				.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
-	    			.header(USER_AGENT, USER_AGENT_STRING) 
-	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-	    			.header(CONNECTION, CONNECTION_STRING)
-					.header(AUTHORIZATION, authorization)
-					.baseUri(baseUri)
-					.basePath("")
-				.when()
-					.get(endpoint)
-				.then()
-					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.log().everything()
-					.assertThat().statusCode(200)
-					.extract().response();
-		
-		return new ApiResponse(response.statusCode(), response.asString());
-	}
-
-	public ApiResponse getApiWithFormParams(String endpoint, Map<String, String> formParams) {
-
-    	authorization = authenticate();
-		log.info("get: " + endpoint);
-		response =
-				given()
-					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
-	    			.header(USER_AGENT, USER_AGENT_STRING) 
-	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-	    			.header(CONNECTION, CONNECTION_STRING)
-					.header(AUTHORIZATION, authorization)
-					.baseUri(baseUri)
-					.basePath("")
-					.formParams(formParams)
-				.when()
-					.get(endpoint)
-				.then()
-					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.extract().response();
-		return new ApiResponse(response.statusCode(), response.asString());
-	}
-
-	public ApiResponse getApiWithQueryParams(String endpoint, Map<String, String> queryParams) {
-
-    	authorization = authenticate();
-		log.info("get: " + endpoint);
-		response =
-				given()
-					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
-	    			.header(USER_AGENT, USER_AGENT_STRING) 
-	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-	    			.header(CONNECTION, CONNECTION_STRING)
-					.header(AUTHORIZATION, authorization)
-					.baseUri(baseUri)
-					.basePath("")
-					.queryParams(queryParams)
-				.when()
-					.get(endpoint)
-				.then()
-					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.extract().response();
-		return new ApiResponse(response.statusCode(), response.asString());
-	}
-    
-	public ApiResponse postApi(String endpoint, String body) {
-
-    	authorization = authenticate();
-    	log.info("post: " + endpoint);
-    	log.info(body);
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
+					.accept(ACCEPT_XML_STRING)
 	    			.header(USER_AGENT, USER_AGENT_STRING) 
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
-	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_XML)
 					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
 					.basePath("")
-					.body(body)
+					.body(addSoapHeader(body))
 				.when()
 					.post(endpoint)
 				.then()
@@ -193,51 +118,70 @@ public class JsonApi {
 					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
     }
-    
-	public ApiResponse putApi(String endpoint, String body) {
 
+	public ApiResponse postSoap(String endpoint, String soapAction, String body) {
+
+		log.info("post soap request - SOAPAction: " + soapAction);
     	authorization = authenticate();
-    	log.info("put: " + endpoint);
-		response = 
+		response =
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
+					.accept(ACCEPT_XML_STRING)
 	    			.header(USER_AGENT, USER_AGENT_STRING) 
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
-	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_XML)
 					.header(AUTHORIZATION, authorization)
+					.header("SOAPAction", soapAction)
 					.baseUri(baseUri)
 					.basePath("")
-					.body(body)
+					.body(addSoapHeader(soapAction, body))
 				.when()
-					.put(endpoint)
+					.post(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
 					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
-    }
-    
-	public ApiResponse deleteApi(String endpoint, String body) {
+	}
 
-    	log.info("delete: " + endpoint);
-    	authorization = authenticate();
-		response = 
-				given()
-					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
-	    			.header(USER_AGENT, USER_AGENT_STRING) 
-	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-	    			.header(CONNECTION, CONNECTION_STRING)
-	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
-					.header(AUTHORIZATION, authorization)
-					.baseUri(baseUri)
-					.basePath("")
-				.when()
-					.delete(endpoint)
-				.then()
-					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.extract().response();
-		return new ApiResponse(response.statusCode(), response.asString());
-    }
+	String addSoapHeader(String soapBody) {
+		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+ "    <soap:Body>"
+				+ soapBody
+				+ "    </soap:Body>"
+				+ "</soap:Envelope>";
+	}
+
+	String addSoapHeader(String soapAction, String soapBody) {
+		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+ "    <soap:Body>"
+				+ "        <" + soapAction + " xmlns=\"http://com.synapps.mojdarts.service.com\">"
+				+ "            <document xmlns=\"\">"
+				+ soapBody
+				+ "            </document>"
+				+ "        </" + soapAction + ">"
+				+ "    </soap:Body>"
+				+ "</soap:Envelope>";
+	}
+
+@Test
+// Following code is for debugging & may fail if data changes
+	public void test() {
+    	SoapApi soapApi = new SoapApi();
+
+		log.info("post: courtlogs");
+    	soapApi.postSoap("courtlogs", "        <getCourtLog xmlns=\"http://com.synapps.mojdarts.service.com\">"
+				+ "            <courthouse xmlns=\"\">DMP-467-LIVERPOOL</courthouse>"
+				+ "            <caseNumber xmlns=\"\">DMP-467-Case001</caseNumber>"
+				+ "            <startTime xmlns=\"\">20230811160000</startTime>"
+				+ "            <endTime xmlns=\"\">20230930170000</endTime>"
+				+ "        </getCourtLog>");
+    	
+
+ 
+	}
+			
+
 }

@@ -8,6 +8,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
@@ -19,8 +20,9 @@ public class StepDef_navigation extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_navigation");
 	
-	public StepDef_navigation(SeleniumWebDriver driver) {
-		super(driver);
+	
+	public StepDef_navigation(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
 	}
 	
 	
@@ -218,7 +220,6 @@ public class StepDef_navigation extends StepDef_base {
 	public void filterFor(String arg1) {
 	    NAV.generic_filterResults(arg1);
 	};
-	
 
 	@Then("^I see the \"([^\"]*)\" ([^\"]*) in \"([^\"]*)\" area is ([^\"]*)$")
 	public void verifyCheckboxState(String labelText, String element, String header, String expected) throws Exception {
@@ -440,7 +441,6 @@ public class StepDef_navigation extends StepDef_base {
 	
 	@When("^I clear the \"([^\"]*)\" field$")
 	public void clearField(String label) throws Exception {
-//	   NAV.set_valueTo(label, Keys.chord(Keys.CONTROL, "a") + Keys.BACK_SPACE);
 	   NAV.clearInputFieldByLabelText(label);
 	};
 	

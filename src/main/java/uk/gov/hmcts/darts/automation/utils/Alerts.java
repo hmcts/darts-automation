@@ -26,14 +26,14 @@ import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 
 public class Alerts {
-	private static WebDriver driver;
+	private WebDriver driver;
 	private static Logger log = LogManager.getLogger("Alerts");
 	private WaitUtils wait;
 	private NavigationShared NAV;
 
 
 	public Alerts(WebDriver driver) {
-		Alerts.driver = driver;
+		this.driver = driver;
 		wait = new WaitUtils(driver);
 		NAV = new NavigationShared(driver);
 		
