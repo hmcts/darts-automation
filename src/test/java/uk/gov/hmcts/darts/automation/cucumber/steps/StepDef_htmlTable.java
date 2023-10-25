@@ -6,12 +6,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.gov.hmcts.darts.automation.utils.HtmlTable;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 
 public class StepDef_htmlTable extends StepDef_base {
     private static Logger log = LogManager.getLogger("StepDef_htmlTable");
 
-    public StepDef_htmlTable(SeleniumWebDriver driver) {
-        super(driver);
+    public StepDef_htmlTable(SeleniumWebDriver driver, TestData testdata) {
+		super(driver, testdata);
     }
 
     HtmlTable htmlTable = new HtmlTable(webDriver);
