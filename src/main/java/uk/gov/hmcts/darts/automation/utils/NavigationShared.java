@@ -610,11 +610,21 @@ public class NavigationShared {
 			wait.waitForClickableElement(button, 10);
 			log.info("element found - try 1");
 		} catch (Error | Exception e) {
-			log.info("element not found - try 2");
-			buttons = driver.findElements(By.xpath(
-					"//button/descendant-or-self::*[text()[contains(., \"" + button_name + "\")]]" ));
-			button = return_oneVisibleFromList(buttons);
-			log.info("element found - try 2");
+			try {
+				log.info("element not found - try 2");
+				buttons = driver.findElements(By.xpath(
+						"//button/descendant-or-self::*[text()[contains(., \"" + button_name + "\")]]" ));
+				button = return_oneVisibleFromList(buttons);
+				log.info("element found - try 2");
+			} catch (Error | Exception e2) {
+				log.info("element not found - try 3");
+				buttons = driver.findElements(By.xpath(
+						"//input[(@type='button' and contains(@value,\"" + button_name + "\")) or " +
+						"(@type='submit' and contains(@value,\"" + button_name + "\"))]"));
+				button = return_oneVisibleFromList(buttons);
+				log.info("element found - try 3");
+				
+			}
 		}
 
 		try {

@@ -4,6 +4,7 @@ import io.cucumber.java.en.Given;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
+import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.Login;
@@ -11,15 +12,20 @@ import uk.gov.hmcts.darts.automation.utils.Login;
 public class StepDef_login extends StepDef_base{
     private static Logger log = LogManager.getLogger("StepDef_login");
     public Login login;
+    private WaitUtils WAIT;
 
     public StepDef_login(SeleniumWebDriver driver) {
         super(driver);
         login = new Login(webDriver);
+        WAIT = new WaitUtils(webDriver);
     }
 
-    @Given("I am logged on to DARTS as an {word} user")
+    @Given("I am logged on to DARTS as an/a {word} user")
     public void logonInternal(String type) throws Exception {
         NAV.navigateToUrl(ReadProperties.main("portal_url"));
+        NAV.waitForBrowserReadyState();
+        WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
+        WAIT.waitForTextOnPage("except where otherwise stated");
         switch (type.toUpperCase()) {
             case "EXTERNAL":
                 login.loginToPortal_ExternalUser(ReadProperties.automationUserId,ReadProperties.automationPassword);
