@@ -22,6 +22,7 @@ public class Login {
     }
 
     public void loginToPortal_ExternalUser(String username, String password) throws Exception {
+        NAV.waitForPageLoad();
         NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
@@ -32,6 +33,7 @@ public class Login {
     }
 
     public void loginToPortal_InternalUser(String username, String password) throws Exception {
+        NAV.waitForPageLoad();
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
