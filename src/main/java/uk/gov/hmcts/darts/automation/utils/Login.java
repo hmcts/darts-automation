@@ -36,6 +36,7 @@ public class Login {
         NAV.waitForPageLoad();
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
+        NAV.waitForBrowserReadyState();
         NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
         NAV.press_buttonByName("Next");
         NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Password"), password);
