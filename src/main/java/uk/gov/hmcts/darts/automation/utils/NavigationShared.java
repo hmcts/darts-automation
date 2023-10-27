@@ -840,7 +840,7 @@ public class NavigationShared {
 		log.info("Waiting for NOT ready state");
 		try {
 //	reduced wait from 1000 to 250 mS 2023-05-24
-		    new WebDriverWait(driver, Duration.ofMillis(250), Duration.ofMillis(50))
+		    new WebDriverWait(driver, Duration.ofMillis(1000), Duration.ofMillis(50))
 		    	.until((ExpectedCondition<Boolean>) wd ->
 		            !((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 			log.info("Finished waiting for NOT ready state");
