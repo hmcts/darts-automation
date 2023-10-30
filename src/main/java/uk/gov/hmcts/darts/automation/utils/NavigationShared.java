@@ -775,7 +775,7 @@ public class NavigationShared {
 	/**
 	 * Overloading with wait time passed - For increased waiting when required
 	 * 
-	 * @param// waitTime
+	 * @param waitTime
 	 */
 	public void waitForPageLoad(int initialWait, int postWait) {
 		log.info("Waiting for Loading Icon to become visible");
@@ -838,9 +838,10 @@ public class NavigationShared {
 	public void waitForBrowserReadyState() {
 		log.info("Wait for document.readyState");
 		log.info("Waiting for NOT ready state");
+//	Wait for browser NOT to be ready - not too long because it may be ready again already
 		try {
 //	reduced wait from 1000 to 250 mS 2023-05-24
-		    new WebDriverWait(driver, Duration.ofMillis(1000), Duration.ofMillis(50))
+		    new WebDriverWait(driver, Duration.ofMillis(250), Duration.ofMillis(50))
 		    	.until((ExpectedCondition<Boolean>) wd ->
 		            !((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 			log.info("Finished waiting for NOT ready state");

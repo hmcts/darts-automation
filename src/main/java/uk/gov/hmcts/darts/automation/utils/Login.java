@@ -30,17 +30,25 @@ public class Login {
         NAV.set_valueTo("Enter your email", username);
         NAV.set_valueTo("Enter your password", password);
         NAV.press_buttonByName("Continue");
+        NAV.waitForBrowserReadyState();
+        WAIT.waitForTextOnPage("except where otherwise stated");
     }
 
     public void loginToPortal_InternalUser(String username, String password) throws Exception {
         NAV.waitForPageLoad();
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
+        WAIT.waitForTextOnPage("Sign in");
         NAV.waitForPageLoad();
+        NAV.waitForBrowserReadyState();
         NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
         NAV.press_buttonByName("Next");
+        WAIT.waitForTextOnPage("Enter password");
+        NAV.waitForBrowserReadyState();
         NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Password"), password);
         NAV.press_buttonByName("Sign in");
+        WAIT.waitForTextOnPage("Stay signed in?");
+        NAV.waitForBrowserReadyState();
         NAV.press_buttonByName("No");
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("except where otherwise stated");

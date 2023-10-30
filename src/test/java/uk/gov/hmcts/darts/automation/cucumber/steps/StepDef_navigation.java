@@ -23,7 +23,6 @@ public class StepDef_navigation extends StepDef_base {
 	@When("^I see \"([^\"]*)\" on the page$")
 	public void text_on_page_check(String arg1) throws Exception {
 	    try {
-			NAV.waitForPageLoad();
 	    	NAV.textPresentOnPage(arg1);
 	    } catch (AssertionError | Exception e) {
 	    	NAV.waitForPageLoad();
