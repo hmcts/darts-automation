@@ -97,16 +97,16 @@ public class Portal {
     public void loginToPortal_InternalUser(String username, String password) throws Exception {
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
-        WAIT.waitForTextOnPage("Sign in");
+        WAIT.waitForTextOnPage("Sign in", 30);
         NAV.waitForPageLoad();
         NAV.waitForBrowserReadyState();
         NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
         NAV.press_buttonByName("Next");
-        WAIT.waitForTextOnPage("Enter password");
+        WAIT.waitForTextOnPage("Enter password", 30);
         NAV.waitForBrowserReadyState();
         NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Password"), password);
         NAV.press_buttonByName("Sign in");
-        WAIT.waitForTextOnPage("Stay signed in?");
+        WAIT.waitForTextOnPage("Stay signed in?", 30);
         NAV.waitForBrowserReadyState();
         NAV.press_buttonByName("No");
         NAV.waitForBrowserReadyState();
