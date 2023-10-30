@@ -51,7 +51,8 @@ public class StepDef_hooks extends StepDef_base {
 	@After
 	public void afterScenario(Scenario scenario) {
 		if (scenario.isFailed()) {	
-			log.info("End of Scenario - Scenario Failed: " + scenario.getId() + " Thread Id: " + Thread.currentThread().getId());
+			log.fatal("End of Scenario - Scenario Failed: " + scenario.getId() + " Thread Id: " + Thread.currentThread().getId());
+			log.fatal("URL: " + webDriver.getCurrentUrl(), "text/plain", "Current url");
 			try {
 				JavascriptExecutor jse = (JavascriptExecutor)webDriver;
 			    jse.executeScript("document.body.style.zoom = '50%';");
