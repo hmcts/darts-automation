@@ -62,7 +62,7 @@ Scenario: DARTS Link
 	Then  I see "Search for a case" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest @broken
+@DMP-407 @smoketest
 Scenario: DARTS Link as Judge
 	Given I am logged on to DARTS as a judge user
 	When  I click on the "Search" link

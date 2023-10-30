@@ -37,6 +37,11 @@ public class StepDef_portal extends StepDef_base {
         NAV.navigateToUrl(ReadProperties.main("portal_url"));
     }
 
+    @Given("I am logged on to DARTS as an/a {word} user")
+    public void logonAsUser(String type) throws Exception {
+    	portal.logonAsUser(type);
+    }
+
     @When("^I enter the security code$")
     public void enterSecurityCode() throws Exception {
         NAV.set_valueTo("Enter your verification code below", prompt.inputDialog("Enter Security Code"));
