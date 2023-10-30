@@ -107,7 +107,8 @@ public class Portal {
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Sign in", 30);
         NAV.waitForPageLoad();
-        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
+//        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
+        webDriver.findElement(By.xpath("//input[@type='email']")).sendKeys(username);
         NAV.press_buttonByName("Next");
         NAV.waitForPageLoad();
         NAV.waitForBrowserReadyState();
@@ -119,7 +120,8 @@ public class Portal {
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Enter password", 30);
         NAV.waitForBrowserReadyState();
-        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Password"), password);
+//        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Password"), password);
+        webDriver.findElement(By.xpath("//input[@type='password']")).sendKeys(password);
         NAV.press_buttonByName("Sign in");
         NAV.waitForPageLoad();
         NAV.waitForBrowserReadyState();
