@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 public class TestData {
 	private static Logger log = LogManager.getLogger("TestData");
-	static String parameterFileName = "src/test/resources/testData.properties";
+	static String parameterFileName = "src/test/resources/testdata.properties";
 	
 	static String currentYear =  Year.now().toString();
 	Properties propFile; // = new Properties();
