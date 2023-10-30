@@ -1,21 +1,15 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
-import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.pageObjects.Portal;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,42 +27,6 @@ public class StepDef_portal extends StepDef_base {
         WAIT = new WaitUtils(webDriver);
     }
 
-    @Given("I am logged on to DARTS as an {word} user")
-    public void logonInternal(String type) throws Exception {
-        NAV.navigateToUrl(ReadProperties.main("portal_url"));
-        NAV.waitForBrowserReadyState();
-        WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
-        WAIT.waitForTextOnPage("except where otherwise stated");
-        switch (type.toUpperCase()) {
-            case "EXTERNAL":
-            case "TRANSCRIBER":
-            case "INTERPRETER_QA_AUDITOR":
-// temporarily moved to external login
-            case "REQUESTER":
-            case "APPROVER":
-            case "JUDGE":
-            case "ADMINISTRATOR":
-                NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
-                break;
-            case "INTERNAL":
-// temporarily moved to external login
-//            case "REQUESTER":
-//            case "APPROVER":
-//            case "JUDGE":
-//            case "ADMINISTRATOR":
-                NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
-                break;
-            default:
-                log.fatal("Unknown type - expected internal or external");
-        }
-        NAV.press_buttonByName("Continue");
-        NAV.waitForBrowserReadyState();
-        WAIT.waitForTextOnPage("This sign in page is for users who do not work for HMCTS.");
-        NAV.set_valueTo("Enter your email", ReadProperties.automationUserId);
-        NAV.set_valueTo("Enter your password", ReadProperties.automationPassword);
-        NAV.press_buttonByName("Continue");
-    }
-
     @Given("^I am on the portal page$")
     public void onPortalPage() throws Exception {
         NAV.navigateToUrl(ReadProperties.main("portal_url"));
@@ -77,6 +35,11 @@ public class StepDef_portal extends StepDef_base {
     @Given("^I am on the landing page$")
     public void onLandingPage() throws Exception {
         NAV.navigateToUrl(ReadProperties.main("portal_url"));
+    }
+
+    @Given("I am logged on to DARTS as an/a {word} user")
+    public void logonAsUser(String type) throws Exception {
+    	portal.logonAsUser(type);
     }
 
     @When("^I enter the security code$")
@@ -103,4 +66,8 @@ public class StepDef_portal extends StepDef_base {
     }
 
 
+    @Then("I see the transcription-count is \"([^\"]*)\"$")
+    public void iSeeTheTranscriptionCountIs(String count) {
+        portal.TranscriptionCountOnPage(count);
+    }
 }

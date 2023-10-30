@@ -1,12 +1,7 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import io.cucumber.java.After;
@@ -14,7 +9,6 @@ import io.cucumber.java.Before;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 public class StepDef_navigation extends StepDef_base {
 
@@ -64,18 +58,19 @@ public class StepDef_navigation extends StepDef_base {
 	@When("^I expand the \"([^\"]*)\" accordion$")
 	public void expandAccordian(String arg1) throws Exception {
 //TODO Check on icon following this before & after click
-	    try {
-	    	NAV.press_buttonByName(arg1);
-	    } catch (Exception e) {
-			NAV.click_link_by_text(arg1);
-	    }
-	    NAV.waitForPageLoad(0, 5);
-	}
-	
-	@When("^I click on the \"([^\"]*)\" accordion$")
-	public void clickAccordian(String arg1) throws Exception {
+        try {
+            NAV.press_buttonByName(arg1);
+        } catch (Exception e) {
+            NAV.click_link_by_text(arg1);
+        }
+        NAV.waitForPageLoad(0, 5);
+    }
+
+    @When("^I click on the \"([^\"]*)\" accordion$")
+    public void clickAccordian(String arg1) throws Exception {
 //TODO Check on icon following this before & after click
-	    try {
+
+      try {
 	    	NAV.press_buttonByName(arg1);
 	    } catch (Exception e) {
 			NAV.click_link_by_text(arg1);
@@ -358,10 +353,10 @@ public class StepDef_navigation extends StepDef_base {
 	
 // Check / uncheck a checkbox in an html table in the same row as other data
 
-	@When ("^I ([^\"]*) the checkbox in the same row as \"([^\"]*)\" \"([^\"]*)\"$")
-	public void checkUncheckCheckboxInTableRowContainingString(String action, String rowData1, String rowData2) throws Exception {
-		NAV.checkUncheckCheckboxInTableRow(rowData1, rowData2, action);
-	}
+    @When("^I ([^\"]*) the checkbox in the same row as \"([^\"]*)\" \"([^\"]*)\"$")
+    public void checkUncheckCheckboxInTableRowContainingString(String action, String rowData1, String rowData2) throws Exception {
+        NAV.checkUncheckCheckboxInTableRow(rowData1, rowData2, action);
+    }
 
 
 // Check / uncheck a checkbox in a specified column of an html table in the same row as other data
@@ -458,7 +453,5 @@ public class StepDef_navigation extends StepDef_base {
 	public void VerifyDropdownValue(String expectedOptionValue, String labelText) throws Exception {
 		NAV.VerifyDropdownValue(expectedOptionValue, labelText);
 	}
-	
-	
-	
+
 }

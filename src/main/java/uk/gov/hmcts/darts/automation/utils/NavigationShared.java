@@ -610,11 +610,21 @@ public class NavigationShared {
 			wait.waitForClickableElement(button, 10);
 			log.info("element found - try 1");
 		} catch (Error | Exception e) {
-			log.info("element not found - try 2");
-			buttons = driver.findElements(By.xpath(
-					"//button/descendant-or-self::*[text()[contains(., \"" + button_name + "\")]]" ));
-			button = return_oneVisibleFromList(buttons);
-			log.info("element found - try 2");
+			try {
+				log.info("element not found - try 2");
+				buttons = driver.findElements(By.xpath(
+						"//button/descendant-or-self::*[text()[contains(., \"" + button_name + "\")]]" ));
+				button = return_oneVisibleFromList(buttons);
+				log.info("element found - try 2");
+			} catch (Error | Exception e2) {
+				log.info("element not found - try 3");
+				buttons = driver.findElements(By.xpath(
+						"//input[(@type='button' and contains(@value,\"" + button_name + "\")) or " +
+						"(@type='submit' and contains(@value,\"" + button_name + "\"))]"));
+				button = return_oneVisibleFromList(buttons);
+				log.info("element found - try 3");
+				
+			}
 		}
 
 		try {
@@ -828,6 +838,7 @@ public class NavigationShared {
 	public void waitForBrowserReadyState() {
 		log.info("Wait for document.readyState");
 		log.info("Waiting for NOT ready state");
+//	Wait for browser NOT to be ready - not too long because it may be ready again already
 		try {
 //	reduced wait from 1000 to 250 mS 2023-05-24
 		    new WebDriverWait(driver, Duration.ofMillis(250), Duration.ofMillis(50))
@@ -1743,9 +1754,9 @@ public class NavigationShared {
 		waitForBrowserReadyState();
 		log.info("Clicked on =>"+clickText+"<= successfully");
 	}
-	
+
 	public void clickOnElementWithId(String id) {
-		
+
 		WebElement element = driver.findElement(By.id(id));
 		wait.waitForClickableElement(element);
 		click_onElement(element);
@@ -1888,9 +1899,9 @@ public class NavigationShared {
 
 
 	public void text_hasClass(String text, String className) {
-		driver.findElement(By.xpath("//*[text()[contains(.,'"+text+"')] and contains(@class, '"+className+"')]"));		
-		
+		driver.findElement(By.xpath("//*[text()[contains(.,'"+text+"')] and contains(@class, '"+className+"')]"));
+
 		log.info("Found li element which has text =>"+text+"<= with class =>"+className);
 	}
-	
+
 }
