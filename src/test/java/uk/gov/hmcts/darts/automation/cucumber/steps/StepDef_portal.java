@@ -70,4 +70,10 @@ public class StepDef_portal extends StepDef_base {
     public void iSeeTheTranscriptionCountIs(String count) {
         portal.TranscriptionCountOnPage(count);
     }
+
+    @Then("I see the notification-count is \"([^\"]*)\"$")
+    public void iSeeTheNotificationCountIs(String count) throws Exception {
+        portal.notificationCount(count);
+    }
+
 }
