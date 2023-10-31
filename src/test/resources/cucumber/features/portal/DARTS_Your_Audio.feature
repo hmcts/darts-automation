@@ -7,7 +7,8 @@ Feature: Your Audio Screen
   Scenario: Verify Your Audio Screen - Current Tab "in Progress" or "Ready"
     #Then I see the notification-count is "1"
     When I click on the "Your Audio" link
-    Then I verify the HTML table contains the following values
+    And I see "Your Audio" on the page
+    Then I verify the HTML table "In Progress" contains the following values
       | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status     |
       | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3083       |             | *IGNORE*   |
       | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4653       |             | *IGNORE*   |
@@ -15,9 +16,33 @@ Feature: Your Audio Screen
       | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2342       |             | PROCESSING |
       | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2661       |             | *IGNORE*   |
       | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2221       |             | PROCESSING |
+    And I see "Select to apply actions" on the page
     Then I verify the HTML table "Ready" contains the following values
       | *NO-CHECK* |  | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status |
       | *NO-CHECK* |  | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3861       |             | READY  |
+
+  Scenario: Verify the sorting of the "Your Audio" table
+    When I click on the "Your Audio" link
+    And I see "Your Audio" on the page
+    Then I verify the HTML table "In Progress" contains the following values
+      | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status     |
+      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3083       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4653       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4673       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2342       |             | PROCESSING |
+      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2661       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2221       |             | PROCESSING |
+    When I click on "Request ID" in the table header
+    Then "Request ID" has sort "descending" icon
+    Then I verify the HTML table "In Progress" contains the following values
+      | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status     |
+      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4673       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4653       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3083       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2661       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2342       |             | PROCESSING |
+      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2221       |             | PROCESSING |
+
 
   Scenario Outline: Verify Clear link for the In Progress Audios
     When I click on the "Your Audio" link
