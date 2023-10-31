@@ -21,7 +21,7 @@ Scenario: Search - Verify link
 	Then  I see "Search for a case" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @DMP-860 @smoketest @broken
+@DMP-407 @DMP-860 @smoketest
 Scenario: Your Audio - Verify link
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Your Audio" link
@@ -62,14 +62,24 @@ Scenario: DARTS Link
 	Then  I see "Search for a case" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest @broken
-Scenario: DARTS Link as Judge
-	Given I am logged on to DARTS as a judge user
-	When  I click on the "Search" link
+@DMP-407 @smoketest
+Scenario Outline: All roles
+	When  I am logged on to DARTS as a <Type> user
 	Then  I see "Search for a case" on the page
-	Then  I do not see "Welcome to DARTS" on the page
-	When  I click on the "DARTS" link
-	Then  I see "Search for a case" on the page
-	And   I do not see "Welcome to DARTS" on the page
+	And   I see link with text "Search"
+	And   I see link with text "Your Transcripts"
+	And   I see link with text "Your Audio"
+	And   I see link with text "HMCTS"
+	And   I see link with text "DARTS"
+	And   I see link with text "Sign out"
+	
+Examples:
+	| Type 			   |
+	| Judge        |
+	| REQUESTER    |
+	| APPROVER     |
+	| APPEALCOURT  |
+	| TRANSCRIBER  |
+	| LANGUAGESHOP |
 
 

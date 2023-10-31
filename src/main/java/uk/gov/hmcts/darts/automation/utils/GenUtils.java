@@ -39,7 +39,7 @@ public class GenUtils {
 	
 	public WebElement lookupWebElement_byPlaceholder(String lookup) {		
 		log.info("Looking for element with placeholder =>"+lookup);
-		return driver.findElement(By.xpath("//*[contains(@placeholder, '"
+		return driver.findElement(By.xpath("//*[contains(normalize-space(@placeholder), '"
 									+ lookup
 									+ "')]"));		
 	}
