@@ -49,6 +49,7 @@ public class Portal {
     
 
     public void logonAsUser(String type) throws Exception {
+    	log.info("About to navigate to homepage & login as user type " + type);
         NAV.navigateToUrl(ReadProperties.main("portal_url"));
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
