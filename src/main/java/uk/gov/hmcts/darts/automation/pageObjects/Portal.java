@@ -4,6 +4,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -94,54 +95,37 @@ public class Portal {
         WAIT.waitForTextOnPage("except where otherwise stated");
     }
 
+// Following is a workaround for placeholder not being recognised when run from Jenkins
+    public WebElement setInputField(String type, String value) {
+    	log.info("About to set input element type: " + type + " to " + value);
+    	WebElement webElement = webDriver.findElement(By.xpath("//input[@type='" + type + "']"));
+    	webElement.click();
+    	webElement.sendKeys(value);
+    	webElement.sendKeys(Keys.TAB);
+    	return webElement;
+    }
+
     public void loginToPortal_InternalUser(String username, String password) throws Exception {
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
-        NAV.waitForPageLoad();
         NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
+        WAIT.waitForTextOnPage("Sign in");
         NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        WAIT.waitForTextOnPage("Sign in", 30);
-        NAV.waitForPageLoad();
+// Following line fails when run from Jenkins but would be preferable
 //        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
-        webDriver.findElement(By.xpath("//input[@type='email']")).sendKeys(username);
+        setInputField("email", username);
         NAV.press_buttonByName("Next");
-        NAV.waitForPageLoad();
         NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
+        WAIT.waitForTextOnPage("Enter password");
         NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        WAIT.waitForTextOnPage("Enter password", 30);
-        NAV.waitForBrowserReadyState();
+// Following line fails when run from Jenkins but would be preferable
 //        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Password"), password);
-        webDriver.findElement(By.xpath("//input[@type='password']")).sendKeys(password);
+        setInputField("password", password);
         NAV.press_buttonByName("Sign in");
-        NAV.waitForPageLoad();
         NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        WAIT.waitForTextOnPage("Stay signed in?", 30);
+        WAIT.waitForTextOnPage("Stay signed in?");
         NAV.waitForBrowserReadyState();
         NAV.press_buttonByName("No");
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
-        NAV.waitForPageLoad();
-        NAV.waitForBrowserReadyState();
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("except where otherwise stated");
     }
