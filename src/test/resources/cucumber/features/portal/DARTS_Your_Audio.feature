@@ -15,6 +15,9 @@ Feature: Your Audio Screen
       | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2342       |             | PROCESSING |
       | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2661       |             | *IGNORE*   |
       | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2221       |             | PROCESSING |
+    Then I verify the HTML table "Ready" contains the following values
+      | *NO-CHECK* |  | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status |
+      | *NO-CHECK* |  | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3861       |             | READY  |
 
   Scenario Outline: Verify Clear link for the In Progress Audios
     When I click on the "Your Audio" link

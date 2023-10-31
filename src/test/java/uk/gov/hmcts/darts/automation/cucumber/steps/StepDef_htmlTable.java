@@ -31,4 +31,9 @@ public class StepDef_htmlTable extends StepDef_base {
     public void HasSortIcon(String tableheaderText, String sortOrder) {
         htmlTable.hasSortIcon(tableheaderText, sortOrder);
     }
+
+    @Then("I verify the HTML table \"([^\"]*)\" contains the following values$")
+    public void iVerifyTheHTMLTableContainsTheFollowingValues(String tableName,DataTable dataTable) {
+        htmlTable.verifyHtmlTableData(dataTable, true, tableName);
+    }
 }
