@@ -10,39 +10,36 @@ Feature: Your Audio Screen
     And I see "Your Audio" on the page
     Then I verify the HTML table "In Progress" contains the following values
       | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status     |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3083       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4653       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4673       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2342       |             | PROCESSING |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2661       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2221       |             | PROCESSING |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 4653       |             | OPEN       |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 2901       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3941       |             | OPEN       |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 4673       |             | OPEN       |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3083       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2221       |             | PROCESSING |
+      | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2342       |             | PROCESSING |
+      | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2661       |             | *IGNORE*   |
     And I see "Select to apply actions" on the page
     Then I verify the HTML table "Ready" contains the following values
       | *NO-CHECK* |  | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status |
-      | *NO-CHECK* |  | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3861       |             | READY  |
+      | *NO-CHECK* |  | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3861       |             | READY  |
+      | *NO-CHECK* |  | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2541       |             | READY  |
+
 
   Scenario: Verify the sorting of the "Your Audio" table
     When I click on the "Your Audio" link
     And I see "Your Audio" on the page
-    Then I verify the HTML table "In Progress" contains the following values
-      | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status     |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3083       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4653       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4673       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2342       |             | PROCESSING |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2661       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2221       |             | PROCESSING |
     When I click on "Request ID" in the table header
     Then "Request ID" has sort "descending" icon
     Then I verify the HTML table "In Progress" contains the following values
       | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status     |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4673       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 4653       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3083       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2661       |             | *IGNORE*   |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2342       |             | PROCESSING |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2221       |             | PROCESSING |
-
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 4673       |             | OPEN       |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 4653       |             | OPEN       |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3941       |             | OPEN       |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3083       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 2901       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2661       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 2342       |             | PROCESSING |
+      | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2221       |             | PROCESSING |
 
   Scenario Outline: Verify Clear link for the In Progress Audios
     When I click on the "Your Audio" link
@@ -92,6 +89,7 @@ Feature: Your Audio Screen
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
+    @DMP-839-AC2
   Scenario Outline: Verify Delete audio link in View Audio page
     When I click on the "Your Audio" link
     When I click on "View" in the same row as "<CaseID>"
