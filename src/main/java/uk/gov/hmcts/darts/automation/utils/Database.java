@@ -32,7 +32,7 @@ public class Database extends Postgres {
 	final String courtCaseJoin = 
 			"darts.court_case cas\r\n" +
 			"inner join darts.courthouse cth\r\n" +
-			"on cth.cth_id = cas.cth_id";
+			"on cth.cth_id = cas.cth_id\r\n";
 	
 	final String eventJoin = 
 			"darts.court_case cas\r\n" +
@@ -51,7 +51,7 @@ public class Database extends Postgres {
 			"on ctr.ctr_id = hea.ctr_id\r\n" +
 			"-- or ctr.ctr_id = eve.ctr_id\r\n" +
 			"left join darts.courthouse cth\r\n" +
-			"on ctr.cth_id = cth.cth_id";
+			"on ctr.cth_id = cth.cth_id\r\n";
 
 	public Database(){
 //		pg = new Postgres();
@@ -78,7 +78,7 @@ public class Database extends Postgres {
 	public boolean courtCaseExists(String courtHouse, String caseNumber) throws Exception {
 		return returnSingleValue("select count(1) "
 				+ "from " + courtCaseJoin
-				+ "where cc.case_number = ? "
+				+ "where cas.case_number = ? "
 				+ "and cth.courthouse_name = ?", caseNumber, courtHouse).equals("1");
 	}
 	

@@ -50,6 +50,27 @@ public class StepDef_db extends StepDef_base {
 		DB.setSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, updateCol, updateVal);
 	}
 
+	@When("^I select column ([^\"]*) from table ([^\"]*) where ([^\"]*) = \"([^\"]*)\"$")
+	public void selectTableValue(String col, String table, String keyCol, String keyVal) throws Exception {
+		log.info("about to return field" + " " + table + " " + keyCol + " " + keyVal + " " + col);
+		String returnVal = DB.returnSingleValue(table, keyCol, keyVal, col);
+		testdata.setProperty(col, returnVal);
+	}
+
+	@When("^I select column ([^\"]*) from table ([^\"]*) where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
+	public void selectTableValue(String col, String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2) throws Exception {
+		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2 + " " + col);
+		String returnVal = DB.returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, col);
+		testdata.setProperty(col, returnVal);
+	}
+
+	@When("^I select column ([^\"]*) from table ([^\"]*) where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
+	public void selectTableValue(String col, String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3) throws Exception {
+		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2  + " " + keyCol3 + " " + keyVal3 + " " + col);
+		String returnVal = DB.returnSingleValue(table, keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, col);
+		testdata.setProperty(col, returnVal);
+	}
+
 	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\"$")
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol, String keyVal) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol + " " + keyVal + " " + col + " " + expectedVal);

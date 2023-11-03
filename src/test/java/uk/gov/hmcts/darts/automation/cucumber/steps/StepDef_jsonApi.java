@@ -107,6 +107,8 @@ public class StepDef_jsonApi extends StepDef_base {
 					getValue(map, "case_retention_fixed_policy", testdata.getProperty("case_retention_fixed_policy")),
 					getValue(map, "case_total_sentence", testdata.getProperty("case_total_sentence")));
 			ApiResponse apiResponse = jsonApi.postApi("events", json);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
 			Assertions.assertEquals(apiResponse.statusCode, "201", "Invalid API response " + apiResponse.statusCode);
 		}
 	}
@@ -125,6 +127,8 @@ public class StepDef_jsonApi extends StepDef_base {
 					getValue(map, "prosecutors"),
 					getValue(map, "defenders"));
 			ApiResponse apiResponse = jsonApi.postApi("cases", json);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
 			Assertions.assertEquals(apiResponse.statusCode, "201", "Invalid API response " + apiResponse.statusCode);
 		}
 	}
@@ -173,7 +177,7 @@ public class StepDef_jsonApi extends StepDef_base {
 	
 	@Then("^the API response contains:$")
 	public void verifyApiResponse(String docString) {
-		Assertions.assertTrue(testdata.responseString.contains(docString), "Response contents not matched:\r" + testdata.responseString);
+		Assertions.assertTrue(testdata.responseString.replaceAll("\\R|\\s", "").contains(docString.replaceAll("\\R|\\s", "")), "Response contents not matched:\r" + testdata.responseString);
 	}
 	
 
