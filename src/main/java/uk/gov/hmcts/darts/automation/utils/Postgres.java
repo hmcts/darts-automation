@@ -106,6 +106,18 @@ public class Postgres {
 		}
 	}
 
+	public ResultSet returnResultSet(String sql) throws Exception {
+		log.info("database select: " + sql);
+		connect();
+		try (Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
+			return rs;
+		} catch (Exception e) {
+			log.fatal("Error in database call " + e.getMessage());
+			throw new Exception(e.getMessage());
+		}
+	}
+
 	public String returnSingleValue(String sql, String key1) throws Exception {
 		log.info("database select: " + sql + " " + key1);
 		connect();

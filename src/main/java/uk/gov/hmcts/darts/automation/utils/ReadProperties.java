@@ -142,36 +142,48 @@ public class ReadProperties {
 	}
 	
 	public static String machine(String property) {
-		log.info("OS =>" + os);
-		try {
-			String returnValue = workstationProperties.getProperty(os+"_"+property);
-			if (returnValue != null) {
-				log.info("Returned OS >"+os+"< property >"+property+"< value >"+returnValue);
-				return returnValue;
-			} else {
-				log.info("Property >"+property+"< NOT FOUND (null) for OS >"+os);
+		log.info("Accessing property: " + property + ", OS =>" + os);
+		String returnValue = getSystemValue(property);
+		if (returnValue != null) {
+			log.info("Override value provided for property " + property + ": " + returnValue);
+			return returnValue;
+		} else {
+			try {
+				returnValue = workstationProperties.getProperty(os+"_"+property);
+				if (returnValue != null) {
+					log.info("Returned OS >"+os+"< property >"+property+"< value >"+returnValue);
+					return returnValue;
+				} else {
+					log.info("Property >"+property+"< NOT FOUND (null) for OS >"+os);
+					return getProperty(property, workstationProperties, workstationPropertiesParameterFileName);
+				}
+			} catch (Exception e) {
+				log.info("Property >"+property+"< NOT FOUND (exception) for OS >"+os);
 				return getProperty(property, workstationProperties, workstationPropertiesParameterFileName);
 			}
-		} catch (Exception e) {
-			log.info("Property >"+property+"< NOT FOUND (exception) for OS >"+os);
-			return getProperty(property, workstationProperties, workstationPropertiesParameterFileName);
 		}
 	}
 	
 	public static String main(String property) {
-		log.info("environment: " + environment);
-		try {
-			String returnValue = environmentProperties.getProperty(property+"_"+environment);
-			if (returnValue != null) {
-				log.info("Returned environment >"+environment+"< property >"+property+"< value >"+returnValue);
-				return returnValue;
-			} else {
-				log.info("Property >"+property+"< NOT FOUND (null) for environment >"+environment);
+		log.info("Accessing property: " + property + " environment: " + environment);
+		String returnValue = getSystemValue(property);
+		if (returnValue != null) {
+			log.info("Override value provided for property " + property + ": " + returnValue);
+			return returnValue;
+		} else {
+			try {
+				returnValue = environmentProperties.getProperty(property+"_"+environment);
+				if (returnValue != null) {
+					log.info("Returned environment >"+environment+"< property >"+property+"< value >"+returnValue);
+					return returnValue;
+				} else {
+					log.info("Property >"+property+"< NOT FOUND (null) for environment >"+environment);
+					return getProperty(property, environmentProperties, environmentPropertiesParameterFileName);
+				}
+			} catch (Exception e) {
+				log.info("Property >"+property+"< NOT FOUND (exception) for environment >"+environment);
 				return getProperty(property, environmentProperties, environmentPropertiesParameterFileName);
 			}
-		} catch (Exception e) {
-			log.info("Property >"+property+"< NOT FOUND (exception) for environment >"+environment);
-			return getProperty(property, environmentProperties, environmentPropertiesParameterFileName);
 		}
 	}
 	
