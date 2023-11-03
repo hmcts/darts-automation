@@ -47,12 +47,12 @@ Feature: Your Audio Screen
     And I see "Are you sure you want to delete this item?" on the page
     Then I verify the HTML table contains the following values
       | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status |
-      | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2661       |             | FAILED |
+      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 2901       |             | FAILED |
     And I click on the "Cancel" link
     And I see "Your Audio" on the page
     Examples:
       | Request ID |
-      | 2661       |
+      | 2901       |
 
   Scenario Outline: Verify View link for the Ready Audios
     # TODO: And I see a new audio blob - Need visibility of icon to check ID and implement
@@ -65,6 +65,9 @@ Feature: Your Audio Screen
     And I see "<StartTime>" on the page
     And I see "<EndTime>" on the page
     And I see "<Restriction>" on the page
+    And I see "Play all audio" on the page
+    And I see "Skip to event" on the page
+    And I see "Jump to a specific audio events within the audio file" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
@@ -89,8 +92,29 @@ Feature: Your Audio Screen
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
-    @DMP-839-AC2
-  Scenario Outline: Verify Delete audio link in View Audio page
+  @DMP-839-AC1
+  Scenario: Verify Delete audio link in View Audio page -Confirm Delete
+    When I click on the "Your Audio" link
+    When I click on "View" in the same row as "<CaseID>"
+    Then I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<StartTime>" on the page
+    And I see "<EndTime>" on the page
+    And I see "<Restriction>" on the page
+    Then I click on the "Delete audio file" link
+    And I see "Are you sure you want to delete this item?" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status |
+      | CASE1009 | Swansea | 15 Aug 2023  | 01:07:33   | 01:07:33 | 3861       |             | READY  |
+    #And I press the "Yes - delete" button
+    #Then I do not see "<CaseID>" on the page
+    #Examples:
+    #  | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
+    #  | CASE1009 | Swansea | Jow Bloggs   | 15 Aug 2023 | 13:07:33 | 13:07:33   | Restriction: Judge directed on reporting restrictions |
+  @DMP-839-AC2
+  Scenario Outline: Verify Delete audio link in View Audio page - Cancel Delete
     When I click on the "Your Audio" link
     When I click on "View" in the same row as "<CaseID>"
     Then I see "<CaseID>" on the page
@@ -122,11 +146,11 @@ Feature: Your Audio Screen
     And I see "Your Audio" on the page
 
   @DMP-836
-#  Scenario Outline: Delete Audio -Confirm
-#    When I click on the "Your Audio" link
-#    When I check the checkbox in the same row as "Swansea" "3861"
-#    And I press the "Delete" button
-#    And I see "Are you sure you want to delete this item?" on the page
+  Scenario: Delete Audio -Confirm
+    When I click on the "Your Audio" link
+    When I check the checkbox in the same row as "Swansea" "3861"
+    And I press the "Delete" button
+    And I see "Are you sure you want to delete this item?" on the page
 #    And I press the "Yes - delete" button
 #    Then I do not see "<CaseID>" on the page
 #    Examples:
@@ -139,25 +163,45 @@ Feature: Your Audio Screen
     And I click on the "Expired" link
     Then I verify the HTML table contains the following values
       | *NO-CHECK* | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status  |
-      | *NO-CHECK* | CASE1009 | Swansea | 15 Aug 2023  | 02:07:33   | 02:07:33 | 2541       |             | EXPIRED |
+      | *NO-CHECK* | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2601       |             | EXPIRED |
 
   @DMP-837
   Scenario: Verify Your Audio Screen - Expired Tab Delete
     When I click on the "Your Audio" link
     And I click on the "Expired" link
-    When I check the checkbox in the same row as "Swansea" "2541"
+    When I check the checkbox in the same row as "Swansea" "2601"
     And I press the "Delete" button
     And I see "Are you sure you want to delete this item?" on the page
     And I click on the "Cancel" link
     And I see "Your Audio" on the page
 
-#  @DMP-837
-#  Scenario: Verify Your Audio Screen - Expired Tab Delete Confirm
-#    When I click on the "Your Audio" link
-#    And I click on the "Expired" link
-#    When I check the checkbox in the same row as "Swansea" "2541"
+  @DMP-837
+  Scenario: Verify Your Audio Screen - Expired Tab Delete Confirm
+    When I click on the "Your Audio" link
+    And I click on the "Expired" link
+    When I check the checkbox in the same row as "Swansea" "2601"
 #    And I press the "Delete" button
 #    And I see "Are you sure you want to delete this item?" on the page
+
+  @DMP-840
+  Scenario Outline: Verify download playback file
+    When I click on the "Your Audio" link
+    When I click on "View" in the same row as "<CaseID>"
+    Then I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<StartTime>" on the page
+    And I see "<EndTime>" on the page
+    And I see "<Restriction>" on the page
+    And I see "Play all audio" on the page
+    And I see "Skip to event" on the page
+    And I see "Jump to a specific audio events within the audio file" on the page
+    And I press the "Download audio file" button
+    # Need to verify Download of the file
+    Examples:
+      | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
 
 
