@@ -39,6 +39,20 @@ public class StepDef_soapApi extends StepDef_base {
 		soapApi = new SoapApi();
 	}
 	
+	@When("I call POST SOAP API using soap body:")
+	public void callPostApiWithJsonBody(String docString) throws Exception {
+		ApiResponse apiResponse = soapApi.postSoap("", docString);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
+	
+	@When("I call POST SOAP API using soap action {word} and body:")
+	public void callGetApiWithJsonBody(String soapAction, String docString) throws Exception {
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, docString);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
+	
 	@When("I call POST {word} SOAP API using soap body:")
 	public void callPostApiWithJsonBody(String endPoint, String docString) throws Exception {
 		ApiResponse apiResponse = soapApi.postSoap(endPoint, docString);
@@ -55,7 +69,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@Then("^the SOAP response contains:$")
 	public void verifyApiResponse(String docString) {
-		Assertions.assertTrue(testdata.responseString.contains(docString), "Response contents not matched:\r" + testdata.responseString);
+		Assertions.assertTrue(testdata.responseString.replaceAll(">\\R|\\s<", "><").contains(docString.replaceAll(">\\R|\\s<", "><")), "Response contents not matched:\r" + testdata.responseString);
 	}
 	
 

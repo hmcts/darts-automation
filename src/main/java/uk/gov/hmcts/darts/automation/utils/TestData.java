@@ -165,6 +165,7 @@ public class TestData {
 	
 	public void setProperty(String property, String value) {
 		properties.setProperty(property, value);
+		log.debug("Value added to properties:", property, value);
 	}
 	
 	public int getIntProperty(String property) {

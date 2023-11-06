@@ -39,7 +39,7 @@ public class SoapApi {
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
 	static final String ACCEPT_XML_STRING = "application/xml, text/plain, */*";
 	static final String CONTENT_TYPE = "Content-Type";
-	static final String CONTENT_TYPE_APPLICATION_XML = "application/xml";
+	static final String CONTENT_TYPE_TEXT_XML = "text/xml";
 	static final String USER_AGENT = "User-Agent";
 	static final String USER_AGENT_STRING = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0";
 	static final String ACCEPT_ENCODING = "Accept-Encoding";
@@ -106,7 +106,7 @@ public class SoapApi {
 	    			.header(USER_AGENT, USER_AGENT_STRING) 
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
-	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_XML)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
 					.header(AUTHORIZATION, authorization)
 					.baseUri(baseUri)
 					.basePath("")
@@ -115,8 +115,9 @@ public class SoapApi {
 					.post(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(200)
 					.extract().response();
-		return new ApiResponse(response.statusCode(), response.asString());
+		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
     }
 
 	public ApiResponse postSoap(String endpoint, String soapAction, String body) {
@@ -130,7 +131,7 @@ public class SoapApi {
 	    			.header(USER_AGENT, USER_AGENT_STRING) 
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
-	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_XML)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
 					.header(AUTHORIZATION, authorization)
 					.header("SOAPAction", soapAction)
 					.baseUri(baseUri)
@@ -140,8 +141,21 @@ public class SoapApi {
 					.post(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(200)
 					.extract().response();
-		return new ApiResponse(response.statusCode(), response.asString());
+		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
+	}
+	
+	String extractValue(String xml, String tag) {
+		String result = "";
+		String[] split1 = xml.split("<" + tag + ">");
+		if (split1.length > 0) {
+			String[] split2 = split1[1].split("</" + tag + ">");
+			if (split2.length > 0) {
+				result = split2[0];
+			}
+		}
+		return result;
 	}
 
 	String addSoapHeader(String soapBody) {
@@ -166,8 +180,8 @@ public class SoapApi {
 				+ "</soap:Envelope>";
 	}
 
-@Test
 // Following code is for debugging & may fail if data changes
+@Test
 	public void test() {
     	SoapApi soapApi = new SoapApi();
 
