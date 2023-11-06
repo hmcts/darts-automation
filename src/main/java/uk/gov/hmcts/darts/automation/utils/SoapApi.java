@@ -47,6 +47,7 @@ public class SoapApi {
 	static final String CONNECTION = "Connection";
 	static final String CONNECTION_STRING = "keep-alive";
 	static final String AUTHORIZATION = "Authorization";
+	static final String SOAP_ACTION = "SOAPAction";
 
 
 	public SoapApi() {
@@ -133,7 +134,7 @@ public class SoapApi {
 	    			.header(CONNECTION, CONNECTION_STRING)
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
 					.header(AUTHORIZATION, authorization)
-					.header("SOAPAction", soapAction)
+					.header(SOAP_ACTION, soapAction)
 					.baseUri(baseUri)
 					.basePath("")
 					.body(addSoapHeader(soapAction, body))
