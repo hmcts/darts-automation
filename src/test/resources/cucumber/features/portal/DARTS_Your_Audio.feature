@@ -11,10 +11,10 @@ Feature: Your Audio Screen
     Then I verify the HTML table "In Progress" contains the following values
       | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status     |
       | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 4653       |             | OPEN       |
-      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 2901       |             | *IGNORE*   |
       | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3941       |             | OPEN       |
       | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 4673       |             | OPEN       |
       | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3083       |             | *IGNORE*   |
+      | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 2901       |             | *IGNORE*   |
       | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2221       |             | PROCESSING |
       | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2342       |             | PROCESSING |
       | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2661       |             | *IGNORE*   |
@@ -23,7 +23,6 @@ Feature: Your Audio Screen
       | *NO-CHECK* |  | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status |
       | *NO-CHECK* |  | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3861       |             | READY  |
       | *NO-CHECK* |  | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2541       |             | READY  |
-
 
   Scenario: Verify the sorting of the "Your Audio" table
     When I click on the "Your Audio" link

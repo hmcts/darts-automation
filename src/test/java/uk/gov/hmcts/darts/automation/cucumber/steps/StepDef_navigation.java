@@ -1,5 +1,6 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
@@ -454,4 +455,13 @@ public class StepDef_navigation extends StepDef_base {
 		NAV.VerifyDropdownValue(expectedOptionValue, labelText);
 	}
 
+	@Then("the dropdown \"([^\"]*)\" contains the options \"([^\"]*)\"$")
+	public void theDropdownContainsTheOptions(String label_name, String dropdown_values) throws Exception {
+		NAV.verifyDropdownOptions(label_name, dropdown_values);
+	}
+
+	@Then("the dropdown \"([^\"]*)\" contains the options$")
+	public void theDropdownContainsTheOptions(String label_name, DataTable dataTable) throws Exception {
+		NAV.verifyDropdownOptions(label_name, dataTable);
+	}
 }
