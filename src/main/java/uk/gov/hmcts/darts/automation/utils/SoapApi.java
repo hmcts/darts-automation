@@ -37,7 +37,7 @@ public class SoapApi {
 	static String baseUri = ReadProperties.main("soapApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
-	static final String ACCEPT_XML_STRING = "application/xml, text/plain, */*";
+	static final String ACCEPT_XML_STRING = "application/xml, text/xml, text/plain, */*";
 	static final String CONTENT_TYPE = "Content-Type";
 	static final String CONTENT_TYPE_TEXT_XML = "text/xml";
 	static final String USER_AGENT = "User-Agent";
@@ -174,11 +174,21 @@ public class SoapApi {
 				+ "    <soap:Body>"
 				+ "        <" + soapAction + " xmlns=\"http://com.synapps.mojdarts.service.com\">"
 				+ "            <document xmlns=\"\">"
-				+ soapBody
+				+ encodeEntities(soapBody)
 				+ "            </document>"
 				+ "        </" + soapAction + ">"
 				+ "    </soap:Body>"
 				+ "</soap:Envelope>";
+	}
+	
+	String encodeEntities(String xml) {
+		String result;
+		if (xml.contains("&lt;")) {
+			result = xml;
+		} else {
+			result = xml.replace("&", "&amp").replace("<", "&lt;").replace("<", "&gt;").replace("\"", "&quot;").replace("'", "&apost;");
+		}
+		return result;	
 	}
 
 // Following code is for debugging & may fail if data changes
