@@ -11,6 +11,10 @@ import io.cucumber.java.Before;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class StepDef_navigation extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_navigation");
@@ -457,11 +461,13 @@ public class StepDef_navigation extends StepDef_base {
 
 	@Then("the dropdown \"([^\"]*)\" contains the options \"([^\"]*)\"$")
 	public void theDropdownContainsTheOptions(String label_name, String dropdown_values) throws Exception {
-		NAV.verifyDropdownOptions(label_name, dropdown_values);
+		List<String> dropdownList = Stream.of(dropdown_values.split(",", -1)).collect(Collectors.toList());
+		NAV.compareDropdownData(label_name, dropdownList);
 	}
 
 	@Then("the dropdown \"([^\"]*)\" contains the options$")
 	public void theDropdownContainsTheOptions(String label_name, DataTable dataTable) throws Exception {
-		NAV.verifyDropdownOptions(label_name, dataTable);
+		List<String> dropdownList = dataTable.asList();
+		NAV.compareDropdownData(label_name, dropdownList);
 	}
 }

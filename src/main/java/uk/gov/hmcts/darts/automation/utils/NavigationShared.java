@@ -1909,19 +1909,6 @@ public class NavigationShared {
 		log.info("Found li element which has text =>"+text+"<= with class =>"+className);
 	}
 
-	public void verifyDropdownOptions(String label_Name, String dropdown_Values) throws Exception {
-		//Create list from String
-		List<String> dropdownList = Stream.of(dropdown_Values.split(",", -1)).collect(Collectors.toList());
-		compareDropdownData(label_Name, dropdownList);
-
-	}
-
-	public void verifyDropdownOptions(String label_Name, DataTable dataTable) throws Exception {
-		//Create list from String
-		List<String> dropdownList = dataTable.asList();
-		compareDropdownData(label_Name, dropdownList);
-	}
-
 	public void compareDropdownData(String label_Name, List<String> dropdownList) throws Exception {
 		int errorCount = 0;
 		List<WebElement> options = new ArrayList<WebElement>();
@@ -1946,7 +1933,8 @@ public class NavigationShared {
 				log.info("Values match at index {}:: Expected: '{}', Actual: '{}'", dropdownIndex, expectedText, actualText);
 			}
 		}
+		log.info("Dropdown has {} error count", errorCount);
 		Assert.assertEquals(0, errorCount);
-		log.error("Dropdown has {} error count", errorCount);
+
 	}
 }

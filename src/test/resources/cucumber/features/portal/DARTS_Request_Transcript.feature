@@ -25,7 +25,7 @@ Feature: Request Transcript
 
   @DMP-862-AC1
   Scenario: View Transcript
-    And I see the transcription-count is "1"
+    And I see the transcription-count is "2"
     Then I click on the "Transcripts" link
     And I verify the HTML table contains the following values
       | Type               | Requested on         | Requested by | Status   |
@@ -33,7 +33,7 @@ Feature: Request Transcript
 
   @DMP-862-AC2
   Scenario: Transcript - View link
-    And I see the transcription-count is "1"
+    And I see the transcription-count is "2"
     Then I click on the "Transcripts" link
     And I verify the HTML table contains the following values
       | Type               | Requested on         | Requested by | Status   |
@@ -212,3 +212,33 @@ Feature: Request Transcript
     Examples:
       | transcription-type | urgency  |
       | Sentencing remarks | Standard |
+
+  @DMP-934
+  Scenario Outline: Request Transcript - Check and confirm your transcript request
+    Then I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    And I select "<transcription-type>" from the "Request Type" dropdown
+    And I select "<urgency>" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I see "Events, audio and specific times requests" on the page
+    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
+    And I press the "Continue" button
+    And I see "Check and confirm your transcript request" on the page
+    And I see "Case Details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "Request Details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<transcription-type>" on the page
+    And I see "<urgency>" on the page
+    And I see "Comments to the Transcriber (optional)" on the page
+    And I see "Provide any further instructions or comments for the transcriber." on the page
+    And I see "You have 2000 characters remaining" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+
+    Examples:
+      | CaseID   | Courthouse | Defendants | HearingDate | transcription-type | urgency  |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Specified Times    | Standard |
