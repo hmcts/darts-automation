@@ -900,6 +900,7 @@ public class NavigationShared {
 	public void click_link_by_text(String arg1) throws Exception {
 		log.info("About to clicked on link with link text =>" + arg1);
 		waitForLoadingIcon(15);
+		waitForPageLoad(15);
 		WebElement linkText;
 		try {
 			log.info("try 1 - linkText");
@@ -1912,14 +1913,13 @@ public class NavigationShared {
 	public void compareDropdownData(String label_Name, List<String> dropdownList) throws Exception {
 		int errorCount = 0;
 		List<WebElement> options = new ArrayList<WebElement>();
-		String elementType = find_inputBy_labelName(label_Name).getTagName();
-		log.info("select element type is >" + elementType);
-		if (elementType.equalsIgnoreCase("select")) {
-			WebElement dropdown = find_locationParent(label_Name).findElement(By.cssSelector("select"));
-
+		WebElement dropdown =  find_inputBy_labelName(label_Name);
+		if (dropdown.getTagName().equalsIgnoreCase("select")) {
 			log.info("Found dropdown with name =>" + label_Name);
 			Select select = new Select(dropdown);
 			options = dropdown.findElements(By.tagName("option"));
+		} else {
+			log.error("Select element cannot be found with label {} ",label_Name);
 		}
 
 		for (int dropdownIndex = 0; dropdownIndex < dropdownList.size(); dropdownIndex++) {

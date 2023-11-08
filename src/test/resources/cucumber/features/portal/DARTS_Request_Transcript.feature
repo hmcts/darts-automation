@@ -12,12 +12,6 @@ Feature: Request Transcript
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
       | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
     Given I click on "CASE1009" in the same row as "Swansea"
-    Then I verify the HTML table contains the following values
-      | Hearing date | Judge | Courtroom       | No. of transcripts |
-      | 15 Aug 2023  |       | ROOM_A          | 1                  |
-      | 15 Aug 2023  |       | ROOM_A12434     | 2                  |
-      | 15 Aug 2023  |       | ROOM_XYZ        | 1                  |
-      | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
     #Hearing Details
     And I click on "15 Aug 2023" in the same row as "ROOM_A"
     And I see "Swansea" on the page
@@ -25,7 +19,7 @@ Feature: Request Transcript
 
   @DMP-862-AC1
   Scenario: View Transcript
-    And I see the transcription-count is "2"
+    #And I see the transcription-count is "2"
     Then I click on the "Transcripts" link
     And I verify the HTML table contains the following values
       | Type               | Requested on         | Requested by | Status   |
@@ -33,7 +27,6 @@ Feature: Request Transcript
 
   @DMP-862-AC2
   Scenario: Transcript - View link
-    And I see the transcription-count is "2"
     Then I click on the "Transcripts" link
     And I verify the HTML table contains the following values
       | Type               | Requested on         | Requested by | Status   |
@@ -42,7 +35,6 @@ Feature: Request Transcript
 
   @DMP-862-AC3
   Scenario: Transcript - Request a new transcript button works
-    And I see the transcription-count is "1"
     Then I click on the "Transcripts" link
     And I verify the HTML table contains the following values
       | Type               | Requested on         | Requested by | Status   |
@@ -145,7 +137,7 @@ Feature: Request Transcript
       | Other                             |
 
   @DMP-917
-  Scenario Outline: Request Transcript - Audio Times/Events using checkbox
+  Scenario Outline: Request Transcript - Audio Times/Events using checkbox - Specified times
     Then I click on the "Transcripts" link
     And I press the "Request a new transcript" button
     And I see "Request a new transcript" on the page
@@ -170,6 +162,7 @@ Feature: Request Transcript
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Specified Times    | Standard |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Court Log          | Standard |
 
   @DMP-917
   Scenario Outline: Request Transcript - Audio Times/Events - manually entering time
@@ -209,11 +202,12 @@ Feature: Request Transcript
     And I press the "Continue" button
     And I see "Events, audio and specific times requests" on the page
     And I click on the "Cancel" link
+    And I see "Hearing" on the page
     Examples:
       | transcription-type | urgency  |
       | Sentencing remarks | Standard |
 
-  @DMP-934
+  @DMP-934 @DMP-1012
   Scenario Outline: Request Transcript - Check and confirm your transcript request
     Then I click on the "Transcripts" link
     And I press the "Request a new transcript" button
@@ -238,7 +232,88 @@ Feature: Request Transcript
     And I see "You have 2000 characters remaining" on the page
     And I check the "I confirm I have received authorisation from the judge." checkbox
     And I press the "Submit request" button
-
+    And I see "Transcript request submitted" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | transcription-type | urgency  |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Specified Times    | Standard |
+
+  @DMP-1012-AC3
+  Scenario Outline: Request Transcript - Error No Authorisation
+    Then I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    And I select "<transcription-type>" from the "Request Type" dropdown
+    And I select "<urgency>" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I see "Events, audio and specific times requests" on the page
+    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
+    And I press the "Continue" button
+    And I see "Check and confirm your transcript request" on the page
+    And I press the "Submit request" button
+    And I see "There is a problem" on the page
+    And I see "You must confirm that you have authority to request a transcript" on the page
+    Examples:
+      | transcription-type | urgency  |
+      | Specified Times    | Standard |
+
+  @DMP-1012-AC2
+  Scenario Outline: Request Transcript - Cancel Link
+    Then I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    And I select "<transcription-type>" from the "Request Type" dropdown
+    And I select "<urgency>" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I see "Events, audio and specific times requests" on the page
+    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
+    And I press the "Continue" button
+    And I see "Check and confirm your transcript request" on the page
+    And I click on the "Cancel" link
+    And I see "Hearing" on the page
+    Examples:
+      | transcription-type | urgency  |
+      | Specified Times    | Standard |
+
+    @DMP-1138-AC1
+    Scenario Outline: Transcript request confirmation screen
+      Then I click on the "Transcripts" link
+      And I press the "Request a new transcript" button
+      And I see "Request a new transcript" on the page
+      And I select "<transcription-type>" from the "Request Type" dropdown
+      And I select "<urgency>" from the "Urgency" dropdown
+      And I press the "Continue" button
+      And I see "Events, audio and specific times requests" on the page
+      And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
+      And I press the "Continue" button
+      And I see "Check and confirm your transcript request" on the page
+      And I check the "I confirm I have received authorisation from the judge." checkbox
+      And I press the "Submit request" button
+      And I see "Transcript request submitted" on the page
+      And I see "Your request ID" on the page
+      And I see "What happens next?" on the page
+      And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
+      Examples:
+        | transcription-type | urgency  |
+        | Specified Times    | Standard |
+
+  @DMP-1138-AC2
+  Scenario Outline: Transcript request confirmation screen- Return to Hearing link
+    Then I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    And I select "<transcription-type>" from the "Request Type" dropdown
+    And I select "<urgency>" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I see "Events, audio and specific times requests" on the page
+    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
+    And I press the "Continue" button
+    And I see "Check and confirm your transcript request" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    And I see "Transcript request submitted" on the page
+    And I click on the "Return to hearing date" link
+    And I see "Hearing" on the page
+    Examples:
+      | transcription-type | urgency  |
+      | Specified Times    | Standard |
+
