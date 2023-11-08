@@ -900,7 +900,6 @@ public class NavigationShared {
 	public void click_link_by_text(String arg1) throws Exception {
 		log.info("About to clicked on link with link text =>" + arg1);
 		waitForLoadingIcon(15);
-		waitForPageLoad(15);
 		WebElement linkText;
 		try {
 			log.info("try 1 - linkText");
