@@ -1,5 +1,6 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
@@ -9,6 +10,10 @@ import io.cucumber.java.Before;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StepDef_navigation extends StepDef_base {
 
@@ -454,4 +459,15 @@ public class StepDef_navigation extends StepDef_base {
 		NAV.VerifyDropdownValue(expectedOptionValue, labelText);
 	}
 
+	@Then("the dropdown \"([^\"]*)\" contains the options \"([^\"]*)\"$")
+	public void theDropdownContainsTheOptions(String label_name, String dropdown_values) throws Exception {
+		List<String> dropdownList = Stream.of(dropdown_values.split(",", -1)).collect(Collectors.toList());
+		NAV.compareDropdownData(label_name, dropdownList);
+	}
+
+	@Then("the dropdown \"([^\"]*)\" contains the options$")
+	public void theDropdownContainsTheOptions(String label_name, DataTable dataTable) throws Exception {
+		List<String> dropdownList = dataTable.asList();
+		NAV.compareDropdownData(label_name, dropdownList);
+	}
 }

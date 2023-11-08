@@ -4,12 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import io.cucumber.datatable.DataTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -775,7 +780,7 @@ public class NavigationShared {
 	/**
 	 * Overloading with wait time passed - For increased waiting when required
 	 * 
-	 * @param waitTime
+	# * @param waitTime
 	 */
 	public void waitForPageLoad(int initialWait, int postWait) {
 		log.info("Waiting for Loading Icon to become visible");
@@ -1904,4 +1909,31 @@ public class NavigationShared {
 		log.info("Found li element which has text =>"+text+"<= with class =>"+className);
 	}
 
+	public void compareDropdownData(String label_Name, List<String> dropdownList) throws Exception {
+		int errorCount = 0;
+		List<WebElement> options = new ArrayList<WebElement>();
+		WebElement dropdown =  find_inputBy_labelName(label_Name);
+		if (dropdown.getTagName().equalsIgnoreCase("select")) {
+			log.info("Found dropdown with name =>" + label_Name);
+			Select select = new Select(dropdown);
+			options = dropdown.findElements(By.tagName("option"));
+		} else {
+			log.error("Select element cannot be found with label {} ",label_Name);
+		}
+
+		for (int dropdownIndex = 0; dropdownIndex < dropdownList.size(); dropdownIndex++) {
+			String actualText = options.get(dropdownIndex).getText();
+			String expectedText = dropdownList.get(dropdownIndex);
+
+			if (!expectedText.equals(actualText)) {
+				log.error("Value mismatch at index {}:: Expected: '{}', Actual: '{}'", dropdownIndex, expectedText, actualText);
+				errorCount++;
+			} else {
+				log.info("Values match at index {}:: Expected: '{}', Actual: '{}'", dropdownIndex, expectedText, actualText);
+			}
+		}
+		log.info("Dropdown has {} error count", errorCount);
+		Assert.assertEquals(0, errorCount);
+
+	}
 }

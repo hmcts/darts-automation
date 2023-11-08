@@ -130,4 +130,9 @@ public class Portal {
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("except where otherwise stated");
     }
+
+    public void notificationCount(String count) {
+        NAV.waitForPageLoad();
+        webDriver.findElement(By.xpath("//span[contains(@id, 'notifications') and contains(text(),'"+count+"')]"));
+    }
 }
