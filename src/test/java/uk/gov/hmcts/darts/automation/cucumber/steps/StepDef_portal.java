@@ -76,4 +76,8 @@ public class StepDef_portal extends StepDef_base {
         portal.notificationCount(count);
     }
 
+    @Given("I navigate to the url \"([^\"]*)\"$")
+    public void iNavigateToTheUrl(String url) throws Exception {
+        NAV.navigateToUrl(url);
+    }
 }
