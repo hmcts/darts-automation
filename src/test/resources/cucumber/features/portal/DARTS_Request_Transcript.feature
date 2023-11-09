@@ -207,6 +207,15 @@ Feature: Request Transcript
       | transcription-type | urgency  |
       | Sentencing remarks | Standard |
 
+  @DMP-917-AC4
+  Scenario: Verify Audio list pagination
+    Then I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    And I click on pagination link "2"
+    And I see "Next" on the page
+    And I see "Previous" on the page
+
   @DMP-934 @DMP-1012
   Scenario Outline: Request Transcript - Check and confirm your transcript request
     Then I click on the "Transcripts" link
@@ -274,27 +283,27 @@ Feature: Request Transcript
       | transcription-type | urgency  |
       | Specified Times    | Standard |
 
-    @DMP-1138-AC1
-    Scenario Outline: Transcript request confirmation screen
-      Then I click on the "Transcripts" link
-      And I press the "Request a new transcript" button
-      And I see "Request a new transcript" on the page
-      And I select "<transcription-type>" from the "Request Type" dropdown
-      And I select "<urgency>" from the "Urgency" dropdown
-      And I press the "Continue" button
-      And I see "Events, audio and specific times requests" on the page
-      And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-      And I press the "Continue" button
-      And I see "Check and confirm your transcript request" on the page
-      And I check the "I confirm I have received authorisation from the judge." checkbox
-      And I press the "Submit request" button
-      And I see "Transcript request submitted" on the page
-      And I see "Your request ID" on the page
-      And I see "What happens next?" on the page
-      And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
-      Examples:
-        | transcription-type | urgency  |
-        | Specified Times    | Standard |
+  @DMP-1138-AC1
+  Scenario Outline: Transcript request confirmation screen
+    Then I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    And I select "<transcription-type>" from the "Request Type" dropdown
+    And I select "<urgency>" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I see "Events, audio and specific times requests" on the page
+    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
+    And I press the "Continue" button
+    And I see "Check and confirm your transcript request" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    And I see "Transcript request submitted" on the page
+    And I see "Your request ID" on the page
+    And I see "What happens next?" on the page
+    And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
+    Examples:
+      | transcription-type | urgency  |
+      | Specified Times    | Standard |
 
   @DMP-1138-AC2
   Scenario Outline: Transcript request confirmation screen- Return to Hearing link

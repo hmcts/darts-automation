@@ -1,6 +1,7 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
@@ -469,5 +470,10 @@ public class StepDef_navigation extends StepDef_base {
 	public void theDropdownContainsTheOptions(String label_name, DataTable dataTable) throws Exception {
 		List<String> dropdownList = dataTable.asList();
 		NAV.compareDropdownData(label_name, dropdownList);
+	}
+
+	@And("I click on pagination link \"([^\"]*)\"$")
+	public void iClickOnPaginationLink(String linkName) throws Exception {
+		NAV.click_pagination_link(linkName);
 	}
 }

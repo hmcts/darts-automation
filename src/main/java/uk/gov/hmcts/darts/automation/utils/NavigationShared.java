@@ -1936,4 +1936,10 @@ public class NavigationShared {
 		Assert.assertEquals(0, errorCount);
 
 	}
+
+	public void click_pagination_link(String linkName) throws Exception {
+		log.info("About to clicked on link with link text =>" + linkName);
+		driver.findElement(By.xpath("//a[contains(.,'"+linkName+"')]")).click();
+
+	}
 }
