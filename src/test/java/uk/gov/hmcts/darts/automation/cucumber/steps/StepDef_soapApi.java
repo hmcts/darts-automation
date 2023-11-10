@@ -40,29 +40,57 @@ public class StepDef_soapApi extends StepDef_base {
 	}
 	
 	@When("I call POST SOAP API using soap body:")
-	public void callPostApiWithJsonBody(String docString) throws Exception {
+	public void callPostApiWithXmlBody(String docString) throws Exception {
 		ApiResponse apiResponse = soapApi.postSoap("", docString);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST SOAP API using soap action {word} and body:")
-	public void callGetApiWithJsonBody(String soapAction, String docString) throws Exception {
-		ApiResponse apiResponse = soapApi.postSoap("", soapAction, docString);
+	public void callPostSoapActionApiWithBody(String soapAction, String docString) throws Exception {
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, docString, true);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
+	
+	@When("I call POST SOAP API using SOAPAction {word} and encoded body:")
+	public void callPostSoapActionApiWithEncodedBody(String soapAction, String docString) throws Exception {
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, docString, true);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
+	
+	@When("I call POST SOAP API using SOAPAction {word} and body:")
+	public void callPostSoapActionApiWithUnencodedBody(String soapAction, String docString) throws Exception {
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, docString, false);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST {word} SOAP API using soap body:")
-	public void callPostApiWithJsonBody(String endPoint, String docString) throws Exception {
+	public void callPostApiWithBody(String endPoint, String docString) throws Exception {
 		ApiResponse apiResponse = soapApi.postSoap(endPoint, docString);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body:")
-	public void callGetApiWithJsonBody(String endPoint, String soapAction, String docString) throws Exception {
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, docString);
+	public void callPostSoapActionApiWithBody(String endPoint, String soapAction, String docString) throws Exception {
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, docString, true);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
+	
+	@When("I call POST {word} SOAP API using SOAPAction {word} and encoded body:")
+	public void callPostSoapActionApiWithEncodedBody(String endPoint, String soapAction, String docString) throws Exception {
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, docString, true);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
+	
+	@When("I call POST {word} SOAP API using SOAPAction {word} and body:")
+	public void callPostSoapActionApiWithNotEncodedBody(String endPoint, String soapAction, String docString) throws Exception {
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, docString, false);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}

@@ -5,13 +5,14 @@ import org.apache.logging.log4j.Logger;
 
 public class JsonString {
 	private static Logger log = LogManager.getLogger("JsonString");
+	private static String LINE_END = System.lineSeparator();
 	
 	public String jsonString = "";
 	String sep = "";
 	
 	public JsonString() {
 		jsonString = "{";
-		sep = "\r\n";
+		sep = LINE_END;
 	}
 
 /*
@@ -24,14 +25,14 @@ public class JsonString {
 				value = "";
 			}
 			jsonString = jsonString + sep + "  \"" + tag + "\": \"" + value + "\""; 
-			sep = ",\r\n";
+			sep = "," + LINE_END;
 		}
 		return this;
 	}
 	
 	public JsonString addJsonLine(String tag, Long value) {
 			jsonString = jsonString + sep + "  \"" + tag + "\": " + value; 
-			sep = ",\r\n";
+			sep = "," + LINE_END;
 		return this;
 	}
 	
@@ -45,7 +46,7 @@ public class JsonString {
 				value = "";
 			}
 			jsonString = jsonString + sep + "  \"" + tag + "\": " + value; 
-			sep = ",\r\n";
+			sep = "," + LINE_END;
 		}
 		return this;
 	}
@@ -55,26 +56,26 @@ public class JsonString {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
-			jsonString = jsonString + sep + "  \"" + tag + "\": [\r\n    \"" + value + "\"\r\n  ]"; 
-			sep = ",\r\n";
+			jsonString = jsonString + sep + "  \"" + tag + "\": [" + LINE_END + "    \"" + value + "\"" + LINE_END + "  ]"; 
+			sep = "," + LINE_END;
 		}
 		return this;
 	}
 	
 	public JsonString addSubSequence(String name) {
-		jsonString = jsonString + sep + "  \"" + name + "\": {\r\n"; 
+		jsonString = jsonString + sep + "  \"" + name + "\": {" + LINE_END; 
 		sep = "";
 		return this;
 	}
 	
 	public JsonString endSubSequence() {
-		jsonString = jsonString + "\r\n  }"; 
-		sep = ",\r\n";
+		jsonString = jsonString + LINE_END + "  }"; 
+		sep = "," + LINE_END;
 		return this;
 	}
 	
 	public String jsonValue() {
-		return jsonString + "\r\n}";
+		return jsonString + LINE_END + "}";
 	}
 	
 	
