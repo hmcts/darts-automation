@@ -44,6 +44,17 @@ public class XmlString {
 		sep = LINE_END ;
 		return this;
 	}
+	
+	public XmlString addTags(String tag, String values, String separator) {
+		if (!values.isBlank()) {
+			String[] vals = values.split(separator);
+			for (String val:vals) {
+				addTag(tag, val);
+			}
+		}
+		return this;
+	}
+	
 /*
  * Add xml opening tag only
  * 
@@ -96,8 +107,7 @@ public class XmlString {
 
 @Test
 	public void testXml() {
-		XmlString xmlString = new XmlString();
-		String xml = xmlString
+		String xml = new XmlString()
 				.addTag("getCourtLog")
 				.addAttribute("xmlns", "http://com.synapps.mojdarts.service.com")
 				.addTag("courthouse")
@@ -114,9 +124,8 @@ public class XmlString {
 				.addValue("20230930170000")
 				.xmlValue();
 		System.out.println(xml);
-		
-		xmlString = new XmlString();
-		xml = xmlString
+
+		xml = new XmlString()
 				.addTag("log_entry")
 				.addAttribute("Y", "2023")
 				.addAttribute("M", "07")
@@ -133,9 +142,7 @@ public class XmlString {
 				.xmlValue();
 		System.out.println(xml);
 		
-		
-		xmlString = new XmlString();
-		xml = xmlString
+		xml = new XmlString()
 				.addTag("case")
 				.addAttribute("type", "")
 				.addAttribute("id", "T20230000")
