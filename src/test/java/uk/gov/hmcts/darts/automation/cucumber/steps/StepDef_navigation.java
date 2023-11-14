@@ -476,14 +476,4 @@ public class StepDef_navigation extends StepDef_base {
 	public void iClickOnPaginationLink(String linkName) throws Exception {
 		NAV.click_pagination_link(linkName);
 	}
-
-
-    @Then("I verify the download file matches \"([^\"]*)\"$")
-    public void iVerifyTheDownloadFileMatches(String fileName) {
-		try {
-			NAV.downloadFileMatches(fileName);
-		} catch (Exception exception){
-			log.fatal("File {} cannot be found", fileName);
-		}
-    }
 }

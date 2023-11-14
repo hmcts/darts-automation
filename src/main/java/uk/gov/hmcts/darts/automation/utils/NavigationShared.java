@@ -1940,35 +1940,6 @@ public class NavigationShared {
 	public void click_pagination_link(String linkName) throws Exception {
 		log.info("About to clicked on link with link text =>" + linkName);
 		driver.findElement(By.xpath("//a[contains(.,'"+linkName+"')]")).click();
-
 	}
 
-	public void downloadFileMatches(String fileName) throws IOException {
-		String workspace_dir = ReadProperties.getDownloadFilepath();
-		File directory = new File(workspace_dir);
-		boolean downloadinFilePresence = false;
-		File[] filesList =directory.listFiles();
-		if(Objects.nonNull(filesList)) {
-			for (File file : filesList) {
-				downloadinFilePresence = file.getName().equalsIgnoreCase(fileName);
-				if (downloadinFilePresence) {
-					log.info("File downloaded {} found and matched as expected", fileName);
-					break;
-				} else {
-					log.error("File {} is not downloaded and cannot be found", fileName);
-				}
-			}
-		}
-		Assert.assertTrue(downloadinFilePresence);
-		deleteDocument_withName_fromDownloads(workspace_dir);
-	}
-	private void deleteDocument_withName_fromDownloads(String workspace_dir) throws IOException {
-		try {
-			FileUtils.cleanDirectory(new File(workspace_dir));
-			log.info("Successfully deleted all documents from the directory: {}", workspace_dir);
-		} catch (IOException e) {
-			log.error("Error occurred while cleaning the directory: {}", workspace_dir, e);
-			throw e;
-		}
-	}
 }

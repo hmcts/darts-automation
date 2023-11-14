@@ -80,4 +80,13 @@ public class StepDef_portal extends StepDef_base {
     public void iNavigateToTheUrl(String url) throws Exception {
         NAV.navigateToUrl(url);
     }
+
+    @Then("I verify the download file matches \"([^\"]*)\"$")
+    public void iVerifyTheDownloadFileMatches(String fileName) {
+        try {
+            portal.downloadFileMatches(fileName);
+        } catch (Exception exception){
+            log.fatal("File {} cannot be found", fileName);
+        }
+    }
 }
