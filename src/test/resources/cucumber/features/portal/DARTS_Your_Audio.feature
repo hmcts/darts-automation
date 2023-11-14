@@ -197,7 +197,7 @@ Feature: Your Audio Screen
     And I see "Skip to event" on the page
     And I see "Jump to a specific audio events within the audio file" on the page
     And I press the "Download audio file" button
-    # Need to verify Download of the file
+    Then I verify the download file matches "test_case1009.mp3"
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
