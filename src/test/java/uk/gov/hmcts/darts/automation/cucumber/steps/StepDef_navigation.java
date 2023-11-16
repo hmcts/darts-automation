@@ -473,12 +473,7 @@ public class StepDef_navigation extends StepDef_base {
 
 	@When("I set {string} to {string} and click away")
 	public void i_set_to_and_click_away(String location_name, String value) throws Exception {
-		try {
-			NAV.set_value_clickaway(location_name, value);
-		} catch (Exception e) {
-			NAV.waitForPageLoad();
-			NAV.set_value_clickaway(location_name, value);
-		}
+		NAV.clickAway(NAV.set_valueTo(location_name, value));
 	}
 
 }
