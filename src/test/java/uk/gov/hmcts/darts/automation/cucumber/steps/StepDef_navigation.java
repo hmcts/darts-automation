@@ -470,4 +470,10 @@ public class StepDef_navigation extends StepDef_base {
 		List<String> dropdownList = dataTable.asList();
 		NAV.compareDropdownData(label_name, dropdownList);
 	}
+
+	@When("I set {string} to {string} and click away")
+	public void i_set_to_and_click_away(String location_name, String value) throws Exception {
+		NAV.clickAway(NAV.set_valueTo(location_name, value));
+	}
+
 }
