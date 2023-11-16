@@ -89,4 +89,9 @@ public class StepDef_portal extends StepDef_base {
             log.fatal("File {} cannot be found", fileName);
         }
     }
+
+    @When("I click on the pagination link \"([^\"]*)\"$")
+    public void iClickOnPaginationLink(String linkName) throws Exception {
+        NAV.click_link_by_text(linkName);
+    }
 }

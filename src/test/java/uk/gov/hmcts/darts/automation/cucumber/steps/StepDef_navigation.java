@@ -471,9 +471,4 @@ public class StepDef_navigation extends StepDef_base {
 		List<String> dropdownList = dataTable.asList();
 		NAV.compareDropdownData(label_name, dropdownList);
 	}
-
-	@And("I click on pagination link \"([^\"]*)\"$")
-	public void iClickOnPaginationLink(String linkName) throws Exception {
-		NAV.click_pagination_link(linkName);
-	}
 }

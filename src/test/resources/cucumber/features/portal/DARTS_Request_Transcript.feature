@@ -10,7 +10,7 @@ Feature: Request Transcript
       | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
-      | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
+      | CASE1009                                                              | TS0002     | ROOM_A    |          |               |
     Given I click on "CASE1009" in the same row as "Swansea"
     #Hearing Details
     And I click on "15 Aug 2023" in the same row as "ROOM_A"
@@ -212,7 +212,7 @@ Feature: Request Transcript
     Then I click on the "Transcripts" link
     And I press the "Request a new transcript" button
     And I see "Request a new transcript" on the page
-    And I click on pagination link "2"
+    And I click on the pagination link "2"
     And I see "Next" on the page
     And I see "Previous" on the page
 
