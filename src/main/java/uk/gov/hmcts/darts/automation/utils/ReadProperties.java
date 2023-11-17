@@ -28,6 +28,8 @@ public class ReadProperties {
 // get azure secrets as environment vars
 	public static String apiUserName = getSystemValue("FUNC_TEST_ROPC_USERNAME");
 	public static String apiPassword = getSystemValue("FUNC_TEST_ROPC_PASSWORD");
+	public static String apiGlobalUserName = getSystemValue("FUNC_TEST_ROPC_GLOBAL_USERNAME");
+	public static String apiGlobalPassword = getSystemValue("FUNC_TEST_ROPC_GLOBAL_PASSWORD");
 	public static String apiClientId = getSystemValue("AAD_B2C_ROPC_CLIENT_ID_KEY");
 	public static String apiClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
 

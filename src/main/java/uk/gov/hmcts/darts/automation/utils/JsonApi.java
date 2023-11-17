@@ -77,8 +77,8 @@ public class JsonApi {
 	    		.header(CONNECTION, CONNECTION_STRING)
     			.urlEncodingEnabled(true)
     			.formParams("grant_type", "password",
-    					"username", ReadProperties.apiUserName,
-    					"password", ReadProperties.apiPassword,
+    					"username", ReadProperties.apiGlobalUserName,
+    					"password", ReadProperties.apiGlobalPassword,
     					"client_id", ReadProperties.apiClientId,
     					"scope", "https://" + ReadProperties.main("apiAuthPath") + "/" + ReadProperties.apiClientId + "/Functional.Test")
     			.baseUri(ReadProperties.main("apiAuthUri"))
