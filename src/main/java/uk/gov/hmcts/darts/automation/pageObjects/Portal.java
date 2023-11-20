@@ -75,6 +75,9 @@ public class Portal {
             case "APPROVER":
                 loginToPortal_InternalUser(ReadProperties.automationApproverTestUserId, ReadProperties.automationInternalUserTestPassword);
                 break;
+            case "REQUESTERAPPROVER":
+                loginToPortal_InternalUser(ReadProperties.automationRequesterApproverTestUserId, ReadProperties.automationRequesterApproverTestPassword);
+                break;
             case "JUDGE":
                 loginToPortal_InternalUser(ReadProperties.automationJudgeTestUserId, ReadProperties.automationInternalUserTestPassword);
                 break;
