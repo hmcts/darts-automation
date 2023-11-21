@@ -62,7 +62,7 @@ Scenario: DARTS Link
 	Then  I see "Search for a case" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest
+@DMP-407 @smoketest @TEST
 Scenario Outline: All roles
 	When  I am logged on to DARTS as a <Type> user
 	Then  I see "Search for a case" on the page
@@ -74,12 +74,13 @@ Scenario Outline: All roles
 	And   I see link with text "Sign out"
 	
 Examples:
-	| Type 			   |
-	| Judge        |
-	| REQUESTER    |
-	| APPROVER     |
-	| APPEALCOURT  |
-	| TRANSCRIBER  |
-	| LANGUAGESHOP |
+	| Type 			        |
+	| Judge             |
+	| REQUESTER         |
+	| APPROVER          |
+	| APPEALCOURT       |
+	| TRANSCRIBER       |
+	| LANGUAGESHOP      |
+	| REQUESTERAPPROVER |
 
 
