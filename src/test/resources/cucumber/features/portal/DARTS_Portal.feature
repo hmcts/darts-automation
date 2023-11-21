@@ -62,7 +62,7 @@ Scenario: DARTS Link
 	Then  I see "Search for a case" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest @TEST
+@DMP-407 @smoketest
 Scenario Outline: All roles
 	When  I am logged on to DARTS as a <Type> user
 	Then  I see "Search for a case" on the page
