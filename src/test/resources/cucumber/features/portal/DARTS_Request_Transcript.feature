@@ -42,6 +42,39 @@ Feature: Request Transcript
     And I press the "Request a new transcript" button
     And I see "Request a new transcript" on the page
 
+  @DMP-868
+  Scenario Outline: View Transcript Screen
+
+    #All Transcripts
+
+    When I click on the breadcrumb link "CASE1009"
+    And I click on the "All Transcripts" link
+    And I see "All transcripts for this case" on the page
+    And I click on the "View" link
+    Then I see "DMP-test-2.docx" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendant>" on the page
+    And I see "<Judge>" on the page
+    And I see "Download transcript file" on the page
+
+  #Transcripts
+    When I click on the breadcrumb link "CASE1009"
+    And I click on "<HearingDate>" in the same row as "<Courtroom>"
+    And I click on the "Transcripts" link
+    And I see "Transcripts for this hearing" on the page
+    And I click on the "View" link
+    Then I see "DMP-test-2.docx" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendant>" on the page
+    And I see "<Judge>" on the page
+    And I see "Download transcript file" on the page
+
+    Examples:
+      | CaseID   | Courthouse | HearingDate | Courtroom | Defendant  | Judge    |
+      | CASE1009 | Swansea    | 15 Aug 2023 | ROOM_A    | Jow Bloggs | Mr Judge |
+
   @DMP-892
   Scenario Outline: Transcript - Request a new transcript
     Then I click on the "Transcripts" link
