@@ -58,7 +58,7 @@ Feature: Request Transcript
     And I see "Check and confirm your transcript request" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Sentencing remarks | Standard |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Sentencing remarks | Overnight |
 
   @DMP-892-AC3
   Scenario Outline: Transcript - Request a new transcript - Cancel link
@@ -75,7 +75,7 @@ Feature: Request Transcript
     And I click on the "Cancel" link
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Sentencing remarks | Standard |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Sentencing remarks | Overnight |
 
   @DMP-892-AC5
   Scenario: Transcript - Request a new transcript - Error
@@ -116,7 +116,7 @@ Feature: Request Transcript
     Then I click on the "Transcripts" link
     And I press the "Request a new transcript" button
     And I see "Request a new transcript" on the page
-    Then the dropdown "Urgency" contains the options "Please select,Standard,Overnight,Other"
+    Then the dropdown "Urgency" contains the options "Please select,Overnight, 3 working days, 7 working days, 12 working days"
 
   @DMP-892
   Scenario: Transcript - Request a new transcript - Verify transcription-type dropdown
@@ -161,8 +161,8 @@ Feature: Request Transcript
     And I see "Check and confirm your transcript request" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Specified Times    | Standard |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Court Log          | Standard |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Specified Times    | Overnight |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Court Log          | Overnight |
 
   @DMP-917
   Scenario Outline: Request Transcript - Audio Times/Events - manually entering time
@@ -190,7 +190,7 @@ Feature: Request Transcript
     And I see "Check and confirm your transcript request" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  | StartTime | EndTime  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Specified Times    | Standard | 13:07:33  | 13:07:33 |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Specified Times    | Overnight | 13:07:33  | 13:07:33 |
 
   @DMP-917
   Scenario Outline: Request Transcript - Audio Times/Events - Cancel link
@@ -205,7 +205,7 @@ Feature: Request Transcript
     And I see "Hearing" on the page
     Examples:
       | transcription-type | urgency  |
-      | Sentencing remarks | Standard |
+      | Sentencing remarks | Overnight |
 
   @DMP-917-AC4
   Scenario: Verify Audio list pagination
@@ -244,7 +244,7 @@ Feature: Request Transcript
     And I see "Transcript request submitted" on the page
     Examples:
       | CaseID   | Courthouse | Defendants | HearingDate | transcription-type | urgency  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Specified Times    | Standard |
+      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Specified Times    | Overnight |
 
   @DMP-1012-AC3
   Scenario Outline: Request Transcript - Error No Authorisation
@@ -263,7 +263,7 @@ Feature: Request Transcript
     And I see "You must confirm that you have authority to request a transcript" on the page
     Examples:
       | transcription-type | urgency  |
-      | Specified Times    | Standard |
+      | Specified Times    | Overnight |
 
   @DMP-1012-AC2
   Scenario Outline: Request Transcript - Cancel Link
@@ -281,7 +281,7 @@ Feature: Request Transcript
     And I see "Hearing" on the page
     Examples:
       | transcription-type | urgency  |
-      | Specified Times    | Standard |
+      | Specified Times    | Overnight |
 
   @DMP-1138-AC1
   Scenario Outline: Transcript request confirmation screen
@@ -303,7 +303,7 @@ Feature: Request Transcript
     And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
     Examples:
       | transcription-type | urgency  |
-      | Specified Times    | Standard |
+      | Specified Times    | Overnight |
 
   @DMP-1138-AC2
   Scenario Outline: Transcript request confirmation screen- Return to Hearing link
@@ -324,5 +324,5 @@ Feature: Request Transcript
     And I see "Hearing" on the page
     Examples:
       | transcription-type | urgency  |
-      | Specified Times    | Standard |
+      | Specified Times    | Overnight |
 

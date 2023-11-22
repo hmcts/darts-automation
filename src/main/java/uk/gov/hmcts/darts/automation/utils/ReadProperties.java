@@ -49,6 +49,8 @@ public class ReadProperties {
 	public static String automationApproverTestUserId = getSystemValue("AUTOMATION_APPROVER_TEST_USERNAME");
 	public static String automationAppealCourtTestUserId = getSystemValue("AUTOMATION_APPEAL_COURT_TEST_USERNAME");
 	public static String automationInternalUserTestPassword = getSystemValue("AUTOMATION_INTERNAL_PASSWORD");
+	public static String automationRequesterApproverTestPassword = getSystemValue("AUTOMATION_REQUESTER_APPROVER_PASSWORD");
+	public static String automationRequesterApproverTestUserId = getSystemValue("AUTOMATION_REQUESTER_APPROVER_USERNAME");
 
 	public static String isRunLocal = getSystemValue("RUN_LOCAL");
 	

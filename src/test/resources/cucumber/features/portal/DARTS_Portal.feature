@@ -74,12 +74,13 @@ Scenario Outline: All roles
 	And   I see link with text "Sign out"
 	
 Examples:
-	| Type 			   |
-	| Judge        |
-	| REQUESTER    |
-	| APPROVER     |
-	| APPEALCOURT  |
-	| TRANSCRIBER  |
-	| LANGUAGESHOP |
+	| Type 			        |
+	| Judge             |
+	| REQUESTER         |
+	| APPROVER          |
+	| APPEALCOURT       |
+	| TRANSCRIBER       |
+	| LANGUAGESHOP      |
+	| REQUESTERAPPROVER |
 
 
