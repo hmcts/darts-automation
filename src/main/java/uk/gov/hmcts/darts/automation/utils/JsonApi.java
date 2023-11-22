@@ -80,7 +80,7 @@ public class JsonApi {
     					"username", ReadProperties.apiGlobalUserName,
     					"password", ReadProperties.apiGlobalPassword,
     					"client_id", ReadProperties.apiClientId,
-    					"scope", "https://" + ReadProperties.main("apiAuthPath") + "/" + ReadProperties.apiClientId + "/Functional.Test")
+						"scope", ReadProperties.main("apiScopeUri") + ReadProperties.apiClientId + "/Functional.Test")
     			.baseUri(ReadProperties.main("apiAuthUri"))
     			.basePath(ReadProperties.main("apiAuthPath"))
     		.when()
