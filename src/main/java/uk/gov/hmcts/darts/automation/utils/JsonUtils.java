@@ -1,5 +1,7 @@
 package uk.gov.hmcts.darts.automation.utils;
 
+import io.restassured.path.json.JsonPath;
+import io.restassured.path.json.config.JsonPathConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,8 +24,27 @@ public class JsonUtils {
 	public JsonUtils() {
 		
 	}
+	
+	public static String extractJsonValue(String json, String tag) {
+		String returnValue = "";
+		JsonPath jsonPath = new JsonPath(json);
+		returnValue = jsonPath.getString(tag);
+		return returnValue;
+	}
+	
+	static String addTimestamp(String time) {
+		if (time == null || time.isBlank()) {
+			return DateUtils.timestamp();
+		} else {
+			if (time.equalsIgnoreCase("blank") || time.equalsIgnoreCase("empty")) {
+				return "";
+			} else {
+				return time;
+			}
+		}
+	}
     
-    public static String buildEventJson(String messageId,
+    public static String buildAddEventJson(String messageId,
     		String type,
     		String subType,
     		String eventId,
@@ -33,7 +54,9 @@ public class JsonUtils {
     		String eventText,
     		String dateTime,
     		String caseRetentionFixedPolicy,
-    		String caseTotalSentence) {
+    		String caseTotalSentence,
+    		String startTime,
+    		String endTime) {
     	JsonString eventJson = new JsonString();
     	eventJson.addJsonLine("message_id", messageId);
     	eventJson.addJsonLine("type", type);
@@ -43,17 +66,19 @@ public class JsonUtils {
     	eventJson.addJsonLine("courtroom", courtroom);
     	eventJson.addJsonSeq("case_numbers", caseNumbers);
     	eventJson.addJsonLine("event_text", eventText);
-    	eventJson.addJsonLine("date_time", dateTime);
+    	eventJson.addJsonLine("date_time", addTimestamp(dateTime));
     	if (!caseRetentionFixedPolicy.isBlank() || !caseTotalSentence.isBlank() ) {
     		eventJson.addSubSequence("retention_policy");
 	    	eventJson.addJsonLine("case_retention_fixed_policy", caseRetentionFixedPolicy);
 	    	eventJson.addJsonLine("case_total_sentence", caseTotalSentence);
     		eventJson.endSubSequence();
     	}
+    	eventJson.addJsonLine("start_time", startTime);
+    	eventJson.addJsonLine("end_time", endTime);
 		return eventJson.jsonValue();
     }
     
-    public static String buildCaseJson(String courthouse,
+    public static String buildAddCaseJson(String courthouse,
     		String caseNumber,
     		String defendant,
     		String judge,
@@ -70,9 +95,19 @@ public class JsonUtils {
 		return jsonString.jsonValue();
     }
     
+    public static String buildAddCourthouseJson(String courthouse,
+    		String code,
+    		String displayName) {
+    	JsonString jsonString = new JsonString();
+    	jsonString.addJsonLine("courthouse_name", courthouse);
+    	jsonString.addJsonLineNoQuotes("code", code);
+    	jsonString.addJsonLine("display_name", displayName.isBlank() ? courthouse : displayName);
+		return jsonString.jsonValue();
+    }
+    
     @Test
 	public void testJson() {
-		Assertions.assertEquals(buildEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11"), "{\r\n"
+		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11", "", ""), "{\r\n"
 				+ "  \"message_id\": \"string1\",\r\n"
 				+ "  \"type\": \"string2\",\r\n"
 				+ "  \"sub_type\": \"string3\",\r\n"
@@ -89,7 +124,7 @@ public class JsonUtils {
 				+ "  \"case_total_sentence\": \"string11\"\r\n"
 				+ "  }\r\n"
 				+ "}");
-		Assertions.assertEquals(buildEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "blank", ""), "{\r\n"
+		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "blank", "", "", ""), "{\r\n"
 				+ "  \"message_id\": \"string1\",\r\n"
 				+ "  \"type\": \"string2\",\r\n"
 				+ "  \"sub_type\": \"string3\",\r\n"

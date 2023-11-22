@@ -58,7 +58,7 @@ public class StepDef_testData extends StepDef_base {
 		testdata.setProperty("courthouse_name", courtHouse);
 		if (!DB.courtCaseExists(courtHouse, caseNumber)) {
 			courthouseExists(courtHouse);
-		String json = JsonUtils.buildCaseJson(courtHouse, caseNumber, "defendant for " + caseNumber,
+		String json = JsonUtils.buildAddCaseJson(courtHouse, caseNumber, "defendant for " + caseNumber,
 				"judge for " + caseNumber,
 				"prosecutor for" + caseNumber,
 				"defender for " + caseNumber);

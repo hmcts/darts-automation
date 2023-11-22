@@ -12,8 +12,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-
+import uk.gov.hmcts.darts.automation.utils.JsonApi;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
+import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 
@@ -101,8 +102,12 @@ public class StepDef_hooks extends StepDef_base {
 	
 	@Before
 	public void beforeScenario(Scenario scenario) {
-		log.info("Start of scenario: "+scenario.getId()+" Thread Id: " + Thread.currentThread().getId());
+		log.info("Start of scenario: {}, Thread Id: {}, Build: {}", scenario.getId(), Thread.currentThread().getId(), ReadProperties.build);
 		this.scenario = scenario;
+		String build = JsonApi.buildInfo();
+		if (!ReadProperties.buildNo.equals(build)) {
+			log.warn("Automation started with build {} but is now Build {}", ReadProperties.buildNo, build);
+		}
 	}
 	
 }

@@ -20,11 +20,11 @@ public class JsonString {
 * 
 */
 	public JsonString addJsonLine(String tag, String value) {
-		if (value != null && !value.isBlank()) {
+		if (value != null && !value.isBlank() && !value.equalsIgnoreCase("MISSING")) {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
-			jsonString = jsonString + sep + "  \"" + tag + "\": \"" + value + "\""; 
+			jsonString = jsonString + sep + "  \"" + tag + "\": \"" + Substitutions.substituteValue(value) + "\""; 
 			sep = "," + LINE_END;
 		}
 		return this;
@@ -36,27 +36,33 @@ public class JsonString {
 		return this;
 	}
 	
+	public JsonString addJsonLineNoQuotes(String tag, String value) {
+			jsonString = jsonString + sep + "  \"" + tag + "\": " + Substitutions.substituteValue(value); 
+			sep = "," + LINE_END;
+		return this;
+	}
+	
 /*
  * Add json value without quotes around value
  * 
  */
 	public JsonString addJsonValue(String tag, String value) {
-		if (value != null && !value.isBlank()) {
+		if (value != null && !value.isBlank() && !value.equalsIgnoreCase("MISSING")) {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
-			jsonString = jsonString + sep + "  \"" + tag + "\": " + value; 
+			jsonString = jsonString + sep + "  \"" + tag + "\": " + Substitutions.substituteValue(value); 
 			sep = "," + LINE_END;
 		}
 		return this;
 	}
 	
 	public JsonString addJsonSeq(String tag, String value) {
-		if (value != null && !value.isBlank()) {
+		if (value != null && !value.isBlank() && !value.equalsIgnoreCase("MISSING")) {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
-			jsonString = jsonString + sep + "  \"" + tag + "\": [" + LINE_END + "    \"" + value + "\"" + LINE_END + "  ]"; 
+			jsonString = jsonString + sep + "  \"" + tag + "\": [" + LINE_END + "    \"" + Substitutions.substituteValue(value) + "\"" + LINE_END + "  ]"; 
 			sep = "," + LINE_END;
 		}
 		return this;

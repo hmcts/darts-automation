@@ -33,7 +33,7 @@ public class XmlString {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
-			xmlString = xmlString + sep() + "<" + tag + ">" + value + "</" + tag + ">"; 
+			xmlString = xmlString + sep() + "<" + tag + ">" + Substitutions.substituteValue(value) + "</" + tag + ">"; 
 			sep = LINE_END;
 		}
 		return this;
@@ -68,7 +68,7 @@ public class XmlString {
 	
 	public XmlString addValue(String value) {
 		String tag = openTags.remove(openTags.size() - 1);
-		xmlString = xmlString + (sep.startsWith(">") ? ">":"") + value + "</" + tag + ">";
+		xmlString = xmlString + (sep.startsWith(">") ? ">":"") + Substitutions.substituteValue(value) + "</" + tag + ">";
 		sep = LINE_END;
 	return this;
 }
@@ -89,7 +89,7 @@ public class XmlString {
 				value = "";
 		}
 		if (sep.startsWith(">")) {
-			xmlString = xmlString + " " + attribute + "=\"" + value + "\"";
+			xmlString = xmlString + " " + attribute + "=\"" + Substitutions.substituteValue(value) + "\"";
 		} else {
 			log.fatal("Attribute {} value {} could not be added - tag is already closed", attribute, value);
 		}
@@ -102,6 +102,7 @@ public class XmlString {
 		while (openTags.size() > 0) {
 			addEndTag();
 		}
+		log.info(xmlString);
 		return xmlString;
 	}
 

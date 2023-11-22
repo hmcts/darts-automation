@@ -63,7 +63,7 @@ public class NavigationShared {
 	public boolean textIsPresentOnPage(String expected_text) throws Exception {
 		log.info("About to look for Expected Text =>" + expected_text);
 		waitForLoadingIcon();
-		String substitutedValue = DateUtils.substituteValue(expected_text);
+		String substitutedValue = Substitutions.substituteValue(expected_text);
 		String bodyText = driver.findElement(By.tagName("body")).getText();
 		boolean found = bodyText.contains(substitutedValue);
 		if (found) 
@@ -86,7 +86,7 @@ public class NavigationShared {
 	public NavigationShared textPresentOnPage(String expected_text) throws Exception {
 		log.info("About to look for Expected Text =>" + expected_text);
 		waitForLoadingIcon();
-		String substitutedValue = DateUtils.substituteValue(expected_text);
+		String substitutedValue = Substitutions.substituteValue(expected_text);
 		int textCount = driver.findElements(By.xpath("//body[contains(normalize-space(.),\"" + substitutedValue +  "\")]")).size();
 		try {
 			Assertions.assertTrue(textCount > 0, "Text not found!");
@@ -109,7 +109,7 @@ public class NavigationShared {
 	public NavigationShared textNotPresentOnPage(String not_expected) throws Exception {
 		log.info("About to look for unexpected Text =>" + not_expected); 
 		waitForLoadingIcon();
-		String substitutedValue = DateUtils.substituteValue(not_expected);
+		String substitutedValue = Substitutions.substituteValue(not_expected);
 
 		String bodyText = driver.findElement(By.tagName("body")).getText();
 		try {
@@ -541,7 +541,7 @@ public class NavigationShared {
 	
 	public String setElementValueTo(WebElement webElement, String value) throws Exception {
 		webElement.clear();
-		String substitutedValue = DateUtils.substituteValue(value);
+		String substitutedValue = Substitutions.substituteValue(value);
 		webElement.sendKeys(substitutedValue);
 
 		log.info("Set input field =>" + webElement.toString() + "<= to =>" + substitutedValue);
@@ -591,7 +591,7 @@ public class NavigationShared {
 
 		log.info("Current value =>" + current_value);
 
-		String substitutedValue = DateUtils.substituteValue(expected_value);
+		String substitutedValue = Substitutions.substituteValue(expected_value);
 		assertEquals(current_value, expected_value);
 		log.info("Saw Expected Value =>" + current_value);
 
@@ -1586,7 +1586,7 @@ public class NavigationShared {
 
 	public void textHas_HTMLAttribute_as(String text, String attribute, String attribute_value) throws Exception {
 		WebElement element = find_inputBy_labelName(text);
-		Assertions.assertEquals(element.getAttribute(attribute), attribute_value);
+		Assertions.assertEquals(attribute_value, element.getAttribute(attribute));
 
 		log.info("Element with text =>" + text + "<= has attribute =>" + attribute + "<= with value =>"
 				+ attribute_value + "<= as expected");
@@ -1602,7 +1602,7 @@ public class NavigationShared {
 
 		String actualTooltipText = driver.findElement(By.xpath("//mat-tooltip-component//div")).getText();
 
-		Assertions.assertEquals(hoverText, actualTooltipText);
+		Assertions.assertTrue(hoverText.equals(actualTooltipText), "Expected: " + hoverText + " but actual: " + actualTooltipText);
 		log.info("Tool tip text matched =>" + hoverText + "<= for element =>" + hoverOverText);
 	}
 
@@ -1709,7 +1709,7 @@ public class NavigationShared {
 
 	public void seeText_inSameRow_asText(String searchText, String nextToText) throws Exception {
 		log.info("About to look for text =>"+searchText+"<= in the same row as =>"+nextToText);
-		String substitutedValue = DateUtils.substituteValue(searchText);
+		String substitutedValue = Substitutions.substituteValue(searchText);
 		driver.findElement(
 				By.xpath(
 						"//table//tr[.//*[contains(normalize-space(text()),\""+substitutedValue+"\")]]//*[text()[contains(normalize-space(.), \""+nextToText+"\")]]"
@@ -1873,7 +1873,7 @@ public class NavigationShared {
 		String value = getValueByLabelInLocationTo(location, labelText);
 
 		log.info("Value of field in =>" + location + "<= with label =>" + labelText + "<= is =>" + value);
-		Assertions.assertTrue(DateUtils.substituteValue(expected).equals(value), "Text value =>"+value+"<= does not match expected =>");
+		Assertions.assertTrue(Substitutions.substituteValue(expected).equals(value), "Text value =>"+value+"<= does not match expected =>");
 	}
 
 	public void VerifyDropdownValue(String expectedOptionValue, String labelText) throws Exception {

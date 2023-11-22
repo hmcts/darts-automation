@@ -15,6 +15,7 @@ import io.restassured.specification.ResponseSpecification;
 import static io.restassured.RestAssured.*;
 
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
+import uk.gov.hmcts.darts.automation.model.responses.Info;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,12 +53,12 @@ public class JsonApi {
 	public JsonApi() {
 	}
 
-    public RequestSpecification requestLogLevel(LogDetail loggingLevel){
+    static public RequestSpecification requestLogLevel(LogDetail loggingLevel){
         RequestSpecification requestSpec = new RequestSpecBuilder().log(loggingLevel).build();
         return requestSpec;
     }
 
-    public ResponseSpecification responseLogLevel(LogDetail loggingLevel){
+    static public ResponseSpecification responseLogLevel(LogDetail loggingLevel){
         ResponseSpecification loglevel = new ResponseSpecBuilder().log(loggingLevel).build();
         return loglevel;
     }
@@ -77,10 +78,10 @@ public class JsonApi {
 	    		.header(CONNECTION, CONNECTION_STRING)
     			.urlEncodingEnabled(true)
     			.formParams("grant_type", "password",
-    					"username", ReadProperties.apiUserName,
-    					"password", ReadProperties.apiPassword,
+    					"username", ReadProperties.apiGlobalUserName,
+    					"password", ReadProperties.apiGlobalPassword,
     					"client_id", ReadProperties.apiClientId,
-    					"scope", "https://" + ReadProperties.main("apiAuthPath") + "/" + ReadProperties.apiClientId + "/Functional.Test")
+						"scope", ReadProperties.main("apiScopeUri") + ReadProperties.apiClientId + "/Functional.Test")
     			.baseUri(ReadProperties.main("apiAuthUri"))
     			.basePath(ReadProperties.main("apiAuthPath"))
     		.when()
@@ -96,7 +97,27 @@ public class JsonApi {
     	
     }
     
-    
+    static public String buildInfo() {
+		log.info("get: info");
+		String buildString =
+				given()
+    				.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept(ACCEPT_JSON_STRING)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+					.baseUri(baseUri)
+					.basePath("")
+				.when()
+					.get("info")
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(200)
+					.extract().response()
+					.getBody().as(Info.class)
+					.build.number;
+    	return buildString;
+    }
 
 	public ApiResponse getApi(String endpoint) {
 
@@ -116,7 +137,6 @@ public class JsonApi {
 					.get(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.log().everything()
 					.assertThat().statusCode(200)
 					.extract().response();
 		

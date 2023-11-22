@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.restassured.path.xml.*;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -22,6 +24,14 @@ public class XmlUtils {
 
 	public XmlUtils() {
 		
+	}
+	
+	public static String extractXmlValue(String xml, String path) {
+		String returnValue = "";
+		XmlPath xmlPath = new XmlPath(xml);
+		returnValue = xmlPath.getString(path);
+		log.info("xml at {} is {}", path, returnValue);
+		return returnValue;
 	}
     
     public static String buildAddEventXml(String messageId,

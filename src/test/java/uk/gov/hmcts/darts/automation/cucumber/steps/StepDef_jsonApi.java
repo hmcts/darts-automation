@@ -16,6 +16,7 @@ import io.cucumber.docstring.DocString;
 
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
@@ -65,14 +66,29 @@ public class StepDef_jsonApi extends StepDef_base {
 			return defaultValue;
 		}
 	}
+	
+/*
+ * Save value from json response in testdata object
+ */
+	@Then("^I find (\\S*) in the json response at \"([^\"]*)\"$")
+	public void extractStringFromJsonResponse(String name, String path) {
+		String value = JsonUtils.extractJsonValue(testdata.responseString, path);
+		testdata.setProperty(name, value);
+	}
+
+	@Then("^I see \"([^\"]*)\" in the json response is \"([^\"]*)\"$")
+	public void verifyStringInJsonResponse(String path, String expectedValue) {
+		String value = JsonUtils.extractJsonValue(testdata.responseString, path);
+		Assertions.assertTrue(Substitutions.substituteValue(expectedValue).equals(value), "Actual value not as Expected: " + value + ", Expected: " + expectedValue);
+	}
 
 	@When("^I call POST events API for id (\\S*) type (\\S*) (\\S*) with \"([^\"]*)\"$")
-	public void callPostEventApi(String id, String type, String subType, String args) throws Exception {
+	public void callPostEventApi(String id, String type, String subType, String args) {
 		testdata.setProperty("message_id", id);
 		testdata.setProperty("type", type);
 		testdata.setProperty("sub_type", subType);
 		testdata.parseArgument(args, eventFields);
-		String json = JsonUtils.buildEventJson(testdata.getProperty("message_id"),
+		String json = JsonUtils.buildAddEventJson(testdata.getProperty("message_id"),
 				testdata.getProperty("type"),
 				testdata.getProperty("sub_type"),
 				testdata.getProperty("event_id"),
@@ -82,7 +98,9 @@ public class StepDef_jsonApi extends StepDef_base {
 				testdata.getProperty("event_text"),
 				testdata.getProperty("date_time"),
 				testdata.getProperty("case_retention_fixed_policy"),
-				testdata.getProperty("case_total_sentence"));
+				testdata.getProperty("case_total_sentence"),
+				testdata.getProperty("start_time"),
+				testdata.getProperty("end_time"));
 		ApiResponse apiResponse = jsonApi.postApi("events", json);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -94,7 +112,7 @@ public class StepDef_jsonApi extends StepDef_base {
 	@When("^I create an event$")
 	public void createEventJson(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
-			String json = JsonUtils.buildEventJson(
+			String json = JsonUtils.buildAddEventJson(
 					getValue(map, "message_id", testdata.getProperty("message_id")),
 					getValue(map, "type", testdata.getProperty("type")),
 					getValue(map, "sub_type", testdata.getProperty("sub_type")),
@@ -105,28 +123,51 @@ public class StepDef_jsonApi extends StepDef_base {
 					getValue(map, "event_text", testdata.getProperty("event_text")),
 					getValue(map, "date_time", testdata.getProperty("date_time")),
 					getValue(map, "case_retention_fixed_policy", testdata.getProperty("case_retention_fixed_policy")),
-					getValue(map, "case_total_sentence", testdata.getProperty("case_total_sentence")));
+					getValue(map, "case_total_sentence", testdata.getProperty("case_total_sentence")),
+					getValue(map, "start_time", testdata.getProperty("start_time")),
+					getValue(map, "end_time", testdata.getProperty("end_time")));
 			ApiResponse apiResponse = jsonApi.postApi("events", json);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
-			Assertions.assertEquals(apiResponse.statusCode, "201", "Invalid API response " + apiResponse.statusCode);
+			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 		}
 	}
 	
-// sample cucumber:
-// When I create a case
-// |courthouse|case_number|defendants|judges|prosecutors|defenders|
-	@When("^I create a case$")
-	public void createCaseJson(List<Map<String,String>> dataTable) {
+	// sample cucumber:
+	// When I create a case
+	// |courthouse|case_number|defendants|judges|prosecutors|defenders|
+		@When("^I create a case$")
+		public void createCaseJson(List<Map<String,String>> dataTable) {
+			for (Map<String, String> map : dataTable) {
+				String json = JsonUtils.buildAddCaseJson(
+						getValue(map, "courthouse"),
+						getValue(map, "case_number"),
+						getValue(map, "defendants"),
+						getValue(map, "judges"),
+						getValue(map, "prosecutors"),
+						getValue(map, "defenders"));
+				ApiResponse apiResponse = jsonApi.postApi("cases", json);
+				testdata.statusCode = apiResponse.statusCode;
+				testdata.responseString = apiResponse.responseString;
+				Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+			}
+		}
+
+/* Create courthouse n.b. display name defaults to courthouse if blank
+ * 
+ * sample cucumber:
+ * When I create a courthouse
+ * |courthouse|code|display_name|
+ * 
+ */
+	@When("^I create a courthouse$")
+	public void createCourthouseJson(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
-			String json = JsonUtils.buildCaseJson(
+			String json = JsonUtils.buildAddCourthouseJson(
 					getValue(map, "courthouse"),
-					getValue(map, "case_number"),
-					getValue(map, "defendants"),
-					getValue(map, "judges"),
-					getValue(map, "prosecutors"),
-					getValue(map, "defenders"));
-			ApiResponse apiResponse = jsonApi.postApi("cases", json);
+					getValue(map, "code"),
+					getValue(map, "display_name"));
+			ApiResponse apiResponse = jsonApi.postApi("courthouses", json);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
 			Assertions.assertEquals(apiResponse.statusCode, "201", "Invalid API response " + apiResponse.statusCode);
@@ -135,22 +176,22 @@ public class StepDef_jsonApi extends StepDef_base {
 	
 	@When("^I call POST cases for courthouse \"([^\"]*)\" case_number \"([^\"]*)\"$")
 	public void callPostCases(String courthouse, String caseNumber) {
-		String json = JsonUtils.buildCaseJson(courthouse, caseNumber, "", "", "", "");
+		String json = JsonUtils.buildAddCaseJson(courthouse, caseNumber, "", "", "", "");
 		ApiResponse apiResponse = jsonApi.postApi("cases", json);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST {word} API using json body:")
-	public void callPostApiWithJsonBody(String endPoint, String docString) throws Exception {
-		ApiResponse apiResponse = jsonApi.postApi(endPoint, docString);
+	public void callPostApiWithJsonBody(String endPoint, String docString) {
+		ApiResponse apiResponse = jsonApi.postApi(endPoint, Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call GET {word} API")
-	public void callGetApiWithJsonBody(String endPoint) throws Exception {
-		ApiResponse apiResponse = jsonApi.getApi(endPoint);
+	public void callGetApiWithJsonBody(String endPoint) {
+		ApiResponse apiResponse = jsonApi.getApi(Substitutions.substituteValue(endPoint));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -161,7 +202,7 @@ public class StepDef_jsonApi extends StepDef_base {
 //	|              | Leeds		 |            |            |                |           |         |                     |
 
 	@When("^I call GET case-hearings API with terms:$")
-	public void callGetCaseHearingsApi(List<Map<String, String>> dataTable) throws Exception {
+	public void callGetCaseHearingsApi(List<Map<String, String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
 			map.get("case_number");
 			ApiResponse apiResponse = jsonApi.getApiWithQueryParams("cases/search", map);
