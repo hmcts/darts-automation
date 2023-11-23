@@ -61,10 +61,14 @@ public class Substitutions {
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
-				if (subsString.equalsIgnoreCase("build")) {
+				if (subsString.equalsIgnoreCase("seq")) {
 					substitutionString = ReadProperties.build;
 				} else {
-					substitutionString = TestData.getProperty(subsString);
+					if (subsString.equalsIgnoreCase("timestamp")) {
+						substitutionString = DateUtils.timestamp();
+					} else {
+						substitutionString = TestData.getProperty(subsString);
+					}
 				}
 			}
 			substitutedValue = value.substring(0, subsStart)+substitutionString+value.substring(subsEnd+2);
