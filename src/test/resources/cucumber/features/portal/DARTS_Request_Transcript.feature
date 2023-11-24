@@ -10,7 +10,6 @@ Feature: Request Transcript
       | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
-      | CASE1009                                                              | TS0002     | ROOM_A    |          |               |
     Given I click on "CASE1009" in the same row as "Swansea"
     #Hearing Details
     And I click on "15 Aug 2023" in the same row as "ROOM_A"
@@ -47,7 +46,7 @@ Feature: Request Transcript
 
     #All Transcripts
 
-    When I click on the breadcrumb link "CASE1009"
+    When I click on the breadcrumb link "<CaseID>"
     And I click on the "All Transcripts" link
     And I see "All transcripts for this case" on the page
     And I click on the "View" link
@@ -59,7 +58,7 @@ Feature: Request Transcript
     And I see "Download transcript file" on the page
 
   #Transcripts
-    When I click on the breadcrumb link "CASE1009"
+    When I click on the breadcrumb link "<CaseID>"
     And I click on "<HearingDate>" in the same row as "<Courtroom>"
     And I click on the "Transcripts" link
     And I see "Transcripts for this hearing" on the page
