@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -530,13 +531,13 @@ public class NavigationShared {
 	}
 	
 
-	public NavigationShared set_valueTo(String location_name, String value) throws Exception {
+	public WebElement set_valueTo(String location_name, String value) throws Exception {
 		log.info("About to Set input field with label =>" + location_name + "<= to =>" + value);
 		WebElement targetElement = findInputFieldByLabelText(location_name);
 		String substitutedValue = setElementValueTo(targetElement, value);
 		log.info("Set input field with label =>" + location_name + "<= to =>" + substitutedValue);
 
-		return this;
+		return targetElement;
 	}
 	
 	public String setElementValueTo(WebElement webElement, String value) throws Exception {
@@ -937,7 +938,7 @@ public class NavigationShared {
 		log.info("Clicked on radio button for =>"+caption+ "<= label =>" + label);
 	}
 
-	public void linkText_visible(String arg1, boolean isExpected) {
+	public boolean linkText_visible(String arg1) {
 		log.info("Going to check whether link text =>" + arg1 + "<= is present on the page");
 		wait.deactivateImplicitWait();
 		waitForLoadingIcon();
@@ -954,7 +955,11 @@ public class NavigationShared {
 				isVisible = false;
 			}
 		}
+		return isVisible;
+	}
 
+	public void linkText_visible(String arg1, boolean isExpected) {
+		boolean isVisible = linkText_visible(arg1);
 		if (isExpected == isVisible) {
 			log.info("Link text present =>" + isExpected + "<= which is expected");
 		} else {
@@ -1902,6 +1907,34 @@ public class NavigationShared {
 		driver.findElement(By.xpath("//*[text()[contains(.,'"+text+"')] and contains(@class, '"+className+"')]"));
 
 		log.info("Found li element which has text =>"+text+"<= with class =>"+className);
+	}
+
+	public void compareDropdownData(String label_Name, List<String> dropdownList) throws Exception {
+		int errorCount = 0;
+		List<WebElement> options = new ArrayList<WebElement>();
+		WebElement dropdown =  find_inputBy_labelName(label_Name);
+		if (dropdown.getTagName().equalsIgnoreCase("select")) {
+			log.info("Found dropdown with name =>" + label_Name);
+			Select select = new Select(dropdown);
+			options = dropdown.findElements(By.tagName("option"));
+		} else {
+			log.error("Select element cannot be found with label {} ",label_Name);
+		}
+
+		for (int dropdownIndex = 0; dropdownIndex < dropdownList.size(); dropdownIndex++) {
+			String actualText = options.get(dropdownIndex).getText();
+			String expectedText = dropdownList.get(dropdownIndex);
+
+			if (!expectedText.equals(actualText)) {
+				log.error("Value mismatch at index {}:: Expected: '{}', Actual: '{}'", dropdownIndex, expectedText, actualText);
+				errorCount++;
+			} else {
+				log.info("Values match at index {}:: Expected: '{}', Actual: '{}'", dropdownIndex, expectedText, actualText);
+			}
+		}
+		log.info("Dropdown has {} error count", errorCount);
+		Assertions.assertEquals(0, errorCount);
+
 	}
 
 }

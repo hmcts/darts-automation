@@ -63,6 +63,10 @@ public class JsonApi {
         return loglevel;
     }
     
+    public String authenticateAsUser(String role) {
+    	return "";
+    }
+    
     public String authenticate() {
     	log.info("authentication");
     	response  = 

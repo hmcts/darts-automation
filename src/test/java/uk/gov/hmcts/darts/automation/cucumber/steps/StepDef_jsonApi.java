@@ -67,6 +67,11 @@ public class StepDef_jsonApi extends StepDef_base {
 		}
 	}
 	
+	@Given("I authenticate as a/an {word} user") 
+	public void authenticateAsUser(String role) {
+		jsonApi.authenticateAsUser(role);
+	}
+	
 /*
  * Save value from json response in testdata object
  */
