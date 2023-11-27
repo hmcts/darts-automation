@@ -10,6 +10,12 @@ import io.cucumber.java.Before;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -170,6 +176,40 @@ public class StepDef_navigation extends StepDef_base {
 	@Then("^I see link with text \"([^\"]*)\"$")
 	public void doSee_linkText(String arg1) {
 		NAV.linkText_visible(arg1, true);
+	}
+	
+	@Then("^I see links with text:$")
+	public void seeLinksWithText(List<List<String>> dataTable) {
+		Assertions.assertTrue(dataTable.size() > 1);
+		int errorCount = 0;
+		for (int rowNum = 1; rowNum < dataTable.size(); rowNum++) {
+			for (int colNum = 0; colNum < dataTable.get(0).size(); colNum++) {
+				String linkText = dataTable.get(0).get(colNum);
+				String linkTest = (dataTable.get(rowNum).get(colNum) == null) ? "" : dataTable.get(rowNum).get(colNum).substring(0, 1);
+				boolean linkExists = NAV.linkText_visible(linkText);
+				if (linkTest.equalsIgnoreCase("Y")) {
+						if (!linkExists) {
+						log.error("Error in links for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
+					errorCount++;
+					}
+				} else {
+					if (linkTest.equalsIgnoreCase("N")) {
+						if (linkExists) {
+							log.error("Error in links for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
+							errorCount++;
+						}
+					} else {
+						if (linkTest.isBlank()) {
+							log.info("Links for {} in row {} not checked, link exists={}", linkText, rowNum, linkExists);
+						} else {
+							log.error("Unexpected value for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
+							errorCount++;
+						}
+					}
+				}
+			}
+		}
+		Assertions.assertEquals(0, errorCount, "Errors found verifying links");
 	}
 	
 	@Then("^I see that \"([^\"]*)\" has \"([^\"]*)\" \"([^\"]*)\"$")

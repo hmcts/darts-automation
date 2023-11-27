@@ -30,10 +30,11 @@ public class TestData {
 	static String parameterFileName = "src/test/resources/testdata.properties";
 	
 	static String currentYear =  Year.now().toString();
-	Properties propFile; // = new Properties();
-	Properties properties; // = new Properties();
+	static Properties propFile; // = new Properties();
+	static Properties properties; // = new Properties();
 	public String statusCode = "";
 	public String responseString = "";
+	private static int instanceCount = 0;
 	
 	public TestData() {
 		propFile = new Properties();
@@ -49,6 +50,7 @@ public class TestData {
 			log.fatal("Error loading properties file >"+parameterFileName);
 			e.printStackTrace();
 		}
+		log.info("Instance count: " + ++instanceCount);
 	}
 
 
@@ -57,7 +59,7 @@ public class TestData {
  * Read property from properties file
  * 
  */
-	String readProperty(String property) {
+	static String readProperty(String property) {
 		
 		return propFile.getProperty(property);
 	}
@@ -68,7 +70,7 @@ public class TestData {
  * 
  */
 	
-	void saveProperty(String property, String value) {
+	static void saveProperty(String property, String value) {
 		properties.setProperty(property, value);
 		propFile.setProperty(property, value);
 		
@@ -86,7 +88,7 @@ public class TestData {
  * increment some default values
  * 
  */
-	public String getProperty(String property) {
+	public static String getProperty(String property) {
 		String returnValue;
 		try {
 			returnValue = properties.getProperty(property);
@@ -139,7 +141,7 @@ public class TestData {
  * and store in properties
  * 
  */
-	public void parseArgument(String arg1, String validValues) throws Exception {
+	public void parseArgument(String arg1, String validValues) {
 		int errors = 0;
 		if (arg1.length() > 0) {
 			String [] arg = arg1.split(",");
@@ -156,7 +158,7 @@ public class TestData {
 			}
 			if (errors > 0) {
 				log.fatal("" + errors + " errors parsing argument");
-				throw new Exception("" + errors + " errors parsing argument");
+				Assertions.fail("" + errors + " errors parsing argument");
 			}
 		} else {
 			log.info("no data in argument");
@@ -208,7 +210,7 @@ public class TestData {
 		return nextValue;
 	}
 	
-	public String getNextCaseNumber(String courtHouse, String caseType) {
+	public static String getNextCaseNumber(String courtHouse, String caseType) {
 		String propertyKey = "CaseNumber-" + courtHouse + "-" + caseType;
 		String caseNumber = properties.getProperty(propertyKey);
 		if (caseNumber == null) {

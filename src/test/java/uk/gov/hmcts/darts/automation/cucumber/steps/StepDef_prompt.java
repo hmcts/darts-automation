@@ -9,6 +9,7 @@ import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
@@ -36,13 +37,13 @@ public class StepDef_prompt extends StepDef_base {
 	
 	@Then("^I pause the test with message \"([^\"]*)\"$")
 	public void pauseTest(String message) {
-	prompt.displayPopup(message);
+	prompt.displayPopup(Substitutions.substituteValue(message));
 	};
 	
 	
 	@Then("^I pause the test with header \"([^\"]*)\" message \"([^\"]*)\"$")
 	public void pauseTest(String header, String message) {
-	prompt.displayPopup(header, message);
+	prompt.displayPopup(header, Substitutions.substituteValue(message));
 	};
 	
 	

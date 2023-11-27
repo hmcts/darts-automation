@@ -78,10 +78,10 @@ public class SoapApi {
 	    		.header(CONNECTION, CONNECTION_STRING)
     			.urlEncodingEnabled(true)
     			.formParams("grant_type", "password",
-    					"username", ReadProperties.apiUserName,
-    					"password", ReadProperties.apiPassword,
+    					"username", ReadProperties.apiGlobalUserName,
+    					"password", ReadProperties.apiGlobalPassword,
     					"client_id", ReadProperties.apiClientId,
-    					"scope", "https://" + ReadProperties.main("apiAuthPath") + "/" + ReadProperties.apiClientId + "/Functional.Test")
+						"scope", ReadProperties.main("apiScopeUri") + ReadProperties.apiClientId + "/Functional.Test")
     			.baseUri(ReadProperties.main("apiAuthUri"))
     			.basePath(ReadProperties.main("apiAuthPath"))
     		.when()
@@ -121,7 +121,7 @@ public class SoapApi {
 		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
     }
 
-	public ApiResponse postSoap(String endpoint, String soapAction, String body) {
+	public ApiResponse postSoap(String endpoint, String soapAction, String body, boolean htmlEncoded) {
 
 		log.info("post soap request - SOAPAction: " + soapAction);
     	authorization = authenticate();
@@ -137,7 +137,7 @@ public class SoapApi {
 					.header(SOAP_ACTION, soapAction)
 					.baseUri(baseUri)
 					.basePath("")
-					.body(addSoapHeader(soapAction, body))
+					.body(addSoapHeader(soapAction, body, htmlEncoded))
 				.when()
 					.post(endpoint)
 				.then()
@@ -168,13 +168,13 @@ public class SoapApi {
 				+ "</soap:Envelope>";
 	}
 
-	String addSoapHeader(String soapAction, String soapBody) {
+	String addSoapHeader(String soapAction, String soapBody, boolean htmlEncoded) {
 		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
 				+ "    <soap:Body>"
 				+ "        <" + soapAction + " xmlns=\"http://com.synapps.mojdarts.service.com\">"
 				+ "            <document xmlns=\"\">"
-				+ encodeEntities(soapBody)
+				+ ((htmlEncoded) ? encodeEntities(soapBody) : soapBody)
 				+ "            </document>"
 				+ "        </" + soapAction + ">"
 				+ "    </soap:Body>"
@@ -186,7 +186,7 @@ public class SoapApi {
 		if (xml.contains("&lt;")) {
 			result = xml;
 		} else {
-			result = xml.replace("&", "&amp").replace("<", "&lt;").replace("<", "&gt;").replace("\"", "&quot;").replace("'", "&apost;");
+			result = xml.replace("&", "&amp").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apost;");
 		}
 		return result;	
 	}

@@ -72,7 +72,7 @@ public class Database extends Postgres {
 	}
 	
 	public boolean courtExists(String courthouse) throws Exception {
-		return returnSingleValue("courthouse", "courthouse_name", courthouse, "count(courthouse_name)").equals("1");
+		return returnSingleValue("darts.courthouse", "courthouse_name", courthouse, "count(courthouse_name)").equals("1");
 	}
 	
 	public boolean courtCaseExists(String courtHouse, String caseNumber) throws Exception {
