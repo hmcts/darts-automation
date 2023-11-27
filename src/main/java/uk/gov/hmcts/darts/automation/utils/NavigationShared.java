@@ -8,9 +8,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import io.cucumber.datatable.DataTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -776,7 +780,7 @@ public class NavigationShared {
 	/**
 	 * Overloading with wait time passed - For increased waiting when required
 	 * 
-	 * @param waitTime
+	# * @param waitTime
 	 */
 	public void waitForPageLoad(int initialWait, int postWait) {
 		log.info("Waiting for Loading Icon to become visible");
@@ -1934,7 +1938,6 @@ public class NavigationShared {
 		}
 		log.info("Dropdown has {} error count", errorCount);
 		Assertions.assertEquals(0, errorCount);
-
 	}
 
 }

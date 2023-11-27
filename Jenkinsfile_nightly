@@ -44,7 +44,9 @@ def secrets = [
     secret('DartsRequesterTestUsername','AUTOMATION_REQUESTER_TEST_USERNAME'),
     secret('DartsApproverTestUsername','AUTOMATION_APPROVER_TEST_USERNAME'),
     secret('DartsAppealCourtTestUsername','AUTOMATION_APPEAL_COURT_TEST_USERNAME'),
-    secret('DartsInternalUserTestPassword','AUTOMATION_INTERNAL_PASSWORD')
+    secret('DartsInternalUserTestPassword','AUTOMATION_INTERNAL_PASSWORD'),
+    secret('DartsRequesterApproverUsername','AUTOMATION_REQUESTER_APPROVER_USERNAME'),
+    secret('DartsRequesterApproverPassword','AUTOMATION_REQUESTER_APPROVER_PASSWORD')
   ],
 ]
 

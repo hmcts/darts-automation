@@ -1,7 +1,7 @@
 plugins {
   // Apply the java-library plugin for API and implementation separation.
   id 'java-library'
-  id 'org.owasp.dependencycheck' version '8.4.2'
+  id 'org.owasp.dependencycheck' version '8.4.3'
   id 'org.sonarqube' version '4.4.1.3373'
   id 'jacoco'
 }
@@ -105,16 +105,16 @@ ext['spring-security.version'] = '6.0.3' // https://spring.io/security/cve-2023-
 
 dependencies {
 
-	implementation(platform("org.apache.logging.log4j:log4j-bom:2.21.1"))
+	implementation(platform("org.apache.logging.log4j:log4j-bom:2.22.0"))
 	implementation 'org.apache.logging.log4j:log4j-api'
 	implementation 'org.apache.logging.log4j:log4j-core'
 	testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl'
 	
 	implementation 'org.seleniumhq.selenium:selenium-java:4.15.0'
 	
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
 	
-	implementation(platform("io.cucumber:cucumber-bom:7.14.0"))
+	implementation(platform("io.cucumber:cucumber-bom:7.14.1"))
 	implementation 'io.cucumber:cucumber-picocontainer'
 	implementation 'io.cucumber:cucumber-java'
 	implementation 'io.cucumber:cucumber-junit'
@@ -128,7 +128,7 @@ dependencies {
 	
   implementation 'commons-io:commons-io:2.15.0'
 
-	implementation(platform("org.junit:junit-bom:5.10.0"))
+	implementation(platform("org.junit:junit-bom:5.10.1"))
 	runtimeOnly    "org.junit.platform:junit-platform-launcher"
 	implementation "org.junit.platform:junit-platform-suite"
 	implementation "org.junit.jupiter:junit-jupiter-api"
@@ -139,17 +139,17 @@ dependencies {
 //	implementation "org.slf4j:slf4j-simple:2.0.7"
 //	implementation "org.slf4j:log4j-over-slf4j:2.0.7"
 	
-	implementation group: 'com.opencsv', name: 'opencsv', version: '5.8'
+	implementation group: 'com.opencsv', name: 'opencsv', version: '5.9'
 	
 //	implementation group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.20.0.0'	
 	
-	implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.0'
 	
 	// Rest assured
 	implementation 'io.rest-assured:rest-assured:5.3.2'
 	
   // Use JUnit Jupiter for testing.
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
 
   // This dependency is exported to consumers, that is to say found on their compile classpath.
   api 'org.apache.commons:commons-math3:3.6.1'

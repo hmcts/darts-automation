@@ -32,6 +32,16 @@ public class HtmlTable {
     public void verifyHtmlTableData(DataTable dataTable, boolean isFirstRowHeader) {
         NAV.waitForPageLoad();
         WebElement htmlTableElement = webDriver.findElement(By.cssSelector(".govuk-table"));
+		verifyHtmlTableData(dataTable, isFirstRowHeader, htmlTableElement);
+    }
+
+    public void verifyHtmlTableData(DataTable dataTable, boolean isFirstRowHeader, String tablename) {
+        NAV.waitForPageLoad();
+        WebElement htmlTableElement = webDriver.findElement(By.xpath("//*[text()=\""+tablename+"\"]/following::table[1]"));
+		verifyHtmlTableData(dataTable, isFirstRowHeader, htmlTableElement);
+	}
+
+    public void verifyHtmlTableData(DataTable dataTable, boolean isFirstRowHeader, WebElement htmlTableElement) {
         List<WebElement> rowElements = htmlTableElement.findElements(By.tagName("tr"));
         List<List<String>> dataTableRows = dataTable.asLists(); //outer List<> is rows, inner List<> is cells
 
@@ -42,7 +52,7 @@ public class HtmlTable {
         //Verify table header
         if (isFirstRowHeader) {
             List<WebElement> headerElements = rowElements.get(0).findElements(By.xpath(".//th")); //get all the headers from the row WebElement
-            compareTableData(headerElements, dataTableRows.get(0), 0, rowElements.get(0).findElements(By.xpath(".//th")).size());
+            compareTableData(headerElements, dataTableRows.get(0), 0);
             rowElements.remove(0);
         }
 
@@ -51,13 +61,14 @@ public class HtmlTable {
             List<String> dataTableColumns = dataTableRows.get(i);
             WebElement rowElem = rowElements.get(i - startIndex);
             List<WebElement> cellElements = rowElem.findElements(By.xpath(".//td"));
-            compareTableData(cellElements, dataTableColumns, i, rowElem.findElements(By.xpath(".//td")).size());
+            compareTableData(cellElements, dataTableColumns, i);
         }
         Assert.assertEquals(0, errorCount);
         log.error("Html Table and Datatable has {} error count", errorCount);
     }
 
-    private void compareTableData(List<WebElement> cellElements, List<String> dataTableColumns, int rowIdx, int tdSize) {
+
+    private void compareTableData(List<WebElement> cellElements, List<String> dataTableColumns, int rowIdx) {
         int htmlIndex = 0;
         for (int dataTableIndex = 0; dataTableIndex < dataTableColumns.size(); dataTableIndex++) { //loop through every cell in the current DataTable row
             String expectedCell = dataTableColumns.get(dataTableIndex);
@@ -69,12 +80,10 @@ public class HtmlTable {
                 actualCell = (actualCell != null) ? actualCell : "";
 
                 if (!expectedCell.equals(actualCell)) {
-                    log.error("Value mismatch at Row: {} Column: {}. Expected: '{}', Actual: '{}'",
-                            rowIdx, dataTableIndex, expectedCell, actualCell);
+                    log.error("Value mismatch at Row: {} Column: {}. Expected: '{}', Actual: '{}'", rowIdx, dataTableIndex, expectedCell, actualCell);
                     errorCount++;
                 } else {
-                    log.info("Values match at Row: {} Column: {}. Expected: '{}', Actual: '{}'",
-                            rowIdx, dataTableIndex, expectedCell, actualCell);
+                    log.info("Values match at Row: {} Column: {}. Expected: '{}', Actual: '{}'", rowIdx, dataTableIndex, expectedCell, actualCell);
                 }
                 htmlIndex++;
             }

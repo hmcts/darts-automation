@@ -70,4 +70,28 @@ public class StepDef_portal extends StepDef_base {
     public void iSeeTheTranscriptionCountIs(String count) {
         portal.TranscriptionCountOnPage(count);
     }
+
+    @Then("I see the notification-count is \"([^\"]*)\"$")
+    public void iSeeTheNotificationCountIs(String count) throws Exception {
+        portal.notificationCount(count);
+    }
+
+    @Given("I navigate to the url \"([^\"]*)\"$")
+    public void iNavigateToTheUrl(String url) throws Exception {
+        NAV.navigateToUrl(url);
+    }
+
+    @Then("I verify the download file matches \"([^\"]*)\"$")
+    public void iVerifyTheDownloadFileMatches(String fileName) {
+        try {
+            portal.downloadFileMatches(fileName);
+        } catch (Exception exception){
+            log.fatal("File {} cannot be found", fileName);
+        }
+    }
+
+    @When("I click on the pagination link \"([^\"]*)\"$")
+    public void iClickOnPaginationLink(String linkName) throws Exception {
+        NAV.click_link_by_text(linkName);
+    }
 }

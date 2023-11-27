@@ -8,16 +8,18 @@ Feature: Case File Screen
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-      | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
-      | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
       | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
+      | CASE1009                                                              | Swansea    | Multiple  |          | Jow Bloggs    |
+      | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
+
     Given I click on "CASE1009" in the same row as "Swansea"
     Then I verify the HTML table contains the following values
       | Hearing date | Judge | Courtroom       | No. of transcripts |
       | 15 Aug 2023  |       | ROOM_A          | 1                  |
-      | 15 Aug 2023  |       | ROOM_A12434     | 2                  |
+      | 15 Aug 2023  |       | ROOM_A12434     | 1                  |
       | 15 Aug 2023  |       | ROOM_XYZ        | 1                  |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
+
   @DMP-965
   Scenario: Case File Screen Sort with Hearing Table
     When I click on "Hearing date" in the table header
@@ -25,7 +27,7 @@ Feature: Case File Screen
     Then I verify the HTML table contains the following values
       | Hearing date | Judge | Courtroom       | No. of transcripts |
       | 15 Aug 2023  |       | ROOM_A          | 1                  |
-      | 15 Aug 2023  |       | ROOM_A12434     | 2                  |
+      | 15 Aug 2023  |       | ROOM_A12434     | 1                  |
       | 15 Aug 2023  |       | ROOM_XYZ        | 1                  |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
 
@@ -37,7 +39,7 @@ Feature: Case File Screen
       | Hearing date | Judge | Courtroom       | No. of transcripts |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
       | 15 Aug 2023  |       | ROOM_XYZ        | 1                  |
-      | 15 Aug 2023  |       | ROOM_A12434     | 2                  |
+      | 15 Aug 2023  |       | ROOM_A12434     | 1                  |
       | 15 Aug 2023  |       | ROOM_A          | 1                  |
 
   @DMP-965
@@ -46,8 +48,8 @@ Feature: Case File Screen
     Then "No. of transcripts" has sort "descending" icon
     Then I verify the HTML table contains the following values
       | Hearing date | Judge | Courtroom       | No. of transcripts |
-      | 15 Aug 2023  |       | ROOM_A12434     | 2                  |
       | 15 Aug 2023  |       | ROOM_A          | 1                  |
+      | 15 Aug 2023  |       | ROOM_A12434     | 1                  |
       | 15 Aug 2023  |       | ROOM_XYZ        | 1                  |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
 
@@ -58,7 +60,7 @@ Feature: Case File Screen
     Then I verify the HTML table contains the following values
       | Hearing date | Judge | Courtroom       | No. of transcripts |
       | 15 Aug 2023  |       | ROOM_A          | 1                  |
-      | 15 Aug 2023  |       | ROOM_A12434     | 2                  |
+      | 15 Aug 2023  |       | ROOM_A12434     | 1                  |
       | 15 Aug 2023  |       | ROOM_XYZ        | 1                  |
       | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
 
@@ -66,10 +68,9 @@ Feature: Case File Screen
   Scenario: All transcripts tab
     Then I click on the "All Transcripts" link
     And I see "All transcripts for this case" on the page
-    And I see the transcription-count is "4"
+    And I see the transcription-count is "3"
     And I verify the HTML table contains the following values
-      | Hearing date | Type               | Requested on         | Requested by | Status   |   |
-      | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | CLOSED   |   |
-      | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | CLOSED   |   |
-      | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | CLOSED   |   |
+      | Hearing date | Type               | Requested on         | Requested by | Status   |      |
+      | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | CLOSED   |      |
+      | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | CLOSED   |      |
       | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | COMPLETE | View |
