@@ -66,21 +66,21 @@ Scenario: DARTS Link
 Scenario Outline: All roles
 	When  I am logged on to DARTS as a <Type> user
 	Then  I see "Search for a case" on the page
-	And   I see link with text "Search"
 	And   I see links with text:
-	| Your Audio   | Your Transcripts   | Transcript Requests   | Your Work   |
-	| <Your Audio> | <Your Transcripts> | <Transcript Requests> | <Your Work> |
+	| Search   | Your Audio   | Your Transcripts   | Transcript requests   | Your work   |
+	| <Search> | <Your Audio> | <Your Transcripts> | <Transcript requests> | <Your work> |
 	And   I see link with text "HMCTS"
 	And   I see link with text "DARTS"
 	And   I see link with text "Sign out"
-	
+
 Examples:
-	| Type 			   | Your Audio | Your Transcripts | Transcript Requests | Your Work |
-	| Judge        | Y          | N                | N                   | N         |
-	| REQUESTER    | Y          | Y                | N                   | N         |
-	| APPROVER     | Y          | Y                | N                   | N         |
-	| APPEALCOURT  | Y          | Y                | N                   | N         |
-	| TRANSCRIBER  | Y          | N                | N                   | N         |
-	| LANGUAGESHOP | Y          | Y                | N                   | N         |
+	| Type 	  	        |Search | Your Audio | Your Transcripts | Transcript requests | Your work |
+	| Judge             | Y     | Y          | N                | Y                   | Y         |
+	| REQUESTER         | Y     | Y          | Y                | N                   | N         |
+	| APPROVER          | Y     | Y          | Y                | N                   | N         |
+	| APPEALCOURT       | Y     | Y          | Y                | N                   | N         |
+	| TRANSCRIBER       | Y     | Y          | N                | Y                   | Y         |
+	| LANGUAGESHOP      | Y     | Y          | Y                | N                   | N         |
+	| REQUESTERAPPROVER | Y     | Y          | Y                | N                   | N         |
 
 
