@@ -28,7 +28,7 @@ Feature: Case Search
 			| DMP461_Case407 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
 			| DMP461_Case409 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
 
-	@DMP-509 @DMP-508 @DMP-515 @DMP-860 @DMP-702 @DMP-517
+	@DMP-509 @DMP-508 @DMP-515 @DMP-860 @DMP-702 @DMP-517 @DMP-561
 	Scenario: Advanced case search and result verification
 		When I click on the "Advanced search" link
 		And I set "Courthouse" to "DMP-1151-1"
@@ -96,6 +96,15 @@ Feature: Case Search
 		And I see "Refine your search by:" on the page
 		And I see "adding more information to your search" on the page
 		And I see "using filters to restrict the number of results" on the page
+
+		When I click on the "Clear search" link
+		And I set "Case ID" to "case"
+		And I press the "Search" button
+		Then I see "15 results" on the page
+
+		When I set "Courthouse" to "Swansea" and click away
+		And I press the "Search" button
+		Then I see "8 results" on the page
 
 @DMP-509 @DMP-507 @DMP-860
 Scenario: Case details and Hearing details
