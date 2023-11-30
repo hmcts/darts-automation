@@ -31,22 +31,21 @@ Feature: Case Search
 	@DMP-509 @DMP-508 @DMP-515 @DMP-860 @DMP-702 @DMP-517 @DMP-561
 	Scenario: Advanced case search and result verification
 		When I click on the "Advanced search" link
-		And I set "Courthouse" to "DMP-1151-1"
-		And I set "Courtroom" to "DMP-1151-01 Courtroom"
+		And I set "Courthouse" to "Swansea"
+		And I set "Courtroom" to "DMP-1025 Courtroom"
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-			| Case ID     | Courthouse | Courtroom             | Judge(s) | Defendants(s)         |
-			| DMP-1151-01 | DMP-1151-1 | DMP-1151-01 Courtroom |          | DMP-1151-01 Defendant |
+			| Case ID  | Courthouse | Courtroom          | Judge(s) 	  | Defendants(s)      |
+			| DMP-1025 | Swansea    | DMP-1025 Courtroom | DMP-1025 Judge | DMP-1025 Defendant |
 
 		When I click on the "Clear search" link
 		And "Courthouse" is ""
 		And "Courtroom" is ""
-		And I set "Defendant's name" to "DMP-695-01 Defendant"
+		And I set "Defendant's name" to "DMP-8722 Defendant"
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-          | Case ID | Courthouse | Courtroom | Judge(s)          | Defendants(s)         |
-		  | DMP-695-01                                                            | DMP-695-1  | DMP-695-01 Courtroom |          | DMP-695-01 Defendant |
-		  | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*             | *IGNORE* | *IGNORE*             |
+          | Case ID | Courthouse | Courtroom 		 | Judge(s) | Defendants(s)      |
+		  | DMP-872 | Swansea    | DMP-872 Courtroom |          | DMP-8722 Defendant |
 
 		When I click on the "Clear search" link
 		And "Defendant's name" is ""
@@ -58,14 +57,15 @@ Feature: Case Search
 
 		When I click on the "Clear search" link
 		And "Judge's name" is ""
-		And I set "Keywords" to "Judge"
+		And I set "Keywords" to "Case"
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-			| Case ID                                                               | Courthouse | Courtroom            | Judge(s) | Defendants(s)        |
-			| DMP-695-01                                                            | DMP-695-1  | DMP-695-01 Courtroom |          | DMP-695-01 Defendant |
-			| !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*             | *IGNORE* | *IGNORE*             |
-			| CASE1_DMP651                                                          | London     | Multiple             |          | Multiple             |
-			| !\nRestriction\nRestriction: Prosecution witness adsent: police       | *IGNORE*   | *IGNORE*             | *IGNORE* | *IGNORE*             |
+			| Case ID       | Courthouse    | Courtroom          | Judge(s) | Defendants(s) |
+			| DMP768-case2  | LEEDS_DMP768  | Room1_DMP768       |          |               |
+			| Case1_DMP1398 | LEEDS_DMP1398 | Room1_LEEDSDMP1398 |          |               |
+			| DMP825-case1  | LEEDS_DMP825  | Room1_DMP825       |          |               |
+			| DMP768-case1  | LEEDS_DMP768  | Room1_DMP768       |          |               |
+			| DMP7681-case1 | LEEDS_DMP7681 | Room1_DMP7681      |          |               |
 
 		When I click on the "Clear search" link
 		And "Keywords" is ""
