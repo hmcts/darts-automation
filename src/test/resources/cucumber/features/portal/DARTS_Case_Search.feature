@@ -70,24 +70,25 @@ Feature: Case Search
 		When I click on the "Clear search" link
 		And "Keywords" is ""
 		And I select the "Specific date" radio button with label "Specific date"
-		And I set "Enter a date" to "09/10/2023"
+		And I set "Enter a date" to "22/11/2023"
+		And I set "Courthouse" to "Swansea" and click away
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-			| Case ID       | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-			| DMP1128-case1 | London     | Multiple  | *IGNORE* | *IGNORE*      |
+			| Case ID  | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+			| T0003679 | Swansea    | room1     |          | fred          |
+			| T0003680 | Swansea    | room1     |          | fred          |
+			| T0005680 | Swansea    | room1     |          | fred          |
+			| T0005681 | Swansea    | room1     |          | fred          |
 
 		When I click on the "Clear search" link
 		And I select the "Date range" radio button with label "Date range"
-		And I set "Enter date from" to "01/11/2023"
-		And I set "Enter date to" to "03/11/2023"
+		And I set "Enter date from" to "24/11/2023"
+		And I set "Enter date to" to "01/12/2023"
+		And I set "Courthouse" to "PerfCourtHouse01" and click away
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-			| Case ID                                                                     | Courthouse | Courtroom    | Judge(s) | Defendants(s) |
-			| A2023XXX                                                                    | Liverpool  | 1            |          |               |
-			| !\nRestriction\nRestriction: Section 4(2) of the Contempt of Court Act 1981 | *IGNORE*   | *IGNORE*     | *IGNORE* | *IGNORE*      |
-			| A2023XXX                                                                    | Leeds      | Multiple     |          |               |
-			| Case1_DMP938                                                                | London     | Multiple     |          |               |
-			| Case2_DMP938                                                                | London     | Room1_London |          |               |
+			| Case ID    | Courthouse       | Courtroom | Judge(s) | Defendants(s) |
+			| CASEAC1002 | PerfCourtHouse01 | Multiple  |          |               |
 
 		When I click on the "Clear search" link
 		And I set "Courthouse" to "Courthouse" and click away
