@@ -129,7 +129,7 @@ Feature: Request Audio for transcribers
         When I click on the "Your work" link
         And I see "Your work" on the page
         Then I click on "View" in the same row as "<CaseID>"
-        And I see "Transcript Request" on the page
+        And I see "Transcript request" on the page
         And I see "<CaseID>" on the page
         And I press the "Get audio for this request" button
         And I see "Events and audio recordings" on the page
@@ -142,24 +142,25 @@ Feature: Request Audio for transcribers
     When I click on the "Your work" link
     And I see "Your work" on the page
     Then I click on "View" in the same row as "<CaseID>"
-    And I see "Transcript Request" on the page
+    And I see "Transcript request" on the page
     And I see "<CaseID>" on the page
     And I see "Upload transcript file" on the page
     And I see "This must be in a doc or docx format. Maximum file size 10MB." on the page
-    And I see "Events and audio recordings" on the page
+    #Add line to click upload file. New  step def may be required.
     Examples:
       | CaseID   |
       | CASE1009 |
 
   @DMP-1326-AC4
-  Scenario Outline: Manual Transcription Request - Select file
+  Scenario Outline: Manual Transcription Request - Cancel Upload
     When I click on the "Your work" link
     And I see "Your work" on the page
     Then I click on "View" in the same row as "<CaseID>"
-    And I see "Transcript Request" on the page
+    And I see "Transcript request" on the page
     And I see "<CaseID>" on the page
     Then I click on the "Cancel" link
     And I see "Your work" on the page
+    And I see "<CaseID>" on the page
     Examples:
       | CaseID   |
       | CASE1009 |
