@@ -23,6 +23,10 @@ public class ReadProperties {
 		return System.getProperty(name);
 	}
 	
+	static String emptyIfNull(String string) {
+		return string == null ? "" : string;
+	}
+	
 	private static Logger log = LogManager.getLogger("ReadProperties");
 
 // get azure secrets as environment vars
@@ -30,8 +34,12 @@ public class ReadProperties {
 	public static String apiPassword = getSystemValue("FUNC_TEST_ROPC_PASSWORD");
 	public static String apiGlobalUserName = getSystemValue("FUNC_TEST_ROPC_GLOBAL_USERNAME");
 	public static String apiGlobalPassword = getSystemValue("FUNC_TEST_ROPC_GLOBAL_PASSWORD");
-	public static String apiClientId = getSystemValue("AAD_B2C_ROPC_CLIENT_ID_KEY");
-	public static String apiClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+	public static String apiExtClientId = getSystemValue("AAD_B2C_ROPC_CLIENT_ID");
+	public static String apiExtClientIdKey = getSystemValue("AAD_B2C_ROPC_CLIENT_ID_KEY");
+	public static String apiExtClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+	public static String apiIntClientId = getSystemValue("AAD_CLIENT_ID");
+	public static String apiIntTenantId = getSystemValue("AAD_TENANT_ID");
+	public static String apiIntClientSecret = getSystemValue("AAD_CLIENT_SECRET");
 
 	public static String apiDbSchema = getSystemValue("DARTS_API_DB_SCHEMA");
 //	n.b.  System.getProperty("AZURE_STORAGE_CONNECTION_STRING"); defined but not used
@@ -53,6 +61,9 @@ public class ReadProperties {
 	public static String automationInternalUserTestPassword = getSystemValue("AUTOMATION_INTERNAL_PASSWORD");
 	public static String automationRequesterApproverTestPassword = getSystemValue("AUTOMATION_REQUESTER_APPROVER_PASSWORD");
 	public static String automationRequesterApproverTestUserId = getSystemValue("AUTOMATION_REQUESTER_APPROVER_USERNAME");
+
+	public static String xhibitUserName = getSystemValue("XHIBIT_USERNAME");
+	public static String xhibitPassword = getSystemValue("XHIBIT_PASSWORD");
 
 	public static String isRunLocal = getSystemValue("RUN_LOCAL");
 	
@@ -76,7 +87,7 @@ public class ReadProperties {
 	public static LogDetail responseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
 	
 	public static String buildNo = JsonApi.buildInfo();
-	public static String build = getSystemValue("build") == null ? buildNo : getSystemValue("build");
+	public static String seq = emptyIfNull(getSystemValue("seq_prefix")) + ((getSystemValue("seq") == null) ? (runLocal ? TestData.getNextSeqNo() : buildNo) : getSystemValue("seq"));
 	private static int instanceCount = 0;
 	
     

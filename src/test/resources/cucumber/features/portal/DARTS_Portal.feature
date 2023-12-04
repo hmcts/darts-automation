@@ -24,15 +24,15 @@ Scenario: Search - Verify link
 @DMP-407 @DMP-860 @smoketest
 Scenario: Your Audio - Verify link
 	Given I am logged on to DARTS as an external user
-	When  I click on the "Your Audio" link
-	Then  I see "Your Audio" on the page
+	When  I click on the "Your audio" link
+	Then  I see "Your audio" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @DMP-860 @smoketest @broken
+@DMP-407 @DMP-860 @smoketest
 Scenario: Your Transcripts - Verify link
 	Given I am logged on to DARTS as an external user
-	When  I click on the "Your Transcripts" link
-	Then  I see "Your Transcripts" on the page
+	When  I click on the "Your transcripts" link
+	Then  I see "Your transcripts" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
 @DMP-407 @smoketest
@@ -64,23 +64,23 @@ Scenario: DARTS Link
 
 @DMP-407 @smoketest
 Scenario Outline: All roles
-	When  I am logged on to DARTS as a <Type> user
+	When  I am logged on to DARTS as a <role> user
 	Then  I see "Search for a case" on the page
 	And   I see links with text:
-	| Search   | Your Audio   | Your Transcripts   | Transcript requests   | Your work   |
-	| <Search> | <Your Audio> | <Your Transcripts> | <Transcript requests> | <Your work> |
+	| Search   | Your audio  | Your transcripts  | Transcript requests  | Your work   |
+	| <search> | <yourAudio> | <yourTranscripts> | <transcriptRequests> | <yourWork> |
 	And   I see link with text "HMCTS"
 	And   I see link with text "DARTS"
 	And   I see link with text "Sign out"
 
 Examples:
-	| Type 	  	        |Search | Your Audio | Your Transcripts | Transcript requests | Your work |
-	| Judge             | Y     | Y          | N                | Y                   | Y         |
-	| REQUESTER         | Y     | Y          | Y                | N                   | N         |
-	| APPROVER          | Y     | Y          | Y                | N                   | N         |
-	| APPEALCOURT       | Y     | Y          | Y                | N                   | N         |
-	| TRANSCRIBER       | Y     | Y          | N                | Y                   | Y         |
-	| LANGUAGESHOP      | Y     | Y          | Y                | N                   | N         |
-	| REQUESTERAPPROVER | Y     | Y          | Y                | N                   | N         |
+	| role 	  	        |search | yourAudio | yourTranscripts | transcriptRequests | yourWork |
+	| Judge             | Y     | Y         | Y               | N                  | N        |
+	| REQUESTER         | Y     | Y         | Y               | N                  | N        |
+	| APPROVER          | Y     | Y         | Y               | N                  | N        |
+	| APPEALCOURT       | Y     | Y         | Y               | N                  | N        |
+	| TRANSCRIBER       | Y     | Y         | N               | Y                  | Y        |
+	| LANGUAGESHOP      | Y     | Y         | Y               | N                  | N        |
+	| REQUESTERAPPROVER | Y     | Y         | Y               | N                  | N        |
 
 

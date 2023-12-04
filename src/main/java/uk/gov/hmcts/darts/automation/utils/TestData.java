@@ -36,7 +36,7 @@ public class TestData {
 	public String responseString = "";
 	private static int instanceCount = 0;
 	
-	public TestData() {
+	static {
 		propFile = new Properties();
 		properties = new Properties();
 		try(FileInputStream inStream = new FileInputStream(new File(parameterFileName))) {
@@ -197,7 +197,7 @@ public class TestData {
 		return String.format(format, prefix, newVal);
 	}
 	
-	public String getNext(String property) {
+	public static String getNext(String property) {
 		String nextValue = properties.getProperty(property);
 		if (nextValue == null) {
 			nextValue = propFile.getProperty(property);
@@ -208,6 +208,10 @@ public class TestData {
 			saveProperty(property, nextValue);
 		}
 		return nextValue;
+	}
+	
+	public static String getNextSeqNo() {
+		return getNext("seq");
 	}
 	
 	public static String getNextCaseNumber(String courtHouse, String caseType) {
