@@ -62,7 +62,7 @@ public class Substitutions {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
 				if (subsString.equalsIgnoreCase("seq")) {
-					substitutionString = ReadProperties.build;
+					substitutionString = ReadProperties.seq;
 				} else {
 					if (subsString.equalsIgnoreCase("timestamp")) {
 						substitutionString = DateUtils.timestamp();

@@ -175,7 +175,7 @@ public class StepDef_jsonApi extends StepDef_base {
 			ApiResponse apiResponse = jsonApi.postApi("courthouses", json);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
-			Assertions.assertEquals(apiResponse.statusCode, "201", "Invalid API response " + apiResponse.statusCode);
+			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 		}
 	}
 	
