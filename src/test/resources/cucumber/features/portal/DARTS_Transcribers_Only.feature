@@ -99,33 +99,6 @@ Feature: Request Audio for transcribers
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
-
-  @DMP-1234-AC1
-  Scenario Outline: Assign transcript order screen - View order details
-    When I click on the "Transcript requests" link
-    And I see "Transcript requests" on the page
-    Then I click on "View" in the same row as "<CaseID>"
-    And I see "<Restriction>" on the page
-    And I see "Transcript Request" on the page
-    And I see "Case details" on the page
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Judge(s)>" on the page
-    And I see "<Defendant(s)>" on the page
-    And I see "Hearing details" on the page
-    And I see "<HearingDate>" on the page
-    And I see "<RequestType>" on the page
-    And I see "<RequestID>" on the page
-    And I see "<RequestMethod>" on the page
-    And I see "<Urgency>" on the page
-    And I see "<From>" on the page
-    And I see "<Received>" on the page
-    And I see "<JudgeApproval>" on the page
-    Examples:
-      | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType                    | RequestID | RequestMethod | Urgency                | From       | Received                 | JudgeApproval |
-      | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 14 Aug 2023 | Summing up (including verdict) | 3633      | Manual        | Up to 3 working days   | Transcriber | 01 Dec 2023 17:19:40    | Yes           |
-
-
     @DMP-1326
     Scenario Outline: Manual Transcription Request - Upload Transcript
       When I click on the "Your work" link
@@ -191,3 +164,30 @@ Feature: Request Audio for transcribers
     Examples:
       | CaseID   |
       | CASE1009 |
+      
+      @DMP-1234-AC1
+  Scenario Outline: Assign transcript order screen - View order details
+    When I click on the "Transcript requests" link
+    And I see "Transcript requests" on the page
+    Then I click on "View" in the same row as "<CaseID>"
+    And I see "<Restriction>" on the page
+    And I see "Transcript Request" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "<Defendant(s)>" on the page
+    And I see "Hearing details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<RequestID>" on the page
+    And I see "<RequestMethod>" on the page
+    And I see "<Urgency>" on the page
+    And I see "<From>" on the page
+    And I see "<Received>" on the page
+    And I see "<JudgeApproval>" on the page
+    Examples:
+      | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType                    | RequestID | RequestMethod | Urgency                | From       | Received                 | JudgeApproval |
+      | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 14 Aug 2023 | Summing up (including verdict) | 3633      | Manual        | Up to 3 working days   | Transcriber | 01 Dec 2023 17:19:40    | Yes           |
+
+
