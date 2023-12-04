@@ -80,10 +80,10 @@ public class SoapApi {
     			.formParams("grant_type", "password",
     					"username", ReadProperties.apiGlobalUserName,
     					"password", ReadProperties.apiGlobalPassword,
-    					"client_id", ReadProperties.apiClientId,
-						"scope", ReadProperties.main("apiScopeUri") + ReadProperties.apiClientId + "/Functional.Test")
-    			.baseUri(ReadProperties.main("apiAuthUri"))
-    			.basePath(ReadProperties.main("apiAuthPath"))
+    					"client_id", ReadProperties.apiExtClientId,
+						"scope", "https://" + ReadProperties.main("apiExtAuthPath") + "/" + ReadProperties.apiExtClientId + "/Functional.Test")
+    			.baseUri(ReadProperties.main("apiExtAuthUri"))
+    			.basePath(ReadProperties.main("apiExtAuthPath") + ReadProperties.main("apiExtAuthPath2"))
     		.when()
     			.post(ReadProperties.main("apiAuthEndpoint"))
 			.then()

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 public class JsonApi {
 	private static Logger log = LogManager.getLogger("JsonApi");
     static Response response;
-    static String authorization;
+    String authorization;
 	static String baseUri = ReadProperties.main("jsonApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
@@ -51,6 +51,7 @@ public class JsonApi {
 
 
 	public JsonApi() {
+		authorization = "";
 	}
 
     static public RequestSpecification requestLogLevel(LogDetail loggingLevel){
@@ -63,11 +64,79 @@ public class JsonApi {
         return loglevel;
     }
     
-    public String authenticateAsUser(String role) {
-    	return "";
+    public void authenticateAsUser(String role) {
+        switch (role.toUpperCase()) {
+        case "EXTERNAL":
+        	externalAuthenticate();
+        	break;
+        case "TRANSCRIBER":
+        	externalAuthenticate(ReadProperties.automationTranscriberUserId, ReadProperties.automationExternalPassword);
+        	break;
+        case "LANGUAGESHOP":
+        	externalAuthenticate(ReadProperties.automationLanguageShopTestUserId, ReadProperties.automationExternalPassword);
+        	break;
+        case "REQUESTER":
+        	internalAuthenticate(ReadProperties.automationRequesterTestUserId, ReadProperties.automationInternalUserTestPassword);
+        	break;
+        case "APPROVER":
+        	internalAuthenticate(ReadProperties.automationApproverTestUserId, ReadProperties.automationInternalUserTestPassword);
+        	break;
+        case "REQUESTERAPPROVER":
+        	internalAuthenticate(ReadProperties.automationRequesterApproverTestUserId, ReadProperties.automationRequesterApproverTestPassword);
+        	break;
+        case "JUDGE":
+        	internalAuthenticate(ReadProperties.automationJudgeTestUserId, ReadProperties.automationInternalUserTestPassword);
+        	break;
+        case "APPEALCOURT":
+        	internalAuthenticate(ReadProperties.automationAppealCourtTestUserId, ReadProperties.automationInternalUserTestPassword);
+        	break;
+        case "INTERNAL":
+        	internalAuthenticate();
+        	break;
+        case "":
+        	log.warn("Authentication - no role provided - using external");
+        	externalAuthenticate();
+        	break;
+        default:
+            log.fatal("Unknown user type - {}"+ role.toUpperCase());
+            authorization = "";
+        }
     }
     
-    public String authenticate() {
+    public void internalAuthenticate() {
+    	internalAuthenticate(ReadProperties.apiUserName, ReadProperties.apiPassword);
+    }
+
+    public void internalAuthenticate(String username, String password) {
+    	authenticate(username, password, 
+    			ReadProperties.apiIntClientId, ReadProperties.apiIntClientSecret, 
+    			"api://" + ReadProperties.apiIntClientId + "/Functional.Test",
+    			ReadProperties.main("apiIntAuthUri"), ReadProperties.apiIntTenantId);
+    }
+    
+    public void externalAuthenticate() {
+    	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
+    }
+    
+    public void externalAuthenticate(String username, String password) {
+    	authenticate(username, password, 
+    			ReadProperties.apiExtClientId, ReadProperties.apiExtClientSecret, 
+    			"https://" + ReadProperties.main("apiExtAuthPath") + "/" + ReadProperties.apiExtClientId + "/Functional.Test",
+    			ReadProperties.main("apiExtAuthUri"), ReadProperties.main("apiExtAuthPath") + ReadProperties.main("apiExtAuthPath2"));
+    }
+    
+    public void authenticate() {
+    	boolean alreadyAuthenticated = !(authorization == null || authorization.isBlank());
+    	log.info(alreadyAuthenticated ? "already Authenticated" : "Not already Authenticated");
+    	if (!alreadyAuthenticated) {
+    		externalAuthenticate();
+    	}
+    }
+    
+    public void authenticate(String username, String password,
+    		String clientId, String clientSecret, 
+    		String scope, 
+    		String baseUri, String basePath) {
     	log.info("authentication");
     	response  = 
     		given()
@@ -82,12 +151,13 @@ public class JsonApi {
 	    		.header(CONNECTION, CONNECTION_STRING)
     			.urlEncodingEnabled(true)
     			.formParams("grant_type", "password",
-    					"username", ReadProperties.apiGlobalUserName,
-    					"password", ReadProperties.apiGlobalPassword,
-    					"client_id", ReadProperties.apiClientId,
-						"scope", ReadProperties.main("apiScopeUri") + ReadProperties.apiClientId + "/Functional.Test")
-    			.baseUri(ReadProperties.main("apiAuthUri"))
-    			.basePath(ReadProperties.main("apiAuthPath"))
+    					"username", username,
+    					"password", password,
+    					"client_id", clientId,
+    					"client_secret", clientSecret,
+						"scope", scope)
+    			.baseUri(baseUri)
+    			.basePath(basePath)
     		.when()
     			.post(ReadProperties.main("apiAuthEndpoint"))
 			.then()
@@ -97,35 +167,40 @@ public class JsonApi {
     			;
 		String access_token = (response.jsonPath().getString("access_token"));
 		String token_type  = (response.jsonPath().getString("token_type"));
-    	return token_type + " " + access_token;
+		authorization = token_type + " " + access_token;
     	
     }
     
     static public String buildInfo() {
 		log.info("get: info");
-		String buildString =
-				given()
-    				.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
-	    			.header(USER_AGENT, USER_AGENT_STRING) 
-	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-	    			.header(CONNECTION, CONNECTION_STRING)
-					.baseUri(baseUri)
-					.basePath("")
-				.when()
-					.get("info")
-				.then()
-					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.assertThat().statusCode(200)
-					.extract().response()
-					.getBody().as(Info.class)
-					.build.number;
-    	return buildString;
+		try {
+			String buildString =
+					given()
+	    				.spec(requestLogLevel(ReadProperties.requestLogLevel))
+						.accept(ACCEPT_JSON_STRING)
+		    			.header(USER_AGENT, USER_AGENT_STRING) 
+		    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+		    			.header(CONNECTION, CONNECTION_STRING)
+						.baseUri(baseUri)
+						.basePath("")
+					.when()
+						.get("info")
+					.then()
+						.spec(responseLogLevel(ReadProperties.responseLogLevel))
+						.assertThat().statusCode(200)
+						.extract().response()
+						.getBody().as(Info.class)
+						.build.number;
+	    	return buildString;
+		} catch(Exception e) {
+			log.warn("Info API Failed");
+			return "";
+		}
     }
 
 	public ApiResponse getApi(String endpoint) {
 
-    	authorization = authenticate();
+    	authenticate();
 		log.info("get: " + endpoint);
 		response =
 				given()
@@ -149,7 +224,7 @@ public class JsonApi {
 
 	public ApiResponse getApiWithFormParams(String endpoint, Map<String, String> formParams) {
 
-    	authorization = authenticate();
+    	authenticate();
 		log.info("get: " + endpoint);
 		response =
 				given()
@@ -172,7 +247,7 @@ public class JsonApi {
 
 	public ApiResponse getApiWithQueryParams(String endpoint, Map<String, String> queryParams) {
 
-    	authorization = authenticate();
+    	authenticate();
 		log.info("get: " + endpoint);
 		response =
 				given()
@@ -195,7 +270,7 @@ public class JsonApi {
     
 	public ApiResponse postApi(String endpoint, String body) {
 
-    	authorization = authenticate();
+    	authenticate();
     	log.info("post: " + endpoint);
     	log.info(body);
 		response = 
@@ -220,7 +295,7 @@ public class JsonApi {
     
 	public ApiResponse putApi(String endpoint, String body) {
 
-    	authorization = authenticate();
+    	authenticate();
     	log.info("put: " + endpoint);
 		response = 
 				given()
@@ -245,7 +320,7 @@ public class JsonApi {
 	public ApiResponse deleteApi(String endpoint, String body) {
 
     	log.info("delete: " + endpoint);
-    	authorization = authenticate();
+    	authenticate();
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))

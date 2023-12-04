@@ -102,7 +102,8 @@ public class StepDef_hooks extends StepDef_base {
 	
 	@Before
 	public void beforeScenario(Scenario scenario) {
-		log.info("Start of scenario: {}, Thread Id: {}, Build: {}", scenario.getId(), Thread.currentThread().getId(), ReadProperties.build);
+		log.info("Start of scenario: {}, Thread Id: {}, Build: {}", scenario.getId(), Thread.currentThread().getId(), ReadProperties.buildNo);
+		log.info("Name: {}, Tags: {} ", scenario.getName(), scenario.getSourceTagNames());
 		this.scenario = scenario;
 		String build = JsonApi.buildInfo();
 		if (!ReadProperties.buildNo.equals(build)) {
