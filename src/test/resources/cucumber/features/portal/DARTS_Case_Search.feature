@@ -28,25 +28,24 @@ Feature: Case Search
 			| DMP461_Case407 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
 			| DMP461_Case409 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
 
-	@DMP-509 @DMP-508 @DMP-515 @DMP-860 @DMP-702 @DMP-517
+	@DMP-509 @DMP-508 @DMP-515 @DMP-860 @DMP-702 @DMP-517 @DMP-561
 	Scenario: Advanced case search and result verification
 		When I click on the "Advanced search" link
-		And I set "Courthouse" to "DMP-1151-1"
-		And I set "Courtroom" to "DMP-1151-01 Courtroom"
+		And I set "Courthouse" to "Swansea"
+		And I set "Courtroom" to "DMP-1025 Courtroom"
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-			| Case ID     | Courthouse | Courtroom             | Judge(s) | Defendants(s)         |
-			| DMP-1151-01 | DMP-1151-1 | DMP-1151-01 Courtroom |          | DMP-1151-01 Defendant |
+			| Case ID  | Courthouse | Courtroom          | Judge(s) 	  | Defendants(s)      |
+			| DMP-1025 | Swansea    | DMP-1025 Courtroom | DMP-1025 Judge | DMP-1025 Defendant |
 
 		When I click on the "Clear search" link
 		And "Courthouse" is ""
 		And "Courtroom" is ""
-		And I set "Defendant's name" to "DMP-695-01 Defendant"
+		And I set "Defendant's name" to "DMP-8722 Defendant"
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-          | Case ID | Courthouse | Courtroom | Judge(s)          | Defendants(s)         |
-		  | DMP-695-01                                                            | DMP-695-1  | DMP-695-01 Courtroom |          | DMP-695-01 Defendant |
-		  | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*             | *IGNORE* | *IGNORE*             |
+          | Case ID | Courthouse | Courtroom 		 | Judge(s) | Defendants(s)      |
+		  | DMP-872 | Swansea    | DMP-872 Courtroom |          | DMP-8722 Defendant |
 
 		When I click on the "Clear search" link
 		And "Defendant's name" is ""
@@ -58,36 +57,38 @@ Feature: Case Search
 
 		When I click on the "Clear search" link
 		And "Judge's name" is ""
-		And I set "Keywords" to "Judge"
+		And I set "Keywords" to "Case"
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-			| Case ID                                                               | Courthouse | Courtroom            | Judge(s) | Defendants(s)        |
-			| DMP-695-01                                                            | DMP-695-1  | DMP-695-01 Courtroom |          | DMP-695-01 Defendant |
-			| !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*             | *IGNORE* | *IGNORE*             |
-			| CASE1_DMP651                                                          | London     | Multiple             |          | Multiple             |
-			| !\nRestriction\nRestriction: Prosecution witness adsent: police       | *IGNORE*   | *IGNORE*             | *IGNORE* | *IGNORE*             |
+			| Case ID       | Courthouse    | Courtroom          | Judge(s) | Defendants(s) |
+			| DMP768-case2  | LEEDS_DMP768  | Room1_DMP768       |          |               |
+			| Case1_DMP1398 | LEEDS_DMP1398 | Room1_LEEDSDMP1398 |          |               |
+			| DMP825-case1  | LEEDS_DMP825  | Room1_DMP825       |          |               |
+			| DMP768-case1  | LEEDS_DMP768  | Room1_DMP768       |          |               |
+			| DMP7681-case1 | LEEDS_DMP7681 | Room1_DMP7681      |          |               |
 
 		When I click on the "Clear search" link
 		And "Keywords" is ""
 		And I select the "Specific date" radio button with label "Specific date"
-		And I set "Enter a date" to "09/10/2023"
+		And I set "Enter a date" to "22/11/2023"
+		And I set "Courthouse" to "Swansea" and click away
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-			| Case ID       | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-			| DMP1128-case1 | London     | Multiple  | *IGNORE* | *IGNORE*      |
+			| Case ID  | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+			| T0003679 | Swansea    | room1     |          | fred          |
+			| T0003680 | Swansea    | room1     |          | fred          |
+			| T0005680 | Swansea    | room1     |          | fred          |
+			| T0005681 | Swansea    | room1     |          | fred          |
 
 		When I click on the "Clear search" link
 		And I select the "Date range" radio button with label "Date range"
-		And I set "Enter date from" to "01/11/2023"
-		And I set "Enter date to" to "03/11/2023"
+		And I set "Enter date from" to "24/11/2023"
+		And I set "Enter date to" to "01/12/2023"
+		And I set "Courthouse" to "PerfCourtHouse01" and click away
 		And I press the "Search" button
 		Then I verify the HTML table contains the following values
-			| Case ID                                                                     | Courthouse | Courtroom    | Judge(s) | Defendants(s) |
-			| A2023XXX                                                                    | Liverpool  | 1            |          |               |
-			| !\nRestriction\nRestriction: Section 4(2) of the Contempt of Court Act 1981 | *IGNORE*   | *IGNORE*     | *IGNORE* | *IGNORE*      |
-			| A2023XXX                                                                    | Leeds      | Multiple     |          |               |
-			| Case1_DMP938                                                                | London     | Multiple     |          |               |
-			| Case2_DMP938                                                                | London     | Room1_London |          |               |
+			| Case ID    | Courthouse       | Courtroom | Judge(s) | Defendants(s) |
+			| CASEAC1002 | PerfCourtHouse01 | Multiple  |          |               |
 
 		When I click on the "Clear search" link
 		And I set "Courthouse" to "Courthouse" and click away
@@ -96,6 +97,15 @@ Feature: Case Search
 		And I see "Refine your search by:" on the page
 		And I see "adding more information to your search" on the page
 		And I see "using filters to restrict the number of results" on the page
+
+		When I click on the "Clear search" link
+		And I set "Case ID" to "case"
+		And I press the "Search" button
+		Then I see "15 results" on the page
+
+		When I set "Courthouse" to "Swansea" and click away
+		And I press the "Search" button
+		Then I see "8 results" on the page
 
 @DMP-509 @DMP-507 @DMP-860
 Scenario: Case details and Hearing details
