@@ -128,14 +128,14 @@ Feature: Request Audio for transcribers
   Scenario Outline: Manual Transcription Request - Get Audio
     When I click on the "Your work" link
     And I see "Your work" on the page
-    Then I click on "View" in the same row as "<CaseID>"
+    Then I click on "View" in the same row as "<HearingDate>"
     And I see "Transcript request" on the page
     And I see "<CaseID>" on the page
     And I press the "Get audio for this request" button
     And I see "Events and audio recordings" on the page
     Examples:
-      | CaseID   |
-      | CASE1009 |
+      | HearingDate | CaseID   |
+      | 15 Aug 2023 | CASE1009 |
 
   @DMP-1326-AC2
   Scenario Outline: Manual Transcription Request - Select file
@@ -234,3 +234,54 @@ Feature: Request Audio for transcribers
     Then "Urgency" has sort "descending" icon
     When I click on "Urgency" in the table header
     Then "Urgency" has sort "ascending" icon
+
+  @DMP-1331
+  Scenario Outline: Automated Transcription Request - Upload Transcript
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    Then I click on "View" in the same row as "<CaseID>"
+    And I see "<Restriction>" on the page
+    And I see "Transcript request" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "<Defendant(s)>" on the page
+    #And I see "Hearing details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<RequestMethod>" on the page
+    And I see "<Urgency>" on the page
+    And I see "<From>" on the page
+    And I see "<JudgeApproval>" on the page
+    Examples:
+      | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType | RequestMethod | Urgency   | From                   | JudgeApproval |
+      | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 05 Dec 2023 | Other       | Automated     | Overnight | darts_global_test_user | Yes           |
+
+  @DMP-1331-AC1
+  Scenario Outline: Automated Transcription Request - Get Audio
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    Then I click on "View" in the same row as "<HearingDate>"
+    And I see "Transcript request" on the page
+    And I see "<CaseID>" on the page
+    And I press the "Get audio for this request" button
+    And I see "Events and audio recordings" on the page
+    Examples:
+      | HearingDate | CaseID   |
+      | 05 Dec 2023 | CASE1009 |
+
+  @DMP-1331-AC13
+  Scenario Outline: Automated Transcription Request - Cancel Upload
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    Then I click on "View" in the same row as "<HearingDate>"
+    And I see "Transcript request" on the page
+    And I see "<CaseID>" on the page
+    Then I click on the "Cancel" link
+    And I see "Your work" on the page
+    And I see "<CaseID>" on the page
+    Examples:
+      | CaseID   | HearingDate |
+      | CASE1009 | 05 Dec 2023 |
