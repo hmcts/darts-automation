@@ -99,43 +99,43 @@ Feature: Request Audio for transcribers
       | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
       | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
 
-    @DMP-1326
-    Scenario Outline: Manual Transcription Request - Upload Transcript
-      When I click on the "Your work" link
-      And I see "Your work" on the page
-      Then I click on "View" in the same row as "<CaseID>"
-      And I see "<Restriction>" on the page
-      And I see "Transcript Request" on the page
-      And I see "Case details" on the page
-      And I see "<CaseID>" on the page
-      And I see "<HearingDate>" on the page
-      And I see "<Courthouse>" on the page
-      And I see "<Judge(s)>" on the page
-      And I see "<Defendant(s)>" on the page
-      And I see "Hearing details" on the page
-      And I see "<HearingDate>" on the page
-      And I see "<RequestType>" on the page
-      And I see "<RequestMethod>" on the page
-      And I see "<Urgency>" on the page
-      And I see "<From>" on the page
-      And I see "<Instructions>" on the page
-      And I see "<JudgeApproval>" on the page
-      Examples:
-        | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType | RequestMethod | Urgency | From       | Instructions | JudgeApproval |
-        | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 14 Aug 2023 | Court Log   | Manual        | Other   | RCJ Appeal | DMP-1025     | Yes           |
+  @DMP-1326
+  Scenario Outline: Manual Transcription Request - Upload Transcript
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    Then I click on "View" in the same row as "<CaseID>"
+    And I see "<Restriction>" on the page
+    And I see "Transcript Request" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "<Defendant(s)>" on the page
+    And I see "Hearing details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<RequestMethod>" on the page
+    And I see "<Urgency>" on the page
+    And I see "<From>" on the page
+    And I see "<Instructions>" on the page
+    And I see "<JudgeApproval>" on the page
+    Examples:
+      | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType | RequestMethod | Urgency | From       | Instructions | JudgeApproval |
+      | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 14 Aug 2023 | Court Log   | Manual        | Other   | RCJ Appeal | DMP-1025     | Yes           |
 
-      @DMP-1326-AC1
-      Scenario Outline: Manual Transcription Request - Get Audio
-        When I click on the "Your work" link
-        And I see "Your work" on the page
-        Then I click on "View" in the same row as "<CaseID>"
-        And I see "Transcript request" on the page
-        And I see "<CaseID>" on the page
-        And I press the "Get audio for this request" button
-        And I see "Events and audio recordings" on the page
-        Examples:
-          | CaseID   |
-          | CASE1009 |
+  @DMP-1326-AC1
+  Scenario Outline: Manual Transcription Request - Get Audio
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    Then I click on "View" in the same row as "<CaseID>"
+    And I see "Transcript request" on the page
+    And I see "<CaseID>" on the page
+    And I press the "Get audio for this request" button
+    And I see "Events and audio recordings" on the page
+    Examples:
+      | CaseID   |
+      | CASE1009 |
 
   @DMP-1326-AC2
   Scenario Outline: Manual Transcription Request - Select file
@@ -164,8 +164,8 @@ Feature: Request Audio for transcribers
     Examples:
       | CaseID   |
       | CASE1009 |
-      
-      @DMP-1234-AC1
+
+  @DMP-1234-AC1
   Scenario Outline: Assign transcript order screen - View order details
     When I click on the "Transcript requests" link
     And I see "Transcript requests" on the page
@@ -187,7 +187,50 @@ Feature: Request Audio for transcribers
     And I see "<Received>" on the page
     And I see "<JudgeApproval>" on the page
     Examples:
-      | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType                    | RequestID | RequestMethod | Urgency                | From       | Received                 | JudgeApproval |
-      | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 14 Aug 2023 | Summing up (including verdict) | 3633      | Manual        | Up to 3 working days   | Transcriber | 01 Dec 2023 17:19:40    | Yes           |
+      | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType                    | RequestID | RequestMethod | Urgency              | From        | Received             | JudgeApproval |
+      | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 14 Aug 2023 | Summing up (including verdict) | 3633      | Manual        | Up to 3 working days | Transcriber | 01 Dec 2023 17:19:40 | Yes           |
 
+  @DMP-1198-AC2
+  Scenario Outline: Transcript Requests - Transcribers
+    When I click on the "Transcript requests" link
+    And I see "Transcript requests" on the page
+    Then I click on "View" in the same row as "<CaseID>"
+    And I see "<Restriction>" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "Hearing details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<urgency>" on the page
+    And I see "<JudgeApproval>" on the page
+    And I see "Choose an action" on the page
+    And I see "Assign to me" on the page
+    And I see "Assign to me and get audio" on the page
+    And I see "Assign to me and upload a transcript" on the page
+    Examples:
+      | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType                    | urgency              | HearingDate | JudgeApproval |
+      | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Summing up (including verdict) | Up to 3 working days | 14 Aug 2023 | Yes           |
 
+  @DMP-1198-AC3
+  Scenario: Transcript Requests - Sortable Column descending
+    When I click on the "Transcript requests" link
+    And I see "Transcript requests" on the page
+    When I click on "Case ID" in the table header
+    Then "Case ID" has sort "descending" icon
+    When I click on "Court" in the table header
+    Then "Court" has sort "descending" icon
+    When I click on "Hearing date" in the table header
+    Then "Hearing date" has sort "descending" icon
+    When I click on "Type" in the table header
+    Then "Type" has sort "descending" icon
+    When I click on "Requested on" in the table header
+    Then "Requested on" has sort "descending" icon
+    When I click on "Method" in the table header
+    Then "Method" has sort "descending" icon
+    When I click on "Urgency" in the table header
+    Then "Urgency" has sort "descending" icon
+    When I click on "Urgency" in the table header
+    Then "Urgency" has sort "ascending" icon
