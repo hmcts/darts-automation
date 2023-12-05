@@ -161,3 +161,11 @@ dependencies {
 wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
+
+
+task smoketest(type: Test, dependsOn: testClasses) {
+   
+    include '**/TestRunner_Cucumber.class'
+    
+    outputs.upToDateWhen { false }
+}
