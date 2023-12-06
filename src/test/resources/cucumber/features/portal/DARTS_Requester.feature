@@ -137,3 +137,27 @@ Feature: User as a Requester
       | Restriction: Judge directed on reporting restrictions | Specified Times    | Overnight |
       | Restriction: Judge directed on reporting restrictions | Court Log          | Overnight |
 
+  @DMP-1033
+  Scenario Outline: View Transcript - Via Your Transcriptions screen
+    When I click on the "Your Transcripts" link
+    And I see "Your Transcripts" on the page
+    And I see "Select to apply actions" on the page
+    Then I click on "View" in the same row as "<CaseID>"
+    And I see "<Restriction>" on the page
+    And I see "Transcript file" on the page
+    And I see "<Status>" on the page
+    And I see "Case Details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "Request Details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<urgency>" on the page
+    And I see "<From>" on the page
+    And I see "<Instructions>" on the page
+    And I see "<JudgeApproval>" on the page
+    Examples:
+      | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType               | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
+      | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Proceedings after verdict | Up to 7 working days | COMPLETE | 14 Aug 2023 | Requester | DMP-1025     | Yes           |
