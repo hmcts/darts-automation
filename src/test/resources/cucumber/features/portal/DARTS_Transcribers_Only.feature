@@ -177,18 +177,16 @@ Feature: Request Audio for transcribers
     And I see "<Courthouse>" on the page
     And I see "<Judge(s)>" on the page
     And I see "<Defendant(s)>" on the page
-    And I see "Hearing details" on the page
+    And I see "Request details" on the page
     And I see "<HearingDate>" on the page
     And I see "<RequestType>" on the page
-    And I see "<RequestID>" on the page
     And I see "<RequestMethod>" on the page
     And I see "<Urgency>" on the page
     And I see "<From>" on the page
-    And I see "<Received>" on the page
     And I see "<JudgeApproval>" on the page
     Examples:
-      | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType                    | RequestID | RequestMethod | Urgency              | From        | Received             | JudgeApproval |
-      | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 14 Aug 2023 | Summing up (including verdict) | 3633      | Manual        | Up to 3 working days | Transcriber | 01 Dec 2023 17:19:40 | Yes           |
+      | CaseID   | Restriction                                           | Courthouse | Judge(s) | Defendant(s) | HearingDate | RequestType                       | RequestMethod | Urgency              | From      | JudgeApproval |
+      | CASE1009 | Restriction: Judge directed on reporting restrictions | Swansea    | Mr Judge | Jow Bloggs   | 14 Aug 2023 | Argument and submission of ruling | Manual        | Up to 3 working days | Requester | Yes           |
 
   @DMP-1198-AC2
   Scenario Outline: Transcript Requests - Transcribers
@@ -201,7 +199,7 @@ Feature: Request Audio for transcribers
     And I see "<Courthouse>" on the page
     And I see "<Defendants>" on the page
     And I see "<Judge(s)>" on the page
-    And I see "Hearing details" on the page
+    And I see "Request details" on the page
     And I see "<HearingDate>" on the page
     And I see "<RequestType>" on the page
     And I see "<urgency>" on the page
@@ -211,8 +209,8 @@ Feature: Request Audio for transcribers
     And I see "Assign to me and get audio" on the page
     And I see "Assign to me and upload a transcript" on the page
     Examples:
-      | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType                    | urgency              | HearingDate | JudgeApproval |
-      | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Summing up (including verdict) | Up to 3 working days | 14 Aug 2023 | Yes           |
+      | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType                       | urgency              | HearingDate | JudgeApproval |
+      | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Argument and submission of ruling | Up to 3 working days | 14 Aug 2023 | Yes           |
 
   @DMP-1198-AC3
   Scenario: Transcript Requests - Sortable Column descending
@@ -310,7 +308,7 @@ Feature: Request Audio for transcribers
       | HearingDate | CaseID   |
       | 05 Dec 2023 | CASE1009 |
 
-  @DMP-1331-AC13
+  @DMP-1331-AC3
   Scenario Outline: Automated Transcription Request - Cancel Upload
     When I click on the "Your work" link
     And I see "Your work" on the page
@@ -323,3 +321,33 @@ Feature: Request Audio for transcribers
     Examples:
       | CaseID   | HearingDate |
       | CASE1009 | 05 Dec 2023 |
+
+  @DMP-1351-AC2
+  Scenario: Your work - completed today tab - Sortable column
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    And I click on the "Completed today" link
+    When I click on "Case ID" in the table header
+    Then "Case ID" has sort "descending" icon
+    When I click on "Court" in the table header
+    Then "Court" has sort "descending" icon
+    When I click on "Hearing date" in the table header
+    Then "Hearing date" has sort "descending" icon
+    When I click on "Type" in the table header
+    Then "Type" has sort "descending" icon
+    When I click on "Requested on" in the table header
+    Then "Requested on" has sort "descending" icon
+    When I click on "Urgency" in the table header
+    Then "Urgency" has sort "descending" icon
+
+    @DMP-1351-AC1-AC3
+    Scenario Outline: Your work - completed today tab - View link
+      When I click on the "Your work" link
+      And I see "Your work" on the page
+      And I click on the "Completed today" link
+      And I see "Completed today" on the page
+      Then I click on "View" in the same row as "<CaseID>"
+      And I see "Transcript request" on the page
+    Examples:
+      | CaseID   |
+      | CASE1009 |
