@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 public class XmlUtils {
 	private static Logger log = LogManager.getLogger("XmlUtils");
 	private static String LINE_END = System.lineSeparator();
-
+	
 	public XmlUtils() {
 		
 	}
@@ -45,23 +45,34 @@ public class XmlUtils {
     		String dateTime,
     		String caseRetentionFixedPolicy,
     		String caseTotalSentence) {
-    	XmlString eventXml = new XmlString();
-    	eventXml.addTag("message_id", messageId);
-    	eventXml.addTag("type", type);
-    	eventXml.addTag("sub_type", subType);
-    	eventXml.addTag("event_id", eventId);
-    	eventXml.addTag("courthouse", courthouse);
-    	eventXml.addTag("courtroom", courtroom);
-    	eventXml.addTag("case_numbers", caseNumbers);
-    	eventXml.addTag("event_text", eventText);
-    	eventXml.addTag("date_time", dateTime);
+    	XmlString xmlString = new XmlString()
+    			.addTag("messageId", messageId)
+    			.addTag("type", type)
+    			.addTag("subType", subType)
+    			.addTag("document")
+    			.addAttribute("ID", eventId)
+    			.addAttribute("Y", DateUtils.datePart(dateTime, "Y"))
+				.addAttribute("M", DateUtils.datePart(dateTime, "M"))
+				.addAttribute("D", DateUtils.datePart(dateTime, "D"))
+    			.addAttribute("H", DateUtils.timePart(dateTime, "H"))
+				.addAttribute("MIN", DateUtils.timePart(dateTime, "MIN"))
+				.addAttribute("S", DateUtils.timePart(dateTime, "S"))
+				.startEncoding()
+				.addTag("CourtHouse", courthouse)
+    			.addTag("CourtRoom", courtroom)
+    			.addTag("Case_numbers")
+    			.addTag("Case_number", caseNumbers)
+    			.addEndTag()
+    			.addTag("EventText", eventText);
     	if (!caseRetentionFixedPolicy.isBlank() || !caseTotalSentence.isBlank() ) {
-    		eventXml.addTag("retention_policy");
-	    	eventXml.addTag("case_retention_fixed_policy", caseRetentionFixedPolicy);
-	    	eventXml.addTag("case_total_sentence", caseTotalSentence);
-    		eventXml.addEndTag();
+    		xmlString.addTag("RetentionPolicy");
+    		xmlString.addTag("CaseRetentionFixedPolicy", caseRetentionFixedPolicy);
+    		xmlString.addTag("CaseTotalSentence", caseTotalSentence);
+    		xmlString.addEndTag();
     	}
-		return eventXml.xmlValue();
+    	xmlString.endEncoding()
+    			.addEndTag();
+		return xmlString.xmlValue();
     }
     
     public static String buildAddCaseXml(String courthouse,
@@ -121,45 +132,41 @@ public class XmlUtils {
     
     @Test
 	public void testXml2() {
-		Assertions.assertEquals("{\r\n"
-				+ "  \"message_id\": \"string1\",\r\n"
-				+ "  \"type\": \"string2\",\r\n"
-				+ "  \"sub_type\": \"string3\",\r\n"
-				+ "  \"event_id\": \"string4\",\r\n"
-				+ "  \"courthouse\": \"string5\",\r\n"
-				+ "  \"courtroom\": \"string6\",\r\n"
-				+ "  \"case_numbers\": [\r\n"
-				+ "    \"string7\"\r\n"
-				+ "  ],\r\n"
-				+ "  \"event_text\": \"string8\",\r\n"
-				+ "  \"date_time\": \"string9\",\r\n"
-				+ "  \"retention_policy\": {\r\n"
-				+ "  \"case_retention_fixed_policy\": \"string10\",\r\n"
-				+ "  \"case_total_sentence\": \"string11\"\r\n"
-				+ "  }\r\n"
-				+ "}", 
-				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11"));
+		Assertions.assertEquals("<messageId>string1</messageId>" + LINE_END
+				+ "<type>string2</type>" + LINE_END
+				+ "<subType>string3</subType>" + LINE_END
+				+ "<document ID=\"string4\" Y=\"2023\" M=\"11\" D=\"10\" H=\"12\" MIN=\"34\" S=\"45\">" + LINE_END
+				+ "  &lt;CourtHouse&gt;string5&lt;/CourtHouse&gt;" + LINE_END
+				+ "  &lt;CourtRoom&gt;string6&lt;/CourtRoom&gt;" + LINE_END
+				+ "  &lt;Case_numbers&gt;" + LINE_END
+				+ "    &lt;Case_number&gt;string7&lt;/Case_number&gt;" + LINE_END
+				+ "  &lt;/Case_numbers&gt;" + LINE_END
+				+ "  &lt;EventText&gt;string8&lt;/EventText&gt;" + LINE_END
+				+ "  &lt;RetentionPolicy&gt;" + LINE_END
+				+ "    &lt;CaseRetentionFixedPolicy&gt;string10&lt;/CaseRetentionFixedPolicy&gt;" + LINE_END
+				+ "    &lt;CaseTotalSentence&gt;string11&lt;/CaseTotalSentence&gt;" + LINE_END
+				+ "  &lt;/RetentionPolicy&gt;" + LINE_END
+				+ "</document>", 
+				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "2023-11-10 12:34:45", "string10", "string11"));
     }
     
     @Test
 	public void testXml3() {
-		Assertions.assertEquals("{\r\n"
-				+ "  \"message_id\": \"string1\",\r\n"
-				+ "  \"type\": \"string2\",\r\n"
-				+ "  \"sub_type\": \"string3\",\r\n"
-				+ "  \"event_id\": \"string4\",\r\n"
-				+ "  \"courthouse\": \"string5\",\r\n"
-				+ "  \"courtroom\": \"string6\",\r\n"
-				+ "  \"case_numbers\": [\r\n"
-				+ "    \"string7\"\r\n"
-				+ "  ],\r\n"
-				+ "  \"event_text\": \"string8\",\r\n"
-				+ "  \"date_time\": \"string9\",\r\n"
-				+ "  \"retention_policy\": {\r\n"
-				+ "  \"case_retention_fixed_policy\": \"\"\r\n"
-				+ "  }\r\n"
-				+ "}",
-				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "blank", ""));
+		Assertions.assertEquals("<messageId>string1</messageId>" + LINE_END
+				+ "<type>string2</type>" + LINE_END
+				+ "<subType>string3</subType>" + LINE_END
+				+ "<document ID=\"string4\" Y=\"2023\" M=\"11\" D=\"10\" H=\"12\" MIN=\"34\" S=\"45\">" + LINE_END
+				+ "  &lt;CourtHouse&gt;string5&lt;/CourtHouse&gt;" + LINE_END
+				+ "  &lt;CourtRoom&gt;string6&lt;/CourtRoom&gt;" + LINE_END
+				+ "  &lt;Case_numbers&gt;" + LINE_END
+				+ "    &lt;Case_number&gt;string7&lt;/Case_number&gt;" + LINE_END
+				+ "  &lt;/Case_numbers&gt;" + LINE_END
+				+ "  &lt;EventText&gt;string8&lt;/EventText&gt;" + LINE_END
+				+ "  &lt;RetentionPolicy&gt;" + LINE_END
+				+ "    &lt;CaseRetentionFixedPolicy&gt;&lt;/CaseRetentionFixedPolicy&gt;" + LINE_END
+				+ "  &lt;/RetentionPolicy&gt;" + LINE_END
+				+ "</document>",
+				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "2023-11-10 12:34:45", "blank", ""));
 		
 	}
 
