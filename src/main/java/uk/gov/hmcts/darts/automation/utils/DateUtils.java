@@ -355,5 +355,59 @@ public class DateUtils {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		return date.format(formatter);
 	}
+	
+	public static String datePart(String string, String part) {
+		String [] split = string.split(" ")[0].split("-");
+		if (split.length == 3) {
+			switch(part.toLowerCase()) {
+				case "d":
+				case "dd":
+					if (split[0].length() < 3) {
+						return split[0];
+					} else {
+						return split[2];
+					}
+				case "m":
+				case "mm":
+					return split[1];
+				case "y":
+				case "yy":
+				case "yyyy":
+					if (split[0].length() > 2) {
+						return split[0];
+					} else {
+						return split[2];
+					}
+				default:
+					Assertions.fail("Invalid part of date " + part + " for date " + string);
+			}
+		} else {
+			Assertions.fail("Invalid date: " + string);
+		}
+		return null;
+	}
+	
+	public static String timePart(String string, String part) {
+		String [] split = ((string.length() > 8) ? string.split(" ")[1] : string).split(":");
+		if (split.length == 3) {
+			switch(part.toLowerCase()) {
+				case "h":
+				case "hh":
+					return split[0];
+				case "m":
+				case "mm":
+				case "min":
+					return split[1];
+				case "s":
+				case "ss":
+					return split[2];
+				default:
+					Assertions.fail("Invalid part of time " + part + " for time " + string);
+			}
+		} else {
+			Assertions.fail("Invalid time: " + string);
+		}
+		return null;
+	}
 
 }

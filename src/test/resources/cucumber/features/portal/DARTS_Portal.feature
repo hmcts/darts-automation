@@ -78,9 +78,9 @@ Examples:
 	| Judge             | Y     | Y         | Y               | N                  | N        |
 	| REQUESTER         | Y     | Y         | Y               | N                  | N        |
 	| APPROVER          | Y     | Y         | Y               | N                  | N        |
-	| APPEALCOURT       | Y     | Y         | Y               | N                  | N        |
+	| APPEALCOURT       | Y     | Y         | N               | N                  | N        |
 	| TRANSCRIBER       | Y     | Y         | N               | Y                  | Y        |
-	| LANGUAGESHOP      | Y     | Y         | Y               | N                  | N        |
+	| LANGUAGESHOP      | Y     | Y         | N               | N                  | N        |
 	| REQUESTERAPPROVER | Y     | Y         | Y               | N                  | N        |
 
 

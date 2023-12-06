@@ -13,11 +13,14 @@ public class XmlString {
 	public String xmlString = "";
 	String sep = "";
 	ArrayList<String> openTags;
+	boolean encoded = false;
+	String saveString = "";
 	
 	public XmlString() {
 		xmlString = "";
 		sep = "";
 		openTags = new ArrayList<String>();
+		encoded = false;
 	}
 	
 	String sep() {
@@ -55,6 +58,38 @@ public class XmlString {
 		return this;
 	}
 	
+	public XmlString startEncoding() {
+		if (sep.startsWith(">")) {
+			saveString = xmlString + ">";
+			sep = sep.substring(1);
+		} else {
+			saveString = xmlString;
+		}
+		xmlString = "";
+		encoded = true;
+		return this;
+	}
+	
+	public XmlString endEncoding() {
+		if (sep.startsWith(">")) {
+			xmlString = xmlString + ">";
+			sep = sep.substring(1);
+		}
+		encoded = false;
+		xmlString = saveString + encodeEntities(xmlString);
+		return this;
+	}
+	
+	String encodeEntities(String xml) {
+		String result;
+		if (xml.contains("&lt;")) {
+			result = xml;
+		} else {
+			result = xml.replace("&", "&amp").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apost;");
+		}
+		return result;	
+	}
+	
 /*
  * Add xml opening tag only
  * 
@@ -65,13 +100,17 @@ public class XmlString {
 		sep = ">" + LINE_END;
 		return this;
 	}
-	
+
+/*
+ * Add value to tag & close tag
+ * 
+ */
 	public XmlString addValue(String value) {
 		String tag = openTags.remove(openTags.size() - 1);
 		xmlString = xmlString + (sep.startsWith(">") ? ">":"") + Substitutions.substituteValue(value) + "</" + tag + ">";
 		sep = LINE_END;
-	return this;
-}
+		return this;
+	}
 	
 /*
  * Add xml closing tag only
@@ -92,6 +131,28 @@ public class XmlString {
 			xmlString = xmlString + " " + attribute + "=\"" + Substitutions.substituteValue(value) + "\"";
 		} else {
 			log.fatal("Attribute {} value {} could not be added - tag is already closed", attribute, value);
+		}
+		return this;
+	}
+
+/*
+ * Add ready formed attribute=value pair
+ * 
+ */
+	public XmlString addAttribute(String attribute) {
+		if (attribute != null && !attribute.isBlank()) {
+			if (sep.startsWith(">")) {
+				xmlString = xmlString + " " + Substitutions.substituteValue(attribute);
+			} else {
+				log.fatal("Attribute {} could not be added - tag is already closed", attribute);
+			}
+		}
+		return this;
+	}
+	
+	public XmlString addAttributes(String[] attributes) {
+		for (String attribute : attributes) {
+			addAttribute(attribute);
 		}
 		return this;
 	}
