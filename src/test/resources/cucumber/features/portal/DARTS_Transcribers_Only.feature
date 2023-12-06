@@ -235,7 +235,45 @@ Feature: Request Audio for transcribers
     When I click on "Urgency" in the table header
     Then "Urgency" has sort "ascending" icon
 
-  @DMP-1331
+@DMP-1203
+  Scenario: Transcriber navigation bar
+
+    When I click on the "Your work" link
+    And I see "To do" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID  | Court    | Hearing date | Type               | Requested on      | Urgency  |
+      | CASE1009 | Swansea  | 05 Dec 2023  | Other              | 05 Dec 2023 16:34 | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+
+    When I click on the "Completed today" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Court    | Hearing date | Type     | Requested on      | Urgency  |
+      | CASE1009 | Swansea  | 05 Dec 2023  | Other    | 05 Dec 2023 16:40 | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*     | *IGNORE* | *IGNORE*          | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*     | *IGNORE* | *IGNORE*          | *IGNORE* |
+    #Then I see "There are no transcript requests completed today" on the page - Save for negative test
+
+    When I click on the "Your audio" link
+    Then I see "Current" on the page
+    And I see "In Progress" on the page
+    And I see "Ready" on the page
+    And I see "Expired" on the page
+
+    When I click on the "Transcript requests" link
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type                           | Requested on      | Method    | Urgency  |
+      | DMP1600-case1 | London_DMP1600 | 11 Oct 2023  | Summing up (including verdict) | 05 Dec 2023 10:44 | Automated | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+      | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+
+ @DMP-1331
   Scenario Outline: Automated Transcription Request - Upload Transcript
     When I click on the "Your work" link
     And I see "Your work" on the page

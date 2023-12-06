@@ -64,6 +64,8 @@ public class ReadProperties {
 
 	public static String xhibitUserName = getSystemValue("XHIBIT_USERNAME");
 	public static String xhibitPassword = getSystemValue("XHIBIT_PASSWORD");
+	public static String cppUserName = getSystemValue("CPP_USERNAME");
+	public static String cppPassword = getSystemValue("CPP_PASSWORD");
 
 	public static String isRunLocal = getSystemValue("RUN_LOCAL");
 	
