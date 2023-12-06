@@ -272,3 +272,44 @@ Feature: Request Audio for transcribers
       | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
       | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
       | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+
+    @DMP-1243-AC5
+    Scenario Outline: Assign transcript order screen - Cancel Assign
+
+      When I click on the "Transcript requests" link
+      And I see "Transcript requests" on the page
+      Then I click on "View" in the same row as "<CaseID>"
+      And I see "Transcript request" on the page
+      And I see "Case details" on the page
+      When I click on the "Cancel" link
+      And I see "Transcript requests" on the page
+      Then I verify the HTML table contains the following values
+        | Case ID       | Court          | Hearing date | Type  | Requested on      | Method    | Urgency  |
+        | DMP1600-case1 | London_DMP1600 | 12 Oct 2023  | Other | 05 Dec 2023 10:16 | Automated | *IGNORE* |
+        | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+        | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+        | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+        | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+        | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+        | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+        | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+        | *IGNORE* | *IGNORE* | *IGNORE*  | *IGNORE* | *IGNORE* | *IGNORE* | *IGNORE* |
+
+      Examples:
+        | CaseID   |
+        | CASE1009 |
+
+    @DMP-1243-AC6
+    Scenario Outline: Assign transcript order screen - Error no selection made
+
+      When I click on the "Transcript requests" link
+      And I see "Transcript requests" on the page
+      Then I click on "View" in the same row as "<CaseID>"
+      And I see "Transcript request" on the page
+      And I see "Case details" on the page
+      Then I press the "Continue" button
+      And I see an error message "Select an action to progress this request."
+
+      Examples:
+        | CaseID   |
+        | CASE1009 |
