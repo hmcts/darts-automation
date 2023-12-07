@@ -1,10 +1,10 @@
 Feature: Cases Endpoints
 
   @DMP-458
-  Scenario: Create a case
+  Scenario Outline: Create a case
     When I create a case
-      | courthouse         | case_number | defendants | judges     | prosecutors     | defenders     |
-      | Harrow Crown Court | T20230001   | fred       | test judge | test prosecutor | test defender |
+      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Then the API status code is 201
     Then the API response contains:
       """
@@ -26,6 +26,9 @@ Feature: Cases Endpoints
             ]
          }
       """
+    Examples:
+      | courthouse         | case_number | defendants | judges     | prosecutors     | defenders     |
+      | Harrow Crown Court | T20230001   | fred       | test judge | test prosecutor | test defender |
 
   @DMP-458
   Scenario: test /cases with courtroom in json body
