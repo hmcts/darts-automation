@@ -327,9 +327,9 @@ public class NavigationShared {
 		String rowXpath = "(./td/descendant-or-self::*[normalize-space(.)=\"%s\"])";
 		int findCount = driver.findElements(By.xpath(String.format("//table//tr[" + rowXpath + " and " + rowXpath + "]" + 
 				"/td/descendant-or-self::*[normalize-space(.)=\"%s\"]",
-				rowData1,
-				rowData2,
-				text))).size();
+				Substitutions.substituteValue(rowData1),
+				Substitutions.substituteValue(rowData2),
+				Substitutions.substituteValue(text)))).size();
 		Assertions.assertTrue(findCount > 0, "String not found in table");
 	}
 	
@@ -339,19 +339,19 @@ public class NavigationShared {
 		driver.findElement(By.xpath(String.format("(//table//tr[" + rowXpath + " and " + rowXpath + "]" + 
 				"//input[@type='button']" + buttonXpath + ")" +
 				" | (//table//tr[" + rowXpath + " and " + rowXpath + "]//button" + buttonXpath + ")",
-				rowData1,
-				rowData2,
+				Substitutions.substituteValue(rowData1),
+				Substitutions.substituteValue(rowData2),
 				buttonText,
-				rowData1,
-				rowData2,
+				Substitutions.substituteValue(rowData1),
+				Substitutions.substituteValue(rowData2),
 				buttonText))).click();
 	}
 	
 	public void checkUncheckCheckboxInTableRow(String rowData1, String rowData2, String action) throws Exception {
 		String xpathBit = "(./td[text()=\"%s\"])";
 		WebElement checkbox = driver.findElement(By.xpath(String.format("//table//tr[" + xpathBit + " and " + xpathBit + "]//input[@type='checkbox']",
-				rowData1,
-				rowData2)));
+				Substitutions.substituteValue(rowData1),
+				Substitutions.substituteValue(rowData2))));
 		set_unset_checkbox(checkbox, action);
 	}
 	
