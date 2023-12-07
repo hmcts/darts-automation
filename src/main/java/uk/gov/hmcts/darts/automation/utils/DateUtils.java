@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class DateUtils {
@@ -329,7 +330,11 @@ public class DateUtils {
 										if (subsString.toLowerCase().startsWith("yyyy-")) {
 											substitutionString = subsString.substring(11, 15);
 										} else {
-											Assertions.fail("Invalid value to substitute =>" + subsString );
+											if (subsString.toLowerCase().startsWith("timestamp-")) {
+												substitutionString = timestamp(subsString.substring(10, 18));
+											} else {
+												Assertions.fail("Invalid value to substitute =>" + subsString );
+											}
 										}
 									}
 								}
@@ -346,7 +351,7 @@ public class DateUtils {
 		Date dateToday = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dateToday);
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format((Date)cal.getTime());		
 	}
 	
@@ -354,6 +359,17 @@ public class DateUtils {
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		return date.format(formatter);
+	}
+	
+	public static String timestamp(String time) {
+		return todayYyyymmdd() + "T" + time + ".000Z";
+	}
+	
+	public static String todayDisplay() {
+		LocalDate date = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+		return date.format(formatter);
+		
 	}
 	
 	public static String datePart(String string, String part) {
@@ -409,6 +425,14 @@ public class DateUtils {
 			Assertions.fail("Invalid time: " + string);
 		}
 		return null;
+	}
+	
+	@Test
+	public void test1() {
+		System.out.println(todayDisplay());
+		System.out.println(timestamp());
+		System.out.println(timestamp("12:34:45"));
+		System.out.println(substituteDateValue("timestamp-12:34:45"));
 	}
 
 }

@@ -89,9 +89,14 @@ public class ReadProperties {
 	public static LogDetail responseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
 	
 	public static String buildNo = JsonApi.buildInfo();
-	public static String seq = emptyIfNull(getSystemValue("seq_prefix")) + ((getSystemValue("seq") == null) ? (runLocal ? TestData.getNextSeqNo() : buildNo) : getSystemValue("seq"));
-	private static int instanceCount = 0;
 	
+// generate sequence number for dynamic data {{seq}}
+// if runLocal, if seq is set in system parameters, use that, otherwise use seq from testdata.properties prefixed by seq_prefix
+// if not run_local, use build no from build info
+	
+	public static String seq = runLocal ? ((getSystemValue("seq") == null) ? emptyIfNull(getSystemValue("seq_prefix")) + TestData.getNextSeqNo() : getSystemValue("seq")) : buildNo;
+			 
+	private static int instanceCount = 0;
     
 	static {
 		log.info("OS =>" + os);
@@ -102,8 +107,6 @@ public class ReadProperties {
 		}
 		log.info("Instance count: " + ++instanceCount);
 	}
-	
-
 	
 	public static String jsonApiUri = "https://darts-api." + environment + ".platform.hmcts.net/";
 	public static String soapApiUri = "https://darts-api." + environment + ".platform.hmcts.net/ws/";

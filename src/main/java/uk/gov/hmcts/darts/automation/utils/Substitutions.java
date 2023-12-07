@@ -59,7 +59,8 @@ public class Substitutions {
 			String subsString = subsTag.toLowerCase();
 			if (subsString.startsWith("date") || subsString.startsWith("numdate") ||
 					subsString.startsWith("dd-") || subsString.startsWith("mm-") ||
-					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd")) {
+					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd") ||
+					subsString.startsWith("timestamp")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
 				if (subsString.equalsIgnoreCase("seq")) {
@@ -68,7 +69,15 @@ public class Substitutions {
 					if (subsString.equalsIgnoreCase("timestamp")) {
 						substitutionString = DateUtils.timestamp();
 					} else {
-						substitutionString = TestData.getProperty(subsTag);
+						if (subsString.equalsIgnoreCase("displaydate")) {
+							substitutionString = DateUtils.timestamp();
+						} else {
+							if (subsString.equalsIgnoreCase("timestamp")) {
+								substitutionString = DateUtils.timestamp();
+							} else {
+								substitutionString = TestData.getProperty(subsTag);
+							}
+						}
 					}
 				}
 			}
