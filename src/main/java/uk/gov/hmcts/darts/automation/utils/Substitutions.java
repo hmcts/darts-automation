@@ -60,7 +60,7 @@ public class Substitutions {
 			if (subsString.startsWith("date") || subsString.startsWith("numdate") ||
 					subsString.startsWith("dd-") || subsString.startsWith("mm-") ||
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd") ||
-					subsString.startsWith("timestamp")) {
+					subsString.startsWith("timestamp-")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
 				if (subsString.equalsIgnoreCase("seq")) {
@@ -70,7 +70,7 @@ public class Substitutions {
 						substitutionString = DateUtils.timestamp();
 					} else {
 						if (subsString.equalsIgnoreCase("displaydate")) {
-							substitutionString = DateUtils.timestamp();
+							substitutionString = DateUtils.todayDisplay();
 						} else {
 							if (subsString.equalsIgnoreCase("timestamp")) {
 								substitutionString = DateUtils.timestamp();
@@ -89,5 +89,12 @@ public class Substitutions {
 			log.info("nothing to substitute =>"+value);
 			return value;
 		}
+	}
+	
+	@Test
+	public void test1() {
+		System.out.println(substituteValue("{{timestamp}}"));
+		System.out.println(substituteValue("{{timestamp-12:23:34}}"));
+		System.out.println(substituteValue("{{displaydate}}"));
 	}
 }
