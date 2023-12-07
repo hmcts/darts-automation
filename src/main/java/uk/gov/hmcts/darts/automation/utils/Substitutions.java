@@ -55,7 +55,8 @@ public class Substitutions {
 		int subsEnd = value.indexOf(delim2);
 		int subsStart = value.lastIndexOf(delim1, subsEnd);
 		if ((subsStart >= 0) && (subsEnd > subsStart)) {
-			String subsString = value.substring(subsStart+2, subsEnd).toLowerCase();
+			String subsTag = value.substring(subsStart+2, subsEnd);
+			String subsString = subsTag.toLowerCase();
 			if (subsString.startsWith("date") || subsString.startsWith("numdate") ||
 					subsString.startsWith("dd-") || subsString.startsWith("mm-") ||
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd")) {
@@ -67,7 +68,7 @@ public class Substitutions {
 					if (subsString.equalsIgnoreCase("timestamp")) {
 						substitutionString = DateUtils.timestamp();
 					} else {
-						substitutionString = TestData.getProperty(subsString);
+						substitutionString = TestData.getProperty(subsTag);
 					}
 				}
 			}

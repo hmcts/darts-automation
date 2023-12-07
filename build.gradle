@@ -110,7 +110,7 @@ dependencies {
 	implementation 'org.apache.logging.log4j:log4j-core'
 	testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl'
 	
-	implementation 'org.seleniumhq.selenium:selenium-java:4.15.0'
+	implementation 'org.seleniumhq.selenium:selenium-java:4.16.1'
 	
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
 	
@@ -162,3 +162,9 @@ wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
 
+task smoketest(type: Test, dependsOn: testClasses) {
+   
+    include '**/TestRunner_Cucumber.class'
+    
+    outputs.upToDateWhen { false }
+}

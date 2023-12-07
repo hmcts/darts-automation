@@ -26,6 +26,24 @@ public class XmlString {
 	String sep() {
 		return String.format("%s%" + ((openTags.size() > 0)? (openTags.size() * 2):"") + "s", sep, "");
 	}
+	
+/*
+ * return String split by whichever separator is used between multiple values in order of "~", ",", " "
+ */
+	public static String[] split(String string) {
+		String sep = "";
+		if (string.contains("~")) 
+			return string.split("~");
+		else 
+			if (string.contains(",")) 
+				return string.split(",");
+			else
+				if (string.contains(" ")) 
+					return string.split(" ");
+				else
+					log.info("no separator found in string {}", string);
+		return string.split(" ");
+	}
 
 /*
 * Add field to xml 
@@ -48,13 +66,45 @@ public class XmlString {
 		return this;
 	}
 	
+	public XmlString addTags(String tag, String[] values) {
+		for (String value:values) {
+			addTag(tag, value);
+		}
+		return this;
+	}
+	
 	public XmlString addTags(String tag, String values, String separator) {
 		if (!values.isBlank()) {
-			String[] vals = values.split(separator);
-			for (String val:vals) {
-				addTag(tag, val);
-			}
+			addTags(tag, values.split(separator));
 		}
+		return this;
+	}
+	
+	public XmlString addTags(String tag, String values) {
+		if (!values.isBlank()) {
+			addTags(tag, split(values));
+		}
+		return this;
+	}
+	
+	public XmlString addTagGroup(String parent, String tag, String[] values) {
+		if (values.length > 0) {
+			addTag(parent);
+			addTags(tag, values);
+			addEndTag();
+		}
+		return this;
+	}
+	
+	public XmlString addTagGroup(String parent, String tag, String values, String separator) {
+		if (!values.isBlank()) {
+			addTagGroup(parent, tag, values.split(separator));
+		}
+		return this;
+	}
+	
+	public XmlString addTagGroup(String parent, String tag, String values) {
+		addTagGroup(parent, tag, split(values));
 		return this;
 	}
 	
@@ -136,10 +186,10 @@ public class XmlString {
 	}
 
 /*
- * Add ready formed attribute=value pair
+ * Add ready formed attribute=value pair(s)
  * 
  */
-	public XmlString addAttribute(String attribute) {
+	public XmlString addAttributes(String attribute) {
 		if (attribute != null && !attribute.isBlank()) {
 			if (sep.startsWith(">")) {
 				xmlString = xmlString + " " + Substitutions.substituteValue(attribute);
@@ -152,7 +202,7 @@ public class XmlString {
 	
 	public XmlString addAttributes(String[] attributes) {
 		for (String attribute : attributes) {
-			addAttribute(attribute);
+			addAttributes(attribute);
 		}
 		return this;
 	}

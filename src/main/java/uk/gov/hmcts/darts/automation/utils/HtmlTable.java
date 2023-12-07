@@ -72,7 +72,7 @@ public class HtmlTable {
         int htmlIndex = 0;
         for (int dataTableIndex = 0; dataTableIndex < dataTableColumns.size(); dataTableIndex++) { //loop through every cell in the current DataTable row
             String expectedCell = dataTableColumns.get(dataTableIndex);
-            expectedCell = (expectedCell != null) ? expectedCell : "";
+            expectedCell = (expectedCell != null) ? Substitutions.substituteValue(expectedCell) : "";
             if (expectedCell.equalsIgnoreCase("*NO-CHECK*")) {
                 htmlIndex++;
             } else if (!expectedCell.equalsIgnoreCase("*IGNORE*") && !expectedCell.equalsIgnoreCase("*SKIP*")) {

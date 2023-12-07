@@ -357,7 +357,7 @@ public class DateUtils {
 	}
 	
 	public static String datePart(String string, String part) {
-		String [] split = string.split(" ")[0].split("-");
+		String [] split = Substitutions.substituteValue(string).split(" ")[0].split("-");
 		if (split.length == 3) {
 			switch(part.toLowerCase()) {
 				case "d":
@@ -376,7 +376,7 @@ public class DateUtils {
 					if (split[0].length() > 2) {
 						return split[0];
 					} else {
-						return split[2];
+						return "20" + split[2];
 					}
 				default:
 					Assertions.fail("Invalid part of date " + part + " for date " + string);
@@ -388,7 +388,8 @@ public class DateUtils {
 	}
 	
 	public static String timePart(String string, String part) {
-		String [] split = ((string.length() > 8) ? string.split(" ")[1] : string).split(":");
+		String substitutedString = Substitutions.substituteValue(string);
+		String [] split = ((substitutedString.length() > 8) ? substitutedString.split(" ")[1] : substitutedString).split(":");
 		if (split.length == 3) {
 			switch(part.toLowerCase()) {
 				case "h":
