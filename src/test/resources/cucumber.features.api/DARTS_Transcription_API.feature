@@ -19,3 +19,9 @@ Feature: Transcription Endpoints
   			{ "trt_id": 999, "description": "Other" }
 			]
 		"""
+
+    @DMP-1600
+    Scenario: Endpoint for Transcriber transcriptions
+      Given I authenticate as a Transcriber user
+      When I call GET /transcriptions/transcriber-view?assigned=true API
+      Then the API status code is 200
