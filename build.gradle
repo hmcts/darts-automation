@@ -146,7 +146,7 @@ dependencies {
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.1'
 	
 	// Rest assured
-	implementation 'io.rest-assured:rest-assured:5.3.2'
+	implementation 'io.rest-assured:rest-assured:5.4.0'
 	
   // Use JUnit Jupiter for testing.
   testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
