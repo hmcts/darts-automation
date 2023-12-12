@@ -1719,6 +1719,7 @@ public class NavigationShared {
 	public void seeText_inSameRow_asText(String searchText, String nextToText) throws Exception {
 		log.info("About to look for text =>"+searchText+"<= in the same row as =>"+nextToText);
 		String substitutedValue = Substitutions.substituteValue(searchText);
+		nextToText = Substitutions.substituteValue(nextToText);
 		driver.findElement(
 				By.xpath(
 						"//table//tr[.//*[contains(normalize-space(text()),\""+substitutedValue+"\")]]//*[text()[contains(normalize-space(.), \""+nextToText+"\")]]"
@@ -1740,6 +1741,8 @@ public class NavigationShared {
 	
 	public void clickText_inSameRow_asText(String clickText, String nextToText) throws Exception {
 		log.info("Going to click on text =>"+clickText+"<= in a row that contains text =>"+nextToText);
+		clickText = Substitutions.substituteValue(clickText);
+		nextToText = Substitutions.substituteValue(nextToText);
 		wait.activateImplicitWait();
 		/**
 		 * 

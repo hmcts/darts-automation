@@ -23,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 
 public class Substitutions {
@@ -60,7 +61,7 @@ public class Substitutions {
 			if (subsString.startsWith("date") || subsString.startsWith("numdate") ||
 					subsString.startsWith("dd-") || subsString.startsWith("mm-") ||
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd") ||
-					subsString.startsWith("timestamp-")) {
+					subsString.startsWith("timestamp-") || subsString.startsWith("displaydate-")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
 				if (subsString.equalsIgnoreCase("seq")) {
@@ -96,5 +97,7 @@ public class Substitutions {
 		System.out.println(substituteValue("{{timestamp}}"));
 		System.out.println(substituteValue("{{timestamp-12:23:34}}"));
 		System.out.println(substituteValue("{{displaydate}}"));
+		Assertions.assertEquals("12", substituteValue("{{dd-12/34/5678}}"));
+		Assertions.assertEquals("9 Dec 2023", substituteValue("{{displaydate-09-12-2023}}"));
 	}
 }

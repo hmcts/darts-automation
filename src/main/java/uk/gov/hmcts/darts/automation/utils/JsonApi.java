@@ -23,12 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Duration;
 import java.util.List;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 
 
@@ -48,6 +48,7 @@ public class JsonApi {
 	static final String CONNECTION = "Connection";
 	static final String CONNECTION_STRING = "keep-alive";
 	static final String AUTHORIZATION = "Authorization";
+	static Map<String, String> emptyMap = new HashMap<String, String>(); 
 
 
 	public JsonApi() {
@@ -199,6 +200,14 @@ public class JsonApi {
     }
 
 	public ApiResponse getApi(String endpoint) {
+		return getApiWithParams(endpoint, emptyMap, emptyMap, emptyMap);
+	}
+
+	public ApiResponse getApiWithParams(String endpoint, String headers, String queryParams, String formParams) {
+		return getApiWithParams(endpoint, stringToMap(headers), stringToMap(queryParams), stringToMap(formParams));
+	}
+
+	public ApiResponse getApiWithParams(String endpoint, Map<String, String> headers, Map<String, String> queryParams, Map<String, String> formParams) {
 
     	authenticate();
 		log.info("get: " + endpoint);
@@ -209,63 +218,44 @@ public class JsonApi {
 	    			.header(USER_AGENT, USER_AGENT_STRING) 
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
 					.header(AUTHORIZATION, authorization)
+					.headers(headers)
+					.queryParams(queryParams)
+					.formParams(formParams)
 					.baseUri(baseUri)
 					.basePath("")
 				.when()
 					.get(endpoint)
 				.then()
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.assertThat().statusCode(200)
 					.extract().response();
 		
 		return new ApiResponse(response.statusCode(), response.asString());
 	}
-
-	public ApiResponse getApiWithFormParams(String endpoint, Map<String, String> formParams) {
-
-    	authenticate();
-		log.info("get: " + endpoint);
-		response =
-				given()
-					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
-	    			.header(USER_AGENT, USER_AGENT_STRING) 
-	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-	    			.header(CONNECTION, CONNECTION_STRING)
-					.header(AUTHORIZATION, authorization)
-					.baseUri(baseUri)
-					.basePath("")
-					.formParams(formParams)
-				.when()
-					.get(endpoint)
-				.then()
-					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.extract().response();
-		return new ApiResponse(response.statusCode(), response.asString());
+	
+	Map<String, String> stringToMap(String string) {
+		Map<String, String> map = new HashMap<String, String>();
+		if (string != null && !string.isBlank()) {
+			String[] pairs = string.split(",");
+			for (String pair : pairs) {
+				try {
+					String [] values = pair.split("=");
+					map.put(values[0], values[1]);
+				} catch (Exception e) {
+					Assertions.fail("Invalid parameter pair in string to map: " + pair);
+				}
+			}
+		}
+		return map;
 	}
 
 	public ApiResponse getApiWithQueryParams(String endpoint, Map<String, String> queryParams) {
+		return getApiWithParams(endpoint, emptyMap, queryParams, emptyMap);
+	}
 
-    	authenticate();
-		log.info("get: " + endpoint);
-		response =
-				given()
-					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept(ACCEPT_JSON_STRING)
-	    			.header(USER_AGENT, USER_AGENT_STRING) 
-	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-	    			.header(CONNECTION, CONNECTION_STRING)
-					.header(AUTHORIZATION, authorization)
-					.baseUri(baseUri)
-					.basePath("")
-					.queryParams(queryParams)
-				.when()
-					.get(endpoint)
-				.then()
-					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.extract().response();
-		return new ApiResponse(response.statusCode(), response.asString());
+	public ApiResponse getApiWithFormParams(String endpoint, Map<String, String> formParams) {
+		return getApiWithParams(endpoint, emptyMap, emptyMap, formParams);
 	}
     
 	public ApiResponse postApi(String endpoint, String body) {
