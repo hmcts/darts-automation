@@ -392,3 +392,187 @@ Feature: Request Audio for transcribers
     Examples:
       | CaseID   |
       | CASE1009 |
+
+  @DMP-1255-AC1
+  Scenario: Transcriber's Your Work - List all to do items
+
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type        | Requested on      | Urgency  |
+      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+
+
+  @DMP-1255-AC2
+  Scenario: Transcriber's Your Work - Sortable columns
+
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+      #checks first table header descending order
+    And I click on "Case ID" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type          | Requested on      | Urgency  |
+      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents   | 06 Dec 2023 14:48 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+
+      #checks first table header ascending order
+    And I click on "Case ID" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type               | Requested on      | Urgency  |
+      | CASE1009      | Swansea        | 15 Aug 2023  | Sentencing remarks | 04 Dec 2023 10:36 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+
+      #checks second table header descending order
+    And I click on "Court" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type               | Requested on      | Urgency  |
+      | CASE1009      | Swansea        | 15 Aug 2023  | Sentencing remarks | 04 Dec 2023 10:36 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+
+       #checks second table header ascending order
+    And I click on "Court" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type        | Requested on      | Urgency  |
+      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+
+       #checks third table header descending order
+    And I click on "Hearing date" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type        | Requested on      | Urgency  |
+      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+
+       #checks third table header ascending order
+    And I click on "Hearing date" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type               | Requested on      | Urgency  |
+      | CASE1009      | Swansea        | 15 Aug 2023  | Sentencing remarks | 04 Dec 2023 10:36 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
+
+        #checks fourth table header descending order
+    And I click on "Type" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type                           | Requested on      | Urgency  |
+      | CASE1009      | Swansea        | 15 Aug 2023  | Summing up (including verdict) | 01 Dec 2023 17:19 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
+
+       #checks fourth table header ascending order
+    And I click on "Type" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court            | Hearing date | Type        | Requested on      | Urgency  |
+      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48   | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+
+      #checks fourth table header descending order
+    And I click on "Requested on" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type        | Requested on      | Urgency  |
+      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
+
+      #checks fourth table header ascending order
+    And I click on "Requested on" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court            | Hearing date | Type                           |  Requested on      | Urgency  |
+      | CASE1009      | Swansea          | 15 Aug 2023  | Summing up (including verdict) | 01 Dec 2023 17:19  | *IGNORE* |
+      | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE*                       | *IGNORE*           | *IGNORE* |
+      | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE*                       | *IGNORE*           | *IGNORE* |
+      | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE*                       | *IGNORE*           | *IGNORE* |
+      | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE*                       | *IGNORE*           | *IGNORE* |
+
+       #checks fifth table header descending order
+    And I click on "Urgency" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court          | Hearing date | Type                           | Requested on      | Urgency  |
+      | CASE1009      | Swansea        | 15 Aug 2023  | Summing up (including verdict) | 01 Dec 2023 17:19 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
+
+      #checks fifth table header ascending order
+    And I click on "Urgency" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID       | Court            | Hearing date | Type        | Requested on      | Urgency  |
+      | CASE1009      | Swansea        | 15 Aug 2023  | Sentencing remarks | 04 Dec 2023 10:36 | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
+
+
+  @DMP-1255-AC3
+  Scenario Outline: Transcriber's Your Work -  View Link on manual requests takes to Manual Transcript request
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    Then I click on "View" in the same row as "<CaseID>"
+    And I see "<Restriction>" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "Request details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<RequestMethod>" on the page
+    And I see "<RequestID>" on the page
+    And I see "<urgency>" on the page
+    And I see "<JudgeApproval>" on the page
+
+    Examples:
+      | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType       | urgency   | RequestMethod | RequestID    |HearingDate | JudgeApproval |
+      | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions |Sentencing remarks | Overnight | Manual        | 3773         |14 Aug 2023 | Yes           |
+
+  @DMP-1255-AC4
+  Scenario Outline: Transcriber's Your Work -  View Link on automatic requests takes to Manual Transcript request
+    When I click on the "Your work" link
+    And I see "Your work" on the page
+    Then I click on "View" in the same row as "<RequestedOn>"
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "Request details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<RequestMethod>" on the page
+    And I see "<RequestID>" on the page
+    And I see "<urgency>" on the page
+    And I see "<JudgeApproval>" on the page
+
+    Examples:
+      | CaseID        |Courthouse       |RequestType                    | urgency               | RequestMethod | RequestID    |HearingDate | JudgeApproval | RequestedOn |
+      | DMP1600-case1 |London_DMP1600   |Summing up (including verdict) | Up to 12 working days | Automated     | 	4013      |11 Oct 2023 | Yes           | 05 Dec 2023 10:44 |
+
