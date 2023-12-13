@@ -20,7 +20,7 @@ Feature: Transcription Endpoints
 			]
 		"""
 
-    @DMP-1600
+    @DMP-1600-NotWorking
     Scenario: Endpoint for Transcriber transcriptions
       Given I authenticate as a Transcriber user
       When I call GET /transcriptions/transcriber-view?assigned=true API

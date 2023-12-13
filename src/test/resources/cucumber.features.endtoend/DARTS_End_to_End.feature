@@ -44,8 +44,8 @@ Feature: Events Endpoints
   @end_to_end
   Scenario Outline: Create a events
     When I create an event
-      | message_id  | type | sub_type | event_id | courthouse   | courtroom   | case_numbers  | event_text      | date_time                | case_retention_fixed_policy | case_total_sentence | start_time               | end_time                 |
-      | MID20230001 | 1100 |          | 16558    | <courthouse> | <courtroom> | <case_number> | Hearing Started | 2023-12-07T14:30:00.000Z |                             |                     | 2023-12-07T01:18:59.903Z | 2023-12-07T01:28:59.903Z |
+      | message_id  | type | sub_type | event_id | courthouse   | courtroom   | case_numbers  | event_text      | date_time     | case_retention_fixed_policy | case_total_sentence | start_time    | end_time      |
+      | MID20230001 | 1100 |          | 16558    | <courthouse> | <courtroom> | <case_number> | Hearing Started | {{timestamp}} |                             |                     | {{timestamp}} | {{timestamp}} |
     Then the API status code is 201
     Then the API response contains:
     """
@@ -66,6 +66,13 @@ Feature: Events Endpoints
     And I see "<courthouse>" on the page
     And I see "<defendants>" on the page
     And I click on "<HearingDate>" in the same row as "<courtroom>"
+    And I set the time fields of "Start Time" to "<StartTime>"
+    And I set the time fields of "End Time" to "<EndTime>"
+    And I select the "Playback Only" radio button
+    And I press the "Get Audio" button
+    #Confirm your Order
+    Then I see "Confirm your Order" on the page
+    Then I see "Case details" on the page
     Examples:
-      | courthouse         | case_number | defendants | courtroom    | HearingDate |
-      | Harrow Crown Court | T20230001   | fred       | Rayners room | 7 Dec 2023  |
+      | courthouse         | case_number | defendants | courtroom    | HearingDate | StartTime              | EndTime                |
+      | Harrow Crown Court | T20230001   | fred       | Rayners room | 8 Dec 2023  | {{timestamp-12:06:40}} | {{timestamp-12:06:40}} |
