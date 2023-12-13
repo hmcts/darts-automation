@@ -55,8 +55,62 @@ Feature: User as a Approver
         | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Argument and submission of ruling | Up to 3 working days | 14 Aug 2023 | Requester |              | Yes           |
 
 
-    
 
+    @DMP-1011-AC3
+    Scenario Outline: transcript request approval process is cancelled
+      When I click on the "Your transcripts" link
+      And I see "Your transcripts" on the page
+      And I see "Requests to approve or reject" on the page
+      Then I click on "View" in the same row as "<CaseID>"
+      And I see "<Restriction>" on the page
+      And I see "Approve transcript request" on the page
+      And I see "Case details" on the page
+      And I see "<CaseID>" on the page
+      And I see "<Courthouse>" on the page
+      And I see "<Defendants>" on the page
+      And I see "<Judge(s)>" on the page
+      And I see "Request details" on the page
+      And I see "<HearingDate>" on the page
+      And I see "<RequestType>" on the page
+      And I see "<urgency>" on the page
+      And I see "<From>" on the page
+      And I see "<JudgeApproval>" on the page
+      And I see "Do you approve this request?" on the page
+      Then I click on the "Cancel" link
+      And I see "Requests to approve or reject" on the page
+
+      Examples:
+        | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency   | HearingDate | From      | JudgeApproval  |
+        | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Overnight | 14 Aug 2023 | Requester | Yes           |
+
+      @DMP-1011-AC4
+      Scenario Outline:  Error - no reason
+        When I click on the "Your transcripts" link
+        And I see "Your transcripts" on the page
+        And I see "Requests to approve or reject" on the page
+        Then I click on "View" in the same row as "<CaseID>"
+        And I see "<Restriction>" on the page
+        And I see "Approve transcript request" on the page
+        And I see "Case details" on the page
+        And I see "<CaseID>" on the page
+        And I see "<Courthouse>" on the page
+        And I see "<Defendants>" on the page
+        And I see "<Judge(s)>" on the page
+        And I see "Request details" on the page
+        And I see "<HearingDate>" on the page
+        And I see "<RequestType>" on the page
+        And I see "<urgency>" on the page
+        And I see "<From>" on the page
+        And I see "<JudgeApproval>" on the page
+        And I see "Do you approve this request?" on the page
+        Then I select the "<string>" radio button
+        And I press the "Submit" button
+        Then I see an error message "You must explain why you cannot approve this request"
+       
+
+        Examples:
+          | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency   | HearingDate | From      | JudgeApproval  |
+          | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Overnight | 14 Aug 2023 | Requester | Yes           |
 
 
 
