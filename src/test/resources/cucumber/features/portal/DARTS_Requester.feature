@@ -257,3 +257,21 @@ Feature: User as a Requester
   Examples:
   | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
   | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
+
+  @DMP-1053
+  Scenario: Delete single request from ready section of your transcripts
+    When I click on the "Your transcripts" link
+    And I check the checkbox in the same row as "CASE1009" "27 Nov 2023 14:29"
+    And I press the "Remove transcript request" button
+    Then I see "Are you sure you want to remove this transcript request?" on the page
+    And I see "This action will remove this transcript request from your transcripts. You can still access it by searching at the hearing and case levels." on the page
+
+    When I click on the "Cancel" link
+    And I see "Your transcripts" on the page
+    And I check the checkbox in the same row as "CASE1009" "27 Nov 2023 14:29"
+    And I press the "Remove transcript request" button
+    And I press the "Yes - remove" button
+    Then I see "Your transcripts" on the page
+    And I do not see "27 Nov 2023 14:29" on the page
+
+  #Update will be needed to use clean data when available
