@@ -81,6 +81,11 @@ public class StepDef_soapApi extends StepDef_base {
 		Assertions.assertEquals(expectedValue, value, "XML value not as expected");
 	}
 	
+	@Given("I authenticate from {word} source system") 
+	public void authenticateAsSource(String source) {
+		soapApi.authenticateAsSource(source);
+	}
+	
 // sample cucumber:
 // When I add a case using soap
 // |courthouse|case_number|defendants|judges|prosecutors|defenders|

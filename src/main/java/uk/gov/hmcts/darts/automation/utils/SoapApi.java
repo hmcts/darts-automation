@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 public class SoapApi {
 	private static Logger log = LogManager.getLogger("SoapApi");
     static Response response;
-	static String authorization;
+	String authorization;
 	static String baseUri = ReadProperties.main("soapApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
@@ -48,6 +48,8 @@ public class SoapApi {
 	static final String CONNECTION_STRING = "keep-alive";
 	static final String AUTHORIZATION = "Authorization";
 	static final String SOAP_ACTION = "SOAPAction";
+	String username;
+	String password;
 
 
 	public SoapApi() {
@@ -64,7 +66,49 @@ public class SoapApi {
         return loglevel;
     }
     
-    public String authenticate() {
+    public void authenticateAsSource(String source) {
+        switch (source.toUpperCase()) {
+        case "EXTERNAL":
+        	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
+        	break;
+        case "XHIBIT":
+        	externalAuthenticate(ReadProperties.automationTranscriberUserId, ReadProperties.automationExternalPassword);
+        	break;
+        case "CPP":
+        	externalAuthenticate(ReadProperties.automationLanguageShopTestUserId, ReadProperties.automationExternalPassword);
+        	break;
+        case "DARMIDTIER":
+        	externalAuthenticate(ReadProperties.darMidTierUserName, ReadProperties.darMidTierPassword);
+        	break;
+        case "":
+        	log.warn("Authentication - no role provided - using external");
+        	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
+        	break;
+        default:
+            log.fatal("Unknown user type - {}"+ source);
+            authorization = "";
+        }
+    }
+    
+    public void externalAuthenticate() {
+    	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
+    }
+    
+    public void externalAuthenticate(String username, String password) {
+    	this.username = username;
+    	this.password = password;
+    	authenticate(username, password);
+    }
+    
+    public void authenticate() {
+    	boolean alreadyAuthenticated = !(authorization == null || authorization.isBlank());
+    	log.info(alreadyAuthenticated ? "already Authenticated" : "Not already Authenticated");
+    	if (!alreadyAuthenticated) {
+    		externalAuthenticate();
+    	}
+    }
+    
+    public void authenticate(String username, String password) {
     	log.info("authentication");
     	response  = 
     		given()
@@ -81,6 +125,7 @@ public class SoapApi {
     					"username", ReadProperties.apiGlobalUserName,
     					"password", ReadProperties.apiGlobalPassword,
     					"client_id", ReadProperties.apiExtClientId,
+    					"client_secret", ReadProperties.apiExtClientSecret,
 						"scope", "https://" + ReadProperties.main("apiExtAuthPath") + "/" + ReadProperties.apiExtClientId + "/Functional.Test")
     			.baseUri(ReadProperties.main("apiExtAuthUri"))
     			.basePath(ReadProperties.main("apiExtAuthPath") + ReadProperties.main("apiExtAuthPath2"))
@@ -93,13 +138,13 @@ public class SoapApi {
     			;
 		String access_token = (response.jsonPath().getString("access_token"));
 		String token_type  = (response.jsonPath().getString("token_type"));
-    	return token_type + " " + access_token;
+		authorization = token_type + " " + access_token;
     }
     
     public ApiResponse postSoap(String endpoint, String body) {
 
 		log.info("post soap request: " + endpoint);
-    	authorization = authenticate();
+    	authenticate();
 		response = 
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
@@ -124,7 +169,7 @@ public class SoapApi {
 	public ApiResponse postSoap(String endpoint, String soapAction, String body, boolean htmlEncoded) {
 
 		log.info("post soap request - SOAPAction: " + soapAction);
-    	authorization = authenticate();
+    	authenticate();
 		response =
 				given()
 					.spec(requestLogLevel(ReadProperties.requestLogLevel))
@@ -158,10 +203,20 @@ public class SoapApi {
 		}
 		return result;
 	}
+	
+	String addSoapAuthHeader() {
+		return  "  <soap:Header>\n"
+				+ "    <ServiceContext token=\"temporary/127.0.0.1-1694086218480-789961425\" xmlns=\"http://context.core.datamodel.fs.documentum.emc.com/\">\n"
+				+ "      <Identities xsi:type=\"RepositoryIdentity\" userName=\"" + username + "\" password=\"" + password + "\" repositoryName=\"moj_darts\" domain=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n"
+				+ "      <RuntimeProperties/>\n"
+				+ "    </ServiceContext>\n"
+				+ "  </soap:Header>";
+	}
 
 	String addSoapHeader(String soapBody) {
 		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+ addSoapAuthHeader()
 				+ "    <soap:Body>"
 				+ soapBody
 				+ "    </soap:Body>"
@@ -171,6 +226,7 @@ public class SoapApi {
 	String addSoapHeader(String soapAction, String soapBody, boolean htmlEncoded) {
 		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+ addSoapAuthHeader()
 				+ "    <soap:Body>"
 				+ "        <" + soapAction + " xmlns=\"http://com.synapps.mojdarts.service.com\">"
 				+ "            <document xmlns=\"\">"
