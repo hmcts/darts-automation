@@ -45,7 +45,11 @@ def secrets = [
     secret('XhibitUserName', 'XHIBIT_USERNAME'),
     secret('XhibitPassword', 'XHIBIT_PASSWORD'),
     secret('CppUserName', 'CPP_USERNAME'),
-    secret('CppPassword', 'CPP_PASSWORD')
+    secret('CppPassword', 'CPP_PASSWORD'),
+    secret('CppPassword', 'CPP_PASSWORD'),
+    secret('DarMidTierUserName', 'DAR_MID_TIER_USERNAME'),
+    secret('DarMidTierPassword', 'DAR_MID_TIER_PASSWORD'),
+    secret('DartsAdminUserName', 'DARTS_ADMIN_USERNAME')
   ],
 ]
 
