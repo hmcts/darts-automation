@@ -161,3 +161,99 @@ Feature: User as a Requester
     Examples:
       | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType               | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
       | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Proceedings after verdict | Up to 7 working days | COMPLETE | 14 Aug 2023 | Requester | DMP-1025     | Yes           |
+
+  @DMP-1028-AC1
+  Scenario Outline: View reject Transcription request
+
+    When I click on the "Your transcripts" link
+    Then I click on "View" in the same row as "<RequestType>"
+    And I see "Your transcripts" on the page
+    And I see "Your request was rejected" on the page
+    And I see "DMP-851 test." on the page
+    And I see "<Restriction>" on the page
+    And I see "Transcript request" on the page
+    And I see "<Status>" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "Request details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<urgency>" on the page
+    And I see "<From>" on the page
+    And I see "<Instructions>" on the page
+    And I see "<JudgeApproval>" on the page
+
+    Examples:
+      | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
+      | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
+
+    @DMP-1028-AC2
+    Scenario Outline: User wants to request again
+
+      When I click on the "Your transcripts" link
+      Then I click on "View" in the same row as "<RequestType>"
+      And I see "Your transcripts" on the page
+      And I see "Your request was rejected" on the page
+      And I see "DMP-851 test." on the page
+      And I see "<Restriction>" on the page
+      And I see "Transcript request" on the page
+      And I see "<Status>" on the page
+      And I see "Case details" on the page
+      And I see "<CaseID>" on the page
+      And I see "<Courthouse>" on the page
+      And I see "<Defendants>" on the page
+      And I see "<Judge(s)>" on the page
+      And I see "Request details" on the page
+      And I see "<HearingDate>" on the page
+      And I see "<RequestType>" on the page
+      And I see "<urgency>" on the page
+      And I see "<From>" on the page
+      And I see "<Instructions>" on the page
+      And I see "<JudgeApproval>" on the page
+      Then I press the "Request again" button
+      And I see "<CaseID>" on the page
+      And I see "<Courthouse>" on the page
+      And I see "<Defendants>" on the page
+
+
+      Examples:
+        | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
+        | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
+
+  @DMP-1028-AC3
+  Scenario Outline: View rejected transcript - A user clicks on the cancel hyperlink
+
+    When I click on the "Your transcripts" link
+    And I click on "View" in the same row as "<RequestType>"
+    And I see "Your transcripts" on the page
+    And I see "Your request was rejected" on the page
+    And I see "DMP-851 test." on the page
+    And I see "<Restriction>" on the page
+    And I see "Transcript request" on the page
+    And I see "<Status>" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "Request details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<urgency>" on the page
+    And I see "<From>" on the page
+    And I see "<Instructions>" on the page
+    And I see "<JudgeApproval>" on the page
+    Then I click on the "Cancel" link
+    And I see "Your transcripts" on the page
+    And I verify the HTML table "Ready" contains the following values
+      | *NO-CHECK* | Case ID  | Court   | Hearing date | Type                                     | Requested on      | Status   | Urgency              |
+      | *NO-CHECK* | CASE1009 | Swansea | 15 Aug 2023  | Argument and submission of ruling        | 27 Nov 2023 14:29 | COMPLETE | Up to 3 working days|
+      | *NO-CHECK* | CASE1009 | Swansea | 15 Aug 2023  | Prosecution opening of facts             | 21 Nov 2023 10:18 | COMPLETE | Up to 12 working days |
+      | *NO-CHECK* | CASE1009 | Swansea | 15 Aug 2023  | Mitigation                               | 17 Nov 2023 10:03 | REJECTED | Up to 3 working days |
+
+  Examples:
+  | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
+  | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
