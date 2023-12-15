@@ -275,3 +275,24 @@ Feature: User as a Requester
     And I do not see "27 Nov 2023 14:29" on the page
 
   #Update will be needed to use clean data when available
+
+  @DMP-1054
+  Scenario: Delete multiple requests from ready section of your transcripts
+    When I click on the "Your transcripts" link
+    And I check the checkbox in the same row as "CASE1009" "21 Nov 2023 10:18"
+    And I check the checkbox in the same row as "CASE1009" "17 Nov 2023 10:03"
+    And I press the "Remove transcript request" button
+    Then I see "Are you sure you want to remove these transcript requests?" on the page
+    And I see "This action will remove these transcript requests from your transcripts. You can still access them by searching at the hearing and case levels." on the page
+
+    When I click on the "Cancel" link
+    And I see "Your transcripts" on the page
+    And I check the checkbox in the same row as "CASE1009" "21 Nov 2023 10:18"
+    And I check the checkbox in the same row as "CASE1009" "17 Nov 2023 10:03"
+    And I press the "Remove transcript request" button
+    And I press the "Yes - remove" button
+    Then I see "Your transcripts" on the page
+    And I do not see "21 Nov 2023 10:18" on the page
+    And I do not see "17 Nov 2023 10:03" on the page
+
+    #Update will be needed to use clean data when available
