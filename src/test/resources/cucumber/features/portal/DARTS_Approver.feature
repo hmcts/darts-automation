@@ -81,6 +81,51 @@ Feature: User as a Approver
             | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | HearingDate | From         | JudgeApproval  |
             | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 7 working days | 14 Aug 2023 | 	global_judge| Yes           |
 
+    @DMP-1746-AC1
+    Scenario: Sort transcription requests for approval by urgency
+
+      When I click on the "Your transcripts" link
+      And I see "Your transcripts" on the page
+        #checks first table header descending order
+      And I click on "Urgency" in the table header
+      Then I verify the HTML table contains the following values
+        | Case ID               | Court          | Hearing date | Type          | Requested on |Request ID | Urgency  |
+        | DMP-1011 DMP-1825     | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*              | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+
+
+        #checks first table header ascending order
+      And I click on "Urgency" in the table header
+      Then I verify the HTML table contains the following values
+        | Case ID       | Court          | Hearing date | Type          | Requested on |Request ID | Urgency  |
+        | CASE1009      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
+        | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*     | *IGNORE*  | *IGNORE* |
     
 
 
