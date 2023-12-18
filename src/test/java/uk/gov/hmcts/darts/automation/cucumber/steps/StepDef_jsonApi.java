@@ -221,6 +221,13 @@ public class StepDef_jsonApi extends StepDef_base {
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
+
+	@When("^I call GET ([^\"]*) API with header \"([^\"]*)\"")
+	public void callGetCaseApiWithHeader(String endpoint, String headers) {
+		ApiResponse apiResponse = jsonApi.getApiWithParams(endpoint, headers, "", "");
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
 	
 	@Then("the API status code is {int}")
 	public void verifyStatusCode(int expected) {

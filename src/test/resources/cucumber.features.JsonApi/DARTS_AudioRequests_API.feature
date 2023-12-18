@@ -1,6 +1,44 @@
 Feature: Audio Request Endpoint
 
-  @DMP-1726
+  @DMP-982-AC1
+  Scenario: Audio Request POST Endpoint
+    Given I authenticate as a EXTERNAL user
+    When I call POST /audio-requests API using json body:
+    """
+    {
+      "hearing_id": 142,
+      "requestor": -30,
+      "start_time": "2023-08-31T09:00:00Z",
+      "end_time": "2023-08-31T12:00:00Z",
+      "request_type": "DOWNLOAD"
+    }
+    """
+    Then the API status code is 200
+
+  @DMP-982-AC2
+  Scenario: Audio Request POST Endpoint with invalid hearing id
+    Given I authenticate as a EXTERNAL user
+    When I call POST /audio-requests API using json body:
+    """
+          {
+         "hearing_id": 5,
+         "requestor": -30,
+         "start_time": "2023-08-31T09:00:00Z",
+         "end_time": "2023-08-31T12:00:00Z",
+         "request_type": "DOWNLOAD"
+          }
+    """
+    Then the API status code is 404
+    Then the API response contains:
+    """
+          {
+         "type": "HEARING_100",
+         "title": "The requested hearing cannot be found",
+         "status": 404
+          }
+    """
+
+  @DMP-1726 @DMP-1271
   Scenario: Audio Request PATCH Endpoint
     Given I authenticate as a Requester user
     When I call GET audio-requests/v2 API with header "user_id=-37" and query params "expired=false"
