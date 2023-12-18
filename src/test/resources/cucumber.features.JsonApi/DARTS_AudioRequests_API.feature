@@ -120,3 +120,37 @@ Feature: Audio Request Endpoint
             "transformed_media_filename": "CASE1009_15_Aug_2023_1"
         }
     """
+
+    @DMP-1730-AC1 @DMP-1091
+    Scenario: Audio Request Transformed Media Endpoint
+      Given I authenticate as a Requester user
+      When I call PATCH audio-requests/7633 API
+      Then the API status code is 204
+
+  @DMP-1730-AC2 @DMP-1091
+  Scenario: Audio Request Transformed Media Endpoint-404
+    Given I authenticate as a Requester user
+    When I call PATCH audio-requests/7632 API
+    Then the API status code is 404
+    Then the API response contains:
+    """
+    {
+    "type": "AUDIO_REQUESTS_100",
+    "title": "The requested audio request cannot be found",
+    "status": 404
+}
+    """
+
+  @DMP-1091-AC3
+  Scenario: Audio Request Transformed Media Endpoint-401
+    Given I authenticate as a Requester user
+    When I call PATCH audio-requests/6493 API
+    Then the API status code is 401
+    Then the API response contains:
+    """
+    {
+    "type": "AUDIO_REQUESTS_101",
+    "title": "The audio request is not valid for this user",
+    "status": 401
+}
+    """
