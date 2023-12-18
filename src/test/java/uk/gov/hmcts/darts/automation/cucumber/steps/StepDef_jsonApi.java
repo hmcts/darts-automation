@@ -201,19 +201,32 @@ public class StepDef_jsonApi extends StepDef_base {
 		testdata.responseString = apiResponse.responseString;
 	}
 
-// sample cucumber:
-//	When I call GET case-hearings API with terms:
+// sample cucumber: - - in endpoint is replaced by /, 
+//	When I call GET case-search API with query params:
 //	| case_number  | courthouse  | courtroom  | judge_name | defendant_name | date_from | date_to | event_text_contains |
 //	|              | Leeds		 |            |            |                |           |         |                     |
 
-	@When("^I call GET case-hearings API with terms:$")
-	public void callGetCaseHearingsApi(List<Map<String, String>> dataTable) {
+	@When("^I call GET ([^\"]*) API with query params:$")
+	public void callGetApiWithQueryParams(String endpoint, List<Map<String, String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
-			map.get("case_number");
-			ApiResponse apiResponse = jsonApi.getApiWithQueryParams("cases/search", map);
+			ApiResponse apiResponse = jsonApi.getApiWithQueryParams(endpoint, map);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
 		}
+	}
+
+	@When("^I call GET ([^\"]*) API with header \"([^\"]*)\" and query params \"([^\"]*)\"$")
+	public void callGetCaseApiWithHeaderAndQueryParams(String endpoint, String headers, String queryParams) {
+		ApiResponse apiResponse = jsonApi.getApiWithParams(endpoint, headers, queryParams, "");
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
+
+	@When("^I call GET ([^\"]*) API with header \"([^\"]*)\"")
+	public void callGetCaseApiWithHeader(String endpoint, String headers) {
+		ApiResponse apiResponse = jsonApi.getApiWithParams(endpoint, headers, "", "");
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@Then("the API status code is {int}")

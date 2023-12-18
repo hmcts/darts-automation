@@ -333,7 +333,11 @@ public class DateUtils {
 											if (subsString.toLowerCase().startsWith("timestamp-")) {
 												substitutionString = timestamp(subsString.substring(10, 18));
 											} else {
-												Assertions.fail("Invalid value to substitute =>" + subsString );
+												if (subsString.toLowerCase().startsWith("displaydate-")) {
+													substitutionString = displayDate(subsString.substring(12));
+												} else {
+													Assertions.fail("Invalid value to substitute =>" + subsString );
+												}
 											}
 										}
 									}
@@ -369,11 +373,24 @@ public class DateUtils {
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
 		return date.format(formatter);
-		
+	}
+	
+	public static String dateAsYyyyMmDd(String string) {
+		return datePart(string, "yyyy") + "-" + datePart(string, "mm") + "-" + datePart(string, "dd");
+	}
+	
+	public static String displayDate(String string) {
+		LocalDate date = LocalDate.parse(dateAsYyyyMmDd(string));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+		return date.format(formatter);
 	}
 	
 	public static String datePart(String string, String part) {
-		String [] split = Substitutions.substituteValue(string).split(" ")[0].split("-");
+		String substitutedString = Substitutions.substituteValue(string).split(" ")[0];
+		if (substitutedString.isBlank()) {
+			substitutedString = todayYyyymmdd();
+		}
+		String [] split = substitutedString.split(substitutedString.contains("/") ? "/" : "-");
 		if (split.length == 3) {
 			switch(part.toLowerCase()) {
 				case "d":
@@ -392,7 +409,11 @@ public class DateUtils {
 					if (split[0].length() > 2) {
 						return split[0];
 					} else {
-						return "20" + split[2];
+						if (split[2].length() > 2) {
+							return split[2];
+						} else {
+							return "20" + split[2];
+						}
 					}
 				default:
 					Assertions.fail("Invalid part of date " + part + " for date " + string);
@@ -429,10 +450,16 @@ public class DateUtils {
 	
 	@Test
 	public void test1() {
+		System.out.println(displayDate("2023-12-09"));
+		System.out.println(displayDate("31-12-2023"));
 		System.out.println(todayDisplay());
 		System.out.println(timestamp());
 		System.out.println(timestamp("12:34:45"));
 		System.out.println(substituteDateValue("timestamp-12:34:45"));
+		System.out.println(datePart("12-34-45", "dd"));
+		System.out.println(datePart("12/34/2045", "dd"));
+		System.out.println(datePart("2045/34/12", "dd"));
+		System.out.println(datePart("", "dd"));
 	}
 
 }

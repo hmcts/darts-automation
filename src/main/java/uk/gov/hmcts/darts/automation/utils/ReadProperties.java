@@ -61,11 +61,14 @@ public class ReadProperties {
 	public static String automationInternalUserTestPassword = getSystemValue("AUTOMATION_INTERNAL_PASSWORD");
 	public static String automationRequesterApproverTestPassword = getSystemValue("AUTOMATION_REQUESTER_APPROVER_PASSWORD");
 	public static String automationRequesterApproverTestUserId = getSystemValue("AUTOMATION_REQUESTER_APPROVER_USERNAME");
+	public static String dartsAdminUserName = getSystemValue("DARTS_ADMIN_USERNAME");
 
 	public static String xhibitUserName = getSystemValue("XHIBIT_USERNAME");
 	public static String xhibitPassword = getSystemValue("XHIBIT_PASSWORD");
 	public static String cppUserName = getSystemValue("CPP_USERNAME");
 	public static String cppPassword = getSystemValue("CPP_PASSWORD");
+	public static String darMidTierUserName = getSystemValue("DAR_MID_TIER_USERNAME");
+	public static String darMidTierPassword = getSystemValue("DAR_MID_TIER_PASSWORD");
 
 	public static String isRunLocal = getSystemValue("RUN_LOCAL");
 	
