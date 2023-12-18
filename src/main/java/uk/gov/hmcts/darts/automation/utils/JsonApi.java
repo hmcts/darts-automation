@@ -241,7 +241,12 @@ public class JsonApi {
 			for (String pair : pairs) {
 				try {
 					String [] values = pair.split("=");
-					map.put(values[0], values[1]);
+					if (values.length == 2) {
+						map.put(values[0], values[1]);
+					} else {
+						map.put(values[0], "");
+						log.info("Empty value in pair {}", pair);
+					}
 				} catch (Exception e) {
 					Assertions.fail("Invalid parameter pair in string to map: " + pair);
 				}
