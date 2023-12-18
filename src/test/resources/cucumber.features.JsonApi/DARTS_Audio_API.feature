@@ -1,5 +1,19 @@
 Feature: Audio Endpoint
 
+  @DMP-777
+  Scenario: GET Audio Endpoint
+    Given I authenticate as a EXTERNAL user
+    When I call GET /audio/hearings/142/audios API
+    Then the API status code is 200
+    Then the API response contains:
+    """
+    {
+        "id": 1295,
+        "media_start_timestamp": "2023-08-15T13:00:00Z",
+        "media_end_timestamp": "2023-08-15T13:01:00Z"
+    }
+    """
+
   @DMP-1169-AC1
   Scenario: GET Media - authorized user
     Given I authenticate as a EXTERNAL user
@@ -47,3 +61,5 @@ Feature: Audio Endpoint
         "detail": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"1123@\""
         }
     """
+
+
