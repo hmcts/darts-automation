@@ -20,6 +20,7 @@ import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.SoapApi;
+import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import uk.gov.hmcts.darts.automation.utils.XmlUtils;
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
@@ -108,56 +109,56 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST SOAP API using soap body:")
 	public void callPostApiWithXmlBody(String docString) {
-		ApiResponse apiResponse = soapApi.postSoap("", docString);
+		ApiResponse apiResponse = soapApi.postSoap("", Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST SOAP API using soap action {word} and body:")
 	public void callPostSoapActionApiWithBody(String soapAction, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap("", soapAction, docString, true);
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString), true);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST SOAP API using SOAPAction {word} and encoded body:")
 	public void callPostSoapActionApiWithEncodedBody(String soapAction, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap("", soapAction, docString, true);
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString), true);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST SOAP API using SOAPAction {word} and body:")
 	public void callPostSoapActionApiWithUnencodedBody(String soapAction, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap("", soapAction, docString, false);
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString), false);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST {word} SOAP API using soap body:")
 	public void callPostApiWithBody(String endPoint, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, docString);
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body:")
 	public void callPostSoapActionApiWithBody(String endPoint, String soapAction, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, docString, true);
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString), true);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST {word} SOAP API using SOAPAction {word} and encoded body:")
 	public void callPostSoapActionApiWithEncodedBody(String endPoint, String soapAction, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, docString, true);
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString), true);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
 	
 	@When("I call POST {word} SOAP API using SOAPAction {word} and body:")
 	public void callPostSoapActionApiWithNotEncodedBody(String endPoint, String soapAction, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, docString, false);
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString), false);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
