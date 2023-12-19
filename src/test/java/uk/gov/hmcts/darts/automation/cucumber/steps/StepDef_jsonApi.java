@@ -238,7 +238,12 @@ public class StepDef_jsonApi extends StepDef_base {
 	public void verifyApiResponse(String docString) {
 		Assertions.assertTrue(testdata.responseString.replaceAll("\\R|\\s", "").contains(docString.replaceAll("\\R|\\s", "")), "Response contents not matched:\r" + testdata.responseString);
 	}
-	
 
-	
+
+	@When("I call PATCH ([^\"]*) API$")
+	public void callPatch(String endpoint) {
+		ApiResponse apiResponse = jsonApi.patchApi(endpoint, "");
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
 }
