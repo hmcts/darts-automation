@@ -34,8 +34,8 @@ Feature: Events Endpoints
          }
       """
     When I add courtlog using json
-      | dateTime      | courthouse   | courtroom   | case_number   | text                           |
-      | {{timestamp}} | <courthouse> | <courtroom> | <case_number> | AUTOMATION LOG - <case_number> |
+      | dateTime      | courthouse   | courtroom   | case_number   | text   |
+      | {{timestamp}} | <courthouse> | <courtroom> | <case_number> | <keywords> |
     Then the API status code is 201
     Then the API response contains:
     """
@@ -54,14 +54,39 @@ Feature: Events Endpoints
     Then I verify the HTML table contains the following values
       | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
       | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants>  |
+
     Then I click on the "Clear search" link
     And "Courthouse" is ""
     And "Case ID" is ""
-    Then I set ""
+    And I set "Courthouse" to "<courthouse>" and click away
+    And I set "Courtroom" to "<courtroom>"
+    And I set "Defendant's name" to "<defendants>"
+    And I press the "Search" button
+    Then I see "result" on the page
 
+    Then I click on the "Clear search" link
+    And "Courthouse" is ""
+    And "Courtroom" is ""
+    And "Defendant's name" is ""
+    And I set "Courtroom" to "<courtroom>"
+    And I press the "Search" button
+    Then I see "You must also enter a courthouse" on the page
+
+    And I set "Courthouse" to "<courthouse>" and click away
+    Then I press the "Search" button
+    Then I see "result" on the page
+
+    Then I click on the "Clear search" link
+    And "Courthouse" is ""
+    And "Courtroom" is ""
+    Then I set "Keywords" to "<keywords>"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants>  |
     Examples:
-      | courthouse         | case_number | defendants | judges     | prosecutors     | defenders     | courtroom    |
-      | Harrow Crown Court | T2023000231   | fred       | test judge | test prosecutor | test defender | Rayners room |
+      | courthouse         | case_number | defendants | judges     | prosecutors     | defenders     | courtroom    | keywords       |
+      | Harrow Crown Court | T2023000231 | fred       | test judge | test prosecutor | test defender | Rayners room | AUTOMATION LOG {{seq}}|
 
   @end2end @end2end6
   Scenario Outline: Create a case and hearing via events
