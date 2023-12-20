@@ -50,6 +50,8 @@ public class XmlUtils {
     			.addTag("type", type)
     			.addTag("subType", subType)
     			.addTag("document")
+				.startEncoding()
+				.addTag("DartsEvent")
     			.addAttribute("ID", eventId)
     			.addAttribute("Y", DateUtils.datePart(dateTime, "Y"))
 				.addAttribute("M", DateUtils.datePart(dateTime, "M"))
@@ -57,10 +59,9 @@ public class XmlUtils {
     			.addAttribute("H", DateUtils.timePart(dateTime, "H"))
 				.addAttribute("MIN", DateUtils.timePart(dateTime, "MIN"))
 				.addAttribute("S", DateUtils.timePart(dateTime, "S"))
-				.startEncoding()
 				.addTag("CourtHouse", courthouse)
     			.addTag("CourtRoom", courtroom)
-    			.addTagGroup("Case_numbers", "Case_number", caseNumbers)
+    			.addTagGroup("CaseNumbers", "CaseNumber", caseNumbers)
     			.addTag("EventText", eventText);
     	if (!caseRetentionFixedPolicy.isBlank() || !caseTotalSentence.isBlank() ) {
     		xmlString.addTag("RetentionPolicy");
@@ -68,6 +69,7 @@ public class XmlUtils {
     		xmlString.addTag("CaseTotalSentence", caseTotalSentence);
     		xmlString.addEndTag();
     	}
+		xmlString.addEndTag();
     	xmlString.endEncoding()
     			.addEndTag();
 		return xmlString.xmlValue();
@@ -104,8 +106,8 @@ public class XmlUtils {
     			.addAttribute("H", DateUtils.timePart(dateTime, "H"))
 				.addAttribute("MIN", DateUtils.timePart(dateTime, "MIN"))
 				.addAttribute("S", DateUtils.timePart(dateTime, "S"))
-				.addTag("courtHouse", courthouse)
-    			.addTag("courtRoom", courtroom)
+				.addTag("courthouse", courthouse)
+    			.addTag("courtroom", courtroom)
     			.addTagGroup("case_numbers", "case_number", caseNumbers)
     			.addTag("text", text)
     			.addEndTag();

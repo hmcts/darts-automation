@@ -386,7 +386,7 @@ public class DateUtils {
 	}
 	
 	public static String datePart(String string, String part) {
-		String substitutedString = Substitutions.substituteValue(string).split(" ")[0];
+		String substitutedString = Substitutions.substituteValue(string).split("T")[0];
 		if (substitutedString.isBlank()) {
 			substitutedString = todayYyyymmdd();
 		}
@@ -426,7 +426,7 @@ public class DateUtils {
 	
 	public static String timePart(String string, String part) {
 		String substitutedString = Substitutions.substituteValue(string);
-		String [] split = ((substitutedString.length() > 8) ? substitutedString.split(" ")[1] : substitutedString).split(":");
+		String [] split = ((substitutedString.length() > 8) ? substitutedString.split("T")[1] : substitutedString).split(":");
 		if (split.length == 3) {
 			switch(part.toLowerCase()) {
 				case "h":
@@ -438,7 +438,7 @@ public class DateUtils {
 					return split[1];
 				case "s":
 				case "ss":
-					return split[2];
+					return split[2].split("\\.")[0];
 				default:
 					Assertions.fail("Invalid part of time " + part + " for time " + string);
 			}

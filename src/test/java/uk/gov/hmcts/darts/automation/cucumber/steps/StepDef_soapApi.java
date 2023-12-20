@@ -82,15 +82,15 @@ public class StepDef_soapApi extends StepDef_base {
 		Assertions.assertEquals(expectedValue, value, "XML value not as expected");
 	}
 	
-	@Given("I authenticate from {word} source system") 
+	@Given("I authenticate from (the) {word} source system") 
 	public void authenticateAsSource(String source) {
 		soapApi.authenticateAsSource(source);
 	}
 	
 // sample cucumber:
-// When I add a case using soap
+// When I add a case
 // |courthouse|case_number|defendants|judges|prosecutors|defenders|
-	@When("^I add a case using soap$")
+	@When("^I create a case$")
 	public void createAddCaseXml(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddCaseXml(
@@ -107,6 +107,52 @@ public class StepDef_soapApi extends StepDef_base {
 		}
 	}
 	
+// sample cucumber:
+// When I create an event
+// |message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|
+	@When("^I create an event$")
+	public void createEventJson(List<Map<String,String>> dataTable) {
+		for (Map<String, String> map : dataTable) {
+			String xml = XmlUtils.buildAddEventXml(
+					getValue(map, "message_id"),
+					getValue(map, "type"),
+					getValue(map, "sub_type"),
+					getValue(map, "event_id"),
+					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
+					getValue(map, "case_numbers"),
+					getValue(map, "event_text"),
+					getValue(map, "date_time"),			// start time
+					getValue(map, "case_retention_fixed_policy"),
+					getValue(map, "case_total_sentence"));
+// Following field is in the json version - not seen in soap xml
+//					 "end_time"
+			ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+		}
+	}
+	
+	// sample cucumber:
+	// When I add logs
+	// |courthouse|courtroom|case_numbers|text|date_time|
+		@When("^I add logs$")
+		public void createAddLogsXml(List<Map<String,String>> dataTable) {
+			for (Map<String, String> map : dataTable) {
+				String xml = XmlUtils.buildAddLogXml(
+						getValue(map, "courthouse"),
+						getValue(map, "courtroom"),
+						getValue(map, "case_numbers"),
+						getValue(map, "text"),
+						getValue(map, "date_time"));
+				ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
+				testdata.statusCode = apiResponse.statusCode;
+				testdata.responseString = apiResponse.responseString;
+				Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+			}
+		}
+	
 	@When("I call POST SOAP API using soap body:")
 	public void callPostApiWithXmlBody(String docString) {
 		ApiResponse apiResponse = soapApi.postSoap("", Substitutions.substituteValue(docString));
@@ -116,7 +162,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST SOAP API using soap action {word} and body:")
 	public void callPostSoapActionApiWithBody(String soapAction, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString), true);
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -128,7 +174,7 @@ public class StepDef_soapApi extends StepDef_base {
 		testdata.responseString = apiResponse.responseString;
 	}
 	
-	@When("I call POST SOAP API using SOAPAction {word} and body:")
+	@When("I call POST SOAP API using SOAPAction {word} and unencoded body:")
 	public void callPostSoapActionApiWithUnencodedBody(String soapAction, String docString) {
 		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString), false);
 		testdata.statusCode = apiResponse.statusCode;
@@ -144,7 +190,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body:")
 	public void callPostSoapActionApiWithBody(String endPoint, String soapAction, String docString) {
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString), true);
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -166,6 +212,20 @@ public class StepDef_soapApi extends StepDef_base {
 	@Then("^the SOAP response contains:$")
 	public void verifyApiResponse(String docString) {
 		Assertions.assertTrue(testdata.responseString.replaceAll(">\\R|\\s<", "><").contains(docString.replaceAll(">\\R|\\s<", "><")), "Response contents not matched:\r" + testdata.responseString);
+	}
+	
+	@When("I call POST {word} SOAP API using soap action {word} and body file {string}")
+	public void callPostSoapActionApiWithBodyFile(String endPoint, String soapAction, String filename) {
+		ApiResponse apiResponse = soapApi.postSoapXmlFile(endPoint, soapAction, filename);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
+	
+	@When("I call POST {word} SOAP API using soap action {word} and audio file {string}")
+	public void callPostSoapActionApiWithAudioFile(String endPoint, String soapAction, String filename) {
+		ApiResponse apiResponse = soapApi.postSoapBinaryFile(endPoint, soapAction, filename);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
 	}
 	
 

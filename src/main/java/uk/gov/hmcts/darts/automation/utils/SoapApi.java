@@ -191,6 +191,32 @@ public class SoapApi {
 					.extract().response();
 		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
 	}
+
+	public ApiResponse postSoap(String endpoint, String soapAction, String body) {
+
+		log.info("post soap request - SOAPAction: " + soapAction);
+    	authenticate();
+		response =
+				given()
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept(ACCEPT_XML_STRING)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
+					.header(AUTHORIZATION, authorization)
+					.header(SOAP_ACTION, soapAction)
+					.baseUri(baseUri)
+					.basePath("")
+					.body(addSoapHeader(soapAction, body))
+				.when()
+					.post(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(200)
+					.extract().response();
+		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
+	}
 	
 	String extractValue(String xml, String tag) {
 		String result = "";
@@ -223,6 +249,18 @@ public class SoapApi {
 				+ "</soap:Envelope>";
 	}
 
+	String addSoapHeader(String soapAction, String soapBody) {
+		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+				+ addSoapAuthHeader()
+				+ "    <soap:Body>"
+				+ "        <ns5:" + soapAction + " xmlns:ns5=\"http://com.synapps.mojdarts.service.com\">"
+				+ soapBody
+				+ "        </ns5:" + soapAction + ">"
+				+ "    </soap:Body>"
+				+ "</soap:Envelope>";
+	}
+
 	String addSoapHeader(String soapAction, String soapBody, boolean htmlEncoded) {
 		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
@@ -245,6 +283,15 @@ public class SoapApi {
 			result = xml.replace("&", "&amp").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apost;");
 		}
 		return result;	
+	}
+	
+	public ApiResponse postSoapXmlFile(String endpoint, String soapAction, String filename) {
+		return postSoap(endpoint, soapAction, TestData.readTextFile(filename));
+	}
+	
+	public ApiResponse postSoapBinaryFile(String endpoint, String soapAction, String filename) {
+//TODO replace file with contents
+		return postSoap(endpoint, soapAction, filename, false);
 	}
 
 // Following code is for debugging & may fail if data changes
