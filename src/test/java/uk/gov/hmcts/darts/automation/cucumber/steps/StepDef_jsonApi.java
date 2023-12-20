@@ -158,6 +158,22 @@ public class StepDef_jsonApi extends StepDef_base {
 			}
 		}
 
+		@When("I add courtlog using json$")
+		public void addCourtlogs(List<Map<String,String>> dataTable) {
+			for (Map<String, String> map : dataTable) {
+				String json = JsonUtils.buildAddCourtLogJson(
+						getValue(map, "dateTime", testdata.getProperty("dateTime")),
+						getValue(map, "courthouse", testdata.getProperty("courthouse")),
+						getValue(map, "courtroom", testdata.getProperty("courtroom")),
+						getValue(map, "case_number", testdata.getProperty("case_number")),
+						getValue(map, "text", testdata.getProperty("text")));
+				ApiResponse apiResponse = jsonApi.postApi("courtlogs", json);
+				testdata.statusCode = apiResponse.statusCode;
+				testdata.responseString = apiResponse.responseString;
+				Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+			}
+		}
+
 /* Create courthouse n.b. display name defaults to courthouse if blank
  * 
  * sample cucumber:
@@ -246,4 +262,5 @@ public class StepDef_jsonApi extends StepDef_base {
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
+
 }
