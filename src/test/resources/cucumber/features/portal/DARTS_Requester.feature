@@ -296,3 +296,14 @@ Feature: User as a Requester
     And I do not see "17 Nov 2023 10:03" on the page
 
     #Update will be needed to use clean data when available
+
+  @DMP-1740
+  Scenario: Your audio - Expired screen
+    When I click on the "Your audio" link
+    And  I click on the "Expired" link
+    Then I verify the HTML table contains the following values
+      |*NO-CHECK* | Case ID    | Court     | Hearing date   | Start time| End time  | Request ID| Expiry date          | Status    |
+      |*NO-CHECK* | CASE1009   | Swansea   | 15 Aug 2023    | 14:00:00  | 14:01:00  |  7713     | 09:20:02 13/12/2023  |  EXPIRED  |
+      |*NO-CHECK* | CASE1009   | Swansea   | 15 Aug 2023    | 13:00:00  | 13:01:00  | 8385      | 16:30:00 19/12/2023  | EXPIRED   |
+
+
