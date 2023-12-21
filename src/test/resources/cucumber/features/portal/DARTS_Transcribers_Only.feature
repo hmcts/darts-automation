@@ -576,3 +576,16 @@ Feature: Request Audio for transcribers
       | CaseID        |Courthouse       |RequestType                    | urgency               | RequestMethod | RequestID    |HearingDate | JudgeApproval | RequestedOn |
       | DMP1600-case1 |London_DMP1600   |Summing up (including verdict) | Up to 12 working days | Automated     | 	4013      |11 Oct 2023 | Yes           | 05 Dec 2023 10:44 |
 
+  @DMP-1353
+  Scenario: Check to ensure transcript request cannot be assigned to two different users
+
+    When I click on the "Transcript requests" link
+    And I click on "View" in the same row as "PerfCase_spqjobwugk"
+    And I select the "Assign to me" radio button with label "Assign to me"
+    And I press the "Continue" button
+    Then I see "Your work" on the page
+    And I see "PerfCase_spqjobwugk" on the page
+
+    When I am logged on to DARTS as an external user
+    And I click on the "Transcript requests" link
+    Then I do not see "PerfCase_spqjobwugk" on the page
