@@ -135,9 +135,9 @@ public class StepDef_soapApi extends StepDef_base {
 	}
 	
 	// sample cucumber:
-	// When I add logs
-	// |courthouse|courtroom|case_numbers|text|date_time|
-		@When("^I add logs$")
+	// When I add courtlogs
+	// |courthouse|courtroom|case_numbers|text|dateTime|
+		@When("^I add courtlogs$")
 		public void createAddLogsXml(List<Map<String,String>> dataTable) {
 			for (Map<String, String> map : dataTable) {
 				String xml = XmlUtils.buildAddLogXml(
@@ -145,7 +145,7 @@ public class StepDef_soapApi extends StepDef_base {
 						getValue(map, "courtroom"),
 						getValue(map, "case_numbers"),
 						getValue(map, "text"),
-						getValue(map, "date_time"));
+						getValue(map, "dateTime"));
 				ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
 				testdata.statusCode = apiResponse.statusCode;
 				testdata.responseString = apiResponse.responseString;
