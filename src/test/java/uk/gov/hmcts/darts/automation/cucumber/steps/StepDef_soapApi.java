@@ -149,7 +149,7 @@ public class StepDef_soapApi extends StepDef_base {
 				ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
 				testdata.statusCode = apiResponse.statusCode;
 				testdata.responseString = apiResponse.responseString;
-				Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+				Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
 			}
 		}
 	
