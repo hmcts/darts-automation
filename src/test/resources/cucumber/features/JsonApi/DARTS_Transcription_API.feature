@@ -1,6 +1,6 @@
 Feature: Transcription Endpoints
 
-  @DMP-1335
+  @DMP-1335 @JSON_API
   Scenario: Return all data from the "transcription_type" table
     When I call GET /transcriptions/types API
     Then the API status code is 200

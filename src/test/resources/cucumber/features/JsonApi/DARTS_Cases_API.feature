@@ -1,8 +1,8 @@
 Feature: Cases Endpoints
 
-  @DMP-458
+  @DMP-458 @JSON_API
   Scenario: Create a case
-    When I create a case
+    When I create a case using json
       | courthouse         | case_number | defendants | judges     | prosecutors     | defenders     |
       | Harrow Crown Court | T20230001   | fred       | test judge | test prosecutor | test defender |
     Then the API status code is 201
@@ -27,7 +27,7 @@ Feature: Cases Endpoints
          }
       """
 
-  @DMP-458
+  @DMP-458 @JSON_API
   Scenario: test /cases with courtroom in json body
     Given I call POST cases API using json body:
       """
@@ -59,7 +59,7 @@ Feature: Cases Endpoints
         "detail": "JSON parse error: Unrecognized field \"case_id\" (class uk.gov.hmcts.darts.cases.model.AddCaseRequest), not marked as ignorable"
         }
       """
-  @DMP-462
+  @DMP-462 @JSON_API
   Scenario: test POST /courtlogs
     Given I call POST courtlogs API using json body:
     """

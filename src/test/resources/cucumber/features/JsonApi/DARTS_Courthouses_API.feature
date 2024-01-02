@@ -1,5 +1,6 @@
 Feature: Courthouse endpoint
 
+@JSON_API
   Scenario: GET courthouses
     When I call GET courthouses API
     Then the API status code is 200
