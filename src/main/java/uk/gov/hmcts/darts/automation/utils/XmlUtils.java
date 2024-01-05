@@ -51,7 +51,8 @@ public class XmlUtils {
     			.addTag("subType", subType)
     			.addTag("document")
 				.startEncoding()
-				.addTag("DartsEvent")
+				.addTag("be:DartsEvent")
+    			.addAttribute("xmlns:be", "urn:integration-cjsonline-gov-uk:pilot:entities")
     			.addAttribute("ID", eventId)
     			.addAttribute("Y", DateUtils.datePart(dateTime, "Y"))
 				.addAttribute("M", DateUtils.datePart(dateTime, "M"))
@@ -59,14 +60,14 @@ public class XmlUtils {
     			.addAttribute("H", DateUtils.timePart(dateTime, "H"))
 				.addAttribute("MIN", DateUtils.timePart(dateTime, "MIN"))
 				.addAttribute("S", DateUtils.timePart(dateTime, "S"))
-				.addTag("CourtHouse", courthouse)
-    			.addTag("CourtRoom", courtroom)
-    			.addTagGroup("CaseNumbers", "CaseNumber", caseNumbers)
-    			.addTag("EventText", eventText);
+				.addTag("be:CourtHouse", courthouse)
+    			.addTag("be:CourtRoom", courtroom)
+    			.addTagGroup("be:CaseNumbers", "be:CaseNumber", caseNumbers)
+    			.addTag("be:EventText", eventText);
     	if (!caseRetentionFixedPolicy.isBlank() || !caseTotalSentence.isBlank() ) {
-    		xmlString.addTag("RetentionPolicy");
-    		xmlString.addTag("CaseRetentionFixedPolicy", caseRetentionFixedPolicy);
-    		xmlString.addTag("CaseTotalSentence", caseTotalSentence);
+    		xmlString.addTag("be:RetentionPolicy");
+    		xmlString.addTag("be:CaseRetentionFixedPolicy", caseRetentionFixedPolicy);
+    		xmlString.addTag("be:CaseTotalSentence", caseTotalSentence);
     		xmlString.addEndTag();
     	}
 		xmlString.addEndTag();
@@ -110,6 +111,30 @@ public class XmlUtils {
     			.addTag("courtroom", courtroom)
     			.addTagGroup("case_numbers", "case_number", caseNumbers)
     			.addTag("text", text)
+    			.addEndTag();
+		return xmlString.xmlValue();
+    }
+    
+    public static String buildGetLogXml(String courthouse,
+    		String caseNumber,
+    		String startTime,
+    		String endTime) {
+    	XmlString xmlString = new XmlString()
+    			.addTag("getCourtLog")
+				.addTag("courthouse", courthouse)
+    			.addTag("case_number", caseNumber)
+    			.addTag("startTime", DateUtils.datePart(startTime, "Y")
+    					+ DateUtils.datePart(startTime, "M")
+    					+ DateUtils.datePart(startTime, "D")
+    					+ DateUtils.datePart(startTime, "H")
+    					+ DateUtils.datePart(startTime, "MIN")
+    	    			+ DateUtils.datePart(startTime, "S"))
+    			.addTag("endTime", DateUtils.datePart(endTime, "Y")
+    					+ DateUtils.datePart(endTime, "M")
+    					+ DateUtils.datePart(endTime, "D")
+    					+ DateUtils.datePart(endTime, "H")
+    					+ DateUtils.datePart(endTime, "MIN")
+    	    			+ DateUtils.datePart(endTime, "S"))
     			.addEndTag();
 		return xmlString.xmlValue();
     }

@@ -122,7 +122,7 @@ public class StepDef_jsonApi extends StepDef_base {
 // sample cucumber:
 // When I create event using json
 // |message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|
-	@When("^I create an event$")
+	@When("^I create an event using json$")
 	public void createEventJson(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
 			String json = JsonUtils.buildAddEventJson(

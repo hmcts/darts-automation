@@ -72,10 +72,10 @@ public class SoapApi {
         	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
         	break;
         case "XHIBIT":
-        	externalAuthenticate(ReadProperties.automationTranscriberUserId, ReadProperties.automationExternalPassword);
+        	externalAuthenticate(ReadProperties.xhibitUserName, ReadProperties.xhibitPassword);
         	break;
         case "CPP":
-        	externalAuthenticate(ReadProperties.automationLanguageShopTestUserId, ReadProperties.automationExternalPassword);
+        	externalAuthenticate(ReadProperties.cppUserName, ReadProperties.cppPassword);
         	break;
         case "DARMIDTIER":
         	externalAuthenticate(ReadProperties.darMidTierUserName, ReadProperties.darMidTierPassword);
@@ -122,8 +122,8 @@ public class SoapApi {
 	    		.header(CONNECTION, CONNECTION_STRING)
     			.urlEncodingEnabled(true)
     			.formParams("grant_type", "password",
-    					"username", ReadProperties.apiGlobalUserName,
-    					"password", ReadProperties.apiGlobalPassword,
+    					"username", username,
+    					"password", password,
     					"client_id", ReadProperties.apiExtClientId,
     					"client_secret", ReadProperties.apiExtClientSecret,
 						"scope", "https://" + ReadProperties.main("apiExtAuthPath") + "/" + ReadProperties.apiExtClientId + "/Functional.Test")

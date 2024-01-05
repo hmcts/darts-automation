@@ -438,7 +438,7 @@ public class DateUtils {
 					return split[1];
 				case "s":
 				case "ss":
-					return split[2].split("\\.")[0];
+					return split[2].split("Z")[0].split("\\.")[0];
 				default:
 					Assertions.fail("Invalid part of time " + part + " for time " + string);
 			}

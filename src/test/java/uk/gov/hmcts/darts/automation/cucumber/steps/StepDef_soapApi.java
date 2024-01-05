@@ -110,8 +110,8 @@ public class StepDef_soapApi extends StepDef_base {
 // sample cucumber:
 // When I create an event
 // |message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|
-	@When("^I create an event using soap$")
-	public void createEventJson(List<Map<String,String>> dataTable) {
+	@When("^I create an event$")
+	public void createEventXml(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddEventXml(
 					getValue(map, "message_id"),
@@ -130,7 +130,7 @@ public class StepDef_soapApi extends StepDef_base {
 			ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
-			Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 		}
 	}
 	
