@@ -1,6 +1,6 @@
 Feature: Test operation of post events
 
-@EVENT_API @SOAP_EVENT1
+@EVENT_API @SOAP_EVENT1 @smoketest
 Scenario Outline: Create a case
     When I create a case
       | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
@@ -10,7 +10,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}0001 | {{seq}}1001 | 20901  |         | text         |               |               | 
 
 
-@EVENT_API @SOAP_EVENT1
+@EVENT_API @SOAP_EVENT1 @smoketest
 Scenario Outline: Create standard events
     When  I create an event
       | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -251,7 +251,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:16:40}} | {{seq}}231 | {{seq}}1231 | 407132 |      | text         |               |               |
 
 
-@EVENT_API @SOAP_EVENT1
+@EVENT_API @SOAP_EVENT1 @smoketest
 Scenario Outline: Create a LOG event
     When  I create an event
       | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -261,7 +261,7 @@ Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:17:00}} | {{seq}}232  | {{seq}}1232 | LOG    |         | log text     |               |               |
         
-@EVENT_API @SOAP_EVENT1
+@EVENT_API @SOAP_EVENT1 @smoketest
 Scenario Outline: Create a SetReportingRestriction event
     When  I create an event
       | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -281,15 +281,14 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:21:00}} | {{seq}}242 | {{seq}}1242 | 21200 | 11009 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:21:20}} | {{seq}}243 | {{seq}}1243 | 21201 |       | text         |               |               |
         
-@EVENT_API @SOAP_EVENT2
-Scenario Outline: Create a SetReportingRestriction event
+@EVENT_API @SOAP_EVENT1 @smoketest
+Scenario Outline: Create a SetInterpreterUsed event
     When  I create an event
       | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
     Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
-
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:00}} | {{seq}}244 | {{seq}}1244 | 3979 | 3933 | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:20}} | {{seq}}245 | {{seq}}1244 |      | 11000 | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}1244 |      | 11001 | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:00}} | {{seq}}244 | {{seq}}1244 | 2917  | 3979    | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:20}} | {{seq}}245 | {{seq}}1244 | 20612 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}1244 | 20917 |         | text         |               |               |
