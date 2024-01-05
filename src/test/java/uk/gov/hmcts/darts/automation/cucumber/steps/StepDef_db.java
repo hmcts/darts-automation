@@ -92,6 +92,7 @@ public class StepDef_db extends StepDef_base {
 		Assertions.assertEquals(Substitutions.substituteValue(expectedVal), returnVal);
 	}
 
+// Then I see table xxxx column yyy is "zzz" where col = "value" and col = "value" and col = "value"
 	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2  + " " + keyCol3 + " " + keyVal3 + " " + col + " " + expectedVal);

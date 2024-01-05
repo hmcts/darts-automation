@@ -112,9 +112,17 @@ public class StepDef_jsonApi extends StepDef_base {
 	}
 	
 // sample cucumber:
-// When I create event
+// When I load an audio file
+// |courthouse|courtroom|case_numbers|audioFile|
+	@When("^I load an audio file$")
+	public void loadAudioFile(List<Map<String,String>> dataTable) {
+//TODO add code to load a file
+	}
+	
+// sample cucumber:
+// When I create event using json
 // |message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|
-	@When("^I create an event$")
+	@When("^I create an event using json$")
 	public void createEventJson(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
 			String json = JsonUtils.buildAddEventJson(
@@ -141,22 +149,22 @@ public class StepDef_jsonApi extends StepDef_base {
 	// sample cucumber:
 	// When I create a case
 	// |courthouse|case_number|defendants|judges|prosecutors|defenders|
-		@When("^I create a case$")
-		public void createCaseJson(List<Map<String,String>> dataTable) {
-			for (Map<String, String> map : dataTable) {
-				String json = JsonUtils.buildAddCaseJson(
-						getValue(map, "courthouse"),
-						getValue(map, "case_number"),
-						getValue(map, "defendants"),
-						getValue(map, "judges"),
-						getValue(map, "prosecutors"),
-						getValue(map, "defenders"));
-				ApiResponse apiResponse = jsonApi.postApi("cases", json);
-				testdata.statusCode = apiResponse.statusCode;
-				testdata.responseString = apiResponse.responseString;
-				Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
-			}
+	@When("^I create a case using json$")
+	public void createCaseJson(List<Map<String,String>> dataTable) {
+		for (Map<String, String> map : dataTable) {
+			String json = JsonUtils.buildAddCaseJson(
+					getValue(map, "courthouse"),
+					getValue(map, "case_number"),
+					getValue(map, "defendants"),
+					getValue(map, "judges"),
+					getValue(map, "prosecutors"),
+					getValue(map, "defenders"));
+			ApiResponse apiResponse = jsonApi.postApi("cases", json);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 		}
+	}
 
 /* Create courthouse n.b. display name defaults to courthouse if blank
  * 

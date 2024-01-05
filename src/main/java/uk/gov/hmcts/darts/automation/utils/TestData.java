@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.StringJoiner;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -16,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Assertions;
 
@@ -244,6 +247,26 @@ public class TestData {
 			caseNum = 0;
 		}
 		return String.format("%s%s%04d",currentCaseNumber.substring(0, 1), caseYear, ++caseNum);
+	}
+	
+	public static String readTextFile(String filename) {
+		return readTextFile(filename, ReadProperties.main("testdataFolder"));
+	}
+	
+	public static String readTextFile(String filename, String directory) {
+		log.info("reading file {}/{}", directory, filename);
+		String filePath = new StringJoiner(File.separator)
+				.add(directory).add(Substitutions.substituteValue(filename)).toString();
+		String text;
+		try {
+// n.b. readAllBytes works for binary files too
+			text = new String(Files.readAllBytes(Paths.get("filePath")));
+			return text;
+		} catch (IOException e) {
+			log.warn("error reading file {}", filePath);
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	@Test
