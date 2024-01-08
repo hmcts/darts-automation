@@ -161,3 +161,149 @@ Feature: User as a Requester
     Examples:
       | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType               | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
       | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Proceedings after verdict | Up to 7 working days | COMPLETE | 14 Aug 2023 | Requester | DMP-1025     | Yes           |
+
+  @DMP-1028-AC1
+  Scenario Outline: View reject Transcription request
+
+    When I click on the "Your transcripts" link
+    Then I click on "View" in the same row as "<RequestType>"
+    And I see "Your transcripts" on the page
+    And I see "Your request was rejected" on the page
+    And I see "DMP-851 test." on the page
+    And I see "<Restriction>" on the page
+    And I see "Transcript request" on the page
+    And I see "<Status>" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "Request details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<urgency>" on the page
+    And I see "<From>" on the page
+    And I see "<Instructions>" on the page
+    And I see "<JudgeApproval>" on the page
+
+    Examples:
+      | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
+      | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
+
+    @DMP-1028-AC2
+    Scenario Outline: User wants to request again
+
+      When I click on the "Your transcripts" link
+      Then I click on "View" in the same row as "<RequestType>"
+      And I see "Your transcripts" on the page
+      And I see "Your request was rejected" on the page
+      And I see "DMP-851 test." on the page
+      And I see "<Restriction>" on the page
+      And I see "Transcript request" on the page
+      And I see "<Status>" on the page
+      And I see "Case details" on the page
+      And I see "<CaseID>" on the page
+      And I see "<Courthouse>" on the page
+      And I see "<Defendants>" on the page
+      And I see "<Judge(s)>" on the page
+      And I see "Request details" on the page
+      And I see "<HearingDate>" on the page
+      And I see "<RequestType>" on the page
+      And I see "<urgency>" on the page
+      And I see "<From>" on the page
+      And I see "<Instructions>" on the page
+      And I see "<JudgeApproval>" on the page
+      Then I press the "Request again" button
+      And I see "<CaseID>" on the page
+      And I see "<Courthouse>" on the page
+      And I see "<Defendants>" on the page
+
+
+      Examples:
+        | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
+        | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
+
+  @DMP-1028-AC3
+  Scenario Outline: View rejected transcript - A user clicks on the cancel hyperlink
+
+    When I click on the "Your transcripts" link
+    And I click on "View" in the same row as "<RequestType>"
+    And I see "Your transcripts" on the page
+    And I see "Your request was rejected" on the page
+    And I see "DMP-851 test." on the page
+    And I see "<Restriction>" on the page
+    And I see "Transcript request" on the page
+    And I see "<Status>" on the page
+    And I see "Case details" on the page
+    And I see "<CaseID>" on the page
+    And I see "<Courthouse>" on the page
+    And I see "<Defendants>" on the page
+    And I see "<Judge(s)>" on the page
+    And I see "Request details" on the page
+    And I see "<HearingDate>" on the page
+    And I see "<RequestType>" on the page
+    And I see "<urgency>" on the page
+    And I see "<From>" on the page
+    And I see "<Instructions>" on the page
+    And I see "<JudgeApproval>" on the page
+    Then I click on the "Cancel" link
+    And I see "Your transcripts" on the page
+    And I verify the HTML table "Ready" contains the following values
+      | *NO-CHECK* | Case ID  | Court   | Hearing date | Type                                     | Requested on      | Status   | Urgency              |
+      | *NO-CHECK* | CASE1009 | Swansea | 15 Aug 2023  | Argument and submission of ruling        | 27 Nov 2023 14:29 | COMPLETE | Up to 3 working days|
+      | *NO-CHECK* | CASE1009 | Swansea | 15 Aug 2023  | Prosecution opening of facts             | 21 Nov 2023 10:18 | COMPLETE | Up to 12 working days |
+      | *NO-CHECK* | CASE1009 | Swansea | 15 Aug 2023  | Mitigation                               | 17 Nov 2023 10:03 | REJECTED | Up to 3 working days |
+
+  Examples:
+  | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
+  | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
+
+  @DMP-1053
+  Scenario: Delete single request from ready section of your transcripts
+    When I click on the "Your transcripts" link
+    And I check the checkbox in the same row as "CASE1009" "27 Nov 2023 14:29"
+    And I press the "Remove transcript request" button
+    Then I see "Are you sure you want to remove this transcript request?" on the page
+    And I see "This action will remove this transcript request from your transcripts. You can still access it by searching at the hearing and case levels." on the page
+
+    When I click on the "Cancel" link
+    And I see "Your transcripts" on the page
+    And I check the checkbox in the same row as "CASE1009" "27 Nov 2023 14:29"
+    And I press the "Remove transcript request" button
+    And I press the "Yes - remove" button
+    Then I see "Your transcripts" on the page
+    And I do not see "27 Nov 2023 14:29" on the page
+
+  #Update will be needed to use clean data when available
+
+  @DMP-1054
+  Scenario: Delete multiple requests from ready section of your transcripts
+    When I click on the "Your transcripts" link
+    And I check the checkbox in the same row as "CASE1009" "21 Nov 2023 10:18"
+    And I check the checkbox in the same row as "CASE1009" "17 Nov 2023 10:03"
+    And I press the "Remove transcript request" button
+    Then I see "Are you sure you want to remove these transcript requests?" on the page
+    And I see "This action will remove these transcript requests from your transcripts. You can still access them by searching at the hearing and case levels." on the page
+
+    When I click on the "Cancel" link
+    And I see "Your transcripts" on the page
+    And I check the checkbox in the same row as "CASE1009" "21 Nov 2023 10:18"
+    And I check the checkbox in the same row as "CASE1009" "17 Nov 2023 10:03"
+    And I press the "Remove transcript request" button
+    And I press the "Yes - remove" button
+    Then I see "Your transcripts" on the page
+    And I do not see "21 Nov 2023 10:18" on the page
+    And I do not see "17 Nov 2023 10:03" on the page
+
+    #Update will be needed to use clean data when available
+
+  @DMP-1740
+  Scenario: Your audio - Expired screen
+    When I click on the "Your audio" link
+    And  I click on the "Expired" link
+    Then I verify the HTML table contains the following values
+      |*NO-CHECK* | Case ID    | Court     | Hearing date   | Start time| End time  | Request ID| Expiry date          | Status    |
+      |*NO-CHECK* | CASE1009   | Swansea   | 15 Aug 2023    | 14:00:00  | 14:01:00  |  7713     | 09:20:02 13/12/2023  |  EXPIRED  |
+      |*NO-CHECK* | CASE1009   | Swansea   | 15 Aug 2023    | 13:00:00  | 13:01:00  | 8385      | 16:30:00 19/12/2023  | EXPIRED   |
+
+

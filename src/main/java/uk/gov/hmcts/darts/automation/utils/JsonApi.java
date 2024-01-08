@@ -311,6 +311,30 @@ public class JsonApi {
 					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
     }
+
+	public ApiResponse patchApi(String endpoint, String body) {
+
+		authenticate();
+		log.info("Patch: " + endpoint);
+		response =
+				given()
+						.spec(requestLogLevel(ReadProperties.requestLogLevel))
+						.accept(ACCEPT_JSON_STRING)
+						.header(USER_AGENT, USER_AGENT_STRING)
+						.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+						.header(CONNECTION, CONNECTION_STRING)
+						.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+						.header(AUTHORIZATION, authorization)
+						.baseUri(baseUri)
+						.basePath("")
+						.body(body)
+						.when()
+						.patch(endpoint)
+						.then()
+						.spec(responseLogLevel(ReadProperties.responseLogLevel))
+						.extract().response();
+		return new ApiResponse(response.statusCode(), response.asString());
+	}
     
 	public ApiResponse deleteApi(String endpoint, String body) {
 

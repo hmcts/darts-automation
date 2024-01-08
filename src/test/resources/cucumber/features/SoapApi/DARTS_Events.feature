@@ -309,6 +309,7 @@ Examples:
 
 @EVENT_API @SOAP_EVENTx @broken
 Scenario Outline: Create a TranscriptionRequest event
+
     When  I create an event
       | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
@@ -483,4 +484,4 @@ Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:08:00}} | {{seq}}375 | {{seq}}1375 | 40790 |         | text         |               |               |
 
-  
+
