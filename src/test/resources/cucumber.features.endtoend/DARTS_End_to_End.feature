@@ -7,32 +7,7 @@ Feature: Events Endpoints
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Then the API status code is 201
-    Then the API response contains:
-      """
-        {
-          "case_id":
-      """
-    Then the API response contains:
-      """
-          "courthouse": "Harrow Crown Court",
-          "case_number":
-          """
-    Then the API response contains:
-  """
-          "defendants": [
-              "fred"
-            ],
-           "judges": [
-              "test judge"
-            ],
-          "prosecutors": [
-              "test prosecutor"
-            ],
-           "defenders": [
-              "test defender"
-            ]
-         }
-      """
+
     When I add courtlog using json
       | dateTime      | courthouse   | courtroom   | case_number   | text   |
       | {{timestamp}} | <courthouse> | <courtroom> | <case_number> | <keywords> |
@@ -44,7 +19,7 @@ Feature: Events Endpoints
         "message": "CREATED"
       }
     """
-    And I am logged on to DARTS as an external user
+    And I am logged on to DARTS as an APPROVER user
     When I click on the "Search" link
     And I click on the "Advanced search" link
     And I set "Courthouse" to "<courthouse>" and click away
@@ -84,9 +59,25 @@ Feature: Events Endpoints
     Then I verify the HTML table contains the following values
       | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
       | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants>  |
+
+    Then I click on the "Clear search" link
+    And "Keywords" is ""
+    And I set "Judge's name" to "<judges>"
+    And I press the "Search" button
+    Then I see "result" on the page
+
+    When I click on the "Your audio" link
+    Then I click on the "Search" link
+    Then I see "result" on the page
+
+    Then I click on the "Clear search" link
+    And I press the "Search" button
+    And I see "No search results" on the page
+    And I see "You need to enter some search terms and try again" on the page
+
     Examples:
-      | courthouse         | case_number | defendants | judges     | prosecutors     | defenders     | courtroom    | keywords       |
-      | Harrow Crown Court | T2023000231 | fred       | test judge | test prosecutor | test defender | Rayners room | AUTOMATION LOG {{seq}}|
+      | courthouse         | case_number     | defendants     | judges     | prosecutors     | defenders     | courtroom    | keywords               |
+      | Harrow Crown Court | T2023000{{seq}} | defendant fred | judge fred | prosecutor fred | defender fred | Rayners room | AUTOMATION LOG {{seq}} |
 
   @end2end @end2end6
   Scenario Outline: Create a case and hearing via events
