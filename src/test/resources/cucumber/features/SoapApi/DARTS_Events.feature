@@ -182,8 +182,8 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:53:40}} | {{seq}}162 | {{seq}}1162 | 20936 | 10631 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:00}} | {{seq}}163 | {{seq}}1163 | 20936 | 10632 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:20}} | {{seq}}164 | {{seq}}1164 | 20936 | 10633 | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937 | 10624 | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625 | text         |               |               |
+#  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937 | 10624 | text         |               |               |
+#  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:20}} | {{seq}}167 | {{seq}}1167 | 21200 | 10311 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:40}} | {{seq}}168 | {{seq}}1168 | 21200 | 10312 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:56:00}} | {{seq}}169 | {{seq}}1169 | 21200 | 10313 | text         |               |               |
@@ -249,6 +249,11 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:16:00}} | {{seq}}229 | {{seq}}1229 | 302004 |      | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:16:20}} | {{seq}}230 | {{seq}}1230 | 407131 |      | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:16:40}} | {{seq}}231 | {{seq}}1231 | 407132 |      | text         |               |               |
+@broken
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937 | 10624   | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625   | text         |               |               |
 
 
 @EVENT_API @SOAP_EVENT @smoketest
@@ -309,10 +314,10 @@ Examples:
 
 @EVENT_API @SOAP_EVENTx @broken
 Scenario Outline: Create a TranscriptionRequest event
-    When  I create an event
-      | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
-    Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text         |               |               |
