@@ -488,4 +488,4 @@ Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:08:00}} | {{seq}}375 | {{seq}}1375 | 40790 |         | text         |               |               |
 
-  
+
