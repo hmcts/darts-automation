@@ -85,4 +85,8 @@ Feature: Cases Endpoints
       }
     """
 
-
+@test
+Scenario: test POST /court-logs
+  When I add courtlog using json
+    | dateTime      | courthouse         | courtroom    | case_number | text                       |
+    | {{timestamp}} | Harrow Crown Court | Rayners room | T20230001   | AUTOMATION LOG - T20230001 |
