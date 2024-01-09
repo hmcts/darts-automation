@@ -312,7 +312,8 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text         |               |               |
 
 
-@EVENT_API @SOAP_EVENTx @broken
+
+@EVENT_API @SOAP_EVENT @smoketest
 Scenario Outline: Create a TranscriptionRequest event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
