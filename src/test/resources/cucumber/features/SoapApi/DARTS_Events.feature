@@ -1,21 +1,21 @@
 Feature: Test operation of post events
 
-@EVENT_API @SOAP_EVENT1 @smoketest
+@EVENT_API @SOAP_EVENT @smoketest
 Scenario Outline: Create a case
-    When I create a case
-      | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
-      | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
+  When I create a case
+    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
+    | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}0001 | {{seq}}1001 | 20901  |         | text         |               |               | 
 
 
-@EVENT_API @SOAP_EVENT1 @smoketest
+@EVENT_API @SOAP_EVENT @smoketest
 Scenario Outline: Create standard events
-    When  I create an event
-      | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
-    Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:00:00}} | {{seq}}001 | {{seq}}1001 | 1000 | 1001 | text         |               |               |
@@ -182,8 +182,8 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:53:40}} | {{seq}}162 | {{seq}}1162 | 20936 | 10631 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:00}} | {{seq}}163 | {{seq}}1163 | 20936 | 10632 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:20}} | {{seq}}164 | {{seq}}1164 | 20936 | 10633 | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937 | 10624 | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625 | text         |               |               |
+#  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937 | 10624 | text         |               |               |
+#  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:20}} | {{seq}}167 | {{seq}}1167 | 21200 | 10311 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:40}} | {{seq}}168 | {{seq}}1168 | 21200 | 10312 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:56:00}} | {{seq}}169 | {{seq}}1169 | 21200 | 10313 | text         |               |               |
@@ -249,24 +249,29 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:16:00}} | {{seq}}229 | {{seq}}1229 | 302004 |      | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:16:20}} | {{seq}}230 | {{seq}}1230 | 407131 |      | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:16:40}} | {{seq}}231 | {{seq}}1231 | 407132 |      | text         |               |               |
+@broken
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937 | 10624   | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625   | text         |               |               |
 
 
-@EVENT_API @SOAP_EVENT1 @smoketest
+@EVENT_API @SOAP_EVENT @smoketest
 Scenario Outline: Create a LOG event
-    When  I create an event
-      | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
-    Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:17:00}} | {{seq}}232  | {{seq}}1232 | LOG    |         | log text     |               |               |
         
-@EVENT_API @SOAP_EVENT1 @smoketest
+@EVENT_API @SOAP_EVENT @smoketest
 Scenario Outline: Create a SetReportingRestriction event
-    When  I create an event
-      | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
-    Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:18:00}} | {{seq}}233 | {{seq}}1233 | 2198  | 3933  | text         |               |               |
@@ -280,15 +285,207 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:20:40}} | {{seq}}241 | {{seq}}1241 | 21200 | 11008 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:21:00}} | {{seq}}242 | {{seq}}1242 | 21200 | 11009 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:21:20}} | {{seq}}243 | {{seq}}1243 | 21201 |       | text         |               |               |
-        
-@EVENT_API @SOAP_EVENT1 @smoketest
+
+@EVENT_API @SOAP_EVENT @smoketest
 Scenario Outline: Create a SetInterpreterUsed event
-    When  I create an event
-      | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
-    Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:00}} | {{seq}}244 | {{seq}}1244 | 2917  | 3979    | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:20}} | {{seq}}245 | {{seq}}1244 | 20612 |         | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}1244 | 20917 |         | text         |               |               |
+
+  
+@EVENT_API @SOAP_EVENT @smoketest
+Scenario Outline: Create a StopAndClose event
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:00}} | {{seq}}247 | {{seq}}1247 | 3000  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:20}} | {{seq}}248 | {{seq}}1248 | 30500 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text         |               |               |
+
+
+@EVENT_API @SOAP_EVENTx @broken
+Scenario Outline: Create a TranscriptionRequest event
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text         |               |               |
+
+  
+@EVENT_API @SOAP_EVENT @smoketest 
+Scenario Outline: Create a Sentencing event
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+#  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:25:00}} | {{seq}}251 | {{seq}}1251 | 2198  | 3934 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:25:20}} | {{seq}}252 | {{seq}}1252 | 40730 | 10808 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:25:40}} | {{seq}}253 | {{seq}}1253 | 40731 | 10808 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:26:00}} | {{seq}}254 | {{seq}}1254 | 40732 | 10808 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:26:20}} | {{seq}}255 | {{seq}}1255 | 40733 | 10808 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:26:40}} | {{seq}}256 | {{seq}}1256 | 40735 | 10808 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:27:00}} | {{seq}}257 | {{seq}}1257 | 40735 |       | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:27:20}} | {{seq}}258 | {{seq}}1258 | 40750 | 11504 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:27:40}} | {{seq}}259 | {{seq}}1259 | 40750 | 11505 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:28:00}} | {{seq}}260 | {{seq}}1260 | 40750 | 11506 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:28:20}} | {{seq}}261 | {{seq}}1261 | 40750 | 11507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:28:40}} | {{seq}}262 | {{seq}}1262 | 40750 | 11508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:29:00}} | {{seq}}263 | {{seq}}1263 | 40750 | 11509 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:29:20}} | {{seq}}264 | {{seq}}1264 | 40750 | 11521 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:29:40}} | {{seq}}265 | {{seq}}1265 | 40750 | 11522 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:30:00}} | {{seq}}266 | {{seq}}1266 | 40750 | 11523 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:30:20}} | {{seq}}267 | {{seq}}1267 | 40750 | 11524 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:30:40}} | {{seq}}268 | {{seq}}1268 | 40750 | 11525 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:31:00}} | {{seq}}269 | {{seq}}1269 | 40750 | 11526 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:31:20}} | {{seq}}270 | {{seq}}1270 | 40750 | 11527 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:31:40}} | {{seq}}271 | {{seq}}1271 | 40750 | 11528 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:32:00}} | {{seq}}272 | {{seq}}1272 | 40750 | 11529 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:32:20}} | {{seq}}273 | {{seq}}1273 | 40750 | 12400 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:32:40}} | {{seq}}274 | {{seq}}1274 | 40750 | 12401 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:33:00}} | {{seq}}275 | {{seq}}1275 | 40750 | 13503 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:33:20}} | {{seq}}276 | {{seq}}1276 | 40750 | 13504 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:33:40}} | {{seq}}277 | {{seq}}1277 | 40750 | 13505 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:34:00}} | {{seq}}278 | {{seq}}1278 | 40750 | 13506 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:34:20}} | {{seq}}279 | {{seq}}1279 | 40751 | 11504 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:34:40}} | {{seq}}280 | {{seq}}1280 | 40751 | 11505 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:35:00}} | {{seq}}281 | {{seq}}1281 | 40751 | 11506 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:35:20}} | {{seq}}282 | {{seq}}1282 | 40751 | 11507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:35:40}} | {{seq}}283 | {{seq}}1283 | 40751 | 11508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:36:00}} | {{seq}}284 | {{seq}}1284 | 40751 | 11509 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:36:20}} | {{seq}}285 | {{seq}}1285 | 40751 | 11521 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:36:40}} | {{seq}}286 | {{seq}}1286 | 40751 | 11522 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:37:00}} | {{seq}}287 | {{seq}}1287 | 40751 | 11523 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:37:20}} | {{seq}}288 | {{seq}}1288 | 40751 | 11524 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:37:40}} | {{seq}}289 | {{seq}}1289 | 40751 | 11525 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:38:00}} | {{seq}}290 | {{seq}}1290 | 40751 | 11526 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:38:20}} | {{seq}}291 | {{seq}}1291 | 40751 | 11527 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:38:40}} | {{seq}}292 | {{seq}}1292 | 40751 | 11528 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:39:00}} | {{seq}}293 | {{seq}}1293 | 40751 | 11529 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:39:20}} | {{seq}}294 | {{seq}}1294 | 40751 | 12400 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:39:40}} | {{seq}}295 | {{seq}}1295 | 40751 | 12401 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:40:00}} | {{seq}}296 | {{seq}}1296 | 40751 | 13503 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:40:20}} | {{seq}}297 | {{seq}}1297 | 40751 | 13504 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:40:40}} | {{seq}}298 | {{seq}}1298 | 40751 | 13505 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:41:00}} | {{seq}}299 | {{seq}}1299 | 40751 | 13506 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:41:20}} | {{seq}}300 | {{seq}}1300 | 40752 | 11504 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:41:40}} | {{seq}}301 | {{seq}}1301 | 40752 | 11505 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:42:00}} | {{seq}}302 | {{seq}}1302 | 40752 | 11506 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:42:20}} | {{seq}}303 | {{seq}}1303 | 40752 | 11507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:42:40}} | {{seq}}304 | {{seq}}1304 | 40752 | 11508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:43:00}} | {{seq}}305 | {{seq}}1305 | 40752 | 11509 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:43:20}} | {{seq}}306 | {{seq}}1306 | 40752 | 11521 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:43:40}} | {{seq}}307 | {{seq}}1307 | 40752 | 11522 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:44:00}} | {{seq}}308 | {{seq}}1308 | 40752 | 11523 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:44:20}} | {{seq}}309 | {{seq}}1309 | 40752 | 11524 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:44:40}} | {{seq}}310 | {{seq}}1310 | 40752 | 11525 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:45:00}} | {{seq}}311 | {{seq}}1311 | 40752 | 11526 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:45:20}} | {{seq}}312 | {{seq}}1312 | 40752 | 11527 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:45:40}} | {{seq}}313 | {{seq}}1313 | 40752 | 11528 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:46:00}} | {{seq}}314 | {{seq}}1314 | 40752 | 11529 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:46:20}} | {{seq}}315 | {{seq}}1315 | 40752 | 12400 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:46:40}} | {{seq}}316 | {{seq}}1316 | 40752 | 12401 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:47:00}} | {{seq}}317 | {{seq}}1317 | 40752 | 13503 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:47:20}} | {{seq}}318 | {{seq}}1318 | 40752 | 13504 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:47:40}} | {{seq}}319 | {{seq}}1319 | 40752 | 13505 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:48:00}} | {{seq}}320 | {{seq}}1320 | 40752 | 13506 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:48:20}} | {{seq}}321 | {{seq}}1321 | 40753 | 11504 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:48:40}} | {{seq}}322 | {{seq}}1322 | 40753 | 11505 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:49:00}} | {{seq}}323 | {{seq}}1323 | 40753 | 11506 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:49:20}} | {{seq}}324 | {{seq}}1324 | 40753 | 11507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:49:40}} | {{seq}}325 | {{seq}}1325 | 40753 | 11508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:50:00}} | {{seq}}326 | {{seq}}1326 | 40753 | 11509 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:50:20}} | {{seq}}327 | {{seq}}1327 | 40753 | 11521 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:50:40}} | {{seq}}328 | {{seq}}1328 | 40753 | 11522 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:51:00}} | {{seq}}329 | {{seq}}1329 | 40753 | 11523 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:51:20}} | {{seq}}330 | {{seq}}1330 | 40753 | 11524 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:51:40}} | {{seq}}331 | {{seq}}1331 | 40753 | 11525 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:52:00}} | {{seq}}332 | {{seq}}1332 | 40753 | 11526 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:52:20}} | {{seq}}333 | {{seq}}1333 | 40753 | 11527 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:52:40}} | {{seq}}334 | {{seq}}1334 | 40753 | 11528 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:53:00}} | {{seq}}335 | {{seq}}1335 | 40753 | 11529 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:53:20}} | {{seq}}336 | {{seq}}1336 | 40753 | 12400 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:53:40}} | {{seq}}337 | {{seq}}1337 | 40753 | 12401 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:54:00}} | {{seq}}338 | {{seq}}1338 | 40753 | 13503 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:54:20}} | {{seq}}339 | {{seq}}1339 | 40753 | 13504 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:54:40}} | {{seq}}340 | {{seq}}1340 | 40753 | 13505 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:55:00}} | {{seq}}341 | {{seq}}1341 | 40753 | 13506 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:55:20}} | {{seq}}342 | {{seq}}1342 | 40750 | 11533 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:55:40}} | {{seq}}343 | {{seq}}1343 | 40750 | 11534 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:56:00}} | {{seq}}344 | {{seq}}1344 | 40750 | 13507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:56:20}} | {{seq}}345 | {{seq}}1345 | 40750 | 13508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:56:40}} | {{seq}}346 | {{seq}}1346 | 40751 | 11533 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:57:00}} | {{seq}}347 | {{seq}}1347 | 40751 | 11534 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:57:20}} | {{seq}}348 | {{seq}}1348 | 40751 | 13507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:57:40}} | {{seq}}349 | {{seq}}1349 | 40751 | 13508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:58:00}} | {{seq}}350 | {{seq}}1350 | 40752 | 11533 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:58:20}} | {{seq}}351 | {{seq}}1351 | 40752 | 11534 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:58:40}} | {{seq}}352 | {{seq}}1352 | 40752 | 13507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:59:00}} | {{seq}}353 | {{seq}}1353 | 40752 | 13508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:59:20}} | {{seq}}354 | {{seq}}1354 | 40753 | 11533 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:59:40}} | {{seq}}355 | {{seq}}1355 | 40753 | 11534 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:00:00}} | {{seq}}356 | {{seq}}1356 | 40753 | 13507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:00:20}} | {{seq}}357 | {{seq}}1357 | 40753 | 13508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:00:40}} | {{seq}}358 | {{seq}}1358 | 40754 | 11533 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:01:00}} | {{seq}}359 | {{seq}}1359 | 40754 | 11534 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:01:20}} | {{seq}}360 | {{seq}}1360 | 40754 | 13507 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:01:40}} | {{seq}}361 | {{seq}}1361 | 40754 | 13508 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:02:00}} | {{seq}}362 | {{seq}}1362 | DETTO | 11531 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:02:20}} | {{seq}}363 | {{seq}}1363 | STS   | 11530 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:02:40}} | {{seq}}364 | {{seq}}1364 | STS1821 | 11532 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
+
+  
+@EVENT_API @SOAP_EVENT @smoketest
+Scenario Outline: Create a DarStart event
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
+	| Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:00}} | {{seq}}364 | {{seq}}1364 | 1000  | 1055    | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:20}} | {{seq}}365 | {{seq}}1365 | 1100  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:40}} | {{seq}}366 | {{seq}}1366 | 1500  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:00}} | {{seq}}367 | {{seq}}1367 | 10100 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:20}} | {{seq}}368 | {{seq}}1368 | 10500 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:40}} | {{seq}}369 | {{seq}}1369 | 20913 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:05:00}} | {{seq}}370 | {{seq}}1370 | 1200  |         | text         |               |               |
+  
+  
+@EVENT_API @SOAP_EVENT @smoketest
+Scenario Outline: Create a DarStop event
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:00}} | {{seq}}371 | {{seq}}1371 | 1200  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:20}} | {{seq}}372 | {{seq}}1372 | 1400  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}373 | {{seq}}1373 | 30100 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:07:00}} | {{seq}}374 | {{seq}}1374 | 30300 |         | text         |               |               |
+  
+  
+@EVENT_API @SOAP_EVENT @smoketest
+Scenario Outline: Create a Null event
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+#  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:08:00}} | {{seq}}375 | {{seq}}1375 | 40790 |         | text         |               |               |
+
+
