@@ -173,7 +173,7 @@ public class StepDef_jsonApi extends StepDef_base {
 						getValue(map, "dateTime", testdata.getProperty("dateTime")),
 						getValue(map, "courthouse", testdata.getProperty("courthouse")),
 						getValue(map, "courtroom", testdata.getProperty("courtroom")),
-						getValue(map, "case_number", testdata.getProperty("case_number")),
+						getValue(map, "case_numbers", testdata.getProperty("case_number")),
 						getValue(map, "text", testdata.getProperty("text")));
 				ApiResponse apiResponse = jsonApi.postApi("courtlogs", json);
 				testdata.statusCode = apiResponse.statusCode;

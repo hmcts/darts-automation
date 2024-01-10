@@ -19,3 +19,45 @@ Feature: Transcription Endpoints
   			{ "trt_id": 999, "description": "Other" }
 			]
 		"""
+
+  @DMP-1336 @DMP-1598
+  Scenario: Transcription Urgency Priority / Sort Order
+    Given I authenticate as a Judge user
+    When I call GET /transcriptions/urgencies API
+    Then the API status code is 200
+    Then the API response contains:
+    """
+    [
+    {
+        "transcription_urgency_id": 2,
+        "description": "Overnight",
+        "priority_order": 1
+    },
+    {
+        "transcription_urgency_id": 7,
+        "description": "Up to 2 working days",
+        "priority_order": 2
+    },
+    {
+        "transcription_urgency_id": 4,
+        "description": "Up to 3 working days",
+        "priority_order": 3
+    },
+    {
+        "transcription_urgency_id": 5,
+        "description": "Up to 7 working days",
+        "priority_order": 4
+    },
+    {
+        "transcription_urgency_id": 6,
+        "description": "Up to 12 working days",
+        "priority_order": 5
+    },
+    {
+        "transcription_urgency_id": 3,
+        "description": "Other",
+        "priority_order": 6
+    }
+]
+    """
+
