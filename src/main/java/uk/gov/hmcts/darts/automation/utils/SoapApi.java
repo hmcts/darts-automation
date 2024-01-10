@@ -140,7 +140,13 @@ public class SoapApi {
 		String token_type  = (response.jsonPath().getString("token_type"));
 		authorization = token_type + " " + access_token;
     }
-    
+
+    /*
+     * Post soap message to endpoint without SOAPAction header
+     * 
+     * Authorisation header & body tags are added
+     * 
+     */
     public ApiResponse postSoap(String endpoint, String body) {
 
 		log.info("post soap request: " + endpoint);
@@ -166,6 +172,14 @@ public class SoapApi {
 		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
     }
 
+    /*
+     * Post soap message to endpoint WITH SOAPAction header
+     * 
+     * Authorisation header body & document tags are added
+     * 
+     * Document can optionally be htmlEncoded
+     * 
+     */
 	public ApiResponse postSoap(String endpoint, String soapAction, String body, boolean htmlEncoded) {
 
 		log.info("post soap request - SOAPAction: " + soapAction);
@@ -192,6 +206,13 @@ public class SoapApi {
 		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
 	}
 
+
+    /*
+     * Post soap message to endpoint WITH SOAPAction header
+     * 
+     * Authorisation header & body tags are added but Document is NOT
+     * 
+     */
 	public ApiResponse postSoap(String endpoint, String soapAction, String body) {
 
 		log.info("post soap request - SOAPAction: " + soapAction);
@@ -292,23 +313,6 @@ public class SoapApi {
 	public ApiResponse postSoapBinaryFile(String endpoint, String soapAction, String filename) {
 //TODO replace file with contents
 		return postSoap(endpoint, soapAction, filename, false);
-	}
-
-// Following code is for debugging & may fail if data changes
-@Test
-	public void test() {
-    	SoapApi soapApi = new SoapApi();
-
-		log.info("post: courtlogs");
-    	soapApi.postSoap("courtlogs", "        <getCourtLog xmlns=\"http://com.synapps.mojdarts.service.com\">"
-				+ "            <courthouse xmlns=\"\">DMP-467-LIVERPOOL</courthouse>"
-				+ "            <caseNumber xmlns=\"\">DMP-467-Case001</caseNumber>"
-				+ "            <startTime xmlns=\"\">20230811160000</startTime>"
-				+ "            <endTime xmlns=\"\">20230930170000</endTime>"
-				+ "        </getCourtLog>");
-    	
-
- 
 	}
 			
 
