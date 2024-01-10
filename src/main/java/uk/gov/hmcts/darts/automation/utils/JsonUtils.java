@@ -87,13 +87,27 @@ public class JsonUtils {
     	JsonString jsonString = new JsonString();
     	jsonString.addJsonLine("courthouse", courthouse);
     	jsonString.addJsonLine("case_number", caseNumber);
-    	
     	jsonString.addJsonSeq("defendants", defendant);
     	jsonString.addJsonSeq("judges", judge);
     	jsonString.addJsonSeq("prosecutors", prosecutor);
     	jsonString.addJsonSeq("defenders", defender);
 		return jsonString.jsonValue();
     }
+
+	public static String buildAddCourtLogJson(String dateTime,
+										  String courthouse,
+										  String courtroom,
+										  String case_number,
+										  String text) {
+		JsonString jsonString = new JsonString();
+		jsonString.addJsonLine("log_entry_date_time", dateTime);
+		jsonString.addJsonLine("courthouse", courthouse);
+
+		jsonString.addJsonLine("courtroom", courtroom);
+		jsonString.addJsonSeq("case_numbers", case_number);
+		jsonString.addJsonLine("text", text);
+		return jsonString.jsonValue();
+	}
     
     public static String buildAddCourthouseJson(String courthouse,
     		String code,

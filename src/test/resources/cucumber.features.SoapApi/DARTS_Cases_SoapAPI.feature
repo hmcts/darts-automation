@@ -21,6 +21,3 @@ Feature: Cases EndPoint using SOAP
     """
     And the API status code is 200
 
-  @DMP-1706
-  Scenario: POST /coutlogs
-    When I call POST SOAP API using SOAPAction addCase and encoded body:
