@@ -216,6 +216,16 @@ public class XmlString {
 		sep = LINE_END;
 		return this;
 	}
+
+/*
+ * Add xml fragment
+ * 
+ */
+	public XmlString addEncodedFragment(String xmlFragment) {
+		xmlString = xmlString + sep + encodeEntities(Substitutions.substituteValue(xmlFragment));
+		sep = LINE_END;
+		return this;
+	}
 	
 	public String xmlValue() {
 		xmlString = xmlString + (sep.startsWith(">") ? ">":"");
