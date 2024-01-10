@@ -206,6 +206,16 @@ public class XmlString {
 		}
 		return this;
 	}
+
+/*
+ * Add xml fragment
+ * 
+ */
+	public XmlString addFragment(String xmlFragment) {
+		xmlString = xmlString + sep + Substitutions.substituteValue(xmlFragment);
+		sep = LINE_END;
+		return this;
+	}
 	
 	public String xmlValue() {
 		xmlString = xmlString + (sep.startsWith(">") ? ">":"");
@@ -245,6 +255,7 @@ public class XmlString {
 				.addAttribute("H", "10")
 				.addAttribute("MIN", "00")
 				.addAttribute("S", "00")
+				.addFragment(new XmlString().addTag("extra", "extraValue").xmlValue())
 				.addTag("courthouse", "DMP-467-LIVERPOOL")
 				.addTag("courtroom", "DMP-467-LIVERPOOL-ROOM_A")
 				.addTag("case_numbers")
