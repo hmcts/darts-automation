@@ -461,6 +461,7 @@ public class DateUtils {
 		System.out.println(datePart("2045/34/12", "dd"));
 		System.out.println(datePart("", "dd"));
 		System.out.println(substituteDateValue("date+0/"));
+		System.out.println(substituteDateValue("date+0"));
 	}
 
 }

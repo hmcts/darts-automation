@@ -124,14 +124,14 @@ Feature: Events Endpoints
     Then I see "result" on the page
 
     Examples:
-      | courthouse         | case_number | defendants     | judges     | prosecutors     | defenders     | courtroom      | keywords                 | dateTime      | todaysDate  |
-      | Harrow Crown Court | S{{seq}}001 | defendant SIT1 | judge SIT1 | prosecutor SIT1 | defender SIT1 | Courtroom SIT1 | AUTOMATION LOG P {{seq}} | {{timestamp}} | {{date+0/}} |
+      | courthouse         | case_number | defendants     | judges     | prosecutors     | defenders     | courtroom             | keywords       | dateTime      | todaysDate  |
+      | Harrow Crown Court | S{{seq}}001 | defendant SIT1 | judge SIT1 | prosecutor SIT1 | defender SIT1 | Courtroom SIT {{seq}} | SIT LOG{{seq}} | {{timestamp}} | {{date+0/}} |
 
   @end2end @end2end6
   #Created a case and event via Post event using SOAP
   Scenario Outline: Create a case and hearing via events
     Given I create an event
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
 
     Given I create a case
@@ -251,5 +251,17 @@ Feature: Events Endpoints
     Then I see "result" on the page
 
     Examples:
-      | user | courthouse         | courtroom      | case_number | dateTime      | message_id | eventId     | type | subType | caseRetention | totalSentence | prosecutors     | defenders     | defendants     | judges     | keywords       | todaysDate  |
-      | APPROVER  | Harrow Crown Court | Courtroom SIT1 | S{{seq}}001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 1100 |         |               |               | prosecutor SIT1 | defender SIT1 | defendant SIT1 | judge SIT1 | SIT LOG{{seq}} | {{date+0/}} |
+      | user     | courthouse         | courtroom             | case_number | dateTime      | message_id | eventId     | type | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords       | todaysDate  |
+      | APPROVER | Harrow Crown Court | Courtroom SIT {{seq}} | S{{seq}}001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 1100 |         |               |               | prosecutor SIT{{seq}} | defender SIT{{seq}} | defendant SIT{{seq}} | judge SIT{{seq}} | SIT LOG{{seq}} | {{date+0/}} |
+
+  @end2end @end2end6
+  #Created a case and event via Post event using SOAP
+  Scenario Outline: Create a case with dailylists
+    Given I create dailylist
+      | courthouse   | courtroom   | hearing_date   | hearing_description   | case_numbers   | defendants   |
+      | <courthouse> | <courtroom> | <hearing_date> | <hearing_description> | <case_numbers> | <defendants> |
+
+    Examples:
+      | user     | courthouse         | courtroom             | hearing_date  | hearing_description   | case_numbers | defendants           |
+      | APPROVER | Harrow Crown Court | Courtroom SIT {{seq}} | {{date+0}} | Courtroom SIT {{seq}} | S{{seq}}001  | defendant SIT{{seq}} |
+

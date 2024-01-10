@@ -152,6 +152,22 @@ public class StepDef_soapApi extends StepDef_base {
 				Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
 			}
 		}
+	@Given("I create dailylist$")
+	public void createDailylistXml(List<Map<String,String>> dataTable) {
+		for (Map<String, String> map : dataTable) {
+			String xml = XmlUtils.buildDailylistXml(
+					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
+					getValue(map, "hearing_date"),
+					getValue(map, "hearing_description"),
+					getValue(map, "case_numbers"),
+					getValue(map, "defendants"));
+			ApiResponse apiResponse = soapApi.postSoap("", "addDailylist", xml, true);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
+		}
+	}
 	
 	@When("I call POST SOAP API using soap body:")
 	public void callPostApiWithXmlBody(String docString) {
@@ -227,7 +243,4 @@ public class StepDef_soapApi extends StepDef_base {
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
-	
-
-	
 }

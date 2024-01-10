@@ -93,7 +93,26 @@ public class XmlUtils {
 	    		.addTagGroup("defenders", "defender", defenders, "~");
 		return xmlString.xmlValue();
     }
-    
+
+	public static String buildDailylistXml(String courthouse,
+										 String courtroom,
+										 String hearing_date,
+										 String hearing_description,
+										 String case_numbers,
+										 String defendants) {
+		XmlString xmlString = new XmlString()
+				.addTag("dailylist")
+				.addAttribute("type", "")
+				.addAttribute("id", case_numbers)
+				.addTag("courthouse", courthouse)
+				.addTag("courtroom", courtroom)
+				.addTag("hearing_date",hearing_date)
+				.addTag("hearing_description",hearing_description)
+				.addTagGroup("case_numbers",case_numbers,"~")
+				.addTagGroup("defendants", "defendant", defendants, "~");
+		return xmlString.xmlValue();
+	}
+
     public static String buildAddLogXml(String courthouse,
     		String courtroom,
     		String caseNumbers,
