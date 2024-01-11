@@ -72,7 +72,7 @@ Feature: Case File Screen
   @DMP-1606
   Scenario: Case File Screen with Restrictions on case
     Given I see "There are restrictions against this case" on the page
-    And I see "Important" on the page
+    Then I see "Important" on the page
     And I see "Show restrictions" on the page
     When I click on the "Show restrictions" link
     Then I see "Hide restrictions" on the page
