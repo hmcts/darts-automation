@@ -233,3 +233,32 @@ Scenario: Case file breadcrumbs
 	Then I click on the breadcrumb link "CASE1009"
 	Then I see "Case ID" on the page
 	And I see "CASE1009" on the page
+
+@DMP-1397-AC1
+Scenario: Hide automatic transcript request - Case file screen
+	Then I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "All Transcripts" link
+	Then I verify the HTML table contains the following values
+		| Hearing date | Type             | Requested on | Requested by |Status        |
+        | 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+
+
+	@DMP-1397-AC2
+Scenario: Hide automatic transcript request - Heating details screen
+	Then I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "5 Jan 2023" link
+	And I click on the "Transcripts" link
+	And I see "There are no transcripts for this hearing." on the page	
+	
+
+
