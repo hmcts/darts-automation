@@ -54,6 +54,8 @@ def secrets = [
     secret('CppPassword', 'CPP_PASSWORD'),
     secret('DarMidTierUserName', 'DAR_MID_TIER_USERNAME'),
     secret('DarMidTierPassword', 'DAR_MID_TIER_PASSWORD'),
+    secret('DarPCMidTierUserName', 'DAR_PC_MID_TIER_USERNAME'),
+    secret('DarPCMidTierPassword', 'DAR_PC_MID_TIER_PASSWORD'),
     secret('DartsAdminUserName', 'DARTS_ADMIN_USERNAME')
   ],
 ]

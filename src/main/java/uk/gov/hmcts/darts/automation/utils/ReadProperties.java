@@ -69,6 +69,8 @@ public class ReadProperties {
 	public static String cppPassword = getSystemValue("CPP_PASSWORD");
 	public static String darMidTierUserName = getSystemValue("DAR_MID_TIER_USERNAME");
 	public static String darMidTierPassword = getSystemValue("DAR_MID_TIER_PASSWORD");
+	public static String DarPCMidTierUsername = getSystemValue("DAR_PC_MID_TIER_USERNAME");
+	public static String DarPCMidTierPassword = getSystemValue("DAR_PC_MID_TIER_PASSWORD");
 
 	public static String isRunLocal = getSystemValue("RUN_LOCAL");
 	
