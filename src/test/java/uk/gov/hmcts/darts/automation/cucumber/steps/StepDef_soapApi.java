@@ -152,25 +152,6 @@ public class StepDef_soapApi extends StepDef_base {
 				Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
 			}
 		}
-	@Given("I add Audio to the case")
-	public void addAudioToCase(List<Map<String,String>> dataTable) {
-		for (Map<String, String> map : dataTable) {
-			String xml = XmlUtils.buildAddAudioXml(
-					getValue(map, "startDateTime"),
-					getValue(map, "endDateTime"),
-					getValue(map, "channel"),
-					getValue(map, "max_channels"),
-					getValue(map, "mediaformat"),
-					getValue(map, "mediafile"),
-					getValue(map, "courthouse"),
-					getValue(map, "courtroom"),
-					getValue(map, "case_numbers"));
-			ApiResponse apiResponse = soapApi.postSoap("", "addAudio", xml, false);
-			testdata.statusCode = apiResponse.statusCode;
-			testdata.responseString = apiResponse.responseString;
-			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
-		}
-	}
 	@Given("I create dailylist$")
 	public void createDailylistXml(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {

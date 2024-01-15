@@ -1,6 +1,5 @@
 package uk.gov.hmcts.darts.automation.utils;
 
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
@@ -10,8 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -371,31 +368,6 @@ public class DateUtils {
 	public static String timestamp(String time) {
 		return todayYyyymmdd() + "T" + time + ".000Z";
 	}
-
-	public static String addTimeToTimestamp(String input){
-		Pattern pattern = Pattern.compile("timestamp\\+(\\d{2}):(\\d{2}):(\\d{2})");
-		Matcher matcher = pattern.matcher(input);
-
-		if (matcher.matches()) {
-			int hoursToAdd = Integer.parseInt(matcher.group(1));
-			int minutesToAdd = Integer.parseInt(matcher.group(2));
-			int secondsToAdd = Integer.parseInt(matcher.group(3));
-
-			// Parse the original timestamp
-			LocalDateTime originalTimestamp = LocalDateTime.now();
-
-			// Add hours, minutes, and seconds to the original timestamp
-			LocalDateTime updatedTimestamp = originalTimestamp.plusHours(hoursToAdd)
-					.plusMinutes(minutesToAdd)
-					.plusSeconds(secondsToAdd);
-
-			// Format the result as a timestamp
-			DateTimeFormatter resultFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-			return updatedTimestamp.format(resultFormatter);
-		}
-		return "Invalid input";
-	}
-
 	
 	public static String todayDisplay() {
 		LocalDate date = LocalDate.now();
@@ -490,7 +462,6 @@ public class DateUtils {
 		System.out.println(datePart("", "dd"));
 		System.out.println(substituteDateValue("date+0/"));
 		System.out.println(substituteDateValue("date+0"));
-		System.out.println(addTimeToTimestamp("timestamp+00:02:00"));
 	}
 
 }
