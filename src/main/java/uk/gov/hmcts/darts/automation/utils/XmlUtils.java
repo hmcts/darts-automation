@@ -133,6 +133,34 @@ public class XmlUtils {
     			.addEndTag();
 		return xmlString.xmlValue();
     }
+
+	public static String buildAddAudioXml(String startDateTime,String endDateTime, String channel,String maxChannels, String mediaFormat, String mediaFile, String courthouse, String courtroom, String caseNumbers) {
+		XmlString xmlString = new XmlString()
+				.addTag("audio")
+				.addTag("start")
+				.addAttribute("Y", DateUtils.datePart(startDateTime, "Y"))
+				.addAttribute("M", DateUtils.datePart(startDateTime, "M"))
+				.addAttribute("D", DateUtils.datePart(startDateTime, "D"))
+				.addAttribute("H", DateUtils.timePart(startDateTime, "H"))
+				.addAttribute("MIN", DateUtils.timePart(startDateTime, "MIN"))
+				.addAttribute("S", DateUtils.timePart(startDateTime, "S"))
+				.addTag("end")
+				.addAttribute("Y", DateUtils.datePart(endDateTime, "Y"))
+				.addAttribute("M", DateUtils.datePart(endDateTime, "M"))
+				.addAttribute("D", DateUtils.datePart(endDateTime, "D"))
+				.addAttribute("H", DateUtils.timePart(endDateTime, "H"))
+				.addAttribute("MIN", DateUtils.timePart(endDateTime, "MIN"))
+				.addAttribute("S", DateUtils.timePart(endDateTime, "S"))
+				.addTag("channel", channel)
+				.addTag("max_channels", maxChannels)
+				.addTag("mediaformat", mediaFormat)
+				.addTag("mediafile", mediaFile)
+				.addTag("courthouse", courthouse)
+				.addTag("courtroom", courtroom)
+				.addTagGroup("case_numbers", "case_number", caseNumbers)
+				.addEndTag();
+		return xmlString.xmlValue();
+	}
     
     public static String buildGetLogXml(String courthouse,
     		String caseNumber,
@@ -157,7 +185,9 @@ public class XmlUtils {
     			.addEndTag();
 		return xmlString.xmlValue();
     }
-    
+
+
+
     @Test
 	public void testXml1() {
 		Assertions.assertEquals("<case type=\"\" id=\"string2\">" + LINE_END
