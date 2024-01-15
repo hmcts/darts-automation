@@ -258,7 +258,71 @@ Scenario: Hide automatic transcript request - Heating details screen
 	And I click on the "DMP-1225_case1" link
 	And I click on the "5 Jan 2023" link
 	And I click on the "Transcripts" link
-	And I see "There are no transcripts for this hearing." on the page	
-	
+	And I see "There are no transcripts for this hearing." on the page
+
+	@DMP-1798-AC1-AC3
+Scenario: Restrictions banner on hearing details screen - All restriction events received during hearing displayed on hearing details screen - Open restriction list
+	When I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "22 Dec 2023" link
+	Then I click on the "Show restrictions" link
+	And I see "Hide restrictions" on the page
+	And I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
+	And I see "For full details, check the hearing events." on the page
+
+	@DMP-1798-AC2
+Scenario: Restrictions banner on hearing details screen - Closed by default
+	When I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "22 Dec 2023" link
+	Then I click on the "Show restrictions" link
+
+	@DMP-1798-AC4
+Scenario: Restrictions banner on hearing details screen - collapse restriction list
+	When I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "22 Dec 2023" link
+	And I click on the "Show restrictions" link
+	And I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
+	And I see "For full details, check the hearing events." on the page
+	Then I click on the "Hide restrictions" link
+	And I do not see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
+	And I do not see "For full details, check the hearing events." on the page
+
+	@DMP-1798-AC5
+Scenario: Restrictions banner on hearing details screen - no restrictions during hearing but others on case
+	When I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "5 Jan 2024" link
+	Then I see "There are restrictions against this case" on the page
+	And I do not see "Show restrictions" on the page
+
+	@DMP-1798-AC6
+Scenario: Restrictions banner on hearing details screen - No restrictions
+	When I set "Case ID" to "CASE5_Event_DMP461"
+	And I press the "Search" button
+	And I click on the "CASE5_Event_DMP461" link
+	Then I do not see "There are restrictions against this case" on the page
+	And I click on the "10 Aug 2023" link
+	Then I do not see "There are restrictions against this case" on the page
+	And I press the "back" button on my browser
+	And I click on the "11 Aug 2023" link
+	Then I do not see "There are restrictions against this case" on the page
+
+
+
+
+
+
+
+
+
+
+
+
 
 
