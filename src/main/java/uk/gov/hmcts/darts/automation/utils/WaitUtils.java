@@ -56,6 +56,24 @@ public class WaitUtils {
 		waitForTextOnPage(text, 10);
 	}
 	
+	public void waitForTextOnPage(String text1, String text2, int wait_time) {
+		By byXpath1 = By.xpath("//*[contains(.,'" // This resolves issues where elements are parallel to text
+				+ text1
+				+ "')]"); 
+		By byXpath2 = By.xpath("//*[contains(.,'" // This resolves issues where elements are parallel to text
+				+ text2
+				+ "')]"); 
+		boolean found = (new WebDriverWait(driver, Duration.ofSeconds(wait_time)))
+				.pollingEvery(Duration.ofMillis(200))
+				.until(ExpectedConditions.or(
+						ExpectedConditions.presenceOfElementLocated(byXpath1), 
+						ExpectedConditions.presenceOfElementLocated(byXpath2)));
+	}
+	
+	public void waitForTextOnPage(String text1, String text2) {
+		waitForTextOnPage(text1, text2, 10);
+	}
+	
 	public void waitForTextOnPage(String text, int wait_time) {
 		By byXpath = By.xpath("//*[contains(.,'" // This resolves issues where elements are parallel to text
 				+ text

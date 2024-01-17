@@ -8,9 +8,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +127,14 @@ public class Portal {
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Sign in");
         NAV.waitForBrowserReadyState();
+        if (webDriver.findElements(By.xpath("//input[@type='" + "email" + "']")).size() == 0) {
+        	List<WebElement> another = webDriver.findElements(By.xpath("//*[text() = 'Use another account']"));
+        	if (another.size() == 1) {
+        		another.get(0).click();
+        	}
+            NAV.waitForBrowserReadyState();
+        }
+        	
 // Following line fails when run from Jenkins but would be preferable
 //        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
         setInputField("email", username);
@@ -136,12 +147,15 @@ public class Portal {
         setInputField("password", password);
         NAV.press_buttonByName("Sign in");
         NAV.waitForBrowserReadyState();
-        WAIT.waitForTextOnPage("Stay signed in?");
-        NAV.waitForBrowserReadyState();
-        NAV.press_buttonByName("No");
-        NAV.waitForBrowserReadyState();
-        WAIT.waitForTextOnPage("except where otherwise stated");
-        NAV.waitForBrowserReadyState();
+// When signing in for a second time, the stay signed in box may not appear
+        WAIT.waitForTextOnPage("Stay signed in?", "Search for a case");
+		if (webDriver.findElements(By.xpath("//*[text() ='" + "Stay signed in?" + "']")).size() == 1) {
+	        NAV.waitForBrowserReadyState();
+	        NAV.press_buttonByName("No");
+	        NAV.waitForBrowserReadyState();
+	        WAIT.waitForTextOnPage("except where otherwise stated");
+	        NAV.waitForBrowserReadyState();
+		}
     }
     
     public void signOut() throws Exception {
