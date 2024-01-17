@@ -12,6 +12,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import uk.gov.hmcts.darts.automation.utils.DateUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonApi;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
@@ -109,6 +110,7 @@ public class StepDef_hooks extends StepDef_base {
 		if (!ReadProperties.buildNo.equals(build)) {
 			log.warn("Automation started with build {} but is now Build {}", ReadProperties.buildNo, build);
 		}
+		testdata.setProperty("started", DateUtils.timestamp());
 	}
 	
 }

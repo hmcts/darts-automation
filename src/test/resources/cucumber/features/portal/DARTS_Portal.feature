@@ -42,7 +42,7 @@ Scenario: Logout
 	Then  I see "Sign in to the DARTS Portal" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest @TS
+@DMP-407 @smoketest
 Scenario: HMCTS Link
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Search" link
@@ -53,18 +53,22 @@ Scenario: HMCTS Link
 	And   I Sign out
 
 @DMP-407 @smoketest
-Scenario: HMCTS Link
-	Given I am logged on to DARTS as a judge user
+Scenario: Sign out Internal user
+	Given I am logged on to DARTS as a requester user
 	Then  I see "Search for a case" on the page
 	When  I Sign out
 	Then  I see "Sign in to the DARTS Portal" on the page
+	When  I am logged on to DARTS as an approver user
+	Then  I see "Search for a case" on the page
 
 @DMP-407 @smoketest
-Scenario: DARTS Link
+Scenario: Sign out External user
 	Given I am logged on to DARTS as an external user
 	Then  I see "Search for a case" on the page
 	When  I Sign out
 	Then  I see "Sign in to the DARTS Portal" on the page
+	When  I am logged on to DARTS as a transcriber user
+	Then  I see "Search for a case" on the page
 
 @DMP-407 @smoketest
 Scenario Outline: All roles
