@@ -23,7 +23,7 @@ public class StepDef_portal extends StepDef_base {
 	public StepDef_portal(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
         prompt = new Prompt(webDriver);
-        portal = new Portal(webDriver);
+        portal = new Portal(webDriver, testdata);
         WAIT = new WaitUtils(webDriver);
     }
 
@@ -45,6 +45,11 @@ public class StepDef_portal extends StepDef_base {
     @When("^I enter the security code$")
     public void enterSecurityCode() throws Exception {
         NAV.set_valueTo("Enter your verification code below", prompt.inputDialog("Enter Security Code"));
+    }
+    
+    @When("I Sign out")
+    public void signOut() throws Exception {
+    	portal.signOut();
     }
 
     @When("^I see phone number \"([^\"]*)\" on the page$")

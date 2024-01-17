@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import uk.gov.hmcts.darts.automation.utils.GenUtils;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
+import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 
 public class Portal {
@@ -31,9 +32,11 @@ public class Portal {
     private NavigationShared NAV;
     private WaitUtils WAIT;
     private GenUtils GEN;
+    private TestData TD;
 
-    public Portal(WebDriver driver) {
+    public Portal(WebDriver driver, TestData testdata) {
         this.webDriver = driver;
+        this.TD = testdata;
         NAV = new NavigationShared(webDriver);
         WAIT = new WaitUtils(webDriver);
         GEN = new GenUtils(webDriver);
@@ -92,6 +95,7 @@ public class Portal {
 
 
     public void loginToPortal_ExternalUser(String username, String password) throws Exception {
+    	TD.userId = "";
         NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
@@ -114,6 +118,7 @@ public class Portal {
     }
 
     public void loginToPortal_InternalUser(String username, String password) throws Exception {
+    	TD.userId = username;
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
@@ -136,6 +141,18 @@ public class Portal {
         NAV.press_buttonByName("No");
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("except where otherwise stated");
+        NAV.waitForBrowserReadyState();
+    }
+    
+    public void signOut() throws Exception {
+    	NAV.click_link_by_text("Sign out");
+    	if (!TD.userId.isBlank()) {
+    		WebElement webElement = webDriver.findElement(By.xpath("//div//*[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + TD.userId.toLowerCase() + "\"]"));
+    		webElement.click();
+    	}
+        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState();
+        WAIT.waitForTextOnPage("Sign in", 15);
     }
 
     public void notificationCount(String count) {
