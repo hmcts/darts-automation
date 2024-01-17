@@ -3,6 +3,7 @@ Feature: Events Endpoints
   @end2end @end2end6
    #Created a case and event via Post courtlog
   Scenario Outline: Create a case
+    Given I authenticate from the DARMIDTIER source system
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
@@ -124,16 +125,17 @@ Feature: Events Endpoints
     Then I see "result" on the page
 
     Examples:
-      | courthouse         | case_number | defendants     | judges     | prosecutors     | defenders     | courtroom      | keywords                 | dateTime      | todaysDate  |
-      | Harrow Crown Court | S{{seq}}001 | defendant SIT1 | judge SIT1 | prosecutor SIT1 | defender SIT1 | Courtroom SIT1 | AUTOMATION LOG P {{seq}} | {{timestamp}} | {{date+0/}} |
+      | courthouse         | case_number | defendants         | judges         | prosecutors         | defenders         | courtroom | keywords       | dateTime      | todaysDate  |
+      | Harrow Crown Court | S{{seq}}001 | S{{seq}} defendant | S{{seq}} judge | S{{seq}} prosecutor | S{{seq}} defender | {{seq}}   | SIT LOG{{seq}} | {{timestamp}} | {{date+0/}} |
 
   @end2end @end2end6
   #Created a case and event via Post event using SOAP
   Scenario Outline: Create a case and hearing via events
+    Given I authenticate from the DARMIDTIER source system
     Given I create an event
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
-
+    Given I authenticate from the DARMIDTIER source system
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
@@ -146,9 +148,9 @@ Feature: Events Endpoints
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants>  |
-
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on the "Clear search" link
     Then "Courthouse" is ""
     Then "Case ID" is ""
@@ -176,9 +178,9 @@ Feature: Events Endpoints
     Then I set "Keywords" to "<keywords>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants>  |
-
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on the "Clear search" link
     Then "Keywords" is ""
     Then I set "Judge's name" to "<judges>"
@@ -192,6 +194,13 @@ Feature: Events Endpoints
 
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
+    Then I see "Important" on the page
+    Then I see "There are restrictions against this case" on the page
+    Then I see "Show restrictions" on the page
+    When I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "For full details, check the events for each hearing below." on the page
+
     Then I click on the breadcrumb link "Search"
     Then I see "Search for a case" on the page
     Then I see "<case_number>" in the same row as "<courthouse>"
@@ -253,3 +262,81 @@ Feature: Events Endpoints
     Examples:
       | user | courthouse         | courtroom      | case_number | dateTime      | message_id | eventId     | type | subType | caseRetention | totalSentence | prosecutors     | defenders     | defendants     | judges     | keywords       | todaysDate  |
       | APPROVER  | Harrow Crown Court | Courtroom SIT1 | S{{seq}}001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 1100 |         |               |               | prosecutor SIT1 | defender SIT1 | defendant SIT1 | judge SIT1 | SIT LOG{{seq}} | {{date+0/}} |
+
+  @end2end @end2end4
+  Scenario Outline: Requester requests transcripts
+    Given I am logged on to DARTS as an REQUESTER user
+    Then I set "Case ID" to "<case_number>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID                                                 | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                           | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction There are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
+    When I click on "<case_number>" in the same row as "<courthouse>"
+    Then I see "<case_number>" on the page
+    Then I click on "<HearingDate>" in the same row as "<courtroom>"
+    Then I see "<HearingDate>" on the page
+    Then I click on the "Transcripts" link
+    Then I press the "Request a new transcript" button
+    Then I see "Request a new transcript" on the page
+    And I select "<transcription-type>" from the "Request Type" dropdown
+    And I select "<urgency>" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I see "Check and confirm your transcript request" on the page
+    And I see "<case_number>" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    And I see "Transcript request submitted" on the page
+    Then I Sign out
+
+    Examples:
+      | case_number | courthouse         | courtroom | judges       | defendants       | HearingDate      | transcription-type | urgency   | StartTime | EndTime  |
+      | S237001     | Harrow Crown Court | 237       | judge SIT237 | defendant SIT237 | {{todayDisplay}} | Sentencing remarks | Overnight | 09:26:51  | 09:29:49 |
+
+  @end2end @end2end4
+  Scenario Outline: Approver requests transcripts
+    Given I am logged on to DARTS as an APPROVER user
+    Then I click on the "Your transcripts" link
+    Then I see "Requests to approve or reject" on the page
+    Then I click on "View" in the same row as "<case_number>"
+    And I see "Do you approve this request?" on the page
+    Then I select the "Yes" radio button
+    Examples:
+      | case_number | courthouse         | courtroom | judges       | defendants       | HearingDate      | transcription-type | urgency   | StartTime | EndTime  |
+      | S237001     | Harrow Crown Court | 237       | judge SIT237 | defendant SIT237 | {{todayDisplay}} | Sentencing remarks | Overnight | 09:26:51  | 09:29:49 |
+
+  @end2end @end2end4
+  Scenario Outline: Transcriber uploads to Transcript requests
+    Given I am logged on to DARTS as an TRANSCRIBER user
+    When I click on the "Transcript requests" link
+    And I see "Transcript requests" on the page
+    Then I click on "View" in the same row as "<case_number>"
+    Then I select the "Assign to me and upload a transcript" radio button
+    Then I press the "Continue" button
+    Then I see "<case_number>" on the page
+    Then I see "<courthouse>" on the page
+    Then I see "<requestMethod>" on the page
+    Then I press the "Get audio for this request" button
+
+    When I select the "Audio preview and events" radio button
+    And I check the checkbox in the same row as "<time>" "Audio recording"
+    And I select the "Download" radio button
+    And I press the "Get Audio" button
+    And I see "Confirm your Order" on the page
+    Then I press the "Confirm" button
+    Then I see "Your order is complete" on the page
+
+    Then I click on the "Return to hearing date" link
+    Then I click on the "Your audio" link
+
+
+    Examples:
+      | case_number | courthouse         | courtroom | judges       | defendants       | HearingDate      | transcription-type | urgency   | StartTime | EndTime  | requestMethod | time |
+      | S237001     | Harrow Crown Court | 237       | judge SIT237 | defendant SIT237 | {{todayDisplay}} | Sentencing remarks | Overnight | 09:26:51  | 09:29:49 | Manual        | 09:26:51 - 09:29:49 |
+    @test
+    Scenario: Signin Signout
+      Given I am logged on to DARTS as an REQUESTER user
+      Then I Sign out
+
+      Given I am logged on to DARTS as an APPROVER user
