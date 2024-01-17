@@ -38,6 +38,7 @@ public class TestData {
 	public String statusCode = "";
 	public String responseString = "";
 	private static int instanceCount = 0;
+	public String userId = "";
 	
 	static {
 		propFile = new Properties();
