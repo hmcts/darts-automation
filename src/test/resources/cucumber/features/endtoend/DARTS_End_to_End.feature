@@ -124,8 +124,9 @@ Feature: Events Endpoints
     Then I see "result" on the page
 
     Examples:
-      | courthouse         | case_number | defendants     | judges     | prosecutors     | defenders     | courtroom             | keywords       | dateTime      | todaysDate  |
-      | Harrow Crown Court | S{{seq}}001 | defendant SIT1 | judge SIT1 | prosecutor SIT1 | defender SIT1 | Courtroom SIT {{seq}} | SIT LOG{{seq}} | {{timestamp}} | {{date+0/}} |
+      | courthouse         | case_number | defendants         | judges         | prosecutors         | defenders         | courtroom | keywords       | dateTime      | todaysDate  |
+      | Harrow Crown Court | S{{seq}}001 | S{{seq}} defendant | S{{seq}} judge | S{{seq}} prosecutor | S{{seq}} defender | {{seq}}   | SIT LOG{{seq}} | {{timestamp}} | {{date+0/}} |
+
 
   @end2end @end2end6
   #Created a case and event via Post event using SOAP
@@ -146,8 +147,9 @@ Feature: Events Endpoints
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
 
     When I click on the "Clear search" link
     Then "Courthouse" is ""
@@ -176,8 +178,9 @@ Feature: Events Endpoints
     Then I set "Keywords" to "<keywords>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
 
     When I click on the "Clear search" link
     Then "Keywords" is ""
@@ -192,6 +195,13 @@ Feature: Events Endpoints
 
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
+    Then I see "Important" on the page
+    Then I see "There are restrictions against this case" on the page
+    Then I see "Show restrictions" on the page
+    When I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "For full details, check the events for each hearing below." on the page
+
     Then I click on the breadcrumb link "Search"
     Then I see "Search for a case" on the page
     Then I see "<case_number>" in the same row as "<courthouse>"
@@ -251,17 +261,5 @@ Feature: Events Endpoints
     Then I see "result" on the page
 
     Examples:
-      | user     | courthouse         | courtroom             | case_number | dateTime      | message_id | eventId     | type | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords       | todaysDate  |
-      | APPROVER | Harrow Crown Court | Courtroom SIT {{seq}} | S{{seq}}001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 1100 |         |               |               | prosecutor SIT{{seq}} | defender SIT{{seq}} | defendant SIT{{seq}} | judge SIT{{seq}} | SIT LOG{{seq}} | {{date+0/}} |
-
-  @end2end @end2end6
-  #Created a case and event via Post event using SOAP
-  Scenario Outline: Create a case with dailylists
-    Given I create dailylist
-      | courthouse   | courtroom   | hearing_date   | hearing_description   | case_numbers   | defendants   |
-      | <courthouse> | <courtroom> | <hearing_date> | <hearing_description> | <case_numbers> | <defendants> |
-
-    Examples:
-      | user     | courthouse         | courtroom             | hearing_date  | hearing_description   | case_numbers | defendants           |
-      | APPROVER | Harrow Crown Court | Courtroom SIT {{seq}} | {{date+0}} | Courtroom SIT {{seq}} | S{{seq}}001  | defendant SIT{{seq}} |
-
+      | user     | courthouse         | courtroom | case_number | dateTime      | message_id | eventId     | type | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords       | todaysDate  |
+      | APPROVER | Harrow Crown Court | {{seq}}   | S{{seq}}001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 2198 | 3933    |               |               | prosecutor SIT{{seq}} | defender SIT{{seq}} | defendant SIT{{seq}} | judge SIT{{seq}} | SIT LOG{{seq}} | {{date+0/}} |
