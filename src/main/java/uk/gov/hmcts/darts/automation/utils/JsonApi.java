@@ -20,6 +20,7 @@ import uk.gov.hmcts.darts.automation.model.responses.Info;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class JsonApi {
 	static final String USER_AGENT = "User-Agent";
 	static final String USER_AGENT_STRING = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0";
 	static final String ACCEPT_ENCODING = "Accept-Encoding";
-	static final String ACCEPT_ENCODING_STRING = "gzip, deflate";
+	static final String ACCEPT_ENCODING_STRING = "gzip, deflate, br";
 	static final String CONNECTION = "Connection";
 	static final String CONNECTION_STRING = "keep-alive";
 	static final String AUTHORIZATION = "Authorization";
@@ -287,6 +288,31 @@ public class JsonApi {
 					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
     }
+
+	public ApiResponse postApi(String endpoint, String body, File audioFile) {
+		authenticate();
+		log.info("post: " + endpoint);
+		log.info(body);
+		response =
+				given()
+						.spec(requestLogLevel(ReadProperties.requestLogLevel))
+						.accept("*/*")
+						.header(USER_AGENT, USER_AGENT_STRING)
+						.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+						.header(CONNECTION, CONNECTION_STRING)
+						.header(AUTHORIZATION, authorization)
+						.contentType(ContentType.MULTIPART)
+						.multiPart("file",audioFile, "multipart/form-data")
+						.formParams("metadata",body)
+						.baseUri(baseUri)
+						.basePath("")
+						.when()
+						.post(endpoint)
+						.then()
+						.spec(responseLogLevel(ReadProperties.responseLogLevel))
+						.extract().response();
+		return new ApiResponse(response.statusCode(), response.asString());
+	}
     
 	public ApiResponse putApi(String endpoint, String body) {
 

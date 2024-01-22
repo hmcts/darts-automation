@@ -1,5 +1,6 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,7 @@ public class StepDef_jsonApi extends StepDef_base {
 	public void extractStringFromJsonResponse(String name, String path) {
 		String value = JsonUtils.extractJsonValue(testdata.responseString, path);
 		testdata.setProperty(name, value);
+
 	}
 
 	@Then("^I see \"([^\"]*)\" in the json response is \"([^\"]*)\"$")
@@ -116,7 +118,28 @@ public class StepDef_jsonApi extends StepDef_base {
 // |courthouse|courtroom|case_numbers|audioFile|
 	@When("^I load an audio file$")
 	public void loadAudioFile(List<Map<String,String>> dataTable) {
-//TODO add code to load a file
+
+		File audioFile = new File("src/test/resources/testdata/sample 1.mp2");
+
+
+		for (Map<String, String> map : dataTable) {
+			String json = JsonUtils.buildAddAudioJson(
+					getValue(map, "courthouse", testdata.getProperty("courthouse")),
+					getValue(map, "courtroom", testdata.getProperty("courtroom")),
+					getValue(map, "case_numbers", testdata.getProperty("case_numbers")),
+					getValue(map, "start_time", testdata.getProperty("start_time")),
+					getValue(map, "end_time", testdata.getProperty("end_time")),
+					getValue(map, "channel", testdata.getProperty("channel")),
+					getValue(map, "total_channels", testdata.getProperty("total_channels")),
+					getValue(map, "format", testdata.getProperty("format")),
+					getValue(map, "filename", testdata.getProperty("filename")),
+					getValue(map, "file_size", testdata.getProperty("file_size")),
+					getValue(map, "checksum", testdata.getProperty("checksum")));
+			ApiResponse apiResponse = jsonApi.postApi("audios", json, audioFile);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+		}
 	}
 	
 // sample cucumber:
@@ -181,6 +204,25 @@ public class StepDef_jsonApi extends StepDef_base {
 				Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 			}
 		}
+
+	@Given("I request a transcription using json$")
+	public void requestATranscriptionUsingJson(List<Map<String, String>> dataTable) {
+		for (Map<String, String> map : dataTable) {
+			String json = JsonUtils.buildRequestTranscription(
+					getValue(map, "hearing_id", testdata.getProperty("hearing_id")),
+					getValue(map, "case_id", testdata.getProperty("case_id")),
+					getValue(map, "transcription_urgency_id", testdata.getProperty("transcription_urgency_id")),
+					getValue(map, "transcription_type_id", testdata.getProperty("transcription_type_id")),
+					getValue(map, "comment", testdata.getProperty("comment")),
+					getValue(map, "start_date_time", testdata.getProperty("start_date_time")),
+					getValue(map, "end_date_time", testdata.getProperty("end_date_time")));
+
+			ApiResponse apiResponse = jsonApi.postApi("transcriptions", json);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+		}
+	}
 
 /* Create courthouse n.b. display name defaults to courthouse if blank
  * 
@@ -270,5 +312,4 @@ public class StepDef_jsonApi extends StepDef_base {
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
-
 }

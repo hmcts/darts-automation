@@ -29,6 +29,7 @@ public class JsonUtils {
 		String returnValue = "";
 		JsonPath jsonPath = new JsonPath(json);
 		returnValue = jsonPath.getString(tag);
+		log.info("json tag {} :: json value {}",tag,returnValue);
 		return returnValue;
 	}
 	
@@ -118,7 +119,41 @@ public class JsonUtils {
     	jsonString.addJsonLine("display_name", displayName.isBlank() ? courthouse : displayName);
 		return jsonString.jsonValue();
     }
-    
+
+	public static String buildAddAudioJson(String courthouse, String courtroom, String case_numbers, String start_time,
+										   String end_time, String channel, String total_channels, String format,
+										   String filename, String file_size, String checksum) {
+
+		JsonString metadata = new JsonString();
+		metadata.addJsonLine("started_at", start_time);
+		metadata.addJsonLine("ended_at", end_time);
+		metadata.addJsonLine("channel", channel);
+		metadata.addJsonLine("total_channels", total_channels);
+		metadata.addJsonLine("format", format);
+		metadata.addJsonLine("filename", filename);
+		metadata.addJsonLine("courthouse", courthouse);
+		metadata.addJsonLine("courtroom", courtroom);
+		metadata.addJsonLine("file_size", file_size);
+		metadata.addJsonLine("checksum", checksum);
+		metadata.addJsonSeq("cases", case_numbers);
+
+		return metadata.jsonValue();
+	}
+
+    public static String buildRequestTranscription(String hearing_id, String case_id, String	transcription_urgency_id,
+												   String transcription_type_id, String	comment, String	start_date_time, String	end_date_time) {
+		JsonString transcriptionReq = new JsonString();
+		transcriptionReq.addJsonLine("hearing_id", hearing_id);
+		transcriptionReq.addJsonLine("case_id", case_id);
+		transcriptionReq.addJsonLine("transcription_urgency_id", transcription_urgency_id);
+		transcriptionReq.addJsonLine("transcription_type_id", transcription_type_id);
+		transcriptionReq.addJsonLine("comment", comment);
+		transcriptionReq.addJsonLine("start_date_time", start_date_time);
+		transcriptionReq.addJsonLine("end_date_time", end_date_time);
+
+		return transcriptionReq.jsonValue();
+    }
+
     @Test
 	public void testJson() {
 		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11", "", ""), "{\r\n"
