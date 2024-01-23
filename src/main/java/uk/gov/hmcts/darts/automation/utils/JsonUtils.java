@@ -140,21 +140,7 @@ public class JsonUtils {
 		return metadata.jsonValue();
 	}
 
-    public static String buildRequestTranscription(String hearing_id, String case_id, String	transcription_urgency_id,
-												   String transcription_type_id, String	comment, String	start_date_time, String	end_date_time) {
-		JsonString transcriptionReq = new JsonString();
-		transcriptionReq.addJsonLine("hearing_id", hearing_id);
-		transcriptionReq.addJsonLine("case_id", case_id);
-		transcriptionReq.addJsonLine("transcription_urgency_id", transcription_urgency_id);
-		transcriptionReq.addJsonLine("transcription_type_id", transcription_type_id);
-		transcriptionReq.addJsonLine("comment", comment);
-		transcriptionReq.addJsonLine("start_date_time", start_date_time);
-		transcriptionReq.addJsonLine("end_date_time", end_date_time);
-
-		return transcriptionReq.jsonValue();
-    }
-
-    @Test
+	@Test
 	public void testJson() {
 		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11", "", ""), "{\r\n"
 				+ "  \"message_id\": \"string1\",\r\n"

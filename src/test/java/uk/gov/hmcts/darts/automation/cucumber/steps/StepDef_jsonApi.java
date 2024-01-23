@@ -119,7 +119,7 @@ public class StepDef_jsonApi extends StepDef_base {
 	@When("^I load an audio file$")
 	public void loadAudioFile(List<Map<String,String>> dataTable) {
 
-		File audioFile = new File("src/test/resources/testdata/sample 1.mp2");
+		File audioFile = new File("/Users/preskshajain/IdeaProjects/darts-automation/src/test/resources/testdata/sample.mp2");
 
 
 		for (Map<String, String> map : dataTable) {
@@ -204,25 +204,6 @@ public class StepDef_jsonApi extends StepDef_base {
 				Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 			}
 		}
-
-	@Given("I request a transcription using json$")
-	public void requestATranscriptionUsingJson(List<Map<String, String>> dataTable) {
-		for (Map<String, String> map : dataTable) {
-			String json = JsonUtils.buildRequestTranscription(
-					getValue(map, "hearing_id", testdata.getProperty("hearing_id")),
-					getValue(map, "case_id", testdata.getProperty("case_id")),
-					getValue(map, "transcription_urgency_id", testdata.getProperty("transcription_urgency_id")),
-					getValue(map, "transcription_type_id", testdata.getProperty("transcription_type_id")),
-					getValue(map, "comment", testdata.getProperty("comment")),
-					getValue(map, "start_date_time", testdata.getProperty("start_date_time")),
-					getValue(map, "end_date_time", testdata.getProperty("end_date_time")));
-
-			ApiResponse apiResponse = jsonApi.postApi("transcriptions", json);
-			testdata.statusCode = apiResponse.statusCode;
-			testdata.responseString = apiResponse.responseString;
-			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
-		}
-	}
 
 /* Create courthouse n.b. display name defaults to courthouse if blank
  * 
