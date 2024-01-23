@@ -263,19 +263,8 @@ Feature: Events Endpoints
       | APPROVER | Harrow Crown Court | Courtroom SIT1 | S{{seq}}001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 1100 |         |               |               | prosecutor SIT1 | defender SIT1 | defendant SIT1 | judge SIT1 | SIT LOG{{seq}} | {{date+0/}} |
 
 
-    @end2end
-      Scenario Outline:
-      Given I authenticate as a Requester user
-      Given I load an audio file
-        | courthouse   | courtroom   | case_numbers  | start_time   | end_time   | channel   | total_channels   | format   | filename   | file_size   | checksum   |
-        | <courthouse> | <courtroom> | <case_number> | <start_time> | <end_time> | <channel> | <total_channels> | <format> | <filename> | <file_size> | <checksum> |
 
-      Examples:
-        | courthouse         | courtroom      | case_number | start_time             | end_time               | channel | total_channels | format | filename | file_size | checksum                 |
-        | Harrow Crown Court | Courtroom SIT1 | S855001     | {{timestamp-12:00:00}} | {{timestamp-12:03:00}} | 1       | 4              | mp2    | sample   | 962.56    | TVRMwq16b4mcZwPSlZj/iQ== |
-
-
-  @end2end @end2end3 @end2end4
+  @end2end @end2end4
   Scenario Outline: Requester requests transcripts
     Given I authenticate from the DARMIDTIER source system
     Given I create an event using json
@@ -309,39 +298,17 @@ Feature: Events Endpoints
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
-
-    Examples:
-      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | StartTime | EndTime  | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | prosecutors         | defenders         |
-      | S855001     | Harrow Crown Court | 855       | S855 judge | S855 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | 09:26:51  | 09:29:49 | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | S{{seq}} prosecutor | S{{seq}} defender |
-
-  @end2end @end2end4
-  Scenario Outline: Approver requests transcripts
-    Given I am logged on to DARTS as an APPROVER user
+    Then I see "Sign in to the DARTS Portal" on the page
+    When I am logged on to DARTS as an APPROVER user
+    Then I see "Search for a case" on the page
     Then I click on the "Your transcripts" link
     Then I see "Requests to approve or reject" on the page
     Then I click on "View" in the same row as "<case_number>"
     And I see "Do you approve this request?" on the page
     Then I select the "Yes" radio button
-    Examples:
-      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate      | transcription-type | urgency   | StartTime | EndTime  |
-      | S855001     | Harrow Crown Court | 855       | S855 judge | S855 defendant | {{todayDisplay}} | Sentencing remarks | Overnight | 09:26:51  | 09:29:49 |
 
-
-  @end2end @end2end4
-  Scenario Outline: Transcriber uploads to Transcript requests
-    Given I create a case using json
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-    Then I find caseid in the json response at "case_id"
-    Given I authenticate as a Requester user
-    Given I call GET /cases/{{caseid}}/hearings API
-
-    Then I find hearingid in the json response at "id"
-    Given I request a transcription using json
-      | hearing_id | case_id    | transcription_urgency_id | transcription_type_id | comment   | start_date_time | end_date_time |
-      | 24469      | {{caseid}} | <transcription-type>     | <urgency>             | <comment> | <dateTime>      |               |
-    Then I find reqid in the json response at "request_id"
-
+    Then I Sign out
+    Then I see "Sign in to the DARTS Portal" on the page
     Given I am logged on to DARTS as an TRANSCRIBER user
     When I click on the "Transcript requests" link
     And I see "Transcript requests" on the page
@@ -363,14 +330,24 @@ Feature: Events Endpoints
 
     Then I click on the "Return to hearing date" link
     Then I click on the "Your audio" link
+    Then I click on "View" in the same row as "<case_number>"
+    Then I see "<case_number>" on the page
+    When I click on the "Transcript requests" link
+
+
 
     Examples:
-      | case_number | courthouse         | courtroom | judges     | defendants     | transcription-type | urgency   | requestMethod | time | prosecutors         | defenders         | comment                 | dateTime      |
-      | S855001     | Harrow Crown Court | 855       | S855 judge | S855 defendant | Sentencing remarks | Overnight |               |      | S{{seq}} prosecutor | S{{seq}} defender | Please process urgently | {{timestamp}} |
+      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | StartTime | EndTime  | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | prosecutors         | defenders         | requestMethod |
+      | S855001     | Harrow Crown Court | 855       | S855 judge | S855 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | 09:26:51  | 09:29:49 | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | S{{seq}} prosecutor | S{{seq}} defender | Manual        |
 
-  @test
-  Scenario: Signin Signout
-    Given I am logged on to DARTS as an REQUESTER user
-    Then I Sign out
 
-    Given I am logged on to DARTS as an APPROVER user
+
+  @end2end
+  Scenario Outline:
+    Given I load an audio file
+      | courthouse   | courtroom   | case_numbers  | start_time   | end_time   | channel   | total_channels   | format   | filename   | file_size   | checksum   |
+      | <courthouse> | <courtroom> | <case_number> | <start_time> | <end_time> | <channel> | <total_channels> | <format> | <filename> | <file_size> | <checksum> |
+
+    Examples:
+      | courthouse         | courtroom      | case_number | start_time             | end_time               | channel | total_channels | format | filename | file_size | checksum                 |
+      | Harrow Crown Court | Courtroom SIT1 | S855001     | {{timestamp-12:00:00}} | {{timestamp-12:03:00}} | 1       | 4              | mp2    | sample   | 962.56    | TVRMwq16b4mcZwPSlZj/iQ== |
