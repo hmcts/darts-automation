@@ -29,6 +29,21 @@ public class ReadProperties {
 	
 	private static Logger log = LogManager.getLogger("ReadProperties");
 
+
+	public static String isRunLocal = getSystemValue("RUN_LOCAL");
+	
+	public static boolean runLocal = isRunLocal != null && isRunLocal.equalsIgnoreCase("true");    
+	
+	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
+	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
+	private static String translationPropertiesParameterFileName = "src/test/resources/translation.properties";
+	static Properties workstationProperties = getProperties(workstationPropertiesParameterFileName);
+	static Properties environmentProperties = getProperties(environmentPropertiesParameterFileName);
+	static Properties translationProperties = getProperties(translationPropertiesParameterFileName);
+	public static String os = System.getProperty("os.name").replace(" ", "_"); // .toUpperCase();
+	public static String systemEnv = getSystemValue("environment");
+	public static String environment = systemEnv == null ? environmentProperties.getProperty("defaultEnv") : systemEnv;
+
 // get azure secrets as environment vars
 	public static String apiUserName = getSystemValue("FUNC_TEST_ROPC_USERNAME");
 	public static String apiPassword = getSystemValue("FUNC_TEST_ROPC_PASSWORD");
@@ -46,7 +61,7 @@ public class ReadProperties {
 	public static String apiDbUserName = getSystemValue("DARTS_API_DB_USERNAME");
 	public static String apiDbPassword = getSystemValue("DARTS_API_DB_PASSWORD");
 	public static String apiDbPort = getSystemValue("DARTS_API_DB_PORT");
-	public static String apiDbHost = getSystemValue("DARTS_API_DB_HOST");
+	public static String apiDbHost = getSystemValue(main("databaseKey"));			// was DARTS_API_DB_HOST
 	public static String apiDbDatabase = getSystemValue("DARTS_API_DB_DATABASE");
 	public static String automationUserId = getSystemValue("AUTOMATION_USERNAME");
 	public static String automationPassword = getSystemValue("AUTOMATION_PASSWORD");
@@ -71,20 +86,6 @@ public class ReadProperties {
 	public static String darMidTierPassword = getSystemValue("DAR_MID_TIER_PASSWORD");
 	public static String DarPCMidTierUsername = getSystemValue("DAR_PC_MID_TIER_USERNAME");
 	public static String DarPCMidTierPassword = getSystemValue("DAR_PC_MID_TIER_PASSWORD");
-
-	public static String isRunLocal = getSystemValue("RUN_LOCAL");
-	
-	public static boolean runLocal = isRunLocal != null && isRunLocal.equalsIgnoreCase("true");    
-	
-	private static String workstationPropertiesParameterFileName = "src/test/resources/workstation.properties";
-	private static String environmentPropertiesParameterFileName = "src/test/resources/environment.properties";
-	private static String translationPropertiesParameterFileName = "src/test/resources/translation.properties";
-	static Properties workstationProperties = getProperties(workstationPropertiesParameterFileName);
-	static Properties environmentProperties = getProperties(environmentPropertiesParameterFileName);
-	static Properties translationProperties = getProperties(translationPropertiesParameterFileName);
-	public static String os = System.getProperty("os.name").replace(" ", "_"); // .toUpperCase();
-	public static String systemEnv = System.getProperty("envName");
-	public static String environment = systemEnv == null ? environmentProperties.getProperty("defaultEnv") : systemEnv;
 	
 	public static LogDetail setupRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
 	public static LogDetail setupResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
@@ -112,11 +113,6 @@ public class ReadProperties {
 		}
 		log.info("Instance count: " + ++instanceCount);
 	}
-	
-	public static String jsonApiUri = "https://darts-api." + environment + ".platform.hmcts.net/";
-	public static String soapApiUri = "https://darts-api." + environment + ".platform.hmcts.net/ws/";
-	public static String portalUri = "https://darts-api." + environment + ".platform.hmcts.net/";
-
 	
 	static Properties getProperties(String parameterFileName) {
 		Properties prop = new Properties();

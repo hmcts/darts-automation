@@ -114,10 +114,25 @@ public class StepDef_jsonApi extends StepDef_base {
 	
 // sample cucumber:
 // When I load an audio file
-// |courthouse|courtroom|case_numbers|audioFile|
+// |courthouse|courtroom|case_numbers|date|startTime|endTime|audioFile|
 	@When("^I load an audio file$")
 	public void loadAudioFile(List<Map<String,String>> dataTable) {
-//TODO add code to load a file
+		for (Map<String, String> map : dataTable) {
+			String date = getValue(map, "date");
+			String audioFile = getValue(map, "audioFile");
+			String json = JsonUtils.buildAddAudioJson(
+					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
+					getValue(map, "case_numbers"),
+					DateUtils.makeTimestamp(date, getValue(map, "startTime")),
+					DateUtils.makeTimestamp(date, getValue(map, "endTime")),
+					audioFile);
+			audioFile = "resources/" + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
+			ApiResponse apiResponse = jsonApi.postMultipartAudioApi("audios", json, audioFile);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+		}
 	}
 	
 // sample cucumber:
