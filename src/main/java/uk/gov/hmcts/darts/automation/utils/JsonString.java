@@ -36,6 +36,12 @@ public class JsonString {
 		return this;
 	}
 	
+	public JsonString addJsonLine(String tag, double value) {
+			jsonString = jsonString + sep + "  \"" + tag + "\": " + value; 
+			sep = "," + LINE_END;
+		return this;
+	}
+	
 	public JsonString addJsonLineNoQuotes(String tag, String value) {
 			jsonString = jsonString + sep + "  \"" + tag + "\": " + Substitutions.substituteValue(value); 
 			sep = "," + LINE_END;

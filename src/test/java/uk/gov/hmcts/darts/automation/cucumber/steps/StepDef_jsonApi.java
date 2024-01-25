@@ -23,6 +23,7 @@ import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.JsonApi;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
+import uk.gov.hmcts.darts.automation.utils.DateUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,7 +102,7 @@ public class StepDef_jsonApi extends StepDef_base {
 				testdata.getProperty("courtroom"),
 				testdata.getProperty("case_numbers"),
 				testdata.getProperty("event_text"),
-				testdata.getProperty("date_time"),
+				DateUtils.makeTimestamp(testdata.getProperty("date_time")),
 				testdata.getProperty("case_retention_fixed_policy"),
 				testdata.getProperty("case_total_sentence"),
 				testdata.getProperty("start_time"),
@@ -113,10 +114,25 @@ public class StepDef_jsonApi extends StepDef_base {
 	
 // sample cucumber:
 // When I load an audio file
-// |courthouse|courtroom|case_numbers|audioFile|
+// |courthouse|courtroom|case_numbers|date|startTime|endTime|audioFile|
 	@When("^I load an audio file$")
 	public void loadAudioFile(List<Map<String,String>> dataTable) {
-//TODO add code to load a file
+		for (Map<String, String> map : dataTable) {
+			String date = getValue(map, "date");
+			String audioFile = getValue(map, "audioFile");
+			String json = JsonUtils.buildAddAudioJson(
+					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
+					getValue(map, "case_numbers"),
+					DateUtils.makeTimestamp(date, getValue(map, "startTime")),
+					DateUtils.makeTimestamp(date, getValue(map, "endTime")),
+					audioFile);
+			audioFile = ReadProperties.main("audioFileLocation") + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
+			ApiResponse apiResponse = jsonApi.postMultipartAudioApi("audios", json, audioFile);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+		}
 	}
 	
 // sample cucumber:
@@ -134,7 +150,7 @@ public class StepDef_jsonApi extends StepDef_base {
 					getValue(map, "courtroom", testdata.getProperty("courtroom")),
 					getValue(map, "case_numbers", testdata.getProperty("case_numbers")),
 					getValue(map, "event_text", testdata.getProperty("event_text")),
-					getValue(map, "date_time", testdata.getProperty("date_time")),
+					DateUtils.makeTimestamp(getValue(map, "date_time", testdata.getProperty("date_time"))),
 					getValue(map, "case_retention_fixed_policy", testdata.getProperty("case_retention_fixed_policy")),
 					getValue(map, "case_total_sentence", testdata.getProperty("case_total_sentence")),
 					getValue(map, "start_time", testdata.getProperty("start_time")),
@@ -170,7 +186,7 @@ public class StepDef_jsonApi extends StepDef_base {
 		public void addCourtlogs(List<Map<String,String>> dataTable) {
 			for (Map<String, String> map : dataTable) {
 				String json = JsonUtils.buildAddCourtLogJson(
-						getValue(map, "dateTime", testdata.getProperty("dateTime")),
+						DateUtils.makeTimestamp(getValue(map, "dateTime", testdata.getProperty("dateTime"))),
 						getValue(map, "courthouse", testdata.getProperty("courthouse")),
 						getValue(map, "courtroom", testdata.getProperty("courtroom")),
 						getValue(map, "case_numbers", testdata.getProperty("case_number")),

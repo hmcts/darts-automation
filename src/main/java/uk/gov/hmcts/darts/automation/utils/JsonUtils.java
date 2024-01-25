@@ -119,6 +119,35 @@ public class JsonUtils {
 		return jsonString.jsonValue();
     }
     
+    public static String buildAddAudioJson(String courthouse,
+    		String courtroom,
+    		String caseNumbers,
+    		String startDateTime,
+    		String endDateTime,
+    		String fileName) {
+    	JsonString jsonString = new JsonString()
+		    	.addJsonLine("started_at", startDateTime)
+		    	.addJsonLine("ended_at", endDateTime)
+		    	.addJsonLine("channel", 1)
+		    	.addJsonLine("total_channels", 4)
+		    	.addJsonLine("format", "mp2")
+		    	.addJsonLine("filename", fileName)
+		    	.addJsonLine("courthouse", courthouse)
+		    	.addJsonLine("courtroom", courtroom);
+    	switch (fileName.toLowerCase()) {
+    	case "sample1":
+	    	jsonString.addJsonLine("file_size", 937.96)
+	    			.addJsonLine("checksum", "aQlozKNmM84agyCpJu26fw==");
+	    	break;
+    	default:
+        	jsonString.addJsonLine("file_size", 1)
+					.addJsonLine("checksum", "");
+    	}
+    	jsonString.addJsonSeq("cases", caseNumbers);
+    		
+		return jsonString.jsonValue();
+    }
+    
     @Test
 	public void testJson() {
 		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11", "", ""), "{\r\n"
