@@ -899,6 +899,7 @@ public class NavigationShared {
 	
 	public void click_link_by_text(String arg1) throws Exception {
 		log.info("About to clicked on link with link text =>" + arg1);
+		arg1 = Substitutions.substituteValue(arg1);
 		waitForLoadingIcon(15);
 		WebElement linkText;
 		try {
