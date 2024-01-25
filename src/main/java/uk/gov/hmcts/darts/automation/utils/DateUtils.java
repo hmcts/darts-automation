@@ -522,6 +522,7 @@ public class DateUtils {
 		Assertions.assertEquals("2045", datePart("12/34/2045", "yy"));
 		Assertions.assertEquals("2045", datePart("2045/34/12", "yy"));
 		System.out.println(datePart("", "dd"));
+		System.out.println(substituteDateValue("date+0/"));
 	}
 
 }
