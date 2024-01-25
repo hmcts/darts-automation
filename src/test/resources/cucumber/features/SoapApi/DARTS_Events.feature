@@ -306,12 +306,12 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}1244 | 20917 |         | text         |               |               |
 
   
-@EVENT_API @SOAP_EVENT @smoketest
 Scenario Outline: Create a StopAndClose event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
   Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+@EVENT_API @SOAP_EVENT @smoketest
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:00}} | {{seq}}247 | {{seq}}1247 | 3000  |         | text         |               |               |
