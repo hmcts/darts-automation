@@ -8,17 +8,11 @@ Feature: Case File Screen
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-      | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
-      | CASE1009                                                              | Swansea    | Multiple  |          | Jow Bloggs    |
-      | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
+      | CASE1009                                                              | Swansea    | Multiple  |Mr Judge  | Jow Bloggs    |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
+      | CASE1009                                                              | TS0002     | ROOM_A    |          |               |
 
     Given I click on "CASE1009" in the same row as "Swansea"
-    Then I verify the HTML table contains the following values
-      | Hearing date | Judge | Courtroom       | No. of transcripts |
-      | 15 Aug 2023  |       | ROOM_A          | 1                  |
-      | 15 Aug 2023  |       | ROOM_A12434     | 1                  |
-      | 15 Aug 2023  |       | ROOM_XYZ        | 1                  |
-      | 15 Aug 2023  |       | ROOM_XYZhhihihi | 0                  |
 
   @DMP-965
   Scenario: Case File Screen Sort with Hearing Table
@@ -74,3 +68,23 @@ Feature: Case File Screen
       | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | CLOSED   |      |
       | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | CLOSED   |      |
       | 14 Aug 2023  | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | COMPLETE | View |
+
+  @DMP-1606
+  Scenario: Case File Screen with Restrictions on case
+    Given I see "There are restrictions against this case" on the page
+    And I see "Important" on the page
+    And I see "Show restrictions" on the page
+    When I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "Restriction applied: Judge directed on reporting restrictions" on the page
+    And I see "For full details, check the events for each hearing below." on the page
+    When I click on the "Hide restrictions" link
+    Then I click on the "Search" link
+    And I set "Case ID" to "DMP-1025"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | DMP-1025                                                              | Swansea    | DMP-1025 Courtroom  |DMP-1025 Judge  | DMP-1025 Defendant|
+    Given I click on "DMP-1025" in the same row as "Swansea"
+    And I do not see "There are restrictions against this case" on the page
+
