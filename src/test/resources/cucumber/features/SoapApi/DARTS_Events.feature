@@ -315,6 +315,9 @@ Scenario Outline: Create a StopAndClose event
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:00}} | {{seq}}247 | {{seq}}1247 | 3000  |         | text         |               |               |
+@EVENT_API @SOAP_EVENT
+Examples:
+  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:20}} | {{seq}}248 | {{seq}}1248 | 30500 |         | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text         |               |               |
 
@@ -487,7 +490,7 @@ Scenario Outline: Create a DarStop event
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:00}} | {{seq}}371 | {{seq}}1371 | 1200  |         | text         |               |               |
-@EVENT_API @SOAP_EVENT @smoketest
+@EVENT_API @SOAP_EVENT
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:20}} | {{seq}}372 | {{seq}}1372 | 1400  |         | text         |               |               |
