@@ -127,7 +127,7 @@ public class StepDef_jsonApi extends StepDef_base {
 					DateUtils.makeTimestamp(date, getValue(map, "startTime")),
 					DateUtils.makeTimestamp(date, getValue(map, "endTime")),
 					audioFile);
-			audioFile = "resources/" + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
+			audioFile = ReadProperties.main("audioFileLocation") + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
 			ApiResponse apiResponse = jsonApi.postMultipartAudioApi("audios", json, audioFile);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
