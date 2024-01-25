@@ -22,11 +22,7 @@ import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import uk.gov.hmcts.darts.automation.utils.GenUtils;
-import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.ReadProperties;
-import uk.gov.hmcts.darts.automation.utils.TestData;
-import uk.gov.hmcts.darts.automation.utils.WaitUtils;
+import uk.gov.hmcts.darts.automation.utils.*;
 
 public class Portal {
 	private static Logger log = LogManager.getLogger("Portal");
@@ -44,11 +40,12 @@ public class Portal {
         WAIT = new WaitUtils(webDriver);
         GEN = new GenUtils(webDriver);
     }
-    
+
     public void clickOnBreadcrumbLink(String label) {
         NAV.waitForPageLoad();
-    	//webDriver.findElement(By.xpath("//a[text()=\"" + label + "\" and contains(@class,'govuk-breadcrumbs__link')]")).click();
-        webDriver.findElement(By.xpath("//a[@class='govuk-breadcrumbs__link'][contains(text(),'"+label+"')]")).click();
+        String substitutedValue=  Substitutions.substituteValue(label);
+        //webDriver.findElement(By.xpath("//a[text()=\"" + label + "\" and contains(@class,'govuk-breadcrumbs__link')]")).click();
+        webDriver.findElement(By.xpath("//a[@class='govuk-breadcrumbs__link'][contains(text(),'"+substitutedValue+"')]")).click();
 
     }
 
