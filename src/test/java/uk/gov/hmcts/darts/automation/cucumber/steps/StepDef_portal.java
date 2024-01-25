@@ -99,4 +99,14 @@ public class StepDef_portal extends StepDef_base {
     public void iClickOnPaginationLink(String linkName) throws Exception {
         NAV.click_link_by_text(linkName);
     }
+
+    @Given("I play the audio player$")
+    public void iPlayTheAudioPlayer() {
+        portal.playAudioPlayer();
+    }
+
+    @Then("I upload the file \"([^\"]*)\" at \"([^\"]*)\"$")
+    public void uploadTheDocument(String filename,String uploadLabel) throws Exception {
+        portal.uploadDocument(filename, uploadLabel);
+    }
 }

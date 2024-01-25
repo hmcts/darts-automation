@@ -265,7 +265,7 @@ Feature: Events Endpoints
 
 
   @end2end @end2end4
-  Scenario Outline: Requester requests transcripts
+  Scenario Outline: Transcriber
     Given I authenticate from the DARMIDTIER source system
     Given I create an event using json
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -306,6 +306,7 @@ Feature: Events Endpoints
     Then I click on "View" in the same row as "<case_number>"
     And I see "Do you approve this request?" on the page
     Then I select the "Yes" radio button
+    Then I press the "Submit" button
 
     Then I Sign out
     Then I see "Sign in to the DARTS Portal" on the page
@@ -321,7 +322,8 @@ Feature: Events Endpoints
     Then I press the "Get audio for this request" button
 
     When I select the "Audio preview and events" radio button
-    And I check the checkbox in the same row as "<time>" "Audio recording"
+    And I set the time fields of "Start Time" to "<startTime>"
+    And I set the time fields of "End Time" to "<endTime>"
     And I select the "Download" radio button
     And I press the "Get Audio" button
     And I see "Confirm your Order" on the page
@@ -332,18 +334,37 @@ Feature: Events Endpoints
     Then I click on the "Your audio" link
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
-    When I click on the "Transcript requests" link
+    Then I play the audio player
+    Then I press the "Download audio file" button
+    Then I verify the download file matches "<audioFile>"
 
-
+    When I click on the "Your work" link
+    Then I click on "View" in the same row as "<case_number>"
+    Then I upload the file "<filename>" at "Upload transcript file"
+    Then I press the "Attach file and complete" button
+    Then I see "Transcript request complete" on the page
 
     Examples:
-      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | StartTime | EndTime  | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | prosecutors         | defenders         | requestMethod |
-      | S855001     | Harrow Crown Court | 855       | S855 judge | S855 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | 09:26:51  | 09:29:49 | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | S{{seq}} prosecutor | S{{seq}} defender | Manual        |
+      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | prosecutors         | defenders         | requestMethod | audioFile                 | startTime | endTime  | filename            |
+      | S855001     | Harrow Crown Court | 855       | S855 judge | S855 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | S{{seq}} prosecutor | S{{seq}} defender | Manual        | S855001_17_Jan_2024_1.mp3 | 16:00:00  | 16:02:00 | file-sample_1MB.doc |
 
 
+    @test
+      Scenario Outline: test
+      Given I am logged on to DARTS as an TRANSCRIBER user
+      When I click on the "Your work" link
+      Then I click on "View" in the same row as "<case_number>"
+      Then I upload the file "<filename>" at "Upload transcript file"
+      Then I press the "Attach file and complete" button
+      Then I see "Transcript request complete" on the page
 
-  @end2end
-  Scenario Outline:
+      Examples:
+        | case_number | filename            |
+        | S855001     | file-sample_1MB.doc |
+
+
+  @end2end2
+  Scenario Outline: Load Audio
     Given I load an audio file
       | courthouse   | courtroom   | case_numbers  | start_time   | end_time   | channel   | total_channels   | format   | filename   | file_size   | checksum   |
       | <courthouse> | <courtroom> | <case_number> | <start_time> | <end_time> | <channel> | <total_channels> | <format> | <filename> | <file_size> | <checksum> |
