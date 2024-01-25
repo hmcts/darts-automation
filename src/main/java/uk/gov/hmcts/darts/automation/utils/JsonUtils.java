@@ -120,26 +120,6 @@ public class JsonUtils {
 		return jsonString.jsonValue();
     }
 
-	public static String buildAddAudioJson(String courthouse, String courtroom, String case_numbers, String start_time,
-										   String end_time, String channel, String total_channels, String format,
-										   String filename, String file_size, String checksum) {
-
-		JsonString metadata = new JsonString();
-		metadata.addJsonLine("started_at", start_time);
-		metadata.addJsonLine("ended_at", end_time);
-		metadata.addJsonLine("channel", channel);
-		metadata.addJsonLine("total_channels", total_channels);
-		metadata.addJsonLine("format", format);
-		metadata.addJsonLine("filename", filename);
-		metadata.addJsonLine("courthouse", courthouse);
-		metadata.addJsonLine("courtroom", courtroom);
-		metadata.addJsonLine("file_size", file_size);
-		metadata.addJsonLine("checksum", checksum);
-		metadata.addJsonSeq("cases", case_numbers);
-
-		return metadata.jsonValue();
-	}
-
 	@Test
 	public void testJson() {
 		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11", "", ""), "{\r\n"

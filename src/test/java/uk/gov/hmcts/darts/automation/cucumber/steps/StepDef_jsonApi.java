@@ -1,6 +1,5 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -118,28 +117,6 @@ public class StepDef_jsonApi extends StepDef_base {
 // |courthouse|courtroom|case_numbers|audioFile|
 	@When("^I load an audio file$")
 	public void loadAudioFile(List<Map<String,String>> dataTable) {
-
-		File audioFile = new File("/Users/preskshajain/IdeaProjects/darts-automation/src/test/resources/testdata/sample.mp2");
-
-
-		for (Map<String, String> map : dataTable) {
-			String json = JsonUtils.buildAddAudioJson(
-					getValue(map, "courthouse", testdata.getProperty("courthouse")),
-					getValue(map, "courtroom", testdata.getProperty("courtroom")),
-					getValue(map, "case_numbers", testdata.getProperty("case_numbers")),
-					getValue(map, "start_time", testdata.getProperty("start_time")),
-					getValue(map, "end_time", testdata.getProperty("end_time")),
-					getValue(map, "channel", testdata.getProperty("channel")),
-					getValue(map, "total_channels", testdata.getProperty("total_channels")),
-					getValue(map, "format", testdata.getProperty("format")),
-					getValue(map, "filename", testdata.getProperty("filename")),
-					getValue(map, "file_size", testdata.getProperty("file_size")),
-					getValue(map, "checksum", testdata.getProperty("checksum")));
-			ApiResponse apiResponse = jsonApi.postApi("audios", json, audioFile);
-			testdata.statusCode = apiResponse.statusCode;
-			testdata.responseString = apiResponse.responseString;
-			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
-		}
 	}
 	
 // sample cucumber:

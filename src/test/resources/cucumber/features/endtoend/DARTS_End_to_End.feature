@@ -348,27 +348,3 @@ Feature: Events Endpoints
       | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | prosecutors         | defenders         | requestMethod | audioFile                 | startTime | endTime  | filename            |
       | S855001     | Harrow Crown Court | 855       | S855 judge | S855 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | S{{seq}} prosecutor | S{{seq}} defender | Manual        | S855001_17_Jan_2024_1.mp3 | 16:00:00  | 16:02:00 | file-sample_1MB.doc |
 
-
-    @test
-      Scenario Outline: test
-      Given I am logged on to DARTS as an TRANSCRIBER user
-      When I click on the "Your work" link
-      Then I click on "View" in the same row as "<case_number>"
-      Then I upload the file "<filename>" at "Upload transcript file"
-      Then I press the "Attach file and complete" button
-      Then I see "Transcript request complete" on the page
-
-      Examples:
-        | case_number | filename            |
-        | S855001     | file-sample_1MB.doc |
-
-
-  @end2end2
-  Scenario Outline: Load Audio
-    Given I load an audio file
-      | courthouse   | courtroom   | case_numbers  | start_time   | end_time   | channel   | total_channels   | format   | filename   | file_size   | checksum   |
-      | <courthouse> | <courtroom> | <case_number> | <start_time> | <end_time> | <channel> | <total_channels> | <format> | <filename> | <file_size> | <checksum> |
-
-    Examples:
-      | courthouse         | courtroom      | case_number | start_time             | end_time               | channel | total_channels | format | filename | file_size | checksum                 |
-      | Harrow Crown Court | Courtroom SIT1 | S855001     | {{timestamp-12:00:00}} | {{timestamp-12:03:00}} | 1       | 4              | mp2    | sample   | 962.56    | TVRMwq16b4mcZwPSlZj/iQ== |
