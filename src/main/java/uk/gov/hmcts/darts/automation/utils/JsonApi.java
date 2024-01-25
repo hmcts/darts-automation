@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.io.File;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
@@ -42,6 +44,7 @@ public class JsonApi {
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
 	static final String CONTENT_TYPE = "Content-Type";
 	static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
+	static final String CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
 	static final String USER_AGENT = "User-Agent";
 	static final String USER_AGENT_STRING = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:89.0) Gecko/20100101 Firefox/89.0";
 	static final String ACCEPT_ENCODING = "Accept-Encoding";
@@ -384,4 +387,31 @@ public class JsonApi {
 					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
     }
+    
+	public ApiResponse postMultipartAudioApi(String endpoint, String body, String filename) {
+
+    	authenticate();
+    	log.info("post audio file: " + endpoint + " filename: " + filename);
+    	log.info(body);
+		response = 
+				given()
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept(ACCEPT_JSON_STRING)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+					.header(CONTENT_TYPE, CONTENT_TYPE_MULTIPART_FORM_DATA)
+					.header(AUTHORIZATION, authorization)
+					.baseUri(baseUri)
+					.basePath("")
+					.multiPart("file", new File(filename))
+					.multiPart("metadata", body, CONTENT_TYPE_APPLICATION_JSON)
+				.when()
+					.post(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.extract().response();
+		return new ApiResponse(response.statusCode(), response.asString());
+    }
+	
 }

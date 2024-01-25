@@ -448,17 +448,79 @@ public class DateUtils {
 		return null;
 	}
 	
+	public static String makeTimestamp(String dateTime, String date, String time) {
+		if (dateTime.isBlank()) {
+			return makeTimestamp(date, time);
+		} else {
+			return makeTimestamp(dateTime);
+		}
+	}
+	
+	public static String makeTimestamp(String dateTime) {
+		String [] split = dateTime.split(" ");
+		if (split.length == 2) {
+			return makeTimestamp(split[0], split[1]);
+		} else {
+			if ((dateTime.length() == 8) && dateTime.contains(":")) {
+				return makeTimestamp("", dateTime);
+			} else {
+				return dateTime;
+			}
+		}
+	}
+	
+	public static String makeTimestamp(String date, String time) {
+		String [] split = date.split(date.contains("/") ? "/" : "-");
+		if (split.length == 3) {
+			if (split[0].length() > 2) {
+				return String.format("%s-%s-%sT%s.000Z", split[0], split[1], split[2], time);
+			} else {
+				if (split[2].length() > 2) {
+					return String.format("%s-%s-%sT%s.000Z", split[2], split[1], split[0], time);
+				} else {
+					return String.format("20%s-%s-%sT%s.000Z", split[2], split[1], split[0], time);
+				}
+			}
+		} else {
+			if (date.isBlank()) {
+				if (time.isBlank()) {
+					return "";
+				} else {
+					return makeTimestamp(todayYyyymmdd(), time);
+				}
+			} else {
+				if (time.isBlank()) {
+					return date;
+				} else {
+					return date + " " + time;
+				}
+			}
+		}
+	}
+	
 	@Test
 	public void test1() {
-		System.out.println(displayDate("2023-12-09"));
-		System.out.println(displayDate("31-12-2023"));
+		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("2023-12-09 12:00:00"));
+		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("09-12-23 12:00:00"));
+		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("2023-12-09T12:00:00.000Z"));
+		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("2023-12-09", "12:00:00"));
+		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("09-12-2023", "12:00:00"));
+		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("09/12/23", "12:00:00"));
+		System.out.println(makeTimestamp("", "12:00:00"));
+		Assertions.assertEquals(makeTimestamp("", "12:00:00"), makeTimestamp("12:00:00"));
+		Assertions.assertEquals("9 Dec 2023", displayDate("2023-12-09"));
+		Assertions.assertEquals("31 Dec 2023", displayDate("31-12-2023"));
 		System.out.println(todayDisplay());
 		System.out.println(timestamp());
 		System.out.println(timestamp("12:34:45"));
 		System.out.println(substituteDateValue("timestamp-12:34:45"));
-		System.out.println(datePart("12-34-45", "dd"));
-		System.out.println(datePart("12/34/2045", "dd"));
-		System.out.println(datePart("2045/34/12", "dd"));
+		Assertions.assertEquals("12", datePart("12-34-45", "dd"));
+		Assertions.assertEquals("12", datePart("12/34/2045", "dd"));
+		Assertions.assertEquals("12", datePart("2045/34/12", "dd"));
+		Assertions.assertEquals("34", datePart("12/34/2045", "mm"));
+		Assertions.assertEquals("2045", datePart("12-34-45", "yy"));
+		Assertions.assertEquals("2045", datePart("12/34/2045", "yy"));
+		Assertions.assertEquals("2045", datePart("2045/34/12", "yy"));
 		System.out.println(datePart("", "dd"));
 		System.out.println(substituteDateValue("date+0/"));
 	}

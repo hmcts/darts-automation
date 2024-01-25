@@ -1,181 +1,213 @@
 Feature: Case Search
 
-	Background:
-		Given I am logged on to DARTS as an external user
-		When I click on the "Search" link
-		And I see "Search for a case" on the page
+ #TODO: Consider having a case with restriction on it
 
-	@DMP-509 @DMP-507 @DMP-517
-	Scenario: Simple case search and result verification
-		Then I set "Case ID" to "Case50"
-		And I see "Also known as a case reference or court reference. There should be no spaces." on the page
-		And I press the "Search" button
-		Then Search results should contain "CaseID" containing "Case50"
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression
+Scenario: Case Search data creation
+	Given I create a case using json
+		| courthouse         | case_number | defendants     | judges           | prosecutors         | defenders         |
+		| Harrow Crown Court | A{{seq}}001 | Def {{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
+		| Harrow Crown Court | A{{seq}}002 | Def {{seq}}-11 | Judge {{seq}}-11 | testprosecutortwo   | testdefendertwo   |
+		| Harrow Crown Court | A{{seq}}003 | Def {{seq}}-2  | Judge {{seq}}-11 | testprosecutorthree | testdefenderthree |
+		| Harrow Crown Court | A{{seq}}004 | Def {{seq}}-22 | Judge {{seq}}-2  | testprosecutorfour  | testdefenderfour  |
+		| Harrow Crown Court | A{{seq}}005 | Def {{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive  | testdefenderfive  |
 
-		When I set "Case ID" to "Case40"
-		And I press the "Search" button
-		Then I verify the HTML table contains the following values
-			| Case ID        | Courthouse       | Courtroom       | Judge(s) | Defendants(s) |
-			| DMP461_Case40  | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case400 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case402 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case404 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case406 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case408 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case401 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case403 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case405 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case407 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
-			| DMP461_Case409 | LIVERPOOL_DMP461 | ROOM_B_DMP461_L |          |               |
+	Given I create an event using json
+		| message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-1  | A{{seq}}001  | {{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
+		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}002  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
+		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}003  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
+		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}004  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
+		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}005  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
 
-	@DMP-509 @DMP-508 @DMP-515 @DMP-860 @DMP-702 @DMP-517 @DMP-561
-	Scenario: Advanced case search and result verification
-		When I click on the "Advanced search" link
-		And I set "Courthouse" to "Swansea"
-		And I set "Courtroom" to "DMP-1025 Courtroom"
-		And I press the "Search" button
-		Then I verify the HTML table contains the following values
-			| Case ID  | Courthouse | Courtroom          | Judge(s) 	  | Defendants(s)      |
-			| DMP-1025 | Swansea    | DMP-1025 Courtroom | DMP-1025 Judge | DMP-1025 Defendant |
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression
+Scenario: Simple and Advanced Case Search
 
-		When I click on the "Clear search" link
-		And "Courthouse" is ""
-		And "Courtroom" is ""
-		And I set "Defendant's name" to "DMP-8722 Defendant"
-		And I press the "Search" button
-		Then I verify the HTML table contains the following values
-          | Case ID | Courthouse | Courtroom 		 | Judge(s) | Defendants(s)      |
-		  | DMP-872 | Swansea    | DMP-872 Courtroom |          | DMP-8722 Defendant |
+  #Simple search
 
-		When I click on the "Clear search" link
-		And "Defendant's name" is ""
-		And I set "Judge's name" to "Mrs S10 Judge"
-		And I press the "Search" button
-		Then I verify the HTML table contains the following values
-			| Case ID   | Courthouse | Courtroom | Judge(s)      | Defendants(s)    |
-			| S10_DEMO1 | Swansea    | Multiple  | Mrs S10 Judge | Mr S10 Defendant |
-
-		When I click on the "Clear search" link
-		And "Judge's name" is ""
-		And I set "Keywords" to "Case"
-		And I press the "Search" button
-		Then I verify the HTML table contains the following values
-			| Case ID       | Courthouse    | Courtroom          | Judge(s) | Defendants(s) |
-			| DMP768-case2  | LEEDS_DMP768  | Room1_DMP768       |          |               |
-			| Case1_DMP1398 | LEEDS_DMP1398 | Room1_LEEDSDMP1398 |          |               |
-			| DMP825-case1  | LEEDS_DMP825  | Room1_DMP825       |          |               |
-			| DMP768-case1  | LEEDS_DMP768  | Room1_DMP768       |          |               |
-			| DMP7681-case1 | LEEDS_DMP7681 | Room1_DMP7681      |          |               |
-
-		When I click on the "Clear search" link
-		And "Keywords" is ""
-		And I select the "Specific date" radio button with label "Specific date"
-		And I set "Enter a date" to "22/11/2023"
-		And I set "Courthouse" to "Swansea" and click away
-		And I press the "Search" button
-		Then I verify the HTML table contains the following values
-			| Case ID  | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-			| T0003679 | Swansea    | room1     |          | fred          |
-			| T0003680 | Swansea    | room1     |          | fred          |
-			| T0005680 | Swansea    | room1     |          | fred          |
-			| T0005681 | Swansea    | room1     |          | fred          |
-
-		When I click on the "Clear search" link
-		And I select the "Date range" radio button with label "Date range"
-		And I set "Enter date from" to "24/11/2023"
-		And I set "Enter date to" to "01/12/2023"
-		And I set "Courthouse" to "PerfCourtHouse01" and click away
-		And I press the "Search" button
-		Then I verify the HTML table contains the following values
-			| Case ID    | Courthouse       | Courtroom | Judge(s) | Defendants(s) |
-			| CASEAC1002 | PerfCourtHouse01 | Multiple  |          |               |
-
-		When I click on the "Clear search" link
-		And I set "Courthouse" to "Courthouse" and click away
-		And I press the "Search" button
-		Then I see "There are more than 500 results" on the page
-		And I see "Refine your search by:" on the page
-		And I see "adding more information to your search" on the page
-		And I see "using filters to restrict the number of results" on the page
-
-		When I click on the "Clear search" link
-		And I set "Case ID" to "case"
-		And I press the "Search" button
-		Then I see "15 results" on the page
-
-		When I set "Courthouse" to "Swansea" and click away
-		And I press the "Search" button
-		Then I see "8 results" on the page
-
-@DMP-509 @DMP-507 @DMP-860
-Scenario: Case details and Hearing details
-	Then I set "Case ID" to "DMP-695-01"
+	When I am logged on to DARTS as an APPROVER user
+	And I click on the "Search" link
+	And I see "Also known as a case reference or court reference. There should be no spaces." on the page
+	And I set "Case ID" to "A{{seq}}"
 	And I press the "Search" button
+	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                               | Courthouse | Courtroom            | Judge(s) | Defendants(s)        |
-		| DMP-695-01                                                            | DMP-695-1  | DMP-695-01 Courtroom |          | DMP-695-01 Defendant |
-		| !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*             | *IGNORE* | *IGNORE*             |
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+
+  #Advanced search
+
+	When I click on the "Clear search" link
+	And I click on the "Advanced search" link
+	And I set "Courthouse" to "Harrow Crown Court"
+	And I set "Courtroom" to "{{seq}}-1"
+	And I press the "Search" button
+	And I click on "Case ID" in the table header
+	Then I verify the HTML table contains the following values
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+
+	When I click on the "Clear search" link
+	And "Courthouse" is ""
+	And "Courtroom" is ""
+	And I set "Defendant's name" to "Def {{seq}}-2"
+	And I press the "Search" button
+	And I click on "Case ID" in the table header
+	Then I verify the HTML table contains the following values
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+
+	When I click on the "Clear search" link
+	And "Defendant's name" is ""
+	And I set "Judge's name" to "Judge {{seq}}-1"
+	And I press the "Search" button
+	And I click on "Case ID" in the table header
+	Then I verify the HTML table contains the following values
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+
+	When I click on the "Clear search" link
+	And "Judge's name" is ""
+	And I set "Keywords" to "{{seq}}ABC-1"
+	And I press the "Search" button
+	And I click on "Case ID" in the table header
+	Then I verify the HTML table contains the following values
+		| Case ID     | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1 | Judge {{seq}}-1  | Def {{seq}}-1  |
+
+	When I click on the "Your audio" link
+	And I click on the "Search" link
+	And I click on "Case ID" in the table header
+	Then I verify the HTML table contains the following values
+		| Case ID     | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1 | Judge {{seq}}-1  | Def {{seq}}-1  |
+
+  #Change both specific and date range once Trevor's date/timestamp step is ready, some cases will be backdated
+
+	When I click on the "Clear search" link
+	And "Keywords" is ""
+	And I select the "Specific date" radio button with label "Specific date"
+	And I set "Enter a date" to "{{date+0/}}"
+	And I set "Case ID" to "A{{seq}}"
+	And I press the "Search" button
+	And I click on "Case ID" in the table header
+	Then I verify the HTML table contains the following values
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+
+	When I click on the "Clear search" link
+	And I select the "Date range" radio button with label "Date range"
+	And I set "Enter date from" to "{{date+0/}}"
+	And I set "Enter date to" to "{{date+0/}}"
+	And I set "Case ID" to "A{{seq}}"
+	And I press the "Search" button
+	And I click on "Case ID" in the table header
+	Then I verify the HTML table contains the following values
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+
+	When I click on the "Clear search" link
+	And I set "Case ID" to "1" and click away
+	And I press the "Search" button
+	Then I see "There are more than 500 results" on the page
+	And I see "Refine your search by:" on the page
+	And I see "adding more information to your search" on the page
+	And I see "using filters to restrict the number of results" on the page
+
+@DMP-509 @DMP-507 @DMP-860 @regression
+Scenario: Case details and Hearing details
 
 	#Case Details
-	When I click on the "DMP-695-01" link
-	Then I see "DMP-695-01" on the page
-	And I see "DMP-695-1" on the page
-	And I see "DMP-695-AC1 Prosecutor" on the page
-	And I see "DMP-695-01 Defence" on the page
-	And I see "DMP-695-01 Defendant" on the page
+
+	Given I am logged on to DARTS as an APPROVER user
+  	When I click on the "Search" link
+  	And I see "Search for a case" on the page
+	And I set "Case ID" to "A{{seq}}"
+	And I press the "Search" button
+	And I click on the "A{{seq}}001" link
+	Then I see "A{{seq}}001" on the page
+	And I see "Harrow Crown Court" on the page
+	And I see "testprosecutor" on the page
+	And I see "testdefender" on the page
+	And I see "Def {{seq}}-1" on the page
 	And I see "Hearings" on the page
-	And I see "Restriction: Judge directed on reporting restrictions" on the page
 
 	#Hearing Details - Set permission for this particular CH as per confluence, may change
-	Then I verify the HTML table contains the following values
-		| Hearing date | Judge            | Courtroom            | No. of transcripts |
-		| 18 Sep 2023  | DMP-695-01 Judge | DMP-695-01 Courtroom | 0                  |
+	#Why is Judge empty?
 
-	When I click on the "18 Sep 2023" link
+	And I verify the HTML table contains the following values
+		| Hearing date | Judge | Courtroom | No. of transcripts |
+		| {{date+0/}}  |       | {{seq}}-1 | 0                  |
+
+	When I click on the "{{displaydate}}" link
 	Then I see "Events and audio recordings" on the page
 	And I see "Select events or audio to set the recording start and end times. You can also manually adjust the times for a custom recording." on the page
 	And I see "Select events to include in requests" on the page
-	And I see "DMP-695-1" on the page
-	And I see "DMP-695-01 Courtroom" on the page
-	And I see "DMP-695-01 Judge" on the page
+	And I see "{{seq}}-1" on the page
+	#And I see "Judge" on the page - Empty at the moment
+	And I see "Hearing started" on the page
+	And I see "{{seq}}ABC-1" on the page
 
 @DMP-509 @DMP-1135 @DMP-508 @DMP-515 @DMP-691
 Scenario: Case Search error message verification
-	When I click on the "Advanced search" link
+	Given I am logged on to DARTS as an APPROVER user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I click on the "Advanced search" link
 	And I set "Courtroom" to "2"
 	And I press the "Search" button
 	Then I see an error message "You must also enter a courthouse"
 
-	#Will use hard-coded dates until we have ability to use date+/- x days
 	When I click on the "Clear search" link
 	And I select the "Specific date" radio button with label "Specific date"
-	And I set "Enter a date" to "06/10/2024"
+	And I set "Enter a date" to "{{date+3/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
 	And I select the "Date range" radio button with label "Date range"
-	And I set "Enter date from" to "06/10/2024"
-	And I set "Enter date to" to "05/10/2023"
+	And I set "Enter date from" to "{{date+7/}}"
+	And I set "Enter date to" to "{{date-7/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
 	And I select the "Date range" radio button with label "Date range"
-	And I set "Enter date from" to "05/10/2023"
-	And I set "Enter date to" to "06/10/2024"
+	And I set "Enter date from" to "{{date-10/}}"
+	And I set "Enter date to" to "{{date+10/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
 	And I select the "Date range" radio button with label "Date range"
-	And I set "Enter date to" to "05/10/2023"
+	And I set "Enter date to" to "{{date-7/}}"
 	And I press the "Search" button
 	Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
 	When I click on the "Clear search" link
 	And I select the "Date range" radio button with label "Date range"
-	And I set "Enter date from" to "05/10/2023"
+	And I set "Enter date from" to "{{date-10/}}"
 	And I press the "Search" button
 	Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
@@ -199,44 +231,64 @@ Scenario: Case Search error message verification
 	Then I see an error message "You have not selected a start date. Select a start date to define your search"
 	Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
-@DMP-963
+@DMP-963 @regression
 Scenario: Last Search results are retrievable on clicking Search in the breadcrumb trail
-	When I set "Case ID" to "Case1009"
+	When I am logged on to DARTS as an APPROVER user
+	And I click on the "Search" link
+	And I set "Case ID" to "A{{seq}}"
 	And I press the "Search" button
+	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-		| CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
-		| !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
-		| CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
-    #Case Details
-	When I click on "CASE1009" in the same row as "Swansea"
-	Then I click on the breadcrumb link "Search"
-	Then I verify the HTML table contains the following values
-		| Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-		| CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
-		| !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
-		| CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
-@DMP-997
+    #Case Details - Update hearing date when possible, fails with {date} currently
+
+	When I click on "A{{seq}}003" in the same row as "Harrow Crown Court"
+	And I see "Prosecutor(s)" on the page
+
+	And I click on the breadcrumb link "Search"
+	And I click on "Case ID" in the table header
+	Then I verify the HTML table contains the following values
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+
+@DMP-997 @regression
 Scenario: Case file breadcrumbs
-	When I set "Case ID" to "Case1009"
+	When I am logged on to DARTS as an APPROVER user
+	And I click on the "Search" link
+	And I set "Case ID" to "A{{seq}}002"
 	And I press the "Search" button
 	Then I verify the HTML table contains the following values
-		| Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-		| CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
-		| !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
-		| CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
-    #Case Details
-	When I click on "CASE1009" in the same row as "Swansea"
-	And I see "Case ID" on the page
-	And I see "CASE1009" on the page
-	Then I click on the breadcrumb link "CASE1009"
-	Then I see "Case ID" on the page
-	And I see "CASE1009" on the page
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+
+    #Case Details - Update hearing date when possible, fails with {date} currently
+
+	When I click on "A{{seq}}002" in the same row as "Harrow Crown Court"
+	And I see "testprosecutortwo" on the page
+	And I see "testdefendertwo" on the page
+	And I click on the "{{displaydate}}" link
+	Then I see "Events and audio recordings" on the page
+
+	When I click on the breadcrumb link "A{{seq}}002"
+	Then I see "testprosecutortwo" on the page
+	And I see "testdefendertwo" on the page
 
 @DMP-1397-AC1
 Scenario: Hide automatic transcript request - Case file screen
-	Then I set "Case ID" to "DMP-1225_case1"
+	Given I am logged on to DARTS as an external user
+  	When I click on the "Search" link
+  	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP-1225_case1"
 	And I press the "Search" button
 	And I click on the "DMP-1225_case1" link
 	And I click on the "All Transcripts" link
@@ -249,80 +301,89 @@ Scenario: Hide automatic transcript request - Case file screen
 		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
 		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
 		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 22 Dec 2023  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 22 Dec 2023  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
 
-
-	@DMP-1397-AC2
+@DMP-1397-AC2
 Scenario: Hide automatic transcript request - Heating details screen
-	Then I set "Case ID" to "DMP-1225_case1"
+	Given I am logged on to DARTS as an external user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP-1225_case1"
 	And I press the "Search" button
 	And I click on the "DMP-1225_case1" link
 	And I click on the "5 Jan 2023" link
 	And I click on the "Transcripts" link
-	And I see "There are no transcripts for this hearing." on the page
+	Then I see "There are no transcripts for this hearing." on the page
 
-	@DMP-1798-AC1-AC3
+@DMP-1798-AC1-AC3
 Scenario: Restrictions banner on hearing details screen - All restriction events received during hearing displayed on hearing details screen - Open restriction list
-	When I set "Case ID" to "DMP-1225_case1"
-	And I press the "Search" button
-	And I click on the "DMP-1225_case1" link
-	And I click on the "22 Dec 2023" link
-	Then I click on the "Show restrictions" link
-	And I see "Hide restrictions" on the page
-	And I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
-	And I see "For full details, check the hearing events." on the page
-
-	@DMP-1798-AC2
-Scenario: Restrictions banner on hearing details screen - Closed by default
-	When I set "Case ID" to "DMP-1225_case1"
-	And I press the "Search" button
-	And I click on the "DMP-1225_case1" link
-	And I click on the "22 Dec 2023" link
-	Then I click on the "Show restrictions" link
-
-	@DMP-1798-AC4
-Scenario: Restrictions banner on hearing details screen - collapse restriction list
-	When I set "Case ID" to "DMP-1225_case1"
+	Given I am logged on to DARTS as an external user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP-1225_case1"
 	And I press the "Search" button
 	And I click on the "DMP-1225_case1" link
 	And I click on the "22 Dec 2023" link
 	And I click on the "Show restrictions" link
+	Then I see "Hide restrictions" on the page
 	And I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
 	And I see "For full details, check the hearing events." on the page
-	Then I click on the "Hide restrictions" link
-	And I do not see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
+
+@DMP-1798-AC2
+Scenario: Restrictions banner on hearing details screen - Closed by default
+	Given I am logged on to DARTS as an external user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "22 Dec 2023" link
+	Then I click on the "Show restrictions" link
+
+@DMP-1798-AC4
+Scenario: Restrictions banner on hearing details screen - collapse restriction list
+	Given I am logged on to DARTS as an external user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "22 Dec 2023" link
+	And I click on the "Show restrictions" link
+	Then I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
+	And I see "For full details, check the hearing events." on the page
+
+	When I click on the "Hide restrictions" link
+	Then I do not see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
 	And I do not see "For full details, check the hearing events." on the page
 
-	@DMP-1798-AC5
+@DMP-1798-AC5
 Scenario: Restrictions banner on hearing details screen - no restrictions during hearing but others on case
-	When I set "Case ID" to "DMP-1225_case1"
+	Given I am logged on to DARTS as an external user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP-1225_case1"
 	And I press the "Search" button
 	And I click on the "DMP-1225_case1" link
 	And I click on the "5 Jan 2024" link
 	Then I see "There are restrictions against this case" on the page
 	And I do not see "Show restrictions" on the page
 
-	@DMP-1798-AC6
+@DMP-1798-AC6
 Scenario: Restrictions banner on hearing details screen - No restrictions
-	When I set "Case ID" to "CASE5_Event_DMP461"
+	Given I am logged on to DARTS as an external user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "CASE5_Event_DMP461"
 	And I press the "Search" button
 	And I click on the "CASE5_Event_DMP461" link
 	Then I do not see "There are restrictions against this case" on the page
-	And I click on the "10 Aug 2023" link
-	Then I do not see "There are restrictions against this case" on the page
+
+	When I click on the "10 Aug 2023" link
+	And I do not see "There are restrictions against this case" on the page
 	And I press the "back" button on my browser
 	And I click on the "11 Aug 2023" link
 	Then I do not see "There are restrictions against this case" on the page
-
-
-
-
-
-
-
-
-
-
-
-
-
-

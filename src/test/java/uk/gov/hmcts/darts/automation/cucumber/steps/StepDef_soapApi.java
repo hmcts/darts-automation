@@ -23,6 +23,7 @@ import uk.gov.hmcts.darts.automation.utils.SoapApi;
 import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import uk.gov.hmcts.darts.automation.utils.XmlUtils;
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
+import uk.gov.hmcts.darts.automation.utils.DateUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
 
 import org.apache.logging.log4j.LogManager;
@@ -122,7 +123,7 @@ public class StepDef_soapApi extends StepDef_base {
 					getValue(map, "courtroom"),
 					getValue(map, "case_numbers"),
 					getValue(map, "event_text"),
-					getValue(map, "date_time"),			// start time
+					DateUtils.makeTimestamp(getValue(map, "date_time"), getValue(map, "date"), getValue(map, "time")),			// start time
 					getValue(map, "case_retention_fixed_policy"),
 					getValue(map, "case_total_sentence"));
 // Following field is in the json version - not seen in soap xml
@@ -145,7 +146,7 @@ public class StepDef_soapApi extends StepDef_base {
 						getValue(map, "courtroom"),
 						getValue(map, "case_numbers"),
 						getValue(map, "text"),
-						getValue(map, "dateTime"));
+						DateUtils.makeTimestamp(getValue(map, "dateTime"), getValue(map, "date"), getValue(map, "time")));
 				ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
 				testdata.statusCode = apiResponse.statusCode;
 				testdata.responseString = apiResponse.responseString;
