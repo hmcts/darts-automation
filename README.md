@@ -47,3 +47,11 @@ Also when run locally, optionally:
 	seq_prefix=n   choose a number 2-9 to prefix the sequence number when RUN_LOCAL=true
 
 RUN_LOCAL should only be set to true when running locally, not from jenkins
+
+Audio & transcription files must be in git. Add to resources/audioFiles or resources/transcriptionFiles 
+
+Default environment is staging
+To run on other environments e.g. demo when running locally, set Environment variables
+	environment
+	DARTS_API_DB_HOST_<environment> 
+	DARTS_API_DB_PASSWORD_<environment>
