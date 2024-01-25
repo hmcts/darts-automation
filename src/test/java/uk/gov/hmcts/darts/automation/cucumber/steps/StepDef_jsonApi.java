@@ -80,6 +80,7 @@ public class StepDef_jsonApi extends StepDef_base {
 	public void extractStringFromJsonResponse(String name, String path) {
 		String value = JsonUtils.extractJsonValue(testdata.responseString, path);
 		testdata.setProperty(name, value);
+
 	}
 
 	@Then("^I see \"([^\"]*)\" in the json response is \"([^\"]*)\"$")
@@ -286,5 +287,4 @@ public class StepDef_jsonApi extends StepDef_base {
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
-
 }

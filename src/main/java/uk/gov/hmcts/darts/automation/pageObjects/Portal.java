@@ -4,10 +4,8 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -199,6 +197,51 @@ public class Portal {
             log.info("Successfully deleted all documents from the directory: {}", workspace_dir);
         } catch (IOException e) {
             log.error("Error occurred while cleaning the directory: {}", workspace_dir, e);
+            throw e;
+        }
+    }
+
+    public void playAudioPlayer() {
+        NAV.waitForBrowserReadyState();
+
+        // Execute JavaScript to play the audio
+        ((JavascriptExecutor) webDriver).executeScript("document.querySelector('audio').play();");
+
+        // Wait for the audio to start playing
+        new WebDriverWait(webDriver,  Duration.ofSeconds(10)).until(ExpectedConditions.jsReturnsValue(
+                "return (document.querySelector('audio').currentTime > 0);"
+        ));
+
+        boolean isAudioPlaying = (boolean) ((JavascriptExecutor) webDriver).executeScript(
+                "var audio = document.getElementsByTagName('audio')[0];" +
+                        "return !audio.paused && audio.currentTime > 0;"
+        );
+
+
+        if (isAudioPlaying) {
+            log.info("Audio is playing correctly.");
+        } else {
+            log.info("Audio is not playing correctly.");
+        }
+        Assertions.assertTrue(isAudioPlaying);
+    }
+
+    public void uploadDocument(String filename, String uploadLabel) throws Exception {
+        try {
+            NAV.waitForBrowserReadyState();
+            WebElement uploadElement = NAV.findInputFieldByLabelText(uploadLabel);
+
+            if (uploadElement != null) {
+                String filepath = ReadProperties.getUploadFilepath() + filename;
+                log.info("Filepath: {}", filepath);
+
+                uploadElement.sendKeys(filepath);
+                log.info("File uploaded successfully.");
+            } else {
+                log.error("Upload element not found!");
+            }
+        } catch (Exception e) {
+            log.error("Error uploading document: {}", e.getMessage());
             throw e;
         }
     }
