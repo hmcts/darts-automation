@@ -13,12 +13,12 @@ Scenario: Case Search data creation
 		| Harrow Crown Court | A{{seq}}005 | Def {{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive  | testdefenderfive  |
 
 	Given I create an event using json
-		| message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-1  | A{{seq}}001  | {{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
-		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}002  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
-		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}003  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
-		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}004  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
-		| {{seq}}001 | 1100 |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}005  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
+		| message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+		| {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-1  | A{{seq}}001  | {{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
+		| {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}002  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
+		| {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}003  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
+		| {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}004  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
+		| {{seq}}001 | 21200 | 11008    | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}005  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
 
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression
 Scenario: Simple and Advanced Case Search
@@ -32,12 +32,13 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
-		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
-		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
-		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
-		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
   #Advanced search
 
@@ -81,19 +82,21 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
-		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
-		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1 | Judge {{seq}}-1  | Def {{seq}}-1  |
+		| Case ID                                                 | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*  | *IGNORE*         | *IGNORE*       |
+		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1 | Judge {{seq}}-1  | Def {{seq}}-1  |
 
 	When I click on the "Your audio" link
 	And I click on the "Search" link
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
-		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
-		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1 | Judge {{seq}}-1  | Def {{seq}}-1  |
+		| Case ID                                                 | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*  | *IGNORE*         | *IGNORE*       |
+		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1 | Judge {{seq}}-1  | Def {{seq}}-1  |
 
   #Change both specific and date range once Trevor's date/timestamp step is ready, some cases will be backdated
 
@@ -105,12 +108,13 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
-		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
-		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
-		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
-		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
 	When I click on the "Clear search" link
 	And I select the "Date range" radio button with label "Date range"
@@ -120,12 +124,13 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
-		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
-		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
-		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
-		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
 	When I click on the "Clear search" link
 	And I set "Case ID" to "1" and click away
@@ -154,7 +159,6 @@ Scenario: Case details and Hearing details
 	And I see "Hearings" on the page
 
 	#Hearing Details - Set permission for this particular CH as per confluence, may change
-	#Why is Judge empty?
 
 	And I verify the HTML table contains the following values
 		| Hearing date    | Judge | Courtroom | No. of transcripts |
@@ -239,14 +243,13 @@ Scenario: Last Search results are retrievable on clicking Search in the breadcru
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
-		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
-		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
-		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
-		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
-
-    #Case Details - Update hearing date when possible, fails with {date} currently
+		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
 	When I click on "A{{seq}}003" in the same row as "Harrow Crown Court"
 	And I see "Prosecutor(s)" on the page
@@ -254,12 +257,13 @@ Scenario: Last Search results are retrievable on clicking Search in the breadcru
 	And I click on the breadcrumb link "Search"
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
-		| A{{seq}}005 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
-		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
-		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
-		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
+		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
+		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
+		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
 @DMP-997 @regression
 Scenario: Case file breadcrumbs
@@ -270,8 +274,6 @@ Scenario: Case file breadcrumbs
 	Then I verify the HTML table contains the following values
 		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
 		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
-
-    #Case Details - Update hearing date when possible, fails with {date} currently
 
 	When I click on "A{{seq}}002" in the same row as "Harrow Crown Court"
 	And I see "testprosecutortwo" on the page
@@ -318,40 +320,41 @@ Scenario: Hide automatic transcript request - Heating details screen
 	And I click on the "Transcripts" link
 	Then I see "There are no transcripts for this hearing." on the page
 
-@DMP-1798-AC1-AC3
+@DMP-1798-AC1-AC3 @regression
 Scenario: Restrictions banner on hearing details screen - All restriction events received during hearing displayed on hearing details screen - Open restriction list
-	Given I am logged on to DARTS as an external user
+	Given I am logged on to DARTS as an APPROVER user
 	When I click on the "Search" link
 	And I see "Search for a case" on the page
-	And I set "Case ID" to "DMP-1225_case1"
+	And I set "Case ID" to "A{{seq}}005"
 	And I press the "Search" button
-	And I click on the "DMP-1225_case1" link
-	And I click on the "22 Dec 2023" link
+	And I click on the "A{{seq}}005" link
+	And I click on the "{{displaydate}}" link
 	And I click on the "Show restrictions" link
 	Then I see "Hide restrictions" on the page
 	And I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
 	And I see "For full details, check the hearing events." on the page
 
-@DMP-1798-AC2
+@DMP-1798-AC2 @regression
 Scenario: Restrictions banner on hearing details screen - Closed by default
-	Given I am logged on to DARTS as an external user
+	Given I am logged on to DARTS as an APPROVER user
 	When I click on the "Search" link
 	And I see "Search for a case" on the page
-	And I set "Case ID" to "DMP-1225_case1"
+	And I set "Case ID" to "A{{seq}}005"
 	And I press the "Search" button
-	And I click on the "DMP-1225_case1" link
-	And I click on the "22 Dec 2023" link
-	Then I click on the "Show restrictions" link
+	And I click on the "A{{seq}}005" link
+	And I click on the "{{displaydate}}" link
+	#Then I click on the "Show restrictions" link
+	Then I do not see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
 
-@DMP-1798-AC4
+@DMP-1798-AC4 @regression
 Scenario: Restrictions banner on hearing details screen - collapse restriction list
-	Given I am logged on to DARTS as an external user
+	Given I am logged on to DARTS as an APPROVER user
 	When I click on the "Search" link
 	And I see "Search for a case" on the page
-	And I set "Case ID" to "DMP-1225_case1"
+	And I set "Case ID" to "A{{seq}}005"
 	And I press the "Search" button
-	And I click on the "DMP-1225_case1" link
-	And I click on the "22 Dec 2023" link
+	And I click on the "A{{seq}}005" link
+	And I click on the "{{displaydate}}" link
 	And I click on the "Show restrictions" link
 	Then I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
 	And I see "For full details, check the hearing events." on the page
