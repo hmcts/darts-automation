@@ -1,6 +1,6 @@
 Feature: Test operation of post events
 
-@EVENT_API @SOAP_EVENT @smoketest
+@EVENT_API @SOAP_EVENT
 Scenario Outline: Create a case
   When I create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
@@ -10,19 +10,15 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}0001 | {{seq}}1001 | 20901  |         | text         |               |               | 
 
 
+@EVENT_API @SOAP_EVENT
 Scenario Outline: Create standard events
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
   Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-
-@EVENT_API @SOAP_EVENT @smoketest
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:00:00}} | {{seq}}001 | {{seq}}1001 | 1000 | 1001 | text         |               |               |
-@EVENT_API @SOAP_EVENT
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:00:20}} | {{seq}}002 | {{seq}}1002 | 1000 | 1002 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:00:40}} | {{seq}}003 | {{seq}}1003 | 1000 | 1003 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:01:00}} | {{seq}}004 | {{seq}}1004 | 1000 | 1004 | text         |               |               |
@@ -260,7 +256,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625   | text         |               |               |
 
 
-@EVENT_API @SOAP_EVENT @smoketest
+@EVENT_API @SOAP_EVENT
 Scenario Outline: Create a LOG event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -270,18 +266,15 @@ Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:17:00}} | {{seq}}232  | {{seq}}1232 | LOG    |         | log text     |               |               |
         
+@EVENT_API @SOAP_EVENT
 Scenario Outline: Create a SetReportingRestriction event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
   Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-@EVENT_API @SOAP_EVENT @smoketest
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:18:00}} | {{seq}}233 | {{seq}}1233 | 2198  | 3933  | text         |               |               |
-@EVENT_API @SOAP_EVENT
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:18:20}} | {{seq}}234 | {{seq}}1234 | 21200 | 11000 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:18:40}} | {{seq}}235 | {{seq}}1235 | 21200 | 11001 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:19:00}} | {{seq}}236 | {{seq}}1236 | 21200 | 11002 | text         |               |               |
@@ -293,7 +286,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:21:00}} | {{seq}}242 | {{seq}}1242 | 21200 | 11009 | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:21:20}} | {{seq}}243 | {{seq}}1243 | 21201 |       | text         |               |               |
 
-@EVENT_API @SOAP_EVENT @smoketest
+@EVENT_API @SOAP_EVENT
 Scenario Outline: Create a SetInterpreterUsed event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -306,24 +299,21 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}1244 | 20917 |         | text         |               |               |
 
   
+@EVENT_API @SOAP_EVENT
 Scenario Outline: Create a StopAndClose event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
   Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-@EVENT_API @SOAP_EVENT @smoketest
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:00}} | {{seq}}247 | {{seq}}1247 | 3000  |         | text         |               |               |
-@EVENT_API @SOAP_EVENT
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:20}} | {{seq}}248 | {{seq}}1248 | 30500 |         | text         |               |               |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text         |               |               |
 
 
 
-@EVENT_API @SOAP_EVENT @smoketest @broken
+@EVENT_API @SOAP_EVENT
 Scenario Outline: Create a TranscriptionRequest event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -334,18 +324,15 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text         |               |               |
 
   
+@EVENT_API @SOAP_EVENT 
 Scenario Outline: Create a Sentencing event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
-#  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-@EVENT_API @SOAP_EVENT @smoketest 
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:25:00}} | {{seq}}251 | {{seq}}1251 | 2198  | 3934 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
-@EVENT_API @SOAP_EVENT
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:25:00}} | {{seq}}251 | {{seq}}1251 | 2198  | 3934  | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:25:20}} | {{seq}}252 | {{seq}}1252 | 40730 | 10808 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:25:40}} | {{seq}}253 | {{seq}}1253 | 40731 | 10808 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:26:00}} | {{seq}}254 | {{seq}}1254 | 40732 | 10808 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
@@ -461,44 +448,38 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:02:40}} | {{seq}}364 | {{seq}}1364 | STS1821 | 11532 | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       |
 
   
+@EVENT_API @SOAP_EVENT
 Scenario Outline: Create a DarStart event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
   Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-@EVENT_API @SOAP_EVENT @smoketest
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
-	| Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:00}} | {{seq}}364 | {{seq}}1364 | 1000  | 1055    | text         |               |               |
+	| Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:00}} | {{seq}}365 | {{seq}}1365 | 1000  | 1055    | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:20}} | {{seq}}366 | {{seq}}1366 | 1100  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:40}} | {{seq}}367 | {{seq}}1367 | 1500  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:00}} | {{seq}}368 | {{seq}}1368 | 10100 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:20}} | {{seq}}369 | {{seq}}1369 | 10500 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:40}} | {{seq}}370 | {{seq}}1370 | 20913 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:05:00}} | {{seq}}371 | {{seq}}1371 | 1200  |         | text         |               |               |
+  
+  
 @EVENT_API @SOAP_EVENT
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:20}} | {{seq}}365 | {{seq}}1365 | 1100  |         | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:03:40}} | {{seq}}366 | {{seq}}1366 | 1500  |         | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:00}} | {{seq}}367 | {{seq}}1367 | 10100 |         | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:20}} | {{seq}}368 | {{seq}}1368 | 10500 |         | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:40}} | {{seq}}369 | {{seq}}1369 | 20913 |         | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:05:00}} | {{seq}}370 | {{seq}}1370 | 1200  |         | text         |               |               |
-  
-  
 Scenario Outline: Create a DarStop event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
   Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-@EVENT_API @SOAP_EVENT @smoketest
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:00}} | {{seq}}371 | {{seq}}1371 | 1200  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:00}} | {{seq}}372 | {{seq}}1372 | 1200  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:20}} | {{seq}}373 | {{seq}}1373 | 1400  |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}374 | {{seq}}1374 | 30100 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:07:00}} | {{seq}}375 | {{seq}}1375 | 30300 |         | text         |               |               |
+  
+  
 @EVENT_API @SOAP_EVENT
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | CaseRetention | totalSentence |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:20}} | {{seq}}372 | {{seq}}1372 | 1400  |         | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}373 | {{seq}}1373 | 30100 |         | text         |               |               |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:07:00}} | {{seq}}374 | {{seq}}1374 | 30300 |         | text         |               |               |
-  
-  
-@EVENT_API @SOAP_EVENT @smoketest
 Scenario Outline: Create a Null event
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -506,6 +487,6 @@ Scenario Outline: Create a Null event
 #  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | CaseRetention | totalSentence |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:08:00}} | {{seq}}375 | {{seq}}1375 | 40790 |         | text         |               |               |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:08:00}} | {{seq}}376 | {{seq}}1376 | 40790 |         | text         |               |               |
 
 
