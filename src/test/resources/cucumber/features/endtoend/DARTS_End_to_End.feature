@@ -1,6 +1,6 @@
 Feature: Events Endpoints
 
-  @end2end @end2end6
+  @end2end @end2end6 @DMP-1927
    #Created a case and event via Post courtlog
   Scenario Outline: Create a case
     Given I authenticate from the DARMIDTIER source system
@@ -128,7 +128,7 @@ Feature: Events Endpoints
       | courthouse         | case_number | defendants         | judges         | prosecutors         | defenders         | courtroom | keywords       | dateTime      | todaysDate  |
       | Harrow Crown Court | S{{seq}}001 | S{{seq}} defendant | S{{seq}} judge | S{{seq}} prosecutor | S{{seq}} defender | {{seq}}   | SIT LOG{{seq}} | {{timestamp}} | {{date+0/}} |
 
-  @end2end @end2end6
+  @end2end @end2end6 @DMP-1927
   #Created a case and event via Post event using SOAP
   Scenario Outline: Create a case and hearing via events
     Given I authenticate from the DARMIDTIER source system
@@ -263,16 +263,15 @@ Feature: Events Endpoints
       | APPROVER | Harrow Crown Court | Courtroom SIT1 | S{{seq}}001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 1100 |         |               |               | prosecutor SIT1 | defender SIT1 | defendant SIT1 | judge SIT1 | SIT LOG{{seq}} | {{date+0/}} |
 
 
-
-  @end2end @end2end4
+  @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber
-    Given I authenticate from the DARMIDTIER source system
-    Given I create an event using json
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
-    Given I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+#    Given I authenticate from the DARMIDTIER source system
+#    Given I create an event using json
+#      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
+#      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+#    Given I create a case
+#      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+#      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
 
     Given I am logged on to DARTS as an REQUESTER user
     Then I set "Case ID" to "<case_number>"
@@ -322,6 +321,7 @@ Feature: Events Endpoints
     Then I press the "Get audio for this request" button
 
     When I select the "Audio preview and events" radio button
+    Then I play the audio player
     And I set the time fields of "Start Time" to "<startTime>"
     And I set the time fields of "End Time" to "<endTime>"
     And I select the "Download" radio button
@@ -332,11 +332,14 @@ Feature: Events Endpoints
 
     Then I click on the "Return to hearing date" link
     Then I click on the "Your audio" link
+    Then I wait for "2" minutes for the audio file with start time "<startTime>" to appear for "<case_number>"
+
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
-    Then I play the audio player
     Then I press the "Download audio file" button
-    Then I verify the download file matches "<audioFile>"
+    Then I verify the download file matches "<case_number>"
+    Then I click on the "Delete audio file" link
+    Then I press the "Yes - delete" button
 
     When I click on the "Your work" link
     Then I click on "View" in the same row as "<case_number>"
@@ -345,6 +348,42 @@ Feature: Events Endpoints
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | prosecutors         | defenders         | requestMethod | audioFile                 | startTime | endTime  | filename            |
-      | S855001     | Harrow Crown Court | 855       | S855 judge | S855 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | S{{seq}} prosecutor | S{{seq}} defender | Manual        | S855001_17_Jan_2024_1.mp3 | 16:00:00  | 16:02:00 | file-sample_1MB.doc |
+      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords   | prosecutors     | defenders     | requestMethod | audioFile                 | startTime | endTime  | filename            |
+      | S859001     | Harrow Crown Court | 859       | S859 judge | S859 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG859 | S859 prosecutor | S859 defender | Manual        | S859001_17_Jan_2024_1.mp3 | 16:00:00  | 16:02:00 | file-sample_1MB.doc |
 
+
+  @test
+  Scenario Outline: test
+    Given I am logged on to DARTS as an TRANSCRIBER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    When I click on "<case_number>" in the same row as "<courthouse>"
+    #Hearing Details
+    And I click on "<HearingDate>" in the same row as "<courtroom>"
+
+
+    When I select the "Audio preview and events" radio button
+    And I set the time fields of "Start Time" to "<startTime>"
+    And I set the time fields of "End Time" to "<endTime>"
+    And I select the "Download" radio button
+    And I press the "Get Audio" button
+    And I see "Confirm your Order" on the page
+    Then I press the "Confirm" button
+    Then I see "Your order is complete" on the page
+
+    Then I click on the "Return to hearing date" link
+    Then I click on the "Your audio" link
+    Then I wait for "2" minutes for the audio file with start time "<startTime>" to appear for "<case_number>"
+
+    Then I click on "View" in the same row as "<case_number>"
+    Then I see "<case_number>" on the page
+      #Then I play the audio player
+    Then I press the "Download audio file" button
+    Then I verify the download file matches "<case_number>"
+    Then I click on the "Delete audio file" link
+    Then I press the "Yes - delete" button
+    Examples:
+      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords   | prosecutors     | defenders     | requestMethod | audioFile                 | startTime | endTime  | filename            |
+      | S859001     | Harrow Crown Court | 859       | S859 judge | S859 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG859 | S859 prosecutor | S859 defender | Manual        | S859001_17_Jan_2024_1.zip | 16:00:00  | 16:02:00 | file-sample_1MB.doc |
