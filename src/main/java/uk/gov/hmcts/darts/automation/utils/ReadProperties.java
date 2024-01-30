@@ -59,9 +59,9 @@ public class ReadProperties {
 	public static String apiDbSchema = getSystemValue("DARTS_API_DB_SCHEMA");
 //	n.b.  System.getProperty("AZURE_STORAGE_CONNECTION_STRING"); defined but not used
 	public static String apiDbUserName = getSystemValue("DARTS_API_DB_USERNAME");
-	public static String apiDbPassword = runLocal ? getSystemValue(main("DARTS_API_DB_PASSWORD")) : getSystemValue("DARTS_API_DB_PASSWORD");
+	public static String apiDbPassword = runLocal ? getSystemValue(main("DB_PASSWORD_KEY")) : getSystemValue("DARTS_API_DB_PASSWORD");
 	public static String apiDbPort = getSystemValue("DARTS_API_DB_PORT");
-	public static String apiDbHost = runLocal ? getSystemValue(main("DARTS_API_DB_HOST")) : getSystemValue("DARTS_API_DB_HOST");
+	public static String apiDbHost = runLocal ? getSystemValue(main("DB_HOST_KEY")) : getSystemValue("DARTS_API_DB_HOST");
 	public static String apiDbDatabase = getSystemValue("DARTS_API_DB_DATABASE");
 	public static String automationUserId = getSystemValue("AUTOMATION_USERNAME");
 	public static String automationPassword = runLocal ? getSystemValue(main("AUTOMATION_PASSWORD")) : getSystemValue("AUTOMATION_PASSWORD");

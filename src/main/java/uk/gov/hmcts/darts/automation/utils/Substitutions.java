@@ -94,6 +94,7 @@ public class Substitutions {
 	
 	@Test
 	public void test1() {
+		System.out.println(substituteValue("{{date-3}}"));
 		System.out.println(substituteValue("{{timestamp}}"));
 		System.out.println(substituteValue("{{timestamp-12:23:34}}"));
 		System.out.println(substituteValue("{{displaydate}}"));
