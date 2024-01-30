@@ -29,6 +29,7 @@ public class JsonUtils {
 		String returnValue = "";
 		JsonPath jsonPath = new JsonPath(json);
 		returnValue = jsonPath.getString(tag);
+		log.info("json tag {} :: json value {}",tag,returnValue);
 		return returnValue;
 	}
 	
@@ -118,7 +119,7 @@ public class JsonUtils {
     	jsonString.addJsonLine("display_name", displayName.isBlank() ? courthouse : displayName);
 		return jsonString.jsonValue();
     }
-    
+  
     public static String buildAddAudioJson(String courthouse,
     		String courtroom,
     		String caseNumbers,

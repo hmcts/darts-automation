@@ -184,7 +184,7 @@ Feature: Your Audio Screen
 
   @DMP-840
   Scenario Outline: Verify download playback file
-    When I click on the "Your Audio" link
+    When I click on the "Your audio" link
     When I click on "View" in the same row as "<CaseID>"
     Then I see "<CaseID>" on the page
     And I see "<Courthouse>" on the page

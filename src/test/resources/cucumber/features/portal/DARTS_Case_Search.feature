@@ -157,8 +157,8 @@ Scenario: Case details and Hearing details
 	#Why is Judge empty?
 
 	And I verify the HTML table contains the following values
-		| Hearing date | Judge | Courtroom | No. of transcripts |
-		| {{date+0/}}  |       | {{seq}}-1 | 0                  |
+		| Hearing date    | Judge | Courtroom | No. of transcripts |
+		| {{displaydate}} |       | {{seq}}-1 | 0                  |
 
 	When I click on the "{{displaydate}}" link
 	Then I see "Events and audio recordings" on the page
