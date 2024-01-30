@@ -169,18 +169,20 @@ public class Portal {
     }
 
     public void downloadFileMatches(String fileName) throws IOException {
+        String substitutedValue = Substitutions.substituteValue(fileName);
+
         String workspace_dir = ReadProperties.getDownloadFilepath();
         File directory = new File(workspace_dir);
         boolean downloadinFilePresence = false;
         File[] filesList = directory.listFiles();
         if (Objects.nonNull(filesList)) {
             for (File file : filesList) {
-                downloadinFilePresence = file.getName().toLowerCase().contains(fileName.toLowerCase());
+                downloadinFilePresence = file.getName().toLowerCase().contains(substitutedValue.toLowerCase());
                 if (downloadinFilePresence) {
-                    log.info("File downloaded {} found and matched as expected", fileName);
+                    log.info("File downloaded {} found and matched as expected", substitutedValue);
                     break;
                 } else {
-                    log.error("File {} is not downloaded and cannot be found", fileName);
+                    log.error("File {} is not downloaded and cannot be found", substitutedValue);
                 }
             }
         }
@@ -224,12 +226,14 @@ public class Portal {
     }
 
     public void uploadDocument(String filename, String uploadLabel) throws Exception {
+        String substitutedValue = Substitutions.substituteValue(filename);
+
         try {
             NAV.waitForBrowserReadyState();
             WebElement uploadElement = NAV.findInputFieldByLabelText(uploadLabel);
 
             if (uploadElement != null) {
-                filename = "resources/" + filename + (filename.endsWith(".doc") || filename.endsWith(".docx") ? "" : ".doc");
+                substitutedValue = substitutedValue + (substitutedValue.endsWith(".doc") || substitutedValue.endsWith(".docx") ? "" : ".doc");
                 String filepath = ReadProperties.getUploadFilepath() + filename;
                 log.info("Filepath: {}", filepath);
 
@@ -245,6 +249,8 @@ public class Portal {
     }
 
     public void waitForAudioFile(String waitTime, String startTime, String caseNumber) {
+        String substitutedValue = Substitutions.substituteValue(caseNumber);
+        String substitutedValue1 = Substitutions.substituteValue(startTime);
         int waitTimeInSeconds = Integer.parseInt(waitTime) * 60;
         log.info("WAIT TIME {}", waitTimeInSeconds);
 
@@ -259,13 +265,13 @@ public class Portal {
             public Boolean apply(WebDriver webDriver) {
                 log.info("Starting fluent wait");
                 NAV.waitForBrowserReadyState();
-                String xpath = "//tr[td[normalize-space(.)='" + startTime + "'] and td[a[normalize-space(.)='" + caseNumber + "']]]";
+                String xpath = "//tr[td[normalize-space(.)='" + substitutedValue1 + "'] and td[a[normalize-space(.)='" + substitutedValue + "']]]";
                 List<WebElement> elements = webDriver.findElements(By.xpath(xpath));
                 if (elements.size() != 0) {
                     log.info("Audio file found.");
                     return true; // Element is present
                 } else {
-                    webDriver.navigate().refresh(); // Refresh the page if element not found
+                    NAV.refreshPage(); // Refresh the page if element not found
                     return false;
                 }
             }
