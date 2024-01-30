@@ -49,7 +49,7 @@ public class StepDef_jsonApi extends StepDef_base {
 			if (value == null) {
 				value = "";
 			}
-			return value;
+			return Substitutions.substituteValue(value);
 		} else {
 			return "";
 		}
@@ -61,7 +61,7 @@ public class StepDef_jsonApi extends StepDef_base {
 			if (tableValue == null || tableValue.isEmpty()) {
 				return defaultValue;
 			} else {
-				return tableValue;
+				return Substitutions.substituteValue(tableValue);
 			}
 		} else {
 			return defaultValue;
