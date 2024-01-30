@@ -109,4 +109,9 @@ public class StepDef_portal extends StepDef_base {
     public void uploadTheDocument(String filename,String uploadLabel) throws Exception {
         portal.uploadDocument(filename, uploadLabel);
     }
+
+    @Then("I wait for \"([^\"]*)\" minutes for the audio file with start time \"([^\"]*)\" to appear for \"([^\"]*)\"$")
+    public void waitForAudioFileWithStartTime(String waitTime, String startTime, String caseNumber) {
+        portal.waitForAudioFile(waitTime, startTime, caseNumber);
+    }
 }

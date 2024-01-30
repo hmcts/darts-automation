@@ -348,7 +348,7 @@ public class NavigationShared {
 	}
 	
 	public void checkUncheckCheckboxInTableRow(String rowData1, String rowData2, String action) throws Exception {
-		String xpathBit = "(./td[text()=\"%s\"])";
+		String xpathBit = "(./td[contains(.,\"%s\")])";
 		WebElement checkbox = driver.findElement(By.xpath(String.format("//table//tr[" + xpathBit + " and " + xpathBit + "]//input[@type='checkbox']",
 				Substitutions.substituteValue(rowData1),
 				Substitutions.substituteValue(rowData2))));

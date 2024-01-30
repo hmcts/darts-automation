@@ -1,21 +1,20 @@
 package uk.gov.hmcts.darts.automation.pageObjects;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 import uk.gov.hmcts.darts.automation.utils.*;
 
 public class Portal {
-	private static Logger log = LogManager.getLogger("Portal");
+    private static Logger log = LogManager.getLogger("Portal");
 
     private WebDriver webDriver;
     private NavigationShared NAV;
@@ -41,20 +40,20 @@ public class Portal {
 
     public void clickOnBreadcrumbLink(String label) {
         NAV.waitForPageLoad();
-        String substitutedValue=  Substitutions.substituteValue(label);
+        String substitutedValue = Substitutions.substituteValue(label);
         //webDriver.findElement(By.xpath("//a[text()=\"" + label + "\" and contains(@class,'govuk-breadcrumbs__link')]")).click();
-        webDriver.findElement(By.xpath("//a[@class='govuk-breadcrumbs__link'][contains(text(),'"+substitutedValue+"')]")).click();
+        webDriver.findElement(By.xpath("//a[@class='govuk-breadcrumbs__link'][contains(text(),'" + substitutedValue + "')]")).click();
 
     }
 
     public void TranscriptionCountOnPage(String count) {
         NAV.waitForPageLoad();
-        webDriver.findElement(By.xpath("//span[contains(@id, 'transcription-count') and contains(text(),'"+count+"')]"));
+        webDriver.findElement(By.xpath("//span[contains(@id, 'transcription-count') and contains(text(),'" + count + "')]"));
     }
-    
+
 
     public void logonAsUser(String type) throws Exception {
-    	log.info("About to navigate to homepage & login as user type " + type);
+        log.info("About to navigate to homepage & login as user type " + type);
         NAV.navigateToUrl(ReadProperties.main("portal_url"));
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
@@ -62,7 +61,7 @@ public class Portal {
         NAV.waitForPageLoad();
         switch (type.toUpperCase()) {
             case "EXTERNAL":
-                loginToPortal_ExternalUser(ReadProperties.automationUserId,ReadProperties.automationPassword);
+                loginToPortal_ExternalUser(ReadProperties.automationUserId, ReadProperties.automationPassword);
                 break;
             case "TRANSCRIBER":
                 loginToPortal_ExternalUser(ReadProperties.automationTranscriberUserId, ReadProperties.automationExternalPassword);
@@ -86,14 +85,14 @@ public class Portal {
                 loginToPortal_InternalUser(ReadProperties.automationAppealCourtTestUserId, ReadProperties.automationInternalUserTestPassword);
                 break;
             default:
-                log.fatal("Unknown user type - {}"+ type.toUpperCase());
+                log.fatal("Unknown user type - {}" + type.toUpperCase());
         }
 
     }
 
 
     public void loginToPortal_ExternalUser(String username, String password) throws Exception {
-    	TD.userId = "";
+        TD.userId = "";
         NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
@@ -105,31 +104,31 @@ public class Portal {
         WAIT.waitForTextOnPage("except where otherwise stated");
     }
 
-// Following is a workaround for placeholder not being recognised when run from Jenkins
+    // Following is a workaround for placeholder not being recognised when run from Jenkins
     public WebElement setInputField(String type, String value) {
-    	log.info("About to set input element type: " + type + " to " + value);
-    	WebElement webElement = webDriver.findElement(By.xpath("//input[@type='" + type + "']"));
-    	webElement.click();
-    	webElement.sendKeys(value);
-    	webElement.sendKeys(Keys.TAB);
-    	return webElement;
+        log.info("About to set input element type: " + type + " to " + value);
+        WebElement webElement = webDriver.findElement(By.xpath("//input[@type='" + type + "']"));
+        webElement.click();
+        webElement.sendKeys(value);
+        webElement.sendKeys(Keys.TAB);
+        return webElement;
     }
 
     public void loginToPortal_InternalUser(String username, String password) throws Exception {
-    	TD.userId = username;
+        TD.userId = username;
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Sign in");
         NAV.waitForBrowserReadyState();
         if (webDriver.findElements(By.xpath("//input[@type='" + "email" + "']")).size() == 0) {
-        	List<WebElement> another = webDriver.findElements(By.xpath("//*[text() = 'Use another account']"));
-        	if (another.size() == 1) {
-        		another.get(0).click();
-        	}
+            List<WebElement> another = webDriver.findElements(By.xpath("//*[text() = 'Use another account']"));
+            if (another.size() == 1) {
+                another.get(0).click();
+            }
             NAV.waitForBrowserReadyState();
         }
-        	
+
 // Following line fails when run from Jenkins but would be preferable
 //        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
         setInputField("email", username);
@@ -144,21 +143,21 @@ public class Portal {
         NAV.waitForBrowserReadyState();
 // When signing in for a second time, the stay signed in box may not appear
         WAIT.waitForTextOnPage("Stay signed in?", "Search for a case");
-		if (webDriver.findElements(By.xpath("//*[text() ='" + "Stay signed in?" + "']")).size() == 1) {
-	        NAV.waitForBrowserReadyState();
-	        NAV.press_buttonByName("No");
-	        NAV.waitForBrowserReadyState();
-	        WAIT.waitForTextOnPage("except where otherwise stated");
-	        NAV.waitForBrowserReadyState();
-		}
+        if (webDriver.findElements(By.xpath("//*[text() ='" + "Stay signed in?" + "']")).size() == 1) {
+            NAV.waitForBrowserReadyState();
+            NAV.press_buttonByName("No");
+            NAV.waitForBrowserReadyState();
+            WAIT.waitForTextOnPage("except where otherwise stated");
+            NAV.waitForBrowserReadyState();
+        }
     }
-    
+
     public void signOut() throws Exception {
-    	NAV.click_link_by_text("Sign out");
-    	if (!TD.userId.isBlank()) {
-    		WebElement webElement = webDriver.findElement(By.xpath("//div//*[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + TD.userId.toLowerCase() + "\"]"));
-    		webElement.click();
-    	}
+        NAV.click_link_by_text("Sign out");
+        if (!TD.userId.isBlank()) {
+            WebElement webElement = webDriver.findElement(By.xpath("//div//*[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + TD.userId.toLowerCase() + "\"]"));
+            webElement.click();
+        }
         NAV.waitForBrowserReadyState();
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Sign in", 15);
@@ -166,28 +165,31 @@ public class Portal {
 
     public void notificationCount(String count) {
         NAV.waitForPageLoad();
-        webDriver.findElement(By.xpath("//span[contains(@id, 'notifications') and contains(text(),'"+count+"')]"));
+        webDriver.findElement(By.xpath("//span[contains(@id, 'notifications') and contains(text(),'" + count + "')]"));
     }
 
     public void downloadFileMatches(String fileName) throws IOException {
+        String substitutedValue = Substitutions.substituteValue(fileName);
+
         String workspace_dir = ReadProperties.getDownloadFilepath();
         File directory = new File(workspace_dir);
         boolean downloadinFilePresence = false;
-        File[] filesList =directory.listFiles();
-        if(Objects.nonNull(filesList)) {
+        File[] filesList = directory.listFiles();
+        if (Objects.nonNull(filesList)) {
             for (File file : filesList) {
-                downloadinFilePresence = file.getName().equalsIgnoreCase(fileName);
+                downloadinFilePresence = file.getName().toLowerCase().contains(substitutedValue.toLowerCase());
                 if (downloadinFilePresence) {
-                    log.info("File downloaded {} found and matched as expected", fileName);
+                    log.info("File downloaded {} found and matched as expected", substitutedValue);
                     break;
                 } else {
-                    log.error("File {} is not downloaded and cannot be found", fileName);
+                    log.error("File {} is not downloaded and cannot be found", substitutedValue);
                 }
             }
         }
         Assert.assertTrue(downloadinFilePresence);
         deleteDocument_withName_fromDownloads(workspace_dir);
     }
+
     private void deleteDocument_withName_fromDownloads(String workspace_dir) throws IOException {
         try {
             FileUtils.cleanDirectory(new File(workspace_dir));
@@ -205,7 +207,7 @@ public class Portal {
         ((JavascriptExecutor) webDriver).executeScript("document.querySelector('audio').play();");
 
         // Wait for the audio to start playing
-        new WebDriverWait(webDriver,  Duration.ofSeconds(10)).until(ExpectedConditions.jsReturnsValue(
+        new WebDriverWait(webDriver, Duration.ofSeconds(10)).until(ExpectedConditions.jsReturnsValue(
                 "return (document.querySelector('audio').currentTime > 0);"
         ));
 
@@ -224,11 +226,14 @@ public class Portal {
     }
 
     public void uploadDocument(String filename, String uploadLabel) throws Exception {
+        String substitutedValue = Substitutions.substituteValue(filename);
+
         try {
             NAV.waitForBrowserReadyState();
             WebElement uploadElement = NAV.findInputFieldByLabelText(uploadLabel);
 
             if (uploadElement != null) {
+                substitutedValue = substitutedValue + (substitutedValue.endsWith(".doc") || substitutedValue.endsWith(".docx") ? "" : ".doc");
                 String filepath = ReadProperties.getUploadFilepath() + filename;
                 log.info("Filepath: {}", filepath);
 
@@ -240,6 +245,41 @@ public class Portal {
         } catch (Exception e) {
             log.error("Error uploading document: {}", e.getMessage());
             throw e;
+        }
+    }
+
+    public void waitForAudioFile(String waitTime, String startTime, String caseNumber) {
+        String substitutedValue = Substitutions.substituteValue(caseNumber);
+        String substitutedValue1 = Substitutions.substituteValue(startTime);
+        int waitTimeInSeconds = Integer.parseInt(waitTime) * 60;
+        log.info("WAIT TIME {}", waitTimeInSeconds);
+
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
+                .pollingEvery(Duration.ofSeconds(10))
+                .ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class);
+
+        Function<WebDriver, Boolean> checkForAudioFile = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                log.info("Starting fluent wait");
+                NAV.waitForBrowserReadyState();
+                String xpath = "//tr[td[normalize-space(.)='" + substitutedValue1 + "'] and td[a[normalize-space(.)='" + substitutedValue + "']]]";
+                List<WebElement> elements = webDriver.findElements(By.xpath(xpath));
+                if (elements.size() != 0) {
+                    log.info("Audio file found.");
+                    return true; // Element is present
+                } else {
+                    NAV.refreshPage(); // Refresh the page if element not found
+                    return false;
+                }
+            }
+        };
+        try {
+            wait.until(checkForAudioFile);
+        } catch (TimeoutException e) {
+            log.info("Audio file not found within the specified wait time.");
         }
     }
 }
