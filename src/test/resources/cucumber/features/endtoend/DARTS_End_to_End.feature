@@ -355,3 +355,52 @@ Feature: Events Endpoints
       | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc |
 
 
+  @test
+  Scenario Outline: test
+    Given I am logged on to DARTS as an TRANSCRIBER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    When I click on "<case_number>" in the same row as "<courthouse>"
+  #Hearing Details
+    And I click on "<HearingDate>" in the same row as "<courtroom>"
+
+    When I select the "Audio preview and events" radio button
+    And I check the checkbox in the same row as "<startTime> - <endTime>" "Audio recording"
+
+    And I select the "Download" radio button
+    And I press the "Get Audio" button
+    And I see "Confirm your Order" on the page
+    Then I press the "Confirm" button
+    Then I see "Your order is complete" on the page
+
+    Then I click on the "Return to hearing date" link
+    Then I click on the "Your audio" link
+    Then I wait for "2" minutes for the audio file with start time "<startTime>" to appear for "<case_number>"
+
+    Then I click on "View" in the same row as "<case_number>"
+    Then I see "<case_number>" on the page
+    #Then I play the audio player
+    Then I press the "Download audio file" button
+    Then I verify the download file matches "<case_number>"
+    Then I click on the "Delete audio file" link
+    Then I press the "Yes - delete" button
+    Examples:
+      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords   | prosecutors     | defenders     | requestMethod | audioFile                 | startTime | endTime  | filename            |
+      | S859001     | Harrow Crown Court | 859       | S859 judge | S859 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG859 | S859 prosecutor | S859 defender | Manual        | S859001_17_Jan_2024_1.zip | 16:00:00  | 16:02:00 | file-sample_1MB.doc |
+
+  @test2
+  Scenario Outline: test2
+    When I load an audio file
+      | courthouse   | courtroom   | case_numbers  | startTime   | endTime   | audioFile   |
+      | <courthouse> | <courtroom> | <case_number> | <startTime> | <endTime> | <audioFile> |
+
+    Examples:
+      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc |
+
+
+
+
+
