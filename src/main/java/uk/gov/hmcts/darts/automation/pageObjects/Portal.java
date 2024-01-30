@@ -4,10 +4,8 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -22,11 +20,7 @@ import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import uk.gov.hmcts.darts.automation.utils.GenUtils;
-import uk.gov.hmcts.darts.automation.utils.NavigationShared;
-import uk.gov.hmcts.darts.automation.utils.ReadProperties;
-import uk.gov.hmcts.darts.automation.utils.TestData;
-import uk.gov.hmcts.darts.automation.utils.WaitUtils;
+import uk.gov.hmcts.darts.automation.utils.*;
 
 public class Portal {
 	private static Logger log = LogManager.getLogger("Portal");
@@ -44,11 +38,12 @@ public class Portal {
         WAIT = new WaitUtils(webDriver);
         GEN = new GenUtils(webDriver);
     }
-    
+
     public void clickOnBreadcrumbLink(String label) {
         NAV.waitForPageLoad();
-    	//webDriver.findElement(By.xpath("//a[text()=\"" + label + "\" and contains(@class,'govuk-breadcrumbs__link')]")).click();
-        webDriver.findElement(By.xpath("//a[@class='govuk-breadcrumbs__link'][contains(text(),'"+label+"')]")).click();
+        String substitutedValue=  Substitutions.substituteValue(label);
+        //webDriver.findElement(By.xpath("//a[text()=\"" + label + "\" and contains(@class,'govuk-breadcrumbs__link')]")).click();
+        webDriver.findElement(By.xpath("//a[@class='govuk-breadcrumbs__link'][contains(text(),'"+substitutedValue+"')]")).click();
 
     }
 
@@ -199,6 +194,51 @@ public class Portal {
             log.info("Successfully deleted all documents from the directory: {}", workspace_dir);
         } catch (IOException e) {
             log.error("Error occurred while cleaning the directory: {}", workspace_dir, e);
+            throw e;
+        }
+    }
+
+    public void playAudioPlayer() {
+        NAV.waitForBrowserReadyState();
+
+        // Execute JavaScript to play the audio
+        ((JavascriptExecutor) webDriver).executeScript("document.querySelector('audio').play();");
+
+        // Wait for the audio to start playing
+        new WebDriverWait(webDriver,  Duration.ofSeconds(10)).until(ExpectedConditions.jsReturnsValue(
+                "return (document.querySelector('audio').currentTime > 0);"
+        ));
+
+        boolean isAudioPlaying = (boolean) ((JavascriptExecutor) webDriver).executeScript(
+                "var audio = document.getElementsByTagName('audio')[0];" +
+                        "return !audio.paused && audio.currentTime > 0;"
+        );
+
+
+        if (isAudioPlaying) {
+            log.info("Audio is playing correctly.");
+        } else {
+            log.info("Audio is not playing correctly.");
+        }
+        Assertions.assertTrue(isAudioPlaying);
+    }
+
+    public void uploadDocument(String filename, String uploadLabel) throws Exception {
+        try {
+            NAV.waitForBrowserReadyState();
+            WebElement uploadElement = NAV.findInputFieldByLabelText(uploadLabel);
+
+            if (uploadElement != null) {
+                String filepath = ReadProperties.getUploadFilepath() + filename;
+                log.info("Filepath: {}", filepath);
+
+                uploadElement.sendKeys(filepath);
+                log.info("File uploaded successfully.");
+            } else {
+                log.error("Upload element not found!");
+            }
+        } catch (Exception e) {
+            log.error("Error uploading document: {}", e.getMessage());
             throw e;
         }
     }

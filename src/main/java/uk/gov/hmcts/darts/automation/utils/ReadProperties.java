@@ -336,5 +336,14 @@ public class ReadProperties {
 		
 		return current_directory+"\\resources\\download";
 	}
+
+	public static String getUploadFilepath() {
+		String current_directory = System.getProperty("user.dir");
+
+		if (current_directory.contains("/"))
+			return current_directory+"/src/test/resources/testdata/";
+
+		return current_directory+"\\src\\test\\resources\\testdata\\";
+	}
 	
 }
