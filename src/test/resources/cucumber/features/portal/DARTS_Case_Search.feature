@@ -387,3 +387,55 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
 	And I press the "back" button on my browser
 	And I click on the "11 Aug 2023" link
 	Then I do not see "There are restrictions against this case" on the page
+
+@DMP-1450-AC1
+Scenario: Case retention error - AC1
+	Given I am logged on to DARTS as an APPROVER user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP_1450"
+	And I press the "Search" button
+	And I click on the "DMP_1450" link
+	And I click on the "View or change" link
+	And I press the "Change retention date" button
+	And I select the "Retain until a specific date" radio button
+	And I set "Enter a date to retain the case until" to "02/02/2024"
+	And I press the "Continue" button
+	Then I see an error message "You do not have permission to reduce the current retention date. Please refer to the DARTS retention policy guidance"
+
+@DMP-1450-AC2
+Scenario: Case retention error - AC2
+	Given I am logged on to DARTS as an JUDGE user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP_1450"
+	And I press the "Search" button
+	And I click on the "DMP_1450" link
+	And I click on the "View or change" link
+	And I press the "Change retention date" button
+	And I select the "Retain until a specific date" radio button
+	And I set "Enter a date to retain the case until" to "02/02/2024"
+	And I press the "Continue" button
+	Then I see an error message "You cannot set retention date earlier than 15/05/2024"
+
+@DMP-1450-AC3
+Scenario: Case retention error - AC3
+	Given I am logged on to DARTS as an JUDGE user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP_1450"
+	And I press the "Search" button
+	And I click on the "DMP_1450" link
+	And I click on the "View or change" link
+	And I press the "Change retention date" button
+	And I select the "Retain until a specific date" radio button
+	And I set "Enter a date to retain the case until" to "10/05/2024"
+	And I press the "Continue" button
+	Then I see an error message "You must explain why you are making this change"
+
+
+
+
+
+
+
