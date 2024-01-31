@@ -323,8 +323,7 @@ Feature: Events Endpoints
     Then I press the "Get audio for this request" button
 
     When I select the "Audio preview and events" radio button
-    #Then I wait for "2" minutes for the audio file with start time "<startTime>" to appear for "Audio recording"
-    #Then I play the audio player
+    Then I play the audio player
     And I set the time fields of "Start Time" to "<startTime>"
     And I set the time fields of "End Time" to "<endTime>"
     And I select the "Download" radio button
@@ -357,6 +356,7 @@ Feature: Events Endpoints
 
   @test
   Scenario Outline: test
+
     Given I am logged on to DARTS as an TRANSCRIBER user
     And I click on the "Search" link
     And I see "Search for a case" on the page
@@ -369,7 +369,7 @@ Feature: Events Endpoints
     When I select the "Audio preview and events" radio button
     And I check the checkbox in the same row as "<startTime> - <endTime>" "Audio recording"
 
-    And I select the "Download" radio button
+    And I select the "<requestType>" radio button
     And I press the "Get Audio" button
     And I see "Confirm your Order" on the page
     Then I press the "Confirm" button
@@ -381,26 +381,45 @@ Feature: Events Endpoints
 
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
-    #Then I play the audio player
+    Then I play the audio player
     Then I press the "Download audio file" button
     Then I verify the download file matches "<case_number>"
     Then I click on the "Delete audio file" link
     Then I press the "Yes - delete" button
     Examples:
-      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords   | prosecutors     | defenders     | requestMethod | audioFile                 | startTime | endTime  | filename            |
-      | S859001     | Harrow Crown Court | 859       | S859 judge | S859 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG859 | S859 prosecutor | S859 defender | Manual        | S859001_17_Jan_2024_1.zip | 16:00:00  | 16:02:00 | file-sample_1MB.doc |
+      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords   | prosecutors     | defenders     | requestMethod | audioFile                 | startTime | endTime  | filename            | requestType   |
+      | S859001     | Harrow Crown Court | 859       | S859 judge | S859 defendant | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG859 | S859 prosecutor | S859 defender | Manual        | S859001_17_Jan_2024_1.zip | 16:00:00  | 16:02:00 | file-sample_1MB.doc | Playback Only |
 
-  @test2
-  Scenario Outline: test2
-    When I load an audio file
-      | courthouse   | courtroom   | case_numbers  | startTime   | endTime   | audioFile   |
-      | <courthouse> | <courtroom> | <case_number> | <startTime> | <endTime> | <audioFile> |
+
+  @test3
+  Scenario Outline: test3
+    Given I am logged on to DARTS as an REQUESTER user
+    Then I set "Case ID" to "<case_number>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+
+    When I click on "<case_number>" in the same row as "<courthouse>"
+    Then I see "<case_number>" on the page
+    Then I click on "<HearingDate>" in the same row as "<courtroom>"
+
+    Then I click on the "Transcripts" link
+    Then I press the "Request a new transcript" button
+    Then I see "Request a new transcript" on the page
+    And I select "<transcription-type>" from the "Request Type" dropdown
+    And I select "<urgency>" from the "Urgency" dropdown
+    And I press the "Continue" button
+
+    And I set the time fields of "Start time" to "<startTime>"
+    And I set the time fields of "End time" to "<endTime>"
+
+    And I press the "Continue" button
+    And I see "Check and confirm your transcript request" on the page
+    And I see "<case_number>" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    And I see "Transcript request submitted" on the page
+    Then I Sign out
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc |
-
-
-
-
-
+      | case_number | courthouse         | courtroom | judges     | defendants     | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords   | prosecutors     | defenders     | requestMethod | audioFile                 | startTime | endTime  | filename            |
+      | S859001     | Harrow Crown Court | 859       | S859 judge | S859 defendant | {{displayDate(17-01-2024)}} | Court Log          | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG859 | S859 prosecutor | S859 defender | Manual        | S859001_17_Jan_2024_1.zip | 16:00:00  | 16:02:00 | file-sample_1MB.doc |

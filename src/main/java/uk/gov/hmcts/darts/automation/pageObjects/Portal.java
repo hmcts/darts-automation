@@ -201,7 +201,13 @@ public class Portal {
     }
 
     public void playAudioPlayer() {
+        try{
         NAV.waitForBrowserReadyState();
+
+        // Wait for the audio to be ready to play
+        new WebDriverWait(webDriver, Duration.ofSeconds(60)).until(ExpectedConditions.jsReturnsValue(
+                "return document.querySelector('audio').readyState >= 3;"
+        ));
 
         // Execute JavaScript to play the audio
         ((JavascriptExecutor) webDriver).executeScript("document.querySelector('audio').play();");
@@ -223,6 +229,11 @@ public class Portal {
             log.info("Audio is not playing correctly.");
         }
         Assertions.assertTrue(isAudioPlaying);
+        } catch (TimeoutException e) {
+            log.info("Timeout occurred, refreshing the page.");
+            webDriver.navigate().refresh();
+            playAudioPlayer();
+        }
     }
 
     public void uploadDocument(String filename, String uploadLabel) throws Exception {
