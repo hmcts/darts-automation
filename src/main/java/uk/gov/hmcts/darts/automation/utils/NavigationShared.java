@@ -1615,21 +1615,6 @@ public class NavigationShared {
 		Assertions.assertTrue(hoverText.equals(actualTooltipText), "Expected: " + hoverText + " but actual: " + actualTooltipText);
 		log.info("Tool tip text matched =>" + hoverText + "<= for element =>" + hoverOverText);
 	}
-
-	public void click_onTrashCanIcon() throws Exception {
-		log.info("Going to click on delete icon - Expecting 1 on the page only when this method is called");
-		List<WebElement> trashIcons = driver.findElements(By.xpath("//span[contains(@class, 'fa-trash')]"));
-		if (trashIcons.size() == 0) {
-			trashIcons = driver.findElements(By.xpath("//a[contains(@id, 'deleteLink')]"));
-		}
-		WebElement trashIcon = return_oneVisibleFromList(trashIcons);
-		trashIcon.click();
-
-		waitForBrowserReadyState();
-		
-		log.info("Clicked on trash icon");
-		
-	}
 	
 	public int getNumberShowing() {
 		try {
@@ -1887,6 +1872,24 @@ public class NavigationShared {
 
 		log.info("Value of field in =>" + location + "<= with label =>" + labelText + "<= is =>" + value);
 		Assertions.assertTrue(Substitutions.substituteValue(expected).equals(value), "Text value =>"+value+"<= does not match expected =>");
+	}
+	
+	public WebElement findFieldByFirstLabelFollowingText(String location, String labelText) throws Exception {
+		log.info("About to find first field following =>" + location + "<= with label =>" + labelText + "<=");
+
+		WebElement targetElement = driver.findElement(By.xpath(String.format(
+				"//input[@id=(//*[normalize-space(.)=\"%s\"]following::label[normalize-space(.)=\"%s\"]/@for)]",
+				location, labelText)));
+		log.info("Located first for field following =>" + location + "<= with label =>" + labelText + "<=");
+		return targetElement;
+	}
+
+	public WebElement setValueByFirstLabelFollowingText(String location, String labelText, String value) throws Exception {
+		log.info("About to Set input first field following =>" + location + "<= with label =>" + labelText + "<= to =>" + value);
+		WebElement targetElement = findFieldByFirstLabelFollowingText(location, labelText);
+		String substitutedValue = setElementValueTo(targetElement, value);
+		log.info("Set first input field following =>" + location + "<= with label =>" + labelText + "<= to =>" + substitutedValue);
+		return targetElement;
 	}
 
 	public void VerifyDropdownValue(String expectedOptionValue, String labelText) throws Exception {

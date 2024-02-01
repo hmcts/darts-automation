@@ -70,6 +70,14 @@ public class StepDef_portal extends StepDef_base {
         NAV.setValueByLabelInLocationTo(header, "Seconds", timeSplit[2]);
     }
 
+    @When("^I set the time fields below \"([^\"]*)\" to \"([^\"]*)\"$")
+    public void setTimeFieldsBelowText(String header, String time) throws Exception {
+        String[] timeSplit = time.split(":");
+        NAV.setValueByFirstLabelFollowingText(header, "Hour", timeSplit[0]);
+        NAV.setValueByFirstLabelFollowingText(header, "Minutes", timeSplit[1]);
+        NAV.setValueByFirstLabelFollowingText(header, "Seconds", timeSplit[2]);
+    }
+
 
     @Then("I see the transcription-count is \"([^\"]*)\"$")
     public void iSeeTheTranscriptionCountIs(String count) {
