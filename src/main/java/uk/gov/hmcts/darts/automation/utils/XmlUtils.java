@@ -139,6 +139,245 @@ public class XmlUtils {
 		return xmlString.xmlValue();
     }
     
+    public static String buildAddDailyListXml(String messageId,
+    		String type,
+    		String subType,
+    		String documentName,
+    		String courthouse,
+    		String courtroom,
+    		String caseNumber,
+    		String startDate,
+    		String startTime,
+    		String endDate,
+    		String timeStamp,
+    		String defendant) {
+    	XmlString xmlString = new XmlString()
+    			.addTag("messageId", messageId)
+    			.addTag("type", type)
+    			.addTag("subType", subType)
+    			.useLineEnd(false)
+    			.addTag("document")
+				.startEncoding()
+				.addTag("cs:DailyList")
+    			.addAttribute("xmlns:cs", "http://www.courtservice.gov.uk/schemas/courtservice")
+    			.addAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
+    			.addAttribute("xsi:schemaLocation", "http://www.courtservice.gov.uk/schemas/courtservice DailyList-v5-2.xsd")
+    			.addAttribute("xmlns:apd", "http://www.govtalk.gov.uk/people/AddressAndPersonalDetails")
+				.addTag("cs:DocumentID")
+					.addTag("cs:DocumentName", documentName)
+					.addTag("cs:UniqueID", messageId)
+					.addTag("cs:DocumentType", "DL")
+					.addTag("cs:TimeStamp", timeStamp)
+					.addTag("cs:Version", "1.0")
+					.addTag("cs:SecurityClassification", "NPM")
+					.addTag("cs:SellByDate", "2010-12-15")
+					.addTag("cs:XSLstylesheetURL", "http://www.courtservice.gov.uk/transforms/courtservice/dailyListHtml.xsl")
+					.addEndTag()
+					.addTag("cs:ListHeader")
+					.addTag("cs:ListCategory", "Criminal")
+					.addTag("cs:StartDate", startDate)
+					.addTag("cs:EndDate", endDate)
+					.addTag("cs:Version", "FINAL v1")
+					.addTag("cs:CRESTprintRef", "MCD/112585")
+					.addTag("cs:PublishedTime", timeStamp)
+					.addTag("cs:CRESTlistID", "12298")
+					.addEndTag();
+		switch (courthouse.toLowerCase()) {
+		case "bath":
+	    	xmlString.addTag("cs:CrownCourt")
+						.addTag("cs:CourtHouseType", "Crown Court")
+						.addTag("cs:CourtHouseCode")
+						.addAttribute("CourtHouseShortName", "BATH")
+						.addValue("1122334455")
+						.addTag("cs:CourtHouseName", "Bath")
+						.addTag("cs:CourtHouseAddress")
+						.addTag("apd:Line", "THE CROWN COURT AT BATH")
+						.addTag("apd:Line", "Wharf Rd")
+						.addTag("apd:Line", "Frimley Green")
+						.addTag("apd:Line", "Camberley")
+						.addTag("apd:PostCode", "GU16 6PT")
+						.addEndTag()
+						.addTag("cs:CourtHouseDX", "DX 12345 BATH")
+						.addTag("cs:CourtHouseTelephone", "01252 836464")
+						.addTag("cs:CourtHouseFax", "01252 836464")
+						.addEndTag()
+						.addTag("cs:CourtLists")
+						.addTag("cs:CourtList")
+						.addTag("cs:CourtHouse")
+						.addTag("cs:CourtHouseType", "Crown Court")
+						.addTag("cs:CourtHouseCode", "1122334455")
+						.addTag("cs:CourtHouseName", "Bath")
+						.addEndTag();
+	    	break;
+		case "swansea":
+	    	xmlString.addTag("cs:CrownCourt")
+						.addTag("cs:CourtHouseType", "Crown Court")
+						.addTag("cs:CourtHouseCode")
+						.addAttribute("CourtHouseShortName", "SWANSEA")
+						.addValue("1122334455")
+						.addTag("cs:CourtHouseName", "Swansea")
+						.addTag("cs:CourtHouseAddress")
+						.addTag("apd:Line", "THE CROWN COURT AT SWANSEA")
+						.addTag("apd:Line", "Wharf Rd")
+						.addTag("apd:Line", "Frimley Green")
+						.addTag("apd:Line", "Camberley")
+						.addTag("apd:PostCode", "GU16 6PT")
+						.addEndTag()
+						.addTag("cs:CourtHouseDX", "DX 12345 SWANSEA")
+						.addTag("cs:CourtHouseTelephone", "01252 836464")
+						.addTag("cs:CourtHouseFax", "01252 836464")
+						.addEndTag()
+						.addTag("cs:CourtLists")
+						.addTag("cs:CourtList")
+						.addTag("cs:CourtHouse")
+						.addTag("cs:CourtHouseType", "Crown Court")
+						.addTag("cs:CourtHouseCode", "1122334455")
+						.addTag("cs:CourtHouseName", "Swansea")
+						.addEndTag();
+	    	break;
+		case "lake":
+	    	xmlString.addTag("cs:CrownCourt")
+						.addTag("cs:CourtHouseType", "Crown Court")
+						.addTag("cs:CourtHouseCode")
+						.addAttribute("CourtHouseShortName", "LAKE")
+						.addValue("1122334455")
+						.addTag("cs:CourtHouseName", "Lakeside Country Club")
+						.addTag("cs:CourtHouseAddress")
+						.addTag("apd:Line", "THE CROWN COURT AT LAKESIDE")
+						.addTag("apd:Line", "Wharf Rd")
+						.addTag("apd:Line", "Frimley Green")
+						.addTag("apd:Line", "Camberley")
+						.addTag("apd:PostCode", "GU16 6PT")
+						.addEndTag()
+						.addTag("cs:CourtHouseDX", "DX 12345 LAKESIDE")
+						.addTag("cs:CourtHouseTelephone", "01252 836464")
+						.addTag("cs:CourtHouseFax", "01252 836464")
+						.addEndTag()
+						.addTag("cs:CourtLists")
+						.addTag("cs:CourtList")
+						.addTag("cs:CourtHouse")
+						.addTag("cs:CourtHouseType", "Crown Court")
+						.addTag("cs:CourtHouseCode", "1122334455")
+						.addTag("cs:CourtHouseName", "Lakeside Country Club")
+						.addEndTag();
+	    	break;
+		default:
+	    	xmlString.addTag("cs:CrownCourt")
+						.addTag("cs:CourtHouseType", "Crown Court")
+						.addTag("cs:CourtHouseCode")
+						.addAttribute("CourtHouseShortName", "HARROW")
+						.addValue("1122334455")
+						.addTag("cs:CourtHouseName", "Harrow Crown Court")
+						.addTag("cs:CourtHouseAddress")
+						.addTag("apd:Line", "THE CROWN COURT AT HARROW")
+						.addTag("apd:Line", "Wharf Rd")
+						.addTag("apd:Line", "Frimley Green")
+						.addTag("apd:Line", "Camberley")
+						.addTag("apd:PostCode", "GU16 6PT")
+						.addEndTag()
+						.addTag("cs:CourtHouseDX", "DX 12345 HARROW")
+						.addTag("cs:CourtHouseTelephone", "01252 836464")
+						.addTag("cs:CourtHouseFax", "01252 836464")
+						.addEndTag()
+						.addTag("cs:CourtLists")
+						.addTag("cs:CourtList")
+						.addTag("cs:CourtHouse")
+						.addTag("cs:CourtHouseType", "Crown Court")
+						.addTag("cs:CourtHouseCode", "1122334455")
+						.addTag("cs:CourtHouseName", "Harrow Crown Court")
+						.addEndTag();
+		}
+		xmlString.addTag("cs:Sittings")
+					.addTag("cs:Sitting")
+					.addTag("cs:CourtRoomNumber", courtroom)
+					.addTag("cs:SittingSequenceNo", "1")
+					.addTag("cs:SittingAt", startTime)
+					.addTag("cs:SittingPriority", "T")
+					.addTag("cs:Judiciary")
+					.addTag("cs:Judge")
+					.addTag("apd:CitizenNameSurname", "Judge N1")
+					.addTag("apd:CitizenNameRequestedName", "Judge N2")
+					.addTag("cs:CRESTjudgeID", "0")
+					.addEndTag()
+					.addEndTag()
+					.addTag("cs:Hearings")
+					.addTag("cs:Hearing")
+					.addTag("cs:HearingSequenceNumber", "1")
+					.addTag("cs:HearingDetails")
+					.addAttribute("HearingType", "TRL")
+					.addTag("cs:HearingDescription", "For Trial")
+					.addTag("cs:HearingDate", startDate)
+					.addEndTag()
+					.addTag("cs:CRESThearingID", "1")
+					.addTag("cs:TimeMarkingNote", startTime.substring(0, 5) + " AM")
+					.addTag("cs:CaseNumber", caseNumber)
+					.addTag("cs:Prosecution")
+					.addAttribute("ProsecutingAuthority", "Crown Prosecution Service")
+					.addTag("cs:ProsecutingReference", "CPS")
+					.addTag("cs:ProsecutingOrganisation")
+					.addTag("cs:OrganisationName", "Crown Prosecution Service")
+					.addEndTag()
+					.addEndTag()
+					.addTag("cs:CommittingCourt")
+					.addTag("cs:CourtHouseType", "Magistrates Court")
+					.addTag("cs:CourtHouseCode")
+					.addAttribute("CourtHouseShortName", "BAM") 
+					.addValue("2725")
+					.addTag("cs:CourtHouseName", "BARNET MAGISTRATES COURT")
+					.addTag("cs:CourtHouseAddress")
+					.addTag("apd:Line", "7C HIGH STREET")
+					.addTag("apd:Line", "-")
+					.addTag("apd:Line", "BARNET")
+					.addTag("apd:PostCode", "EN5 5UE")
+					.addEndTag()
+					.addTag("cs:CourtHouseDX", "DX 8626 BARNET")
+					.addTag("cs:CourtHouseTelephone", "02084419042")
+					.addEndTag()
+					.addTag("cs:Defendants")
+					.addTag("cs:Defendant")
+					.addTag("cs:PersonalDetails")
+					.addTag("cs:Name")
+					.addTag("apd:CitizenNameForename", "Franz")
+					.addTag("apd:CitizenNameSurname", "KAFKA")
+					.addEndTag()
+					.addTag("cs:IsMasked", "no")
+					.addTag("cs:DateOfBirth")
+					.addTag("apd:BirthDate", "1962-06-12")
+					.addTag("apd:VerifiedBy", "not verified")
+					.addEndTag()
+					.addTag("cs:Sex", "male")
+					.addTag("cs:Address")
+					.addTag("apd:Line", "ADDRESS LINE 1")
+					.addTag("apd:Line", "ADDRESS LINE 2")
+					.addTag("apd:Line", "ADDRESS LINE 3")
+					.addTag("apd:Line", "ADDRESS LINE 4")
+					.addTag("apd:Line", "SOMETOWN, SOMECOUNTY")
+					.addTag("apd:PostCode", "GU12 7RT")
+					.addEndTag()
+					.addEndTag()
+					.addTag("cs:ASNs")
+					.addTag("cs:ASN", "0723XH1000000262665K")
+					.addEndTag()
+					.addTag("cs:CRESTdefendantID", "29161")
+					.addTag("cs:PNCnumber", "20123456789L")
+					.addTag("cs:URN", "62AA1010646")
+					.addTag("cs:CustodyStatus", "In custody")
+					.addEndTag()
+					.addEndTag()
+					.addEndTag()
+					.addEndTag()
+					.addEndTag()
+					.addEndTag()
+					.addEndTag()
+					.addEndTag()
+					.addEndTag()
+					.endEncoding()
+	    			.useLineEnd(true)
+					.addEndTag();
+
+		return xmlString.xmlValue();
+    }
+    
     @Test
 	public void testXml1() {
 		Assertions.assertEquals("<case type=\"\" id=\"string2\">" + LINE_END
@@ -177,7 +416,7 @@ public class XmlUtils {
 				+ "    &lt;CaseTotalSentence&gt;string11&lt;/CaseTotalSentence&gt;" + LINE_END
 				+ "  &lt;/RetentionPolicy&gt;" + LINE_END
 				+ "</document>", 
-				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "2023-11-10 12:34:45", "string10", "string11"));
+				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "2023-11-10T12:34:45Z", "string10", "string11"));
     }
     
     @Test
@@ -197,7 +436,7 @@ public class XmlUtils {
 				+ "    &lt;CaseRetentionFixedPolicy&gt;&lt;/CaseRetentionFixedPolicy&gt;" + LINE_END
 				+ "  &lt;/RetentionPolicy&gt;" + LINE_END
 				+ "</document>",
-				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "case1,case2", "string8", "2023-11-10 12:34:45", "blank", ""));
+				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "case1,case2", "string8", "2023-11-10T12:34:45Z", "blank", ""));
 		
 	}
     
@@ -212,9 +451,24 @@ public class XmlUtils {
 				+ "  </case_numbers>" + LINE_END
 				+ "  <text>logtext</text>" + LINE_END
 				+ "</log_entry>",
-				buildAddLogXml("courthousename", "courtroomname", "case1,case2", "logtext", "2023-11-10 12:34:45"));
+				buildAddLogXml("courthousename", "courtroomname", "case1,case2", "logtext", "2023-11-10T12:34:45Z"));
 		
 	}
-
+    
+    @Test
+	public void testXml5() {
+    	System.out.println(buildAddDailyListXml("DARTS_E2E_2024-01-30-auto", 
+				"DL", 
+				"DL",
+				"DL 30/01/24 FINAL v1",
+				"xx",
+				"room2",
+				"T2024009",
+				"2024-01-30",
+				"10:00:00",
+				"2024-01-30",
+				"2024-01-30T12:34:45+00:00",
+				"def name"));
+    }
 
 }

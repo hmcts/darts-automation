@@ -153,6 +153,32 @@ public class StepDef_soapApi extends StepDef_base {
 				Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
 			}
 		}
+		
+// sample cucumber:
+// When I add a daily list
+// | ... | datatable follows
+		@When("^I add (a) daily list(s)$")
+		public void createAddDailyListXml(List<Map<String,String>> dataTable) {
+			for (Map<String, String> map : dataTable) {
+				String xml = XmlUtils.buildAddDailyListXml(
+						getValue(map, "messageId"),
+						getValue(map, "type"),
+						getValue(map, "subType"),
+						getValue(map, "documentName"),
+						getValue(map, "courthouse"),
+						getValue(map, "courtroom"),
+						getValue(map, "caseNumber"),
+						getValue(map, "startDate"),
+						getValue(map, "startTime"),
+						getValue(map, "endDate"),
+						getValue(map, "timeStamp"),
+						getValue(map, "defendant"));
+				ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
+				testdata.statusCode = apiResponse.statusCode;
+				testdata.responseString = apiResponse.responseString;
+				Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
+			}
+		}
 	
 	@When("I call POST SOAP API using soap body:")
 	public void callPostApiWithXmlBody(String docString) {
