@@ -201,7 +201,7 @@ public class Portal {
     }
 
     public void playAudioPlayer() {
-        try{
+
         NAV.waitForBrowserReadyState();
 
         // Wait for the audio to be ready to play
@@ -229,11 +229,6 @@ public class Portal {
             log.info("Audio is not playing correctly.");
         }
         Assertions.assertTrue(isAudioPlaying);
-        } catch (TimeoutException e) {
-            log.info("Timeout occurred, refreshing the page.");
-            webDriver.navigate().refresh();
-            playAudioPlayer();
-        }
     }
 
     public void uploadDocument(String filename, String uploadLabel) throws Exception {
