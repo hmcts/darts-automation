@@ -1878,7 +1878,7 @@ public class NavigationShared {
 		log.info("About to find first field following =>" + location + "<= with label =>" + labelText + "<=");
 
 		WebElement targetElement = driver.findElement(By.xpath(String.format(
-				"//input[@id=(//*[normalize-space(.)=\"%s\"]following::label[normalize-space(.)=\"%s\"]/@for)]",
+				"//input[@id=(//*[normalize-space(.)=\"%s\"]/following::label[normalize-space(.)=\"%s\"][1]/@for)]",
 				location, labelText)));
 		log.info("Located first for field following =>" + location + "<= with label =>" + labelText + "<=");
 		return targetElement;
