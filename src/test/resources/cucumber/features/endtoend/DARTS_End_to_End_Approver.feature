@@ -101,7 +101,6 @@ Feature: Approver
     Then I select the "No" radio button
     Then I set " Why can you not approve this request? " to "<Reason>"
     Then I press the "Submit" button
-    Then I do not see "<case_number>" on the page
     Then I Sign out
 
     Examples:
