@@ -15,16 +15,19 @@ public class XmlString {
 	ArrayList<String> openTags;
 	boolean encoded = false;
 	String saveString = "";
+	String lineEnd = LINE_END;
 	
 	public XmlString() {
 		xmlString = "";
 		sep = "";
 		openTags = new ArrayList<String>();
 		encoded = false;
+		lineEnd = LINE_END;
 	}
 	
 	String sep() {
-		return String.format("%s%" + ((openTags.size() > 0)? (openTags.size() * 2):"") + "s", sep, "");
+//		return String.format("%s%" + ((openTags.size() > 0) ? (openTags.size() * 2) : "") + "s", sep, "");
+		return String.format("%s%" + ((openTags.size() > 0 && !lineEnd.isEmpty()) ? (openTags.size() * 2) : "") + "s", sep, "");
 	}
 	
 /*
@@ -44,6 +47,11 @@ public class XmlString {
 					log.info("no separator found in string {}", string);
 		return string.split(" ");
 	}
+	
+	public XmlString useLineEnd(boolean lf) {
+		lineEnd = lf ? LINE_END : "";
+		return this;
+	}
 
 /*
 * Add field to xml 
@@ -55,14 +63,14 @@ public class XmlString {
 				value = "";
 			}
 			xmlString = xmlString + sep() + "<" + tag + ">" + Substitutions.substituteValue(value) + "</" + tag + ">"; 
-			sep = LINE_END;
+			sep = lineEnd;
 		}
 		return this;
 	}
 	
 	public XmlString addTag(String tag, Long value) {
 		xmlString = xmlString + sep() + "  <" + tag + ">" + value + "</" + tag + ">"; 
-		sep = LINE_END ;
+		sep = lineEnd;
 		return this;
 	}
 	
@@ -135,7 +143,7 @@ public class XmlString {
 		if (xml.contains("&lt;")) {
 			result = xml;
 		} else {
-			result = xml.replace("&", "&amp").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apost;");
+			result = xml.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
 		}
 		return result;	
 	}
@@ -147,7 +155,7 @@ public class XmlString {
 	public XmlString addTag(String tag) {
 		xmlString = xmlString + sep() + "<" + tag; 
 		openTags.add(tag);
-		sep = ">" + LINE_END;
+		sep = ">" + lineEnd;
 		return this;
 	}
 
@@ -158,7 +166,7 @@ public class XmlString {
 	public XmlString addValue(String value) {
 		String tag = openTags.remove(openTags.size() - 1);
 		xmlString = xmlString + (sep.startsWith(">") ? ">":"") + Substitutions.substituteValue(value) + "</" + tag + ">";
-		sep = LINE_END;
+		sep = lineEnd;
 		return this;
 	}
 	
@@ -169,7 +177,7 @@ public class XmlString {
 	public XmlString addEndTag() {
 		String tag = openTags.remove(openTags.size() - 1);
 		xmlString = xmlString + sep() + "</" + tag + ">"; 
-		sep = LINE_END;
+		sep = lineEnd;
 		return this;
 	}
 	
@@ -206,6 +214,28 @@ public class XmlString {
 		}
 		return this;
 	}
+	
+/*
+ * Add xml start CDATA
+ * 
+ */
+	public XmlString addStartCdata() {
+		xmlString = xmlString + sep() + "<![CDATA["; 
+// future could use		openTags.add("CDATA");
+		sep = "";
+		return this;
+	}
+	
+/*
+ * Add xml end CDATA
+ * 
+ */
+	public XmlString addEndCdata() {
+		xmlString = xmlString + sep() + "]]>"; 
+// future could use		addEndTag(); if openTags.add("CDATA"); is used
+		sep = "";
+		return this;
+	}
 
 /*
  * Add xml fragment
@@ -213,13 +243,13 @@ public class XmlString {
  */
 	public XmlString addFragment(String xmlFragment) {
 		xmlString = xmlString + sep + Substitutions.substituteValue(xmlFragment);
-		sep = LINE_END;
+		sep = lineEnd;
 		return this;
 	}
 	
 	public String xmlValue() {
 		xmlString = xmlString + (sep.startsWith(">") ? ">":"");
-		sep = LINE_END;
+		sep = lineEnd;
 		while (openTags.size() > 0) {
 			addEndTag();
 		}
