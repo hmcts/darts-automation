@@ -90,5 +90,18 @@ Examples:
 	| TRANSCRIBER       | Y     | Y         | N               | Y                  | Y        |
 	| LANGUAGESHOP      | Y     | Y         | N               | N                  | N        |
 	| REQUESTERAPPROVER | Y     | Y         | Y               | N                  | N        |
+	
+
+
+@Admin @smoketest
+Scenario Outline: All roles
+	When  I am logged on to DARTS as an ADMIN user
+	Then  I see "Users" on the page
+	And   I see links with text:
+	| Users   | Groups  | Organisations | Courthouses | Events | Node registry | Transformed media | Transcript requests |
+	| Y       | Y       | Y             | Y           | Y      | Y             | Y                 | Y                   |
+	And   I see link with text "HMCTS"
+	And   I see link with text "DARTS"
+	And   I see link with text "Sign out"
 
 
