@@ -11,8 +11,8 @@ Feature: Requester
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     When I load an audio file
-      | courthouse   | courtroom   | case_numbers  | startTime   | endTime   | audioFile   |
-      | <courthouse> | <courtroom> | <case_number> | <startTime> | <endTime> | <audioFile> |
+      | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
+      | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
     Given I am logged on to DARTS as an REQUESTER user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
