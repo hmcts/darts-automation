@@ -9,7 +9,7 @@ Scenario: External logon
 @smoketest
 Scenario: External logon
 	Given I am logged on to DARTS as an external user
-	Then  I see "Search for a case" on the page
+	Then  I see "I have failed" on the page
 	And   I do not see "Welcome to DARTS" on the page
 	And   I see "All content is available under the Open Government Licence v3.0, except where otherwise stated" on the page
 
