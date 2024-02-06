@@ -83,6 +83,9 @@ public class SoapApi {
         case "DARPCMIDTIER":
         	externalAuthenticate(ReadProperties.DarPCMidTierUsername, ReadProperties.DarPCMidTierPassword);
         	break;
+        case "DARPC":
+        	externalAuthenticate(ReadProperties.DarPCUsername, ReadProperties.DarPCPassword);
+        	break;
         case "":
         	log.warn("Authentication - no role provided - using external");
         	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);

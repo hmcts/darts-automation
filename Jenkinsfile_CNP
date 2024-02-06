@@ -51,6 +51,8 @@ def secrets = [
     secret('DarMidTierPassword', 'DAR_MID_TIER_PASSWORD'),
     secret('DarPCMidTierUserName', 'DAR_PC_MID_TIER_USERNAME'),
     secret('DarPCMidTierPassword', 'DAR_PC_MID_TIER_PASSWORD'),
+    secret('DarPCUserName', 'DAR_PC_USERNAME'),
+    secret('DarPCPassword', 'DAR_PC_PASSWORD'),
     secret('DartsAdminUserName', 'DARTS_ADMIN_USERNAME')
   ],
 ]
