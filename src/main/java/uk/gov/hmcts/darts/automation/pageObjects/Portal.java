@@ -53,8 +53,12 @@ public class Portal {
 
 
     public void logonAsUser(String type) throws Exception {
-        log.info("About to navigate to homepage & login as user type " + type);
-        NAV.navigateToUrl(ReadProperties.main("portal_url"));
+    	log.info("About to navigate to homepage & login as user type " + type);
+    	if (type.equalsIgnoreCase("ADMIN")) {
+    		NAV.navigateToUrl(ReadProperties.main("portal_url") + "/admin");
+    	} else {
+    		NAV.navigateToUrl(ReadProperties.main("portal_url"));
+    	}
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
         WAIT.waitForTextOnPage("except where otherwise stated");
@@ -83,6 +87,9 @@ public class Portal {
                 break;
             case "APPEALCOURT":
                 loginToPortal_InternalUser(ReadProperties.automationAppealCourtTestUserId, ReadProperties.automationInternalUserTestPassword);
+                break;
+            case "ADMIN":
+                loginToPortal_ExternalUser(ReadProperties.dartsAdminUserName, ReadProperties.automationExternalPassword);
                 break;
             default:
                 log.fatal("Unknown user type - {}" + type.toUpperCase());
@@ -143,13 +150,13 @@ public class Portal {
         NAV.waitForBrowserReadyState();
 // When signing in for a second time, the stay signed in box may not appear
         WAIT.waitForTextOnPage("Stay signed in?", "Search for a case");
-        if (webDriver.findElements(By.xpath("//*[text() ='" + "Stay signed in?" + "']")).size() == 1) {
-            NAV.waitForBrowserReadyState();
-            NAV.press_buttonByName("No");
-            NAV.waitForBrowserReadyState();
-            WAIT.waitForTextOnPage("except where otherwise stated");
-            NAV.waitForBrowserReadyState();
-        }
+		if (webDriver.findElements(By.xpath("//*[text() ='" + "Stay signed in?" + "']")).size() == 1) {
+	        NAV.waitForBrowserReadyState();
+	        NAV.press_buttonByName("No");
+	        NAV.waitForBrowserReadyState();
+		}
+	        WAIT.waitForTextOnPage("except where otherwise stated");
+	        NAV.waitForBrowserReadyState();
     }
 
     public void signOut() throws Exception {
