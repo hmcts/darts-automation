@@ -157,7 +157,7 @@ public class StepDef_soapApi extends StepDef_base {
 // sample cucumber:
 // When I add a daily list
 // | ... | datatable follows
-		@When("^I add (a) daily list(s)$")
+		@When("I add (a) daily list(s)")
 		public void createAddDailyListXml(List<Map<String,String>> dataTable) {
 			for (Map<String, String> map : dataTable) {
 				String xml = XmlUtils.buildAddDailyListXml(
@@ -172,7 +172,8 @@ public class StepDef_soapApi extends StepDef_base {
 						getValue(map, "startTime"),
 						getValue(map, "endDate"),
 						getValue(map, "timeStamp"),
-						getValue(map, "defendant"));
+						getValue(map, "defendant"),
+						getValue(map, "urn", "62AA1010646"));
 				ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
 				testdata.statusCode = apiResponse.statusCode;
 				testdata.responseString = apiResponse.responseString;
