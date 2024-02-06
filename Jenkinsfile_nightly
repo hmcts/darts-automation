@@ -94,7 +94,7 @@ withNightlyPipeline(type, product, component) {
       reportFiles          : "results.html",
       reportName           : "Cucumber Test Report"
     ]
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/junit/cucumber.xml'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'test-results/functionalTest/cucumber.xml'
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'automation.log'
   }
 }

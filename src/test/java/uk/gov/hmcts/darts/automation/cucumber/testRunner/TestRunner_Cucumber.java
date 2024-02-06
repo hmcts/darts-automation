@@ -27,7 +27,7 @@ import static io.cucumber.junit.platform.engine.Constants.EXECUTION_DRY_RUN_PROP
 //@IncludeTags(value = "smoketest | DMP-407")
 @ExcludeTags(value = "broken | obsolete")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
-@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "html:reports/html/results.html, junit:reports/junit/cucumber.xml")
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "html:test-results/html/results.html, junit:test-results/functionalTest/cucumber.xml")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "uk/gov/hmcts/darts/automation/cucumber/steps")
 @ConfigurationParameter(key = SNIPPET_TYPE_PROPERTY_NAME, value = "camelcase")
 @ConfigurationParameter(key = EXECUTION_DRY_RUN_PROPERTY_NAME, value = "false")
