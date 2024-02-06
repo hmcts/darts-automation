@@ -150,7 +150,8 @@ public class XmlUtils {
     		String startTime,
     		String endDate,
     		String timeStamp,
-    		String defendant) {
+    		String defendant,
+    		String urn) {
     	XmlString xmlString = new XmlString()
     			.addTag("messageId", messageId)
     			.addTag("type", type)
@@ -175,8 +176,8 @@ public class XmlUtils {
 					.addEndTag()
 					.addTag("cs:ListHeader")
 					.addTag("cs:ListCategory", "Criminal")
-					.addTag("cs:StartDate", startDate)
-					.addTag("cs:EndDate", endDate)
+					.addTag("cs:StartDate", DateUtils.dateAsYyyyMmDd(startDate))
+					.addTag("cs:EndDate", DateUtils.dateAsYyyyMmDd(endDate))
 					.addTag("cs:Version", "FINAL v1")
 					.addTag("cs:CRESTprintRef", "MCD/112585")
 					.addTag("cs:PublishedTime", timeStamp)
@@ -306,7 +307,7 @@ public class XmlUtils {
 					.addTag("cs:HearingDetails")
 					.addAttribute("HearingType", "TRL")
 					.addTag("cs:HearingDescription", "For Trial")
-					.addTag("cs:HearingDate", startDate)
+					.addTag("cs:HearingDate", DateUtils.dateAsYyyyMmDd(startDate))
 					.addEndTag()
 					.addTag("cs:CRESThearingID", "1")
 					.addTag("cs:TimeMarkingNote", startTime.substring(0, 5) + " AM")
@@ -360,7 +361,7 @@ public class XmlUtils {
 					.addEndTag()
 					.addTag("cs:CRESTdefendantID", "29161")
 					.addTag("cs:PNCnumber", "20123456789L")
-					.addTag("cs:URN", "62AA1010646")
+					.addTag("cs:URN", urn)
 					.addTag("cs:CustodyStatus", "In custody")
 					.addEndTag()
 					.addEndTag()
@@ -468,7 +469,8 @@ public class XmlUtils {
 				"10:00:00",
 				"2024-01-30",
 				"2024-01-30T12:34:45+00:00",
-				"def name"));
+				"def name",
+				"62AA1010646"));
     }
 
 }
