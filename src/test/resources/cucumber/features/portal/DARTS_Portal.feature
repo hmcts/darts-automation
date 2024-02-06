@@ -94,7 +94,7 @@ Examples:
 
 
 @Admin @smoketest
-Scenario Outline: All roles
+Scenario: Admin User
 	When  I am logged on to DARTS as an ADMIN user
 	Then  I see "Users" on the page
 	And   I see links with text:

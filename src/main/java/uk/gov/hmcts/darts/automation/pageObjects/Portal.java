@@ -155,9 +155,9 @@ public class Portal {
 	        NAV.waitForBrowserReadyState();
 	        NAV.press_buttonByName("No");
 	        NAV.waitForBrowserReadyState();
+		}
 	        WAIT.waitForTextOnPage("except where otherwise stated");
 	        NAV.waitForBrowserReadyState();
-		}
     }
     
     public void signOut() throws Exception {
