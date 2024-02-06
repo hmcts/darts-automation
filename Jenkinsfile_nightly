@@ -2,7 +2,7 @@
 
 properties([
   // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-  pipelineTriggers([cron('H 07 * * 1-5')])
+  pipelineTriggers([cron('H 08 * * 1-5')])
 ])
 
 @Library("Infrastructure")
@@ -79,4 +79,17 @@ withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
   enableFullFunctionalTest()
   enableSlackNotifications('#darts-builds')
+
+  afterAlways('fullFunctionalTest') {
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "reports/html",
+      reportFiles          : "results.html",
+      reportName           : "Cucumber Test Report"
+    ]
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/junit/cucumber.xml'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'automation.log'
+  }
 }
