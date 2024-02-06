@@ -171,23 +171,31 @@ public class Portal {
     public void downloadFileMatches(String fileName) throws IOException {
         String substitutedValue = Substitutions.substituteValue(fileName);
 
-        String workspace_dir = ReadProperties.getDownloadFilepath();
-        File directory = new File(workspace_dir);
-        boolean downloadinFilePresence = false;
+        String workspaceDir = ReadProperties.getDownloadFilepath();
+        File directory = new File(workspaceDir);
+        boolean downloadFilePresence = false;
+
         File[] filesList = directory.listFiles();
         if (Objects.nonNull(filesList)) {
             for (File file : filesList) {
-                downloadinFilePresence = file.getName().toLowerCase().contains(substitutedValue.toLowerCase());
-                if (downloadinFilePresence) {
+                //downloadinFilePresence = file.getName().toLowerCase().contains(substitutedValue.toLowerCase());
+                if (file.getName().toLowerCase().contains(substitutedValue.toLowerCase())) {
                     log.info("File downloaded {} found and matched as expected", substitutedValue);
+                    downloadFilePresence = true;
                     break;
-                } else {
-                    log.error("File {} is not downloaded and cannot be found", substitutedValue);
                 }
             }
+            if (!downloadFilePresence) {
+                log.error("File {} is not downloaded and cannot be found", substitutedValue);
+            }
+        } else {
+            log.error("The directory is empty or could not be read.");
         }
-        Assert.assertTrue(downloadinFilePresence);
-        deleteDocument_withName_fromDownloads(workspace_dir);
+
+        Assert.assertTrue("The expected file was not downloaded.", downloadFilePresence);
+    if (downloadFilePresence) {
+        deleteDocument_withName_fromDownloads(workspaceDir);
+    }
     }
 
     private void deleteDocument_withName_fromDownloads(String workspace_dir) throws IOException {
