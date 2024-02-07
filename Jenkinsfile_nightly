@@ -82,7 +82,7 @@ withNightlyPipeline(type, product, component) {
 
   before('fullFunctionalTest') {
     // set the tags to run on the nightly build
-    env.INCLUDE_TAGS = "smoke | regression | end2end"
+    env.INCLUDE_TAGS = "smoketest | regression | end2end"
   }
 
   afterAlways('fullFunctionalTest') {

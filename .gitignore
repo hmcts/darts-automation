@@ -51,3 +51,4 @@ test-results/*
 
 # Ignore test only logging
 src/test/resources/log4j2-test.properties
+src/test/resources/testdata.properties
