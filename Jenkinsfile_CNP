@@ -81,7 +81,7 @@ withNightlyPipeline(type, product, component) {
       allowMissing         : true,
       alwaysLinkToLastBuild: true,
       keepAll              : true,
-      reportDir            : "reports/html",
+      reportDir            : "test-results/html",
       reportFiles          : "results.html",
       reportName           : "Cucumber Test Report"
     ]
