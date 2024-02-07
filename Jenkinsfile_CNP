@@ -76,6 +76,11 @@ withNightlyPipeline(type, product, component) {
   enableFullFunctionalTest()
   enableSlackNotifications('#darts-builds')
 
+  before('fullFunctionalTest') {
+    // set the tags to run on the nightly build
+    env.INCLUDE_TAGS = "smoke | regression | end2end"
+  }
+
   afterAlways('fullFunctionalTest') {
     publishHTML target: [
       allowMissing         : true,
