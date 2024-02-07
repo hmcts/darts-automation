@@ -70,9 +70,22 @@ GradleBuilder builder = new GradleBuilder(this, product)
 
 // this "Jenkinsfile_CNP" file defines the build to run on PRs and master branch, not nightly
 // we are only using the "withNightlyPipeline" function here as it better suits the steps we require e.g. check, build and functional tests
-// but rest-assured this will not run nightly, that is defined by the "Jenkinsfile_nightly"
+// but rest assured this will not run nightly, that is defined by the "Jenkinsfile_nightly"
 withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
   enableFullFunctionalTest()
   enableSlackNotifications('#darts-builds')
+
+  afterAlways('fullFunctionalTest') {
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "reports/html",
+      reportFiles          : "results.html",
+      reportName           : "Cucumber Test Report"
+    ]
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'test-results/functionalTest/cucumber.xml'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'automation.log'
+  }
 }
