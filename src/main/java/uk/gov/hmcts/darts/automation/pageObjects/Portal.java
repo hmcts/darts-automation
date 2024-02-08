@@ -100,7 +100,7 @@ public class Portal {
 
     public void loginToPortal_ExternalUser(String username, String password) throws Exception {
         TD.userId = "";
-        NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
+        NAV.click_link_by_text("I work with the HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("This sign in page is for users who do not work for HMCTS.");
@@ -123,7 +123,7 @@ public class Portal {
 
     public void loginToPortal_InternalUser(String username, String password) throws Exception {
         TD.userId = username;
-        NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
+        NAV.click_link_by_text("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Sign in");
