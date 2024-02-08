@@ -31,10 +31,12 @@ replay_pid*
 # Ignore Gradle build output directory
 build
 bin/*
+!bin/secrets-stg.sh
 
 #Ignore results
 target/*
 reports/*
+test-results/*
 
 ### IntelliJ IDEA ###
 .idea
@@ -49,3 +51,4 @@ reports/*
 
 # Ignore test only logging
 src/test/resources/log4j2-test.properties
+src/test/resources/testdata.properties

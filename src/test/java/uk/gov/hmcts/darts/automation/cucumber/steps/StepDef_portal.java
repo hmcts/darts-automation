@@ -90,8 +90,8 @@ public class StepDef_portal extends StepDef_base {
     }
 
     @Given("I navigate to the url \"([^\"]*)\"$")
-    public void iNavigateToTheUrl(String url) throws Exception {
-        NAV.navigateToUrl(url);
+    public void iNavigateToTheUrl(String endpoint) throws Exception {
+        NAV.navigateToUrl(ReadProperties.main("portal_url") + endpoint);
     }
 
     @Then("I verify the download file matches \"([^\"]*)\"$")

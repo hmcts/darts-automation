@@ -399,10 +399,29 @@ public class NavigationShared {
 		}
 	}
 	
+	public void clickOnLabel(String labelText) {
+		WebElement targetElement;
+		try {
+			targetElement = driver.findElement(
+					By.xpath("//label[text()[(normalize-space(.)=\"" + labelText + "\")]]"));
+			log.info("element found on try 1");
+		} catch (Exception e) {
+			log.debug("element not found - try 2");
+			targetElement = driver.findElement(
+					By.xpath("//label[text()[contains(.,\"" + labelText + "\")]]"));
+			log.info("element found - try 2");
+		}
+		targetElement.click();
+	}
+	
 	public void checkRadioButton(String label) throws Exception {
-		log.info("About to Check radio button with label =>" + label);
-		WebElement webElement = findInputFieldByLabelText(label);
-		set_unset_checkbox(webElement, "CHECK");
+		try {
+			log.info("About to Check radio button with label =>" + label);
+			WebElement webElement = findInputFieldByLabelText(label);
+			set_unset_checkbox(webElement, "CHECK");
+		} catch (Exception e) {
+			clickOnLabel(label);
+		}
 		waitForPageLoad();
 	}
 	

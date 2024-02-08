@@ -11,16 +11,17 @@ Feature: Approver
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     When I load an audio file
-      | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
-      | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
+      | courthouse   | courtroom   | case_numbers  | date        | startTime | endTime  | audioFile   |
+      | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | 10:01:00  | 10:02:00 | <audioFile> |
+      | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | 10:03:00  | 10:04:00 | <audioFile> |
     Given I am logged on to DARTS as an REQUESTER user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID                                                 | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number>                                           | <courthouse> | <courtroom> | <judges> | <defendants>  |
-      | !\nRestriction There are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -50,8 +51,8 @@ Feature: Approver
     Then I Sign out
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc | Download         |
+      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 |
 
   @end2end @end2end3 @DMP-2201
   Scenario Outline: Approver - Rejects the request
@@ -71,9 +72,9 @@ Feature: Approver
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID                                                 | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number>                                           | <courthouse> | <courtroom> | <judges> | <defendants>  |
-      | !\nRestriction There are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -104,5 +105,5 @@ Feature: Approver
     Then I Sign out
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType | Reason     |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc | Download         | Reject for testing|
+      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | Reason             |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | Reject for testing |

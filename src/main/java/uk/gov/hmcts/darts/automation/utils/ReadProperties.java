@@ -86,6 +86,8 @@ public class ReadProperties {
 	public static String darMidTierPassword = getSystemValue("DAR_MID_TIER_PASSWORD");
 	public static String DarPCMidTierUsername = getSystemValue("DAR_PC_MID_TIER_USERNAME");
 	public static String DarPCMidTierPassword = getSystemValue("DAR_PC_MID_TIER_PASSWORD");
+	public static String DarPCUsername = getSystemValue("DAR_PC_USERNAME");
+	public static String DarPCPassword = getSystemValue("DAR_PC_PASSWORD");
 	
 	public static LogDetail setupRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
 	public static LogDetail setupResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;

@@ -51,6 +51,8 @@ def secrets = [
     secret('DarMidTierPassword', 'DAR_MID_TIER_PASSWORD'),
     secret('DarPCMidTierUserName', 'DAR_PC_MID_TIER_USERNAME'),
     secret('DarPCMidTierPassword', 'DAR_PC_MID_TIER_PASSWORD'),
+    secret('DarPCUserName', 'DAR_PC_USERNAME'),
+    secret('DarPCPassword', 'DAR_PC_PASSWORD'),
     secret('DartsAdminUserName', 'DARTS_ADMIN_USERNAME')
   ],
 ]
@@ -68,9 +70,27 @@ GradleBuilder builder = new GradleBuilder(this, product)
 
 // this "Jenkinsfile_CNP" file defines the build to run on PRs and master branch, not nightly
 // we are only using the "withNightlyPipeline" function here as it better suits the steps we require e.g. check, build and functional tests
-// but rest-assured this will not run nightly, that is defined by the "Jenkinsfile_nightly"
+// but rest assured this will not run nightly, that is defined by the "Jenkinsfile_nightly"
 withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
   enableFullFunctionalTest()
   enableSlackNotifications('#darts-builds')
+
+  before('fullFunctionalTest') {
+    // set the tags to run on the nightly build
+    env.INCLUDE_TAGS = "smoketest"
+  }
+
+  afterAlways('fullFunctionalTest') {
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "test-results/html",
+      reportFiles          : "results.html",
+      reportName           : "Cucumber Test Report"
+    ]
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'test-results/functionalTest/cucumber.xml'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'automation.log'
+  }
 }

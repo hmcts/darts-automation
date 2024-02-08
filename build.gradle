@@ -24,29 +24,28 @@ tasks.withType(JavaExec).configureEach {
   javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
-// this functional task is here for the Jenkins pipeline which runs ./gradlew functional
-// it's a copy of what runs in the "test" task
-task functional(type: Test) {
-  useJUnitPlatform()
-
-  testLogging {
-    exceptionFormat = 'full'
-  }
-
-  description = "Runs functional tests"
-  group = "Verification"
-}
-
-tasks.withType(Test) {
-  useJUnitPlatform()
-
-  testLogging {
-    exceptionFormat = 'full'
-  }
-}
+def tags = System.getenv("INCLUDE_TAGS") ?: 'smoketest'
 
 test {
   failFast = false
+
+  doFirst {
+    System.out.println("Running features with tags: " + tags)
+  }
+
+  useJUnitPlatform {
+    includeTags tags
+  }
+
+  testLogging {
+    exceptionFormat = 'full'
+    events 'started', 'passed', 'skipped', 'failed'
+  }
+}
+
+// this functional task is here for the Jenkins pipeline which runs ./gradlew functional
+task functional {
+  dependsOn test
 }
 
 jacocoTestReport {

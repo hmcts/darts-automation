@@ -182,21 +182,24 @@ public class StepDef_navigation extends StepDef_base {
 	public void seeLinksWithText(List<List<String>> dataTable) {
 		Assertions.assertTrue(dataTable.size() > 1);
 		int errorCount = 0;
+		String errorLinks = "";
 		for (int rowNum = 1; rowNum < dataTable.size(); rowNum++) {
 			for (int colNum = 0; colNum < dataTable.get(0).size(); colNum++) {
 				String linkText = dataTable.get(0).get(colNum);
 				String linkTest = (dataTable.get(rowNum).get(colNum) == null) ? "" : dataTable.get(rowNum).get(colNum).substring(0, 1);
 				boolean linkExists = NAV.linkText_visible(linkText);
 				if (linkTest.equalsIgnoreCase("Y")) {
-						if (!linkExists) {
+					if (!linkExists) {
 						log.error("Error in links for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
-					errorCount++;
+						errorCount++;
+						errorLinks = errorLinks + (errorLinks.isBlank() ? "" : ", ") + linkText;
 					}
 				} else {
 					if (linkTest.equalsIgnoreCase("N")) {
 						if (linkExists) {
 							log.error("Error in links for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
 							errorCount++;
+							errorLinks = errorLinks + (errorLinks.isBlank() ? "" : ", ") + linkText;
 						}
 					} else {
 						if (linkTest.isBlank()) {
@@ -204,12 +207,13 @@ public class StepDef_navigation extends StepDef_base {
 						} else {
 							log.error("Unexpected value for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
 							errorCount++;
+							errorLinks = errorLinks + (errorLinks.isBlank() ? "" : ", ") + linkText;
 						}
 					}
 				}
 			}
 		}
-		Assertions.assertEquals(0, errorCount, "Errors found verifying links");
+		Assertions.assertEquals(0, errorCount, "Errors found verifying links: " + errorLinks);
 	}
 	
 	@Then("^I see that \"([^\"]*)\" has \"([^\"]*)\" \"([^\"]*)\"$")

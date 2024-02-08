@@ -1,6 +1,6 @@
 Feature: Internal Login Portal
 
-  @DMP-621
+  @DMP-621 @regression
   Scenario: Internal sign in from link on external page
     Given I am on the landing page
     When I see "Sign in to the DARTS Portal" on the page

@@ -2,7 +2,7 @@
 
 properties([
   // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-  pipelineTriggers([cron('H 07 * * 1-5')])
+  pipelineTriggers([cron('H 08 * * 1-5')])
 ])
 
 @Library("Infrastructure")
@@ -56,6 +56,8 @@ def secrets = [
     secret('DarMidTierPassword', 'DAR_MID_TIER_PASSWORD'),
     secret('DarPCMidTierUserName', 'DAR_PC_MID_TIER_USERNAME'),
     secret('DarPCMidTierPassword', 'DAR_PC_MID_TIER_PASSWORD'),
+    secret('DarPCUserName', 'DAR_PC_USERNAME'),
+    secret('DarPCPassword', 'DAR_PC_PASSWORD'),
     secret('DartsAdminUserName', 'DARTS_ADMIN_USERNAME')
   ],
 ]
@@ -77,4 +79,22 @@ withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
   enableFullFunctionalTest()
   enableSlackNotifications('#darts-builds')
+
+  before('fullFunctionalTest') {
+    // set the tags to run on the nightly build
+    env.INCLUDE_TAGS = "smoketest | regression | end2end"
+  }
+
+  afterAlways('fullFunctionalTest') {
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "test-results/html",
+      reportFiles          : "results.html",
+      reportName           : "Cucumber Test Report"
+    ]
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'test-results/functionalTest/cucumber.xml'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'automation.log'
+  }
 }
