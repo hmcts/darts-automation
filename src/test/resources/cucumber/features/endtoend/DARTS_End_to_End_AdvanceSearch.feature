@@ -3,7 +3,7 @@ Feature: Advance Search
   @end2end @end2end6 @DMP-1927
    #Created a case and event via Post courtlog
   Scenario Outline: Create a case
-    Given I authenticate from the DARMIDTIER source system
+    #Given I authenticate from the DARPCMIDTIER source system
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
