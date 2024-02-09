@@ -12,16 +12,18 @@ Feature: Admin
     And   I see link with text "Sign out"
 
   @DMP-2187-AC3
-  Scenario: No ADMIN permissions
-    When  I am logged on to DARTS as an TRANSCRIBER user
-    Then I see "Page not found" on the page
-
-
-    When I navigate to the url "/work"
-    And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
+  Scenario Outline: No ADMIN permissions
+    When I navigate to the url "/admin"
+    # And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
+    And I click on the "I work with the HM Courts and Tribunals Service" link
     And I see "I have an account for DARTS through my organisation." on the page
     And I press the "Continue" button
-    When I set "Enter your email" to "<email>"
-    And I set "Enter your password" to "<password>"
+    When I set "Enter your email" to "<Email>"
+    And I set "Enter your password" to "<Password>"
     And I press the "Continue" button
     Then I see "Page not found" on the page
+
+    Examples:
+      | Email                        | Password   |
+      | darts.transcriber@hmcts.net  | Password@1 |
+      | darts.languageshop@hmcts.net | Password@1 |
