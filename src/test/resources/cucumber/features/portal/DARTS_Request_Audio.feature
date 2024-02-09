@@ -43,8 +43,10 @@ Scenario: Request Audio with Request Type Playback Only NEW
   Then I see "Events and audio recordings" on the page
   And I see "{{seq}}ABC-6" on the page
 
-  When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Playback Only" radio button
+  #When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  When I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Playback Only" radio button
+  And I click on the radio button label "Playback Only"
   And I press the "Get Audio" button
 
   #Confirm your Order
@@ -96,8 +98,10 @@ Scenario: Request Audio with Request Type Download NEW
   Then I see "Events and audio recordings" on the page
   And I see "{{seq}}ABC-6" on the page
 
-  When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  When I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
 
   #Confirm your Order
@@ -137,9 +141,12 @@ Scenario: Request Audio Confirm your Order Cancel link
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
   And I see "Confirm your Order" on the page
   And I click on the "Cancel" link
@@ -155,9 +162,12 @@ Scenario: Request Audio Confirm Order Back link
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
   And I see "Confirm your Order" on the page
   And I click on the "Back" link
@@ -188,8 +198,10 @@ Scenario: Request Audio request type error message
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
   And I press the "Get Audio" button
   Then I see "You must select a request type" on the page
 
@@ -203,9 +215,12 @@ Scenario: Order Confirmation - Return to hearing date link
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
   Then I see "Confirm your Order" on the page
 
@@ -224,9 +239,12 @@ Scenario: Order Confirmation - Back to search results link
   And I click on "{{displaydate}}" in the same row as "{{seq}}-7"
   Then I see "{{seq}}ABC-7" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
   Then I see "Confirm your Order" on the page
 
@@ -245,10 +263,12 @@ Scenario: Request Audio by setting Start Time and End Time
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
   And I set the time fields of "Start Time" to "10:01:00"
   And I set the time fields of "End Time" to "10:02:00"
-  And I select the "Playback Only" radio button
+  #And I select the "Playback Only" radio button
+  And I click on the radio button label "Playback Only"
   And I press the "Get Audio" button
 
   #Confirm your Order
@@ -299,9 +319,11 @@ Scenario Outline: Request Audio Events only available for hearing
   And I see "Swansea" on the page
   And I see "ROOM_A" on the page
 
-  When I select the "Events only" radio button
+  #When I select the "Events only" radio button
+  When I click on the radio button label "Events only"
   And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-  And I select the "Playback Only" radio button
+  #And I select the "Playback Only" radio button
+  And I click on the radio button label "Playback Only"
   And I press the "Get Audio" button
 
   #Confirm your Order
@@ -357,7 +379,8 @@ Scenario Outline: Preview Audio Player Loading
   And I see "Swansea" on the page
   And I see "ROOM_A" on the page
 
-  When I select the "Audio preview and events" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
   And I press the "Preview Audio" button in the same row as "<StartTime>" "<EndTime>"
   Then I see "<Text>" in the same row as "<StartTime>" "<EndTime>"
   Examples:
