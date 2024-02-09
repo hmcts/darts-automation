@@ -962,6 +962,20 @@ public class NavigationShared {
 		log.info("Clicked on radio button for =>"+caption+ "<= label =>" + label);
 	}
 
+	public void clickRadioButtonLabel(String label) throws Exception {
+		log.info("About to click on radio button label =>{}",label);
+		click_link_by_text(label);
+
+		log.info("Clicked on radio button label =>" + label);
+	}
+
+	public void clickCheckboxLabel(String label) throws Exception {
+		log.info("About to click on radio button label =>{}",label);
+		click_link_by_text(label);
+
+		log.info("Clicked on radio button label =>" + label);
+	}
+
 	public boolean linkText_visible(String arg1) {
 		log.info("Going to check whether link text =>" + arg1 + "<= is present on the page");
 		wait.deactivateImplicitWait();

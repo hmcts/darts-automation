@@ -2,14 +2,14 @@ Feature: Transcriber
 
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber - TranscriptionType - Sentencing Remarks - Audio requestType -Download
+    Given I create a case
+      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I authenticate from the XHIBIT source system
     Given I create an event
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
-    Given I authenticate from the DARPCMIDTIER source system
-    Given I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
@@ -18,9 +18,9 @@ Feature: Transcriber
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID                                                 | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number>                                           | <courthouse> | <courtroom> | <judges> | <defendants>  |
-      | !\nRestriction There are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -33,7 +33,8 @@ Feature: Transcriber
     And I press the "Continue" button
     And I see "Check and confirm your transcript request" on the page
     And I see "<case_number>" on the page
-    And I check the "I confirm I have received authorisation from the judge." checkbox
+    #And I check the "I confirm I have received authorisation from the judge." checkbox
+    Then I click on the "I confirm I have received authorisation from the judge." checkbox
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
@@ -86,19 +87,18 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:04:00  | 18:05:00 | file-sample_1MB.doc | Download         |
+      | courthouse         | courtroom | case_number  | judges         | defendants          | prosecutors        | defenders      | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
+      | Harrow Crown Court | {{seq}}   | SIT{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:04:00  | 18:05:00 | file-sample_1MB.doc | Download         |
 
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback
+    Given I create a case
+      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I authenticate from the XHIBIT source system
     Given I create an event
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
-    Given I authenticate from the DARPCMIDTIER source system
-    Given I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
@@ -107,9 +107,9 @@ Feature: Transcriber
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID                                                 | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number>                                           | <courthouse> | <courtroom> | <judges> | <defendants>  |
-      | !\nRestriction There are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -125,7 +125,8 @@ Feature: Transcriber
     And I press the "Continue" button
     And I see "Check and confirm your transcript request" on the page
     And I see "<case_number>" on the page
-    And I check the "I confirm I have received authorisation from the judge." checkbox
+    #And I check the "I confirm I have received authorisation from the judge." checkbox
+    Then I click on the "I confirm I have received authorisation from the judge." checkbox
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
@@ -178,7 +179,7 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc | Playback Only    |
+      | courthouse         | courtroom | case_number  | judges         | defendants          | prosecutors        | defenders      | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
+      | Harrow Crown Court | {{seq}}   | SIT{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc | Playback Only    |
 
 
