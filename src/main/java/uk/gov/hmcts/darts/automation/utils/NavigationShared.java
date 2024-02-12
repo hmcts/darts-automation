@@ -731,11 +731,18 @@ public class NavigationShared {
 			log.info("Clicked on checkbox with for, checking if checked");
 			if (checkbox.isSelected()) {
 				log.info("Checkbox is already set - nothing to do");
+				waitForBrowserReadyState();
 				return null;
 			}
 		} catch (Exception e) {
-			log.info("element not found - continuing .....");
-
+			try {
+				log.info("error clicking in checkbox - try clicking on label");
+				clickOnLabel(location_name);
+				waitForBrowserReadyState();
+				return null;
+			} catch (Exception e1) {
+				log.info("element not found - continuing .....");
+			}
 		}
 		WebElement parentLocation = find_locationParent(location_name);
 
@@ -954,11 +961,19 @@ public class NavigationShared {
 	public void select_radioButtonWithLabel(String caption, String label) {
 
 		log.info("About to click on radio button for =>"+caption+ "<= label =>" + label);
-		WebElement radioButton = driver.findElement(By.xpath(String.format(
-				"//*[//*[contains(normalize-space(text()),'%s')]]//*[@id=(//label[text()[contains(.,'%s')]]/@for)]"
-				,caption, label
-				)));
-		radioButton.click();
+		try {
+			WebElement radioButton = driver.findElement(By.xpath(String.format(
+					"//*[//*[contains(normalize-space(text()),'%s')]]//*[@id=(//label[text()[contains(.,'%s')]]/@for)]"
+					,caption, label
+					)));
+			radioButton.click();
+		} catch(Exception e) {
+			WebElement radioButtonLabel = driver.findElement(By.xpath(String.format(
+					"//*[contains(normalize-space(text()),'%s')]//label[text()[contains(.,'%s')]]"
+					,caption, label
+					)));
+			radioButtonLabel.click();
+		}
 		log.info("Clicked on radio button for =>"+caption+ "<= label =>" + label);
 	}
 

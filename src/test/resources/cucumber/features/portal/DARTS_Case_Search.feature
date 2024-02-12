@@ -1,10 +1,8 @@
 Feature: Case Search
 
- #TODO: Consider having a case with restriction on it
-
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression
 Scenario: Case Search data creation
-	Given I create a case using json
+	Given I create a case
 		| courthouse         | case_number | defendants     | judges           | prosecutors         | defenders         |
 		| Harrow Crown Court | A{{seq}}001 | Def {{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
 		| Harrow Crown Court | A{{seq}}002 | Def {{seq}}-11 | Judge {{seq}}-11 | testprosecutortwo   | testdefendertwo   |
@@ -12,7 +10,7 @@ Scenario: Case Search data creation
 		| Harrow Crown Court | A{{seq}}004 | Def {{seq}}-22 | Judge {{seq}}-2  | testprosecutorfour  | testdefenderfour  |
 		| Harrow Crown Court | A{{seq}}005 | Def {{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive  | testdefenderfive  |
 
-	Given I create an event using json
+	Given I create an event
 		| message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
 		| {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-1  | A{{seq}}001  | {{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
 		| {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}002  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
@@ -34,7 +32,7 @@ Scenario: Simple and Advanced Case Search
 	Then I verify the HTML table contains the following values
 		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
 		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
 		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
 		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
@@ -84,7 +82,7 @@ Scenario: Simple and Advanced Case Search
 	Then I verify the HTML table contains the following values
 		| Case ID                                                 | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
 		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*  | *IGNORE*         | *IGNORE*       |
+		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*  | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
 		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1 | Judge {{seq}}-1  | Def {{seq}}-1  |
 
@@ -94,7 +92,7 @@ Scenario: Simple and Advanced Case Search
 	Then I verify the HTML table contains the following values
 		| Case ID                                                 | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
 		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*  | *IGNORE*         | *IGNORE*       |
+		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*  | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
 		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1 | Judge {{seq}}-1  | Def {{seq}}-1  |
 
@@ -102,7 +100,7 @@ Scenario: Simple and Advanced Case Search
 
 	When I click on the "Clear search" link
 	And "Keywords" is ""
-	And I select the "Specific date" radio button with label "Specific date"
+	And I select the "Specific date" radio button
 	And I set "Enter a date" to "{{date+0/}}"
 	And I set "Case ID" to "A{{seq}}"
 	And I press the "Search" button
@@ -110,14 +108,14 @@ Scenario: Simple and Advanced Case Search
 	Then I verify the HTML table contains the following values
 		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
 		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
 		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
 		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
 		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
 	When I click on the "Clear search" link
-	And I select the "Date range" radio button with label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "{{date+0/}}"
 	And I set "Enter date to" to "{{date+0/}}"
 	And I set "Case ID" to "A{{seq}}"
@@ -126,7 +124,7 @@ Scenario: Simple and Advanced Case Search
 	Then I verify the HTML table contains the following values
 		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
 		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
 		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
 		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
@@ -173,7 +171,7 @@ Scenario: Case details and Hearing details
 	And I see "Hearing started" on the page
 	And I see "{{seq}}ABC-1" on the page
 
-@DMP-509 @DMP-1135 @DMP-508 @DMP-515 @DMP-691
+@DMP-509 @DMP-1135 @DMP-508 @DMP-515 @DMP-691 @regression
 Scenario: Case Search error message verification
 	Given I am logged on to DARTS as an APPROVER user
 	When I click on the "Search" link
@@ -184,52 +182,52 @@ Scenario: Case Search error message verification
 	Then I see an error message "You must also enter a courthouse"
 
 	When I click on the "Clear search" link
-	And I select the "Specific date" radio button with label "Specific date"
+	And I select the "Specific date" radio button
 	And I set "Enter a date" to "{{date+3/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
-	And I select the "Date range" radio button with label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "{{date+7/}}"
 	And I set "Enter date to" to "{{date-7/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
-	And I select the "Date range" radio button with label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "{{date-10/}}"
 	And I set "Enter date to" to "{{date+10/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
-	And I select the "Date range" radio button with label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date to" to "{{date-7/}}"
 	And I press the "Search" button
 	Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
 	When I click on the "Clear search" link
-	And I select the "Date range" radio button with label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "{{date-10/}}"
 	And I press the "Search" button
 	Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
 	When I click on the "Clear search" link
-	And I select the "Specific date" radio button with label "Specific date"
+	And I select the "Specific date" radio button
 	And I set "Enter a date" to "Invalid"
 	And I press the "Search" button
 	Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
 	When I click on the "Clear search" link
-	And I select the "Date range" radio button with label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "Invalid"
 	And I press the "Search" button
 	Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 	Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
 	When I click on the "Clear search" link
-	And I select the "Date range" radio button with label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date to" to "Invalid"
 	And I press the "Search" button
 	Then I see an error message "You have not selected a start date. Select a start date to define your search"
@@ -245,7 +243,7 @@ Scenario: Last Search results are retrievable on clicking Search in the breadcru
 	Then I verify the HTML table contains the following values
 		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
 		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
 		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
 		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
@@ -259,7 +257,7 @@ Scenario: Last Search results are retrievable on clicking Search in the breadcru
 	Then I verify the HTML table contains the following values
 		| Case ID                                                 | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
 		| A{{seq}}005                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-		| !\nRestriction There are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
+		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
 		| A{{seq}}003                                             | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
 		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |

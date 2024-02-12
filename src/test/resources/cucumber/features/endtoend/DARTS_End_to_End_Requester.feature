@@ -99,5 +99,5 @@ Feature: Requester
     Then I see "Complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc |
+      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}021 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc |
