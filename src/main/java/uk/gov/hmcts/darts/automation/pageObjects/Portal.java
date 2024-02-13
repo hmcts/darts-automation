@@ -268,6 +268,24 @@ public class Portal {
             throw e;
         }
     }
+    
+    public void wait(int waitTime) {
+        int waitTimeInSeconds = waitTime * 60;
+        log.info("WAIT TIME {}", waitTimeInSeconds);
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds));  
+        Function<WebDriver, Boolean> justWait = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {  
+                return false;
+            };
+        };
+        try {
+            wait.until(justWait);
+        } catch (TimeoutException e) {
+            log.info("Wait complete");
+        }
+    }
 
     public void waitForAudioFile(String waitTime, String startTime, String caseNumber) {
         String substitutedValue = Substitutions.substituteValue(caseNumber);
@@ -286,7 +304,7 @@ public class Portal {
             public Boolean apply(WebDriver webDriver) {
                 log.info("Starting fluent wait");
                 NAV.waitForBrowserReadyState();
-                String xpath = "//tr[td[normalize-space(.)='" + substitutedValue1 + "'] and td[a[normalize-space(.)='" + substitutedValue + "']]]";
+                String xpath = "//tr[./td[normalize-space(.)='" + substitutedValue1 + "'] and ./td[a[normalize-space(.)='" + substitutedValue + "']]]";
                 List<WebElement> elements = webDriver.findElements(By.xpath(xpath));
                 if (elements.size() != 0) {
                     log.info("Audio file found.");

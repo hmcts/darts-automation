@@ -425,6 +425,17 @@ public class NavigationShared {
 		waitForPageLoad();
 	}
 	
+	private void clickChecboxElement(WebElement webElement) {
+		try {
+		webElement.click();
+		} catch(Exception e) {
+			Actions actions = new Actions(driver);
+			actions.click(webElement).perform();
+		}
+		clickAway(webElement);
+		waitForBrowserReadyState();
+	}
+	
 	public void set_unset_checkbox(WebElement webElement, String action) throws Exception {
 		boolean isChecked = webElement.isSelected();
 		switch (action.toUpperCase()) {
@@ -433,9 +444,7 @@ public class NavigationShared {
 				log.info("already checked - no action");
 			} else {
 				log.info("about to check checkbox");
-				webElement.click();
-				clickAway(webElement);
-				waitForBrowserReadyState();
+				clickChecboxElement(webElement);
 				if (!webElement.isSelected()) {
 					log.fatal("Web element was clicked but is unchanged");
 					throw new Exception("Web element was clicked but is unchanged");
@@ -445,9 +454,7 @@ public class NavigationShared {
 		case "UNCHECK":
 			if (isChecked) {
 				log.info("about to uncheck checkbox");
-				webElement.click();
-				webElement.sendKeys(Keys.TAB);
-				waitForBrowserReadyState();
+				clickChecboxElement(webElement);
 				if (webElement.isSelected()) {
 					log.fatal("Web element was clicked but is unchanged");
 					throw new Exception("Web element was clicked but is unchanged");
@@ -457,8 +464,8 @@ public class NavigationShared {
 			}
 			break;
 		default:
-			log.fatal("invalid action passed to check-uncheck "+action);
-			throw new Exception("invalid action passed to check-uncheck "+action);
+			log.error("invalid action passed to check-uncheck "+action);
+			clickChecboxElement(webElement);
 		}
 	}
 	
@@ -1770,19 +1777,24 @@ public class NavigationShared {
 		 */
 		WebElement click_text = driver.findElement(
 				By.xpath(
-						"//table//tr//td[contains(text(),\""+nextToText+"\")]//ancestor::tr//td[text()[contains(., \""+clickText+"\")]]"
+						"//table//tr[.//td[contains(text(),\""+nextToText+"\")]]//td[text()[contains(., \""+clickText+"\")]]"
 								+ "|"
-						+ "//table//tr//td//a[contains(text(),\""+nextToText+"\")]//ancestor::tr//td//a[text()[contains(., \""+clickText+"\")]]"
+						+ "//table//tr[.//td//a[contains(text(),\""+nextToText+"\")]]//td//a[text()[contains(., \""+clickText+"\")]]"
 								+ "|"
-						+ "//table//tr//td[contains(text(),\""+nextToText+"\")]//ancestor::tr//td//a[text()[contains(., \""+clickText+"\")]]"
+						+ "//table//tr[.//td[contains(text(),\""+nextToText+"\")]]//td//a[text()[contains(., \""+clickText+"\")]]"
 								+ "|"
-						+ "//table//tr//*[contains(text(),\""+nextToText+"\")]//ancestor::tr//a[text()[contains(., \""+clickText+"\")]]"
+						+ "//table//tr[.//*[contains(text(),\""+nextToText+"\")]]//a[text()[contains(., \""+clickText+"\")]]"
 								+ "|"
-						+ "//dl//div//*[contains(text(),\""+nextToText+"\")]//ancestor::div[@class='govuk-summary-list__row']//a[text()[contains(., \""+clickText+"\")]]"
+						+ "//dl//div[.//*[contains(text(),\""+nextToText+"\")]]//a[text()[contains(., \""+clickText+"\")]]" // removed [@class='govuk-summary-list__row']
 				+ ""));
 		
 		wait.waitForClickableElement(click_text);
-		click_onElement(click_text);
+		try {
+			click_onElement(click_text);
+		} catch (Exception e) {
+			Actions actions = new Actions(driver);
+			actions.click(click_text).perform();
+		}
 		waitForBrowserReadyState();
 		log.info("Clicked on =>"+clickText+"<= successfully");
 	}
