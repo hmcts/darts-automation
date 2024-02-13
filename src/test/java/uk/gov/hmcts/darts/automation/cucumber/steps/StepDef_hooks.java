@@ -110,7 +110,7 @@ public class StepDef_hooks extends StepDef_base {
 		if (!ReadProperties.buildNo.equals(build)) {
 			log.warn("Automation started with build {} but is now Build {}", ReadProperties.buildNo, build);
 		}
-		scenario.log("Environment: " + ReadProperties.environment + ", Build: " + ReadProperties.buildNo);
+		scenario.attach("Environment: " + ReadProperties.environment + ", Build: " + ReadProperties.buildNo + ", seq: " + ReadProperties.seq, "text/plain", "Run-details");
 		testdata.setProperty("started", DateUtils.timestamp());
 	}
 	
