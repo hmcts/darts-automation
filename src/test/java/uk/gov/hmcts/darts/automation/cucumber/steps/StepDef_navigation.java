@@ -520,14 +520,5 @@ public class StepDef_navigation extends StepDef_base {
 		NAV.clickAway(NAV.set_valueTo(location_name, value));
 	}
 
-	@Then("I click on the radio button label \"([^\"]*)\"$")
-	public void clickOnTheRadioButtonLabeled(String label) throws Exception {
-		NAV.clickRadioButtonLabel(label);
-
-	}
-
-	@Then("I click on the \"([^\"]*)\" checkbox$")
-	public void clickOnTheCheckbox(String label) throws Exception {
-		NAV.clickCheckboxLabel(label);
-	}
 }
+

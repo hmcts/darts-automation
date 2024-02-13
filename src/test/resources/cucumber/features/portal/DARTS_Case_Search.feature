@@ -100,8 +100,7 @@ Scenario: Simple and Advanced Case Search
 
 	When I click on the "Clear search" link
 	And "Keywords" is ""
-	#And I select the "Specific date" radio button with label "Specific date"
-	And I click on the radio button label "Specific date"
+	And I select the "Specific date" radio button
 	And I set "Enter a date" to "{{date+0/}}"
 	And I set "Case ID" to "A{{seq}}"
 	And I press the "Search" button
@@ -116,8 +115,7 @@ Scenario: Simple and Advanced Case Search
 		| A{{seq}}001                                              | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
 	When I click on the "Clear search" link
-	#And I select the "Date range" radio button with label "Date range"
-	And I click on the radio button label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "{{date+0/}}"
 	And I set "Enter date to" to "{{date+0/}}"
 	And I set "Case ID" to "A{{seq}}"
@@ -184,60 +182,52 @@ Scenario: Case Search error message verification
 	Then I see an error message "You must also enter a courthouse"
 
 	When I click on the "Clear search" link
-	#And I select the "Specific date" radio button with label "Specific date"
-	And I click on the radio button label "Specific date"
+	And I select the "Specific date" radio button
 	And I set "Enter a date" to "{{date+3/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
-	#And I select the "Date range" radio button with label "Date range"
-	And I click on the radio button label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "{{date+7/}}"
 	And I set "Enter date to" to "{{date-7/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
-	#And I select the "Date range" radio button with label "Date range"
-	And I click on the radio button label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "{{date-10/}}"
 	And I set "Enter date to" to "{{date+10/}}"
 	And I press the "Search" button
 	Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
 	When I click on the "Clear search" link
-	#And I select the "Date range" radio button with label "Date range"
-	And I click on the radio button label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date to" to "{{date-7/}}"
 	And I press the "Search" button
 	Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
 	When I click on the "Clear search" link
-	#And I select the "Date range" radio button with label "Date range"
-	And I click on the radio button label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "{{date-10/}}"
 	And I press the "Search" button
 	Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
 	When I click on the "Clear search" link
-	#And I select the "Specific date" radio button with label "Specific date"
-	And I click on the radio button label "Specific date"
+	And I select the "Specific date" radio button
 	And I set "Enter a date" to "Invalid"
 	And I press the "Search" button
 	Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
 	When I click on the "Clear search" link
-	#And I select the "Date range" radio button with label "Date range"
-	And I click on the radio button label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date from" to "Invalid"
 	And I press the "Search" button
 	Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 	Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
 	When I click on the "Clear search" link
-	#And I select the "Date range" radio button with label "Date range"
-	And I click on the radio button label "Date range"
+	And I select the "Date range" radio button
 	And I set "Enter date to" to "Invalid"
 	And I press the "Search" button
 	Then I see an error message "You have not selected a start date. Select a start date to define your search"
@@ -304,7 +294,7 @@ Scenario: Hide automatic transcript request - Case file screen
 	And I click on the "All Transcripts" link
 	Then I verify the HTML table contains the following values
 		| Hearing date | Type             | Requested on | Requested by |Status        |
-        | 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
+    | 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
 		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
 		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |
 		| 05 Jan 2024  |*IGNORE*          |*IGNORE*      |*IGNORE*      |*IGNORE*      |

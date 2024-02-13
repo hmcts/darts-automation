@@ -100,7 +100,7 @@ public class Portal {
 
     public void loginToPortal_ExternalUser(String username, String password) throws Exception {
         TD.userId = "";
-        NAV.click_link_by_text("I work with the HM Courts and Tribunals Service");
+        NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("This sign in page is for users who do not work for HMCTS.");
@@ -123,7 +123,7 @@ public class Portal {
 
     public void loginToPortal_InternalUser(String username, String password) throws Exception {
         TD.userId = username;
-        NAV.click_link_by_text("I'm an employee of HM Courts and Tribunals Service");
+        NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Sign in");
@@ -268,6 +268,24 @@ public class Portal {
             throw e;
         }
     }
+    
+    public void wait(int waitTime) {
+        int waitTimeInSeconds = waitTime * 60;
+        log.info("WAIT TIME {}", waitTimeInSeconds);
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds));  
+        Function<WebDriver, Boolean> justWait = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {  
+                return false;
+            };
+        };
+        try {
+            wait.until(justWait);
+        } catch (TimeoutException e) {
+            log.info("Wait complete");
+        }
+    }
 
     public void waitForAudioFile(String waitTime, String startTime, String caseNumber) {
         String substitutedValue = Substitutions.substituteValue(caseNumber);
@@ -286,7 +304,7 @@ public class Portal {
             public Boolean apply(WebDriver webDriver) {
                 log.info("Starting fluent wait");
                 NAV.waitForBrowserReadyState();
-                String xpath = "//tr[td[normalize-space(.)='" + substitutedValue1 + "'] and td[a[normalize-space(.)='" + substitutedValue + "']]]";
+                String xpath = "//tr[./td[normalize-space(.)='" + substitutedValue1 + "'] and ./td[a[normalize-space(.)='" + substitutedValue + "']]]";
                 List<WebElement> elements = webDriver.findElements(By.xpath(xpath));
                 if (elements.size() != 0) {
                     log.info("Audio file found.");
