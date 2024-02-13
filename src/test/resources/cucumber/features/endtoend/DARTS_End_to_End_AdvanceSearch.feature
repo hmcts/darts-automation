@@ -3,15 +3,12 @@ Feature: Advance Search
   @end2end @end2end6 @DMP-1927
    #Created a case and event via Post courtlog
   Scenario Outline: Create a case
-#    Given I authenticate from the DARMIDTIER source system
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-
     Given I add courtlogs
       | dateTime   | courthouse   | courtroom   | case_numbers  | text       |
       | <dateTime> | <courthouse> | <courtroom> | <case_number> | <keywords> |
-
     When I am logged on to DARTS as an APPROVER user
     Then I click on the "Search" link
     Then I click on the "Advanced search" link
@@ -131,7 +128,6 @@ Feature: Advance Search
   @end2end @end2end6 @DMP-1927
   #Created a case and event via Post event using SOAP
   Scenario Outline: Create a case and hearing via events
-    Given I authenticate from the XHIBIT source system
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
@@ -147,8 +143,8 @@ Feature: Advance Search
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID                                                 | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number>                                           | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on the "Clear search" link
     Then "Courthouse" is ""
@@ -177,8 +173,8 @@ Feature: Advance Search
     Then I set "Keywords" to "<keywords>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID                                                 | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number>                                           | <courthouse> | <courtroom> | <judges> | <defendants>  |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on the "Clear search" link
     Then "Keywords" is ""
@@ -218,6 +214,7 @@ Feature: Advance Search
 
     When I click on the "Clear search" link
     Then I select the "Specific date" radio button
+    
     Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I see "result" on the page

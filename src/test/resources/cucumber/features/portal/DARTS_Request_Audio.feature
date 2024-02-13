@@ -6,20 +6,20 @@ Scenario: Request Audio data creation
 
   Given I create a case
     | courthouse         | case_number | defendants    | judges          | prosecutors         | defenders         |
-    | Harrow Crown Court | A{{seq}}006 | Def {{seq}}-1 | Judge {{seq}}-1 | testprosecutorsix   | testdefendersix   |
-    | Harrow Crown Court | A{{seq}}007 | Def {{seq}}-7 | Judge {{seq}}-7 | testprosecutorseven | testdefenderseven |
+    | Harrow Crown Court | B{{seq}}006 | Def {{seq}}-6 | Judge {{seq}}-6 | testprosecutorsix   | testdefendersix   |
+    | Harrow Crown Court | B{{seq}}007 | Def {{seq}}-7 | Judge {{seq}}-7 | testprosecutorseven | testdefenderseven |
 
   Given I create an event
     | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-    | {{seq}}001 | 1100 | 	     | {{seq}}1001 | Harrow Crown Court | {{seq}}-6  | A{{seq}}006  | {{seq}}ABC-6  | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}002 | 1100 | 	     | {{seq}}1002 | Harrow Crown Court | {{seq}}-7  | A{{seq}}007  | {{seq}}ABC-7  | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}006 | 1100 | 	     | {{seq}}1006 | Harrow Crown Court | {{seq}}-6  | B{{seq}}006  | {{seq}}ABC-6  | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}007 | 1100 | 	     | {{seq}}1007 | Harrow Crown Court | {{seq}}-7  | B{{seq}}007  | {{seq}}ABC-7  | {{timestamp-10:00:00}} |                             |                     |
 
-  When I authenticate from the darmidtier source system
+  #When I authenticate from the darmidtier source system
 
   When I load an audio file
     | courthouse         | courtroom | case_numbers | date        | startTime | endTime  | audioFile |
-    | Harrow Crown Court | {{seq}}-6 | A{{seq}}006  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
-    | Harrow Crown Court | {{seq}}-7 | A{{seq}}007  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
+    | Harrow Crown Court | {{seq}}-6 | B{{seq}}006  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
+    | Harrow Crown Court | {{seq}}-7 | B{{seq}}007  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
 
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @regression
 Scenario: Request Audio with Request Type Playback Only NEW
@@ -27,15 +27,15 @@ Scenario: Request Audio with Request Type Playback Only NEW
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
   And I see "Search for a case" on the page
-  And I set "Case ID" to "A{{seq}}006"
+  And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
     | Case ID     | Courthouse         | Courtroom | Judge(s)        | Defendants(s) |
-    | A{{seq}}006 | Harrow Crown Court | {{seq}}-6 | Judge {{seq}}-1 | Def {{seq}}-1 |
+    | B{{seq}}006 | Harrow Crown Court | {{seq}}-6 | Judge {{seq}}-6 | Def {{seq}}-6 |
 
   #Case Details
 
-  When I click on "A{{seq}}006" in the same row as "Harrow Crown Court"
+  When I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
 
   #Hearing Details
 
@@ -43,8 +43,10 @@ Scenario: Request Audio with Request Type Playback Only NEW
   Then I see "Events and audio recordings" on the page
   And I see "{{seq}}ABC-6" on the page
 
-  When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Playback Only" radio button
+  #When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  When I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Playback Only" radio button
+  And I click on the radio button label "Playback Only"
   And I press the "Get Audio" button
 
   #Confirm your Order
@@ -52,9 +54,9 @@ Scenario: Request Audio with Request Type Playback Only NEW
   Then I see "Confirm your Order" on the page
   #And I see "<Restriction>" on the page
   And I see "Case details" on the page
-  And I see "A{{seq}}006" on the page
+  And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-1" on the page
+  And I see "Def {{seq}}-6" on the page
   And I see "Audio details" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
@@ -65,9 +67,9 @@ Scenario: Request Audio with Request Type Playback Only NEW
   When I press the "Confirm" button
   Then I see "Your order is complete" on the page
   #And I see "<Restriction>" on the page
-  And I see "A{{seq}}006" on the page
+  And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-1" on the page
+  And I see "Def {{seq}}-6" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
   And I see "10:02:00" on the page
@@ -80,15 +82,15 @@ Scenario: Request Audio with Request Type Download NEW
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
   And I see "Search for a case" on the page
-  And I set "Case ID" to "A{{seq}}006"
+  And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
     | Case ID     | Courthouse         | Courtroom | Judge(s)        | Defendants(s) |
-    | A{{seq}}006 | Harrow Crown Court | {{seq}}-6 | Judge {{seq}}-1 | Def {{seq}}-1 |
+    | B{{seq}}006 | Harrow Crown Court | {{seq}}-6 | Judge {{seq}}-6 | Def {{seq}}-6 |
 
   #Case Details
 
-  When I click on "A{{seq}}006" in the same row as "Harrow Crown Court"
+  When I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
 
   #Hearing Details
 
@@ -96,8 +98,10 @@ Scenario: Request Audio with Request Type Download NEW
   Then I see "Events and audio recordings" on the page
   And I see "{{seq}}ABC-6" on the page
 
-  When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  When I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
 
   #Confirm your Order
@@ -105,9 +109,9 @@ Scenario: Request Audio with Request Type Download NEW
   Then I see "Confirm your Order" on the page
   #And I see "<Restriction>" on the page
   And I see "Case details" on the page
-  And I see "A{{seq}}006" on the page
+  And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-1" on the page
+  And I see "Def {{seq}}-6" on the page
   And I see "Audio details" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
@@ -118,9 +122,9 @@ Scenario: Request Audio with Request Type Download NEW
   When I press the "Confirm" button
   Then I see "Your order is complete" on the page
   #And I see "<Restriction>" on the page
-  And I see "A{{seq}}006" on the page
+  And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-1" on the page
+  And I see "Def {{seq}}-6" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
   And I see "10:02:00" on the page
@@ -131,15 +135,18 @@ Scenario: Request Audio with Request Type Download NEW
 Scenario: Request Audio Confirm your Order Cancel link
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "A{{seq}}006"
+  And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
-  And I click on "A{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
   And I see "Confirm your Order" on the page
   And I click on the "Cancel" link
@@ -149,15 +156,18 @@ Scenario: Request Audio Confirm your Order Cancel link
 Scenario: Request Audio Confirm Order Back link
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "A{{seq}}006"
+  And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
-  And I click on "A{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
   And I see "Confirm your Order" on the page
   And I click on the "Back" link
@@ -167,9 +177,9 @@ Scenario: Request Audio Confirm Order Back link
 Scenario: Request Audio Error Messages
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "A{{seq}}006"
+  And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
-  And I click on "A{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
@@ -182,14 +192,16 @@ Scenario: Request Audio Error Messages
 Scenario: Request Audio request type error message
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "A{{seq}}006"
+  And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
-  And I click on "A{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
   And I press the "Get Audio" button
   Then I see "You must select a request type" on the page
 
@@ -197,15 +209,18 @@ Scenario: Request Audio request type error message
 Scenario: Order Confirmation - Return to hearing date link
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "A{{seq}}006"
+  And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
-  And I click on "A{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
   Then I see "Confirm your Order" on the page
 
@@ -218,15 +233,18 @@ Scenario: Order Confirmation - Return to hearing date link
 Scenario: Order Confirmation - Back to search results link
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "A{{seq}}007"
+  And I set "Case ID" to "B{{seq}}007"
   And I press the "Search" button
-  And I click on "A{{seq}}007" in the same row as "Harrow Crown Court"
+  And I click on "B{{seq}}007" in the same row as "Harrow Crown Court"
   And I click on "{{displaydate}}" in the same row as "{{seq}}-7"
   Then I see "{{seq}}ABC-7" on the page
 
-  When I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  And I select the "Download" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
+  #And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  And I click on the "10:01:00 - 10:02:00" checkbox
+  #And I select the "Download" radio button
+  And I click on the radio button label "Download"
   And I press the "Get Audio" button
   Then I see "Confirm your Order" on the page
 
@@ -235,29 +253,31 @@ Scenario: Order Confirmation - Back to search results link
   And I click on the "Back to search results" link
   Then I see "Search for a case" on the page
 
-@DMP-695 @regression  #Manually enter in Start Time and End Time
+@DMP-695 @regression #Manually enter in Start Time and End Time
 Scenario: Request Audio by setting Start Time and End Time
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "A{{seq}}006"
+  And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
-  And I click on "A{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   Then I see "{{seq}}ABC-6" on the page
 
-  When I select the "Audio preview and events" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
   And I set the time fields of "Start Time" to "10:01:00"
   And I set the time fields of "End Time" to "10:02:00"
-  And I select the "Playback Only" radio button
+  #And I select the "Playback Only" radio button
+  And I click on the radio button label "Playback Only"
   And I press the "Get Audio" button
 
   #Confirm your Order
 
   Then I see "Confirm your Order" on the page
   And I see "Case details" on the page
-  And I see "A{{seq}}006" on the page
+  And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-1" on the page
+  And I see "Def {{seq}}-6" on the page
   And I see "Audio details" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
@@ -267,9 +287,9 @@ Scenario: Request Audio by setting Start Time and End Time
 
   When I press the "Confirm" button
   Then I see "Your order is complete" on the page
-  And I see "A{{seq}}006" on the page
+  And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-1" on the page
+  And I see "Def {{seq}}-6" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
   And I see "10:02:00" on the page
@@ -299,9 +319,11 @@ Scenario Outline: Request Audio Events only available for hearing
   And I see "Swansea" on the page
   And I see "ROOM_A" on the page
 
-  When I select the "Events only" radio button
+  #When I select the "Events only" radio button
+  When I click on the radio button label "Events only"
   And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-  And I select the "Playback Only" radio button
+  #And I select the "Playback Only" radio button
+  And I click on the radio button label "Playback Only"
   And I press the "Get Audio" button
 
   #Confirm your Order
@@ -357,7 +379,8 @@ Scenario Outline: Preview Audio Player Loading
   And I see "Swansea" on the page
   And I see "ROOM_A" on the page
 
-  When I select the "Audio preview and events" radio button
+  #When I select the "Audio preview and events" radio button
+  When I click on the radio button label "Audio preview and events"
   And I press the "Preview Audio" button in the same row as "<StartTime>" "<EndTime>"
   Then I see "<Text>" in the same row as "<StartTime>" "<EndTime>"
   Examples:
