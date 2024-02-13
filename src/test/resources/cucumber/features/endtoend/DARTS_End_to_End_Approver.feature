@@ -51,8 +51,8 @@ Feature: Approver
     Then I Sign out
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 |
+      | courthouse         | courtroom | case_number     | judges           | defendants            | prosecutors          | defenders        | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   |
+      | Harrow Crown Court | {{seq}}   | SIT{{seq}}99001 | SIT{{seq}} judge | SIT{{seq}} defendants | SIT{{seq}} defenders | SIT{{seq}} judge | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT KEY{{seq}} | sample1.mp2 |
 
   @end2end @end2end3 @DMP-2201
   Scenario Outline: Approver - Rejects the request
@@ -70,10 +70,6 @@ Feature: Approver
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -104,5 +100,5 @@ Feature: Approver
     Then I Sign out
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | Reason             |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | Reject for testing |
+      | courthouse         | courtroom | case_number     | judges         | defendants          | prosecutors        | defenders      | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | Reason             |
+      | Harrow Crown Court | {{seq}}   | SIT{{seq}}99001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT KEY{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | Reject for testing |

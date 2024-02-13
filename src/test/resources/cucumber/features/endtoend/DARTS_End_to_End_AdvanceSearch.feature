@@ -1,6 +1,6 @@
 Feature: Advance Search
 
-  @end2end @end2end6 @DMP-1927
+  @end2end @end2end6 @DMP-1927 @demo
    #Created a case and event via Post courtlog
   Scenario Outline: Create a case
     Given I create a case
@@ -80,38 +80,33 @@ Feature: Advance Search
     Then I see "using filters to restrict the number of results" on the page
 
     When I click on the "Clear search" link
-    #Then I select the "Specific date" radio button with label "Specific date"
-    Then I click on the radio button label "Specific date"
+    Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I see "result" on the page
 
     When I click on the "Clear search" link
-    #Then I select the "Specific date" radio button with label "Specific date"
-    Then I click on the radio button label "Specific date"
+    Then I select the "Specific date" radio button
     Then I set "Enter a date" to "Invalid"
     Then I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
-    #Then I select the "Date range" radio button with label "Date range"
-    Then I click on the radio button label "Date range"
+    Then I select the "Date range" radio button
     Then I set "Enter date from" to "Invalid"
     Then I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
-    #Then I select the "Date range" radio button with label "Date range"
-    Then I click on the radio button label "Date range"
+    Then I select the "Date range" radio button
     Then I set "Enter date to" to "Invalid"
     Then I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
-    #Then I select the "Date range" radio button with label "Date range"
-    Then I click on the radio button label "Date range"
+    Then I select the "Date range" radio button
     Then I set "Enter date from" to "<todaysDate>"
     Then I set "Enter date to" to "<todaysDate>"
     Then I press the "Search" button
@@ -127,10 +122,10 @@ Feature: Advance Search
     Then I see "result" on the page
 
     Examples:
-      | courthouse         | case_number | defendants         | judges         | prosecutors         | defenders         | courtroom | keywords        | dateTime      | todaysDate  |
-      | Harrow Crown Court | S{{seq}}001 | S{{seq}} defendant | S{{seq}} judge | S{{seq}} prosecutor | S{{seq}} defender | {{seq}}   | SIT_TEST{{seq}} | {{timestamp}} | {{date+0/}} |
+      | courthouse         | case_number     | defendants           | judges           | prosecutors           | defenders           | courtroom | keywords     | dateTime      | todaysDate  |
+      | Harrow Crown Court | SIT{{seq}}99001 | SIT{{seq}} defendant | SIT{{seq}} judge | SIT{{seq}} prosecutor | SIT{{seq}} defender | {{seq}}   | SIT_KEY{{seq}} | {{timestamp}} | {{date+0/}} |
 
-  @end2end @end2end6 @DMP-1927
+  @end2end @end2end6 @DMP-1927 @demo
   #Created a case and event via Post event using SOAP
   Scenario Outline: Create a case and hearing via events
     Given I create a case
@@ -218,39 +213,33 @@ Feature: Advance Search
     Then I see "using filters to restrict the number of results" on the page
 
     When I click on the "Clear search" link
-    #Then I select the "Specific date" radio button with label "Specific date"
-    Then I click on the radio button label "Specific date"
-
+    Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I see "result" on the page
 
     When I click on the "Clear search" link
-    #Then I select the "Specific date" radio button with label "Specific date"
-    Then I click on the radio button label "Specific date"
+    Then I select the "Specific date" radio button
     Then I set "Enter a date" to "Invalid"
     Then I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
-    #Then I select the "Date range" radio button with label "Date range"
-    Then I click on the radio button label "Date range"
+    Then I select the "Date range" radio button
     Then I set "Enter date from" to "Invalid"
     Then I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
-    #Then I select the "Date range" radio button with label "Date range"
-    Then I click on the radio button label "Date range"
+    Then I select the "Date range" radio button
     Then I set "Enter date to" to "Invalid"
     Then I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
-    #Then I select the "Date range" radio button with label "Date range"
-    Then I click on the radio button label "Date range"
+    Then I select the "Date range" radio button
     Then I set "Enter date from" to "<todaysDate>"
     Then I set "Enter date to" to "<todaysDate>"
     Then I press the "Search" button
@@ -266,5 +255,5 @@ Feature: Advance Search
     Then I see "result" on the page
 
     Examples:
-      | user     | courthouse         | courtroom | case_number | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors         | defenders         | defendants         | judges         | keywords       | todaysDate  |
-      | APPROVER | Harrow Crown Court | {{seq}}   | S{{seq}}001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | S{{seq}} prosecutor | S{{seq}} defender | S{{seq}} defendant | S{{seq}} judge | SIT LOG{{seq}} | {{date+0/}} |
+      | user     | courthouse         | courtroom | case_number   | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords     | todaysDate  |
+      | APPROVER | Harrow Crown Court | {{seq}}   | SIT{{seq}}99001 | {{timestamp}} | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | SIT{{seq}} prosecutor | SIT{{seq}} defender | SIT{{seq}} defendant | SIT{{seq}} judge | SIT KEY{{seq}} | {{date+0/}} |

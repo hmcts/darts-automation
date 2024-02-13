@@ -1,6 +1,6 @@
 Feature: Requester
 
-  @end2end @end2end2 @DMP-2206 @PJ
+  @end2end @end2end2 @DMP-2206
   Scenario Outline: Requester
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -88,7 +88,6 @@ Feature: Requester
     Then I upload the file "<filename>" at "Upload transcript file"
     Then I press the "Attach file and complete" button
     Then I see "Transcript request complete" on the page
-
     Then I Sign out
 
     Then I see "Sign in to the DARTS Portal" on the page
@@ -99,5 +98,5 @@ Feature: Requester
     Then I see "Complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors        | defenders      | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}001 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} defenders | S{{seq}} judge | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc |
+      | courthouse         | courtroom | case_number     | judges           | defendants            | prosecutors          | defenders        | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
+      | Harrow Crown Court | {{seq}}   | SIT{{seq}}99001 | SIT{{seq}} judge | SIT{{seq}} defendants | SIT{{seq}} defenders | SIT{{seq}} judge | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT KEY{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc |

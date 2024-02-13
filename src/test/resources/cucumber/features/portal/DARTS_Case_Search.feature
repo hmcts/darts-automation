@@ -2,7 +2,7 @@ Feature: Case Search
 
  #TODO: Consider having a case with restriction on it
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression @demo
 Scenario: Case Search data creation
 	Given I create a case
 		| courthouse         | case_number | defendants     | judges           | prosecutors         | defenders         |
@@ -20,7 +20,7 @@ Scenario: Case Search data creation
 		| {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}004  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
 		| {{seq}}001 | 21200 | 11008    | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}005  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression @demo
 Scenario: Simple and Advanced Case Search
 
   #Simple search
@@ -140,7 +140,7 @@ Scenario: Simple and Advanced Case Search
 	And I see "adding more information to your search" on the page
 	And I see "using filters to restrict the number of results" on the page
 
-@DMP-509 @DMP-507 @DMP-860 @regression
+@DMP-509 @DMP-507 @DMP-860 @regression @demo
 Scenario: Case details and Hearing details
 
 	#Case Details
@@ -235,7 +235,7 @@ Scenario: Case Search error message verification
 	Then I see an error message "You have not selected a start date. Select a start date to define your search"
 	Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
-@DMP-963 @regression
+@DMP-963 @regression @demo
 Scenario: Last Search results are retrievable on clicking Search in the breadcrumb trail
 	When I am logged on to DARTS as an APPROVER user
 	And I click on the "Search" link
@@ -265,7 +265,7 @@ Scenario: Last Search results are retrievable on clicking Search in the breadcru
 		| A{{seq}}002                                             | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
 		| A{{seq}}001                                             | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
 
-@DMP-997 @regression
+@DMP-997 @regression @demo
 Scenario: Case file breadcrumbs
 	When I am logged on to DARTS as an APPROVER user
 	And I click on the "Search" link
@@ -320,7 +320,7 @@ Scenario: Hide automatic transcript request - Heating details screen
 	And I click on the "Transcripts" link
 	Then I see "There are no transcripts for this hearing." on the page
 
-@DMP-1798-AC1-AC3 @regression
+@DMP-1798-AC1-AC3 @regression @demo
 Scenario: Restrictions banner on hearing details screen - All restriction events received during hearing displayed on hearing details screen - Open restriction list
 	Given I am logged on to DARTS as an APPROVER user
 	When I click on the "Search" link
@@ -334,7 +334,7 @@ Scenario: Restrictions banner on hearing details screen - All restriction events
 	And I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
 	And I see "For full details, check the hearing events." on the page
 
-@DMP-1798-AC2 @regression
+@DMP-1798-AC2 @regression @demo
 Scenario: Restrictions banner on hearing details screen - Closed by default
 	Given I am logged on to DARTS as an APPROVER user
 	When I click on the "Search" link
@@ -346,7 +346,7 @@ Scenario: Restrictions banner on hearing details screen - Closed by default
 	#Then I click on the "Show restrictions" link
 	Then I do not see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
 
-@DMP-1798-AC4 @regression
+@DMP-1798-AC4 @regression @demo
 Scenario: Restrictions banner on hearing details screen - collapse restriction list
 	Given I am logged on to DARTS as an APPROVER user
 	When I click on the "Search" link
