@@ -1,16 +1,15 @@
 Feature: Requester
 
-  @end2end @end2end2 @DMP-2206 @ts2
+  @end2end @end2end2 @DMP-2206
   Scenario Outline: Requester
+    Given I create a case
+      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I authenticate from the XHIBIT source system
     And   I create an event
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
-    And   I authenticate from the DARPCMIDTIER source system
-    And   I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-    And   I load an audio file
+    When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
     And  I wait for 2 minutes
@@ -62,7 +61,8 @@ Feature: Requester
     And I press the "Continue" button
     And I see "Check and confirm your transcript request" on the page
     And I see "<case_number>" on the page
-    And I check the "I confirm I have received authorisation from the judge." checkbox
+    #And I check the "I confirm I have received authorisation from the judge." checkbox
+    Then I click on the "I confirm I have received authorisation from the judge." checkbox
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
