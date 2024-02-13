@@ -29,6 +29,8 @@ public class Portal {
     private WaitUtils WAIT;
     private GenUtils GEN;
     private TestData TD;
+    private Database DB;
+    private JsonApi jsonApi;
 
     public Portal(WebDriver driver, TestData testdata) {
         this.webDriver = driver;
@@ -36,6 +38,8 @@ public class Portal {
         NAV = new NavigationShared(webDriver);
         WAIT = new WaitUtils(webDriver);
         GEN = new GenUtils(webDriver);
+        DB = new Database();
+    	jsonApi = new JsonApi();
     }
 
     public void clickOnBreadcrumbLink(String label) {
@@ -282,6 +286,26 @@ public class Portal {
         };
         try {
             wait.until(justWait);
+        } catch (TimeoutException e) {
+            log.info("Wait complete");
+        }
+    }
+    
+    public void waitForAudioToBeLoaded(String userId, String courthouse, String caseNumber, String hearingDate) throws Exception {
+    	String user_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userId, "usr_id");
+        int waitTimeInSeconds = 300;
+        log.info("WAIT TIME {}", waitTimeInSeconds);
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds));  
+        Function<WebDriver, Boolean> audioIsLoaded = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+            	ApiResponse apiResponse = jsonApi.getApiWithParams("audio-requests/v2", "user_id=" + user_id, "expired=false", "");
+        		return apiResponse.responseString.contains("\"case_number\":\"" + caseNumber + "\",\"courthouse_name\":\"" + courthouse + "\",\"hearing_date\":\"" + hearingDate + "\"");
+            };
+        };
+        try {
+            wait.until(audioIsLoaded);
         } catch (TimeoutException e) {
             log.info("Wait complete");
         }

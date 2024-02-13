@@ -123,6 +123,11 @@ public class StepDef_portal extends StepDef_base {
         portal.wait(waitTime);
     }
 
+    @Then("I wait until the audio file has been loaded for user  \"([^\"]*)\" courthouse  \"([^\"]*)\" case  \"([^\"]*)\" date  \"([^\"]*)\"")
+    public void waitForAudioToBeLoaded(String userId, String courthouse, String caseNumber, String hearingDate) throws Exception {
+    	portal.waitForAudioToBeLoaded(userId, courthouse, caseNumber, hearingDate);
+    }
+
     @Then("I wait for \"([^\"]*)\" minutes with \"([^\"]*)\" to appear for \"([^\"]*)\"$")
     public void waitForAudioFileWithStartTime(String waitTime, String startTime, String caseNumber) {
         portal.waitForAudioFile(waitTime, startTime, caseNumber);
