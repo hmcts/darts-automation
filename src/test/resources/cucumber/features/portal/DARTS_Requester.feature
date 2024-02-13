@@ -306,4 +306,35 @@ Feature: User as a Requester
       |*NO-CHECK* | CASE1009   | Swansea   | 15 Aug 2023    | 14:00:00  | 14:01:00  |  7713     | 09:20:02 13/12/2023  |  EXPIRED  |
       |*NO-CHECK* | CASE1009   | Swansea   | 15 Aug 2023    | 13:00:00  | 13:01:00  | 8385      | 16:30:00 19/12/2023  | EXPIRED   |
 
+  @DMP-2123
+  Scenario: Delete single transcripts request warning
+    When I click on the "Your transcripts" link
+    And I check the checkbox in the same row as "DMP-1908" "Swansea"
+    And I press the "Remove transcript request" button
+    And I see "Are you sure you want to remove this transcript request?" on the page
+    And I see "This action will remove this transcript request from your transcripts. You can still access it by searching at the hearing and case levels." on the page
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse | Hearing date | Type        | Requested on      | Status   | Urgency   |
+      | DMP-1908 | Swansea    | 26 Jan 2024  | Antecedents | 26 Jan 2024 16:06 | Complete | OVERNIGHT |
+    And I see the "Yes - delete" button
+    And I see link with text "Cancel"
+
+   #Update will be needed to use dynamic data when available.
+
+  @DMP-2124
+  Scenario: Delete multiple transcripts request warning
+    When I click on the "Your transcripts" link
+    And I check the checkbox in the same row as "DMP-1908" "Swansea"
+    And I check the checkbox in the same row as "S859001" "Harrow Crown Court"
+    And I press the "Remove transcript request" button
+    And I see "Are you sure you want to remove these transcript requests?" on the page
+    And I see "This action will remove these transcript requests from your transcripts. You can still access them by searching at the hearing and case levels." on the page
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Hearing date | Type               | Requested on      | Status   | Urgency   |
+      | DMP-1908 | Swansea            | 26 Jan 2024  | Antecedents        | 26 Jan 2024 16:06 | Complete | OVERNIGHT |
+      | S859001  | Harrow Crown Court | 17 Jan 2024  | Sentencing remarks | 26 Jan 2024 15:47 | Complete | OVERNIGHT |
+    And I see the "Yes - delete" button
+    And I see link with text "Cancel"
+
+  #Update will be needed to use dynamic data when available
 
