@@ -22,7 +22,7 @@ Scenario: Request Audio data creation
     | Harrow Crown Court | {{seq}}-7 | B{{seq}}007  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
 
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @regression
-Scenario: Request Audio with Request Type Playback Only NEW
+Scenario: Request Audio with Request Type Playback Only
 
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
