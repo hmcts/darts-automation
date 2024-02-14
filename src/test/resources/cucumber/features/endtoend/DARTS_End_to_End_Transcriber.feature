@@ -33,8 +33,7 @@ Feature: Transcriber
     And I press the "Continue" button
     And I see "Check and confirm your transcript request" on the page
     And I see "<case_number>" on the page
-    #And I check the "I confirm I have received authorisation from the judge." checkbox
-    Then I click on the "I confirm I have received authorisation from the judge." checkbox
+    And I check the "I confirm I have received authorisation from the judge." checkbox
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
@@ -125,8 +124,7 @@ Feature: Transcriber
     And I press the "Continue" button
     And I see "Check and confirm your transcript request" on the page
     And I see "<case_number>" on the page
-    #And I check the "I confirm I have received authorisation from the judge." checkbox
-    Then I click on the "I confirm I have received authorisation from the judge." checkbox
+    And I check the "I confirm I have received authorisation from the judge." checkbox
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
