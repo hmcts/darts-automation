@@ -39,13 +39,13 @@ Feature: Requester
     And  I see "You have already ordered this audio and the request is 'pending'." on the page
     When I click on the "HMCTS" link
 
-    And  I click on the "Your audio" link
 #    Then I wait for "2" minutes with "READY" to appear for "<case_number>"
     Then I wait for the audio file to be ready
       | courthouse   | case_number   | hearing_date | user      |
-      | <courthouse> | <case_number> | {{date+0/}}  | REQUESTER |    
-
-    Then I click on "View" in the same row as "<case_number>"
+      | <courthouse> | <case_number> | {{date+0/}}  | REQUESTER |
+      
+    When I click on the "Your audio" link
+    And  I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
     #Then I play the audio player
     Then I click on the "Search" link
