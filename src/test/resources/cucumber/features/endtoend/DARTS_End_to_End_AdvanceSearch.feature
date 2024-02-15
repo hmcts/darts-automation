@@ -256,5 +256,5 @@ Feature: Advance Search
     Then I see "result" on the page
 
     Examples:
-      | user     | courthouse         | courtroom | case_number | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors         | defenders         | defendants         | judges         | keywords       | todaysDate  |
-      | APPROVER | Harrow Crown Court | {{seq}}   | S{{seq}}042 | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor | S{{seq}} defender | S{{seq}} defendant | S{{seq}} judge | SIT LOG{{seq}} | {{date+0/}} |
+      | user     | courthouse         | courtroom | case_number | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors         | defenders         | defendants         | judges         | keywords           | todaysDate  |
+      | APPROVER | Harrow Crown Court | {{seq}}   | S{{seq}}042 | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor | S{{seq}} defender | S{{seq}} defendant | S{{seq}} judge | SIT LOG-42-{{seq}} | {{date+0/}} |
