@@ -43,31 +43,6 @@ public class StepDef_jsonApi extends StepDef_base {
 		jsonApi = new JsonApi();
 	}
 	
-	String getValue(Map<String, String> map, String column) {
-		if (map.containsKey(column)) {
-			String value = map.get(column);
-			if (value == null) {
-				value = "";
-			}
-			return Substitutions.substituteValue(value);
-		} else {
-			return "";
-		}
-	}
-	
-	String getValue(Map<String, String> map, String column, String defaultValue) {
-		if (map.containsKey(column)) {
-			String tableValue = map.get(column);
-			if (tableValue == null || tableValue.isEmpty()) {
-				return defaultValue;
-			} else {
-				return Substitutions.substituteValue(tableValue);
-			}
-		} else {
-			return defaultValue;
-		}
-	}
-	
 	@Given("I authenticate as a/an {word} user") 
 	public void authenticateAsUser(String role) {
 		jsonApi.authenticateAsUser(role);
