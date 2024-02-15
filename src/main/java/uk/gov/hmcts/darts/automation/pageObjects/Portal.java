@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import uk.gov.hmcts.darts.automation.utils.*;
+import uk.gov.hmcts.darts.automation.utils.Credentials;
 
 public class Portal {
     private static Logger log = LogManager.getLogger("Portal");
@@ -29,6 +30,8 @@ public class Portal {
     private WaitUtils WAIT;
     private GenUtils GEN;
     private TestData TD;
+    private Database DB;
+    private JsonApi jsonApi;
 
     public Portal(WebDriver driver, TestData testdata) {
         this.webDriver = driver;
@@ -36,6 +39,8 @@ public class Portal {
         NAV = new NavigationShared(webDriver);
         WAIT = new WaitUtils(webDriver);
         GEN = new GenUtils(webDriver);
+        DB = new Database();
+    	jsonApi = new JsonApi();
     }
 
     public void clickOnBreadcrumbLink(String label) {
@@ -51,8 +56,9 @@ public class Portal {
         webDriver.findElement(By.xpath("//span[contains(@id, 'transcription-count') and contains(text(),'" + count + "')]"));
     }
 
-
     public void logonAsUser(String type) throws Exception {
+    	String userName = Credentials.userName(type);
+    	String password = Credentials.password(type);
     	log.info("About to navigate to homepage & login as user type " + type);
     	if (type.equalsIgnoreCase("ADMIN")) {
     		NAV.navigateToUrl(ReadProperties.main("portal_url") + "/admin");
@@ -65,31 +71,17 @@ public class Portal {
         NAV.waitForPageLoad();
         switch (type.toUpperCase()) {
             case "EXTERNAL":
-                loginToPortal_ExternalUser(ReadProperties.automationUserId, ReadProperties.automationPassword);
-                break;
             case "TRANSCRIBER":
-                loginToPortal_ExternalUser(ReadProperties.automationTranscriberUserId, ReadProperties.automationExternalPassword);
-                break;
             case "LANGUAGESHOP":
-                loginToPortal_ExternalUser(ReadProperties.automationLanguageShopTestUserId, ReadProperties.automationExternalPassword);
+            case "ADMIN":
+                loginToPortal_ExternalUser(userName, password);
                 break;
             case "REQUESTER":
-                loginToPortal_InternalUser(ReadProperties.automationRequesterTestUserId, ReadProperties.automationInternalUserTestPassword);
-                break;
             case "APPROVER":
-                loginToPortal_InternalUser(ReadProperties.automationApproverTestUserId, ReadProperties.automationInternalUserTestPassword);
-                break;
             case "REQUESTERAPPROVER":
-                loginToPortal_InternalUser(ReadProperties.automationRequesterApproverTestUserId, ReadProperties.automationRequesterApproverTestPassword);
-                break;
             case "JUDGE":
-                loginToPortal_InternalUser(ReadProperties.automationJudgeTestUserId, ReadProperties.automationInternalUserTestPassword);
-                break;
             case "APPEALCOURT":
-                loginToPortal_InternalUser(ReadProperties.automationAppealCourtTestUserId, ReadProperties.automationInternalUserTestPassword);
-                break;
-            case "ADMIN":
-                loginToPortal_ExternalUser(ReadProperties.dartsAdminUserName, ReadProperties.automationExternalPassword);
+                loginToPortal_InternalUser(userName, password);
                 break;
             default:
                 log.fatal("Unknown user type - {}" + type.toUpperCase());
@@ -282,6 +274,30 @@ public class Portal {
         };
         try {
             wait.until(justWait);
+        } catch (TimeoutException e) {
+            log.info("Wait complete");
+        }
+    }
+    
+    public void waitForAudioToBeLoaded(String user, String courthouse, String caseNumber, String hearingDate) throws Exception {
+    	log.info("Waiting for audio file to be loaded - {} {} {} for {}", courthouse, caseNumber, hearingDate, user);
+    	String userName = Credentials.userName(user);
+    	String user_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userName, "usr_id");
+        int waitTimeInSeconds = 300;
+        String expectedResponse = "\"case_number\":\"" + caseNumber + "\",\"courthouse_name\":\"" + courthouse + "\",\"hearing_date\":\"" + DateUtils.dateAsYyyyMmDd(hearingDate) + "\"";
+        log.info("WAIT TIME {}", waitTimeInSeconds);
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
+                .pollingEvery(Duration.ofSeconds(10));  
+        Function<WebDriver, Boolean> audioIsLoaded = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+            	ApiResponse apiResponse = jsonApi.getApiWithParams("audio-requests/v2", "user_id=" + user_id, "expired=false", "");
+        		return apiResponse.responseString.contains(expectedResponse);
+            };
+        };
+        try {
+            wait.until(audioIsLoaded);
         } catch (TimeoutException e) {
             log.info("Wait complete");
         }

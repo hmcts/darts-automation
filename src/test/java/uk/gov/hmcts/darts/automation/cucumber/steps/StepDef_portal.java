@@ -4,14 +4,22 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import uk.gov.hmcts.darts.automation.utils.ApiResponse;
+import uk.gov.hmcts.darts.automation.utils.DateUtils;
+import uk.gov.hmcts.darts.automation.utils.JsonUtils;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.pageObjects.Portal;
+
+import java.util.List;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 
 public class StepDef_portal extends StepDef_base {
 
@@ -122,6 +130,25 @@ public class StepDef_portal extends StepDef_base {
     public void waitForTime(int waitTime) {
         portal.wait(waitTime);
     }
+
+    @Then("I wait until the audio file has been loaded for user  \"([^\"]*)\" courthouse  \"([^\"]*)\" case  \"([^\"]*)\" date  \"([^\"]*)\"")
+    public void waitForAudioToBeLoaded(String userId, String courthouse, String caseNumber, String hearingDate) throws Exception {
+    	portal.waitForAudioToBeLoaded(userId, courthouse, caseNumber, hearingDate);
+    }
+	
+ // sample cucumber:
+ // Then I wait for the audio file to be ready
+ // |user|courthouse|case_number|hearing_date|
+ 	@Then("^I wait for the audio file to be ready$")
+ 	public void loadAudioFile(List<Map<String,String>> dataTable) throws Exception {
+ 		for (Map<String, String> map : dataTable) {
+ 			portal.waitForAudioToBeLoaded(
+ 					getValue(map, "user"),
+ 					getValue(map, "courthouse"),
+ 					getValue(map, "case_number"),
+ 					getValue(map, "hearing_date"));
+ 		}
+ 	}
 
     @Then("I wait for \"([^\"]*)\" minutes with \"([^\"]*)\" to appear for \"([^\"]*)\"$")
     public void waitForAudioFileWithStartTime(String waitTime, String startTime, String caseNumber) {

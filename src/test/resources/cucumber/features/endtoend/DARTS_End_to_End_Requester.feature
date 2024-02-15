@@ -12,7 +12,6 @@ Feature: Requester
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
-    And  I wait for 2 minutes
     When I am logged on to DARTS as an REQUESTER user
     And  I set "Case ID" to "<case_number>"
     And  I press the "Search" button
@@ -40,10 +39,13 @@ Feature: Requester
     And  I see "You have already ordered this audio and the request is 'pending'." on the page
     When I click on the "HMCTS" link
 
-    And  I click on the "Your audio" link
-    Then I wait for "2" minutes with "READY" to appear for "<case_number>"
-
-    Then I click on "View" in the same row as "<case_number>"
+#    Then I wait for "2" minutes with "READY" to appear for "<case_number>"
+    Then I wait for the audio file to be ready
+      | courthouse   | case_number   | hearing_date | user      |
+      | <courthouse> | <case_number> | {{date+0/}}  | REQUESTER |
+      
+    When I click on the "Your audio" link
+    And  I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
     #Then I play the audio player
     Then I click on the "Search" link
@@ -61,8 +63,7 @@ Feature: Requester
     And I press the "Continue" button
     And I see "Check and confirm your transcript request" on the page
     And I see "<case_number>" on the page
-    #And I check the "I confirm I have received authorisation from the judge." checkbox
-    Then I click on the "I confirm I have received authorisation from the judge." checkbox
+    And I check the "I confirm I have received authorisation from the judge." checkbox
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
