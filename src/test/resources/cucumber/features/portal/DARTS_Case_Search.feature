@@ -1,6 +1,6 @@
 Feature: Case Search
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression @DM
 Scenario: Case Search data creation
 	Given I create a case
 		| courthouse         | case_number | defendants     | judges           | prosecutors         | defenders         |
@@ -388,4 +388,75 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
 	And I do not see "There are restrictions against this case" on the page
 	And I press the "back" button on my browser
 	And I click on the "11 Aug 2023" link
+	Then I do not see "There are restrictions against this case" on the page
+
+@DMP-1799-AC1-AC4 @DM
+Scenario: Restrictions banner on request/review screen - All restriction events received during hearing displayed on request/review screen - Open restriction list
+    Given I am logged on to DARTS as an REQUESTER user
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "A{{seq}}005"
+    And I press the "Search" button
+    And I click on the "A{{seq}}005" link
+    And I click on the "{{displaydate}}" link
+    #Audio request check your answers
+    When I select the "Audio preview and events" radio button
+    And I check the checkbox in the same row as "10:00:00" "An order made under s46 of the Youth Justice and Criminal Evidence Act 1999"
+    And I press the "Get Audio" button
+    Then I see "Confirm your Order" on the page
+    And I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
+    And I see "For full details, check the hearing events." on the page
+    And I click on the "Hide restrictions" link
+    When I press the "Confirm" button
+    #Audio Request Confirmation Screen
+    Then I see "Your order is complete" on the page
+    And I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "Restriction applied: An order made under s46 of the Youth Justice and Criminal Evidence Act 1999" on the page
+    And I see "For full details, check the hearing events." on the page
+    And I click on the "Hide restrictions" link
+    And I click on the "Return to hearing date" link
+
+@DMP-1799-AC5-Static
+Scenario: Restrictions banner on hearing details screen - no restrictions during hearing but others on case
+	Given I am logged on to DARTS as an APPROVER user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "DMP-1225_case1"
+	And I press the "Search" button
+	And I click on the "DMP-1225_case1" link
+	And I click on the "5 Jan 2024" link
+	Then I see "There are restrictions against this case" on the page
+	And I do not see "Show restrictions" on the page
+	When I select the "Audio preview and events" radio button
+	And I check the checkbox in the same row as "12:00:00 - 12:01:00" "Audio recording"
+	And I press the "Get Audio" button
+	 #Audio request check your answers
+	Then I see "Confirm your Order" on the page
+	Then I see "There are restrictions against this case" on the page
+	And I do not see "Show restrictions" on the page
+   #Audio request confirmation screen
+	And I press the "Confirm" button
+	Then I see "There are restrictions against this case" on the page
+	And I do not see "Show restrictions" on the page
+
+@DMP-1799-AC6-Static
+Scenario: Restrictions banner on hearing details screen - no restrictions during hearing but others on case
+	Given I am logged on to DARTS as an APPROVER user
+	When I click on the "Search" link
+	And I see "Search for a case" on the page
+	And I set "Case ID" to "CASE5_Event_DMP461"
+	And I press the "Search" button
+	And I click on the "CASE5_Event_DMP461" link
+	And I click on the "10 Aug 2023" link
+	Then I do not see "There are restrictions against this case" on the page
+	When I select the "Audio preview and events" radio button
+	And I check the checkbox in the same row as "00:00:00 - 00:00:00" "Audio recording"
+	And I press the "Get Audio" button
+  	#Audio request check your answers
+	Then I see "Confirm your Order" on the page
+	Then I do not see "There are restrictions against this case" on the page
+   	#Audio request confirmation screen
+	And I press the "Confirm" button
 	Then I do not see "There are restrictions against this case" on the page

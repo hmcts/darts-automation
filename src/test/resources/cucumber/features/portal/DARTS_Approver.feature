@@ -139,4 +139,37 @@ Feature: User as a Approver
       | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType                     | urgency              | HearingDate | From         | JudgeApproval |
       | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Summing up (including verdict)  | Up to 3 working days | 15 Aug 2023 | global_judge | Yes           |
 
+  @DMP-1799-AC1-AC4 @DM
+  Scenario: Restrictions banner on request/review screen - All restriction events received during hearing displayed on request/review screen - Open restriction list
+    #Approve/reject transcript request
+    When I am logged on to DARTS as an APPROVER user
+    Then I see "Search for a case" on the page
+    Then I click on the "Your transcripts" link
+    Then I see "Requests to approve or reject" on the page
+    Then I click on "View" in the same row as "S1031032"
+    And I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "Restriction applied: Section 4(2) of the Contempt of Court Act 1981" on the page
+    And I see "For full details, check the hearing events." on the page
+    And I click on the "Hide restrictions" link
 
+  @DMP-1799-AC5 @DMC
+  Scenario: Restrictions banner on hearing details screen - no restrictions during hearing but others on case
+    #Approve/reject transcript request
+    When I am logged on to DARTS as an APPROVER user
+    Then I see "Search for a case" on the page
+    Then I click on the "Your transcripts" link
+    Then I see "Requests to approve or reject" on the page
+    Then I click on "View" in the same row as "DMP-1225_case1"
+    Then I see "There are restrictions against this case" on the page
+    And I do not see "Show restrictions" on the page
+
+  @DMP-1799-AC6 @DMC
+  Scenario: Restrictions banner on hearing details screen - No restrictions
+    #Approve/reject transcript request
+    When I am logged on to DARTS as an APPROVER user
+    Then I see "Search for a case" on the page
+    Then I click on the "Your transcripts" link
+    Then I see "Requests to approve or reject" on the page
+    Then I click on "View" in the same row as "	PerfCase_gxpmdbtjqdsxpkl"
+    Then I do not see "There are restrictions against this case" on the page

@@ -395,4 +395,3 @@ Feature: Request Transcript
     Examples:
       | transcription-type | urgency  |
       | Specified Times    | Overnight |
-

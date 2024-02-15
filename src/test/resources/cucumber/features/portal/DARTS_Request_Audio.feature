@@ -400,3 +400,4 @@ Scenario: Hearing table sorted with time
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+  

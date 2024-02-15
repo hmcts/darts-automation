@@ -338,3 +338,104 @@ Feature: User as a Requester
 
   #Update will be needed to use dynamic data when available
 
+  @DMP-1799-AC1-AC4 @DMC
+  Scenario: Restrictions banner on request/review screen - All restriction events received during hearing displayed on request/review screen - Open restriction list
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "SIT8161001"
+    And I press the "Search" button
+    Given I click on "SIT8161001" in the same row as "Harrow Crown Court"
+    #Request Transcript - events, audio and specific times screen
+    And I click on "12 Feb 2024" in the same row as "8161"
+    And I see "Harrow Crown Court" on the page
+    And I see "8161" on the page
+    And I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "Restriction applied: Section 4(2) of the Contempt of Court Act 1981" on the page
+    And I see "For full details, check the hearing events." on the page
+    And I click on the "Hide restrictions" link
+    #View Transcript - via Hearing Details screen
+    And I click on the "Transcripts" link
+    And I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "Restriction applied: Section 4(2) of the Contempt of Court Act 1981" on the page
+    And I see "For full details, check the hearing events." on the page
+    And I click on the "Hide restrictions" link
+    #Request Transcript - type and urgency
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    And I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "Restriction applied: Section 4(2) of the Contempt of Court Act 1981" on the page
+    And I see "For full details, check the hearing events." on the page
+    And I click on the "Hide restrictions" link
+    And I select "Sentencing remarks" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    #Request Transcript - Check and confirm your request screen
+    And I see "Check and confirm your transcript request" on the page
+    And I click on the "Show restrictions" link
+    Then I see "Hide restrictions" on the page
+    And I see "Restriction applied: Section 4(2) of the Contempt of Court Act 1981" on the page
+    And I see "For full details, check the hearing events." on the page
+    And I click on the "Hide restrictions" link
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+
+  @DMP-1799-AC5 @DMC
+  Scenario: Restrictions banner on hearing details screen - no restrictions during hearing but others on case
+    When I click on the "Search" link
+    And I set "Case ID" to "DMP-1225_case1"
+    And I press the "Search" button
+    And I click on the "DMP-1225_case1" link
+    And I click on the "5 Jan 2024" link
+    Then I see "There are restrictions against this case" on the page
+    And I do not see "Show restrictions" on the page
+    #Request Transcript - events, audio and specific times screen
+    And I see "DMP-1225_Courthouse" on the page
+    And I see "Room1_DMP1225" on the page
+    Then I see "There are restrictions against this case" on the page
+    And I do not see "Show restrictions" on the page
+    #View Transcript - via Hearing Details screen
+    And I click on the "Transcripts" link
+    Then I see "There are restrictions against this case" on the page
+    And I do not see "Show restrictions" on the page
+    #Request Transcript - type and urgency
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    Then I see "There are restrictions against this case" on the page
+    And I do not see "Show restrictions" on the page
+    And I select "Sentencing remarks" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    #Request Transcript - Check and confirm your request screen
+    And I see "Check and confirm your transcript request" on the page
+    Then I see "There are restrictions against this case" on the page
+    And I do not see "Show restrictions" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+
+  @DMP-1799-AC6 @DMC
+  Scenario: Restrictions banner on hearing details screen - No restrictions
+    When I click on the "Search" link
+    And I set "Case ID" to "CASE5_Event_DMP461"
+    And I press the "Search" button
+    And I click on the "CASE5_Event_DMP461" link
+    And I click on the "10 Aug 2023" link
+    Then I do not see "There are restrictions against this case" on the page
+    #Request Transcript - events, audio and specific times screen
+    And I see "Swansea" on the page
+    And I see "ROOM1_LEEDS461" on the page
+    Then I do not see "There are restrictions against this case" on the page
+    #View Transcript - via Hearing Details screen
+    And I click on the "Transcripts" link
+    Then I do not see "There are restrictions against this case" on the page
+    #Request Transcript - type and urgency
+    And I press the "Request a new transcript" button
+    And I see "Request a new transcript" on the page
+    Then I do not see "There are restrictions against this case" on the page
+    And I select "Sentencing remarks" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    #Request Transcript - Check and confirm your request screen
+    And I see "Check and confirm your transcript request" on the page
+    Then I do not see "There are restrictions against this case" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
