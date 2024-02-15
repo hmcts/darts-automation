@@ -43,31 +43,6 @@ public class StepDef_soapApi extends StepDef_base {
 		soapApi = new SoapApi();
 	}
 	
-	String getValue(Map<String, String> map, String column) {
-		if (map.containsKey(column)) {
-			String value = map.get(column);
-			if (value == null) {
-				value = "";
-			}
-			return Substitutions.substituteValue(value);
-		} else {
-			return "";
-		}
-	}
-	
-	String getValue(Map<String, String> map, String column, String defaultValue) {
-		if (map.containsKey(column)) {
-			String tableValue = map.get(column);
-			if (tableValue == null || tableValue.isEmpty()) {
-				return defaultValue;
-			} else {
-				return Substitutions.substituteValue(tableValue);
-			}
-		} else {
-			return defaultValue;
-		}
-	}
-	
 /*
  * Save value from xml response in testdata object
  */
@@ -135,51 +110,51 @@ public class StepDef_soapApi extends StepDef_base {
 		}
 	}
 	
-	// sample cucumber:
-	// When I add courtlogs
-	// |courthouse|courtroom|case_numbers|text|dateTime|
-		@When("^I add courtlogs$")
-		public void createAddLogsXml(List<Map<String,String>> dataTable) {
-			for (Map<String, String> map : dataTable) {
-				String xml = XmlUtils.buildAddLogXml(
-						getValue(map, "courthouse"),
-						getValue(map, "courtroom"),
-						getValue(map, "case_numbers"),
-						getValue(map, "text"),
-						DateUtils.makeTimestamp(getValue(map, "dateTime"), getValue(map, "date"), getValue(map, "time")));
-				ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
-				testdata.statusCode = apiResponse.statusCode;
-				testdata.responseString = apiResponse.responseString;
-				Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
-			}
+// sample cucumber:
+// When I add courtlogs
+// |courthouse|courtroom|case_numbers|text|dateTime|
+	@When("^I add courtlogs$")
+	public void createAddLogsXml(List<Map<String,String>> dataTable) {
+		for (Map<String, String> map : dataTable) {
+			String xml = XmlUtils.buildAddLogXml(
+					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
+					getValue(map, "case_numbers"),
+					getValue(map, "text"),
+					DateUtils.makeTimestamp(getValue(map, "dateTime"), getValue(map, "date"), getValue(map, "time")));
+			ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
 		}
+	}
 		
 // sample cucumber:
 // When I add a daily list
 // | ... | datatable follows
-		@When("I add (a) daily list(s)")
-		public void createAddDailyListXml(List<Map<String,String>> dataTable) {
-			for (Map<String, String> map : dataTable) {
-				String xml = XmlUtils.buildAddDailyListXml(
-						getValue(map, "messageId"),
-						getValue(map, "type"),
-						getValue(map, "subType"),
-						getValue(map, "documentName"),
-						getValue(map, "courthouse"),
-						getValue(map, "courtroom"),
-						getValue(map, "caseNumber"),
-						getValue(map, "startDate"),
-						getValue(map, "startTime"),
-						getValue(map, "endDate"),
-						getValue(map, "timeStamp"),
-						getValue(map, "defendant"),
-						getValue(map, "urn", "62AA1010646"));
-				ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
-				testdata.statusCode = apiResponse.statusCode;
-				testdata.responseString = apiResponse.responseString;
-				Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
-			}
+	@When("I add (a) daily list(s)")
+	public void createAddDailyListXml(List<Map<String,String>> dataTable) {
+		for (Map<String, String> map : dataTable) {
+			String xml = XmlUtils.buildAddDailyListXml(
+					getValue(map, "messageId"),
+					getValue(map, "type"),
+					getValue(map, "subType"),
+					getValue(map, "documentName"),
+					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
+					getValue(map, "caseNumber"),
+					getValue(map, "startDate"),
+					getValue(map, "startTime"),
+					getValue(map, "endDate"),
+					getValue(map, "timeStamp"),
+					getValue(map, "defendant"),
+					getValue(map, "urn", "62AA1010646"));
+			ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
 		}
+	}
 	
 	@When("I call POST SOAP API using soap body:")
 	public void callPostApiWithXmlBody(String docString) {
