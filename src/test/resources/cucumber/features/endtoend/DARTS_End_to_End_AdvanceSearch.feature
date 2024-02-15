@@ -1,6 +1,6 @@
 Feature: Advance Search
 
-  @end2end @end2end6 @DMP-1927
+  @end2end @end2end6 @DMP-1927 @demo
    #Created a case and event via Post courtlog
   Scenario Outline: Create a case
     Given I create a case
@@ -122,10 +122,10 @@ Feature: Advance Search
     Then I see "result" on the page
 
     Examples:
-      | courthouse         | case_number | defendants         | judges         | prosecutors         | defenders         | courtroom | keywords        | dateTime      | todaysDate  |
-      | Harrow Crown Court | S{{seq}}041 | S{{seq}} defendant | S{{seq}} judge | S{{seq}} prosecutor | S{{seq}} defender | {{seq}}   | SIT_TEST{{seq}} | {{timestamp}} | {{date+0/}} |
+      | courthouse         | case_number | defendants         | judges         | prosecutors         | defenders         | courtroom | keywords             | dateTime      | todaysDate  |
+      | Harrow Crown Court | S{{seq}}041 | S{{seq}} defendant | S{{seq}} judge | S{{seq}} prosecutor | S{{seq}} defender | {{seq}}   | CASE KEYWORDS{{seq}} | {{timestamp}} | {{date+0/}} |
 
-  @end2end @end2end6 @DMP-1927
+  @end2end @end2end6 @DMP-1927 @demo
   #Created a case and event via Post event using SOAP
   Scenario Outline: Create a case and hearing via events
     Given I create a case
@@ -214,7 +214,7 @@ Feature: Advance Search
 
     When I click on the "Clear search" link
     Then I select the "Specific date" radio button
-    
+
     Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I see "result" on the page
@@ -256,5 +256,5 @@ Feature: Advance Search
     Then I see "result" on the page
 
     Examples:
-      | user     | courthouse         | courtroom | case_number | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors         | defenders         | defendants         | judges         | keywords       | todaysDate  |
-      | APPROVER | Harrow Crown Court | {{seq}}   | S{{seq}}042 | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor | S{{seq}} defender | S{{seq}} defendant | S{{seq}} judge | SIT LOG{{seq}} | {{date+0/}} |
+      | user     | courthouse         | courtroom | case_number | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors         | defenders         | defendants         | judges         | keywords             | todaysDate  |
+      | APPROVER | Harrow Crown Court | {{seq}}   | S{{seq}}042 | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor | S{{seq}} defender | S{{seq}} defendant | S{{seq}} judge | CASE KEYWORDS{{seq}} | {{date+0/}} |

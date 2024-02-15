@@ -6,7 +6,7 @@ Scenario: External logon
 	Then  I see "Welcome to DARTS" on the page
 	And   I see "All content is available under the Open Government Licence v3.0, except where otherwise stated" on the page
 
-@smoketest
+@smoketest @demo
 Scenario: External logon
 	Given I am logged on to DARTS as an external user
 	Then  I see "Search for a case" on the page
@@ -14,35 +14,35 @@ Scenario: External logon
 	And   I see "All content is available under the Open Government Licence v3.0, except where otherwise stated" on the page
 
 
-@DMP-407 @smoketest
+@DMP-407 @smoketest @demo
 Scenario: Search - Verify link
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Search" link
 	Then  I see "Search for a case" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @DMP-860 @smoketest
+@DMP-407 @DMP-860 @smoketest @demo
 Scenario: Your Audio - Verify link
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Your audio" link
 	Then  I see "Your audio" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @DMP-860 @smoketest
+@DMP-407 @DMP-860 @smoketest @demo
 Scenario: Your Transcripts - Verify link
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Your transcripts" link
 	Then  I see "Your transcripts" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest
+@DMP-407 @smoketest @demo
 Scenario: Logout
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Sign out" link
 	Then  I see "Sign in to the DARTS Portal" on the page
 	And   I do not see "Welcome to DARTS" on the page
 
-@DMP-407 @smoketest
+@DMP-407 @smoketest @demo
 Scenario: HMCTS Link
 	Given I am logged on to DARTS as an external user
 	When  I click on the "Search" link
@@ -52,7 +52,7 @@ Scenario: HMCTS Link
 	And   I do not see "Welcome to DARTS" on the page
 	And   I Sign out
 
-@DMP-407 @smoketest
+@DMP-407 @smoketest @demo
 Scenario: Sign out Internal user
 	Given I am logged on to DARTS as a requester user
 	Then  I see "Search for a case" on the page
@@ -61,7 +61,7 @@ Scenario: Sign out Internal user
 	When  I am logged on to DARTS as an approver user
 	Then  I see "Search for a case" on the page
 
-@DMP-407 @smoketest
+@DMP-407 @smoketest @demo
 Scenario: Sign out External user
 	Given I am logged on to DARTS as an external user
 	Then  I see "Search for a case" on the page
@@ -70,7 +70,7 @@ Scenario: Sign out External user
 	When  I am logged on to DARTS as a transcriber user
 	Then  I see "Search for a case" on the page
 
-@DMP-407 @smoketest
+@DMP-407 @smoketest @demo
 Scenario Outline: All roles
 	When  I am logged on to DARTS as a <role> user
 	Then  I see "Search for a case" on the page
@@ -93,7 +93,7 @@ Examples:
 	
 
 
-@Admin @smoketest
+@Admin @smoketest @demo
 Scenario: Admin User
 	When  I am logged on to DARTS as an ADMIN user
 	Then  I see "Users" on the page
