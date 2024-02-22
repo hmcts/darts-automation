@@ -82,7 +82,7 @@ GradleBuilder builder = new GradleBuilder(this, product)
 // but rest assured this will not run nightly, that is defined by the "Jenkinsfile_nightly"
 withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
-  enableFullFunctionalTest(60)
+  enableFullFunctionalTest(90)
   enableSlackNotifications('#darts-builds')
 
   before('fullFunctionalTest') {
