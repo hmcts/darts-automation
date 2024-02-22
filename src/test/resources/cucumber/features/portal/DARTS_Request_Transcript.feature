@@ -7,7 +7,7 @@ Feature: Request Transcript
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
     Given I click on "CASE1009" in the same row as "Swansea"
@@ -82,7 +82,7 @@ Feature: Request Transcript
     And I set "Case ID" to "<CaseID>"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID        | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID        | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | Swansea_case_3 | Swansea    | 2         |          |               |
 
   #No audio available
@@ -105,7 +105,7 @@ Feature: Request Transcript
 
     When I click on the "Cancel and go back to the search results" link
     Then I verify the HTML table contains the following values
-      | Case ID        | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID        | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | Swansea_case_3 | Swansea    | 2         |          |               |
 
     Examples:

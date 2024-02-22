@@ -30,7 +30,7 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
 		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
@@ -47,7 +47,7 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
 		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
 		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
@@ -59,7 +59,7 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}004 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
 		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
 
@@ -69,7 +69,7 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}003 | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
 		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
 		| A{{seq}}001 | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
@@ -80,7 +80,7 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                  | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
+		| Case ID                                                  | Courthouse         | Courtroom | Judge(s)         | Defendant(s)  |
 		| A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
 		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*  | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}003                                              | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
@@ -90,7 +90,7 @@ Scenario: Simple and Advanced Case Search
 	And I click on the "Search" link
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                  | Courthouse         | Courtroom | Judge(s)         | Defendants(s)  |
+		| Case ID                                                  | Courthouse         | Courtroom | Judge(s)         | Defendant(s)  |
 		| A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-2  | Def {{seq}}-11 |
 		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*  | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}003                                              | Harrow Crown Court | {{seq}}-2 | Judge {{seq}}-11 | Def {{seq}}-2  |
@@ -106,7 +106,7 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
 		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
@@ -122,7 +122,7 @@ Scenario: Simple and Advanced Case Search
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
 		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
@@ -242,7 +242,7 @@ Scenario: Last Search results are retrievable on clicking Search in the breadcru
 	And I press the "Search" button
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
 		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
@@ -256,7 +256,7 @@ Scenario: Last Search results are retrievable on clicking Search in the breadcru
 	And I click on the breadcrumb link "Search"
 	And I click on "Case ID" in the table header
 	Then I verify the HTML table contains the following values
-		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
 		| !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
 		| A{{seq}}004                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
@@ -271,7 +271,7 @@ Scenario: Case file breadcrumbs
 	And I set "Case ID" to "A{{seq}}002"
 	And I press the "Search" button
 	Then I verify the HTML table contains the following values
-		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendants(s)  |
+		| Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)  |
 		| A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
 
 	When I click on "A{{seq}}002" in the same row as "Harrow Crown Court"

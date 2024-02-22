@@ -7,7 +7,7 @@ Feature: Case File Screen
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | CASE1009                                                              | Swansea    | Multiple  |Mr Judge  | Jow Bloggs    |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
       | CASE1009                                                              | TS0002     | ROOM_A    |          |               |
@@ -83,7 +83,7 @@ Feature: Case File Screen
     And I set "Case ID" to "DMP-1025"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | DMP-1025                                                              | Swansea    | DMP-1025 Courtroom  |DMP-1025 Judge  | DMP-1025 Defendant|
     Given I click on "DMP-1025" in the same row as "Swansea"
     And I do not see "There are restrictions against this case" on the page
