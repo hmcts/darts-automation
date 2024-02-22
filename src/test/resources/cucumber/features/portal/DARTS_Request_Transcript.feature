@@ -1,6 +1,507 @@
 Feature: Request Transcript
 
-  Background:
+  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-934 @DMP-1012 @DMP-1138 @regression
+  Scenario: Request Transcription data creation
+    Given I create a case using json
+      | courthouse         | case_number | defendants      | judges            | prosecutors         | defenders         |
+      | Harrow Crown Court | C{{seq}}001 | DefC {{seq}}-8  | JudgeC {{seq}}-8  | testprosecutoreight | testdefenderright |
+      | Harrow Crown Court | C{{seq}}002 | DefC {{seq}}-9  | JudgeC {{seq}}-9  | testprosecutornine  | testdefendernine  |
+      | Harrow Crown Court | C{{seq}}003 | DefC {{seq}}-10 | JudgeC {{seq}}-10 | testprosecutorten   | testdefenderten   |
+
+    Given I create an event using json
+      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100  |          | {{seq}}1008 | Harrow Crown Court | {{seq}}-8  | C{{seq}}001  | {{seq}}ABC-8  | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}1009 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}ABC-9  | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 21200 | 11008    | {{seq}}1010 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}DEF-9  | {{timestamp-10:30:30}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}1011 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}GHI-9  | {{timestamp-10:31:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}1012 | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{seq}}ABC-10 | {{timestamp-11:00:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}1013 | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{seq}}DEF-10 | {{timestamp-11:01:00}} |                             |                     |
+
+    When I load an audio file
+      | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
+      | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1   |
+      | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{date+0/}} | 11:00:00  | 11:01:00 | sample1   |
+
+  @DMP-862 @DMP-917 @DMP-934 @DMP-1012 @DMP-1138 @regression
+  Scenario: Request Transcription, Specified Times with Event Checkboxes
+
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    When I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    #DMP-862-AC3 Request Transcript button works
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+    And I see "There are restrictions against this hearing" on the page
+    And I see "C{{seq}}002" on the page
+    And I see "Harrow Crown Court" on the page
+    And I see "DefC {{seq}}-9" on the page
+    And I see "{{displaydate}}" on the page
+
+   #@DMP-892-AC1 and @DMP-892-AC4 Specified Times option (Court Log different scenario) and Urgency populated
+    When I select "Specified Times" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+    And I see "Select events or specify start and end times to request a transcript." on the page
+    And I see "Specific times requests cover all events and audio between the transcript start and end time." on the page
+
+    #DMP-917-AC1 Setting specific time via checkboxes
+    When I check the checkbox in the same row as "10:30:00" "Hearing started"
+    And I check the checkbox in the same row as "10:31:00" "Hearing ended"
+    And I press the "Continue" button
+    #DMP-934 and DMP-917-AC2 Confirmation screen checks
+    Then I see "Check and confirm your transcript request" on the page
+    And I see "C{{seq}}002" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "DefC {{seq}}-9" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Specified Times" in the same row as "Request type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Provide any further instructions or comments for the transcriber." on the page
+    And I see "You have 2000 characters remaining" on the page
+
+    When I set "Comments to the Transcriber (optional)" to "Requesting transcript Specified Times for one minute of audio selected via event checkboxes."
+    And I see "You have 1908 characters remaining" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    #DMP-1012-AC1 and DMP-1138-AC1 Transcript submitted screen
+    Then I see "Transcript request submitted" on the page
+    And I see "What happens next?" on the page
+    And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
+
+    #DMP-1138-AC2 Return to hearing date link
+    When I click on the "Return to hearing date" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Specified Times" in the same row as "Awaiting Authorisation"
+
+    When I click on the "Your transcripts" link
+    Then I see "C{{seq}}002" in the same row as "Awaiting Authorisation"
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an APPROVER user
+    And I click on the "Your transcripts" link
+    And I click on "View" in the same row as "C{{seq}}002"
+    Then I see "Approve transcript request" on the page
+    And I see "C{{seq}}002" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "JudgeC {{seq}}-9" in the same row as "Judge(s)"
+    And I see "DefC {{seq}}-9" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing Date"
+    And I see "Specified Times" in the same row as "Request Type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
+    And I see "Yes" in the same row as "Judge approval"
+
+    When I select the "Yes" radio button
+    And I press the "Submit" button
+    Then I see "Requests to approve or reject" on the page
+    And I do not see "C{{seq}}002" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as a TRANSCRIBER user
+    And I click on the "Transcript requests" link
+    And I see "Manual" in the same row as "C{{seq}}002"
+    And I click on "View" in the same row as "C{{seq}}002"
+    Then I see "Transcript Request" on the page
+    And I see "C{{seq}}002" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "JudgeC {{seq}}-9" in the same row as "Judge(s)"
+    And I see "DefC {{seq}}-9" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing Date"
+    And I see "Specified Times" in the same row as "Request Type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
+    And I see "Yes" in the same row as "Judge approval"
+
+    #TODO: Try Assign to me and get audio or Assign to me and upload a transcript in different scenarios
+
+    When I select the "Assign to me" radio button
+    And I press the "Continue" button
+    Then I see "C{{seq}}002" on the page
+
+    When I click on the "Completed today" link
+    Then I do not see "C{{seq}}002" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I click on the "Your transcripts" link
+    Then I see "C{{seq}}002" in the same row as "With Transcriber"
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as a TRANSCRIBER user
+    And I click on the "Your work" link
+    And I click on "View" in the same row as "C{{seq}}002"
+    And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
+    And I upload the file "file-sample_1MB.doc" at "Upload transcript file"
+    And I press the "Attach file and complete" button
+    Then I see "Transcript request complete" on the page
+
+    When I click on the "Go to your work" link
+    And I click on the "Completed today" link
+    Then I see "C{{seq}}002" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I click on the "Your transcripts" link
+    Then I see "C{{seq}}002" in the same row as "Complete"
+
+    When I click on "View" in the same row as "C{{seq}}002"
+    Then I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
+    And I see "Complete" on the page
+
+    When I click on the "Search" link
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "All Transcripts" link
+    Then I see "Specified Times" in the same row as "Complete"
+
+    #DMP-868 Check transcript after clicking View link - Case Details
+    When I click on "View" in the same row as "Specified Times"
+    Then I see "file-sample_1MB.doc" on the page
+    And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for transcript"
+
+    When I click on the breadcrumb link "C{{seq}}002"
+    #@DMP-862-AC1 See complete transcript in Hearing Details
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "Specified Times" in the same row as "Complete"
+
+    #@DMP-862-AC2 Check transcript after clicking View link - Hearing Details
+    When I click on "View" in the same row as "Specified Times"
+    Then I see "file-sample_1MB.doc" on the page
+    And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for transcript"
+
+  @DMP-917 @DMP-862 @DMP-868 @DMP-934 @DMP-1012 @DMP-1138 @regression
+  Scenario: Request Transcription, Court Log by Manually Entering Time
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "C{{seq}}003"
+    And I press the "Search" button
+    When I click on "C{{seq}}003" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    #DMP-862-AC3 Request Transcript button works
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+    And I see "C{{seq}}003" on the page
+    And I see "Harrow Crown Court" on the page
+    And I see "DefC {{seq}}-10" on the page
+    And I see "{{displaydate}}" on the page
+
+    #@DMP-892-AC1 and @DMP-892-AC4 Court Log option (Specified Times different scenario) and Urgency populated
+    When I select "Court Log" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+    And I see "Select events or specify start and end times to request a transcript." on the page
+    And I see "Specific times requests cover all events and audio between the transcript start and end time." on the page
+
+    #DMP-917-AC1 Setting specific time via fields
+    When I set the time fields below "Start time" to "11:00:00"
+    And I set the time fields below "End time" to "11:01:00"
+    And I press the "Continue" button
+    #DMP-934 and DMP-917-AC2 Confirmation screen checks
+    Then I see "Check and confirm your transcript request" on the page
+    And I see "C{{seq}}003" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "DefC {{seq}}-10" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Court Log" in the same row as "Request type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Provide any further instructions or comments for the transcriber." on the page
+    And I see "You have 2000 characters remaining" on the page
+
+    When I set "Comments to the Transcriber (optional)" to "Requesting transcript Court Log for one minute of audio selected via manually entering time."
+    And I see "You have 1908 characters remaining" on the page
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    #DMP-1012-AC1 and DMP-1138-AC1 Transcript submitted screen
+    Then I see "Transcript request submitted" on the page
+    And I see "What happens next?" on the page
+    And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
+
+    #DMP-1138-AC2 Return to hearing date link
+    When I click on the "Return to hearing date" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Court Log" in the same row as "Awaiting Authorisation"
+
+    When I click on the "Your transcripts" link
+    Then I see "C{{seq}}003" in the same row as "Awaiting Authorisation"
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an APPROVER user
+    And I click on the "Your transcripts" link
+    And I click on "View" in the same row as "C{{seq}}003"
+    Then I see "Approve transcript request" on the page
+    And I see "C{{seq}}003" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "JudgeC {{seq}}-10" in the same row as "Judge(s)"
+    And I see "DefC {{seq}}-10" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing Date"
+    And I see "Court Log" in the same row as "Request Type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Requesting transcript Court Log for one minute of audio selected via manually entering time." in the same row as "Instructions"
+    And I see "Yes" in the same row as "Judge approval"
+
+    When I select the "Yes" radio button
+    And I press the "Submit" button
+    Then I see "Requests to approve or reject" on the page
+    And I do not see "C{{seq}}003" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as a TRANSCRIBER user
+    And I click on the "Transcript requests" link
+    And I see "Manual" in the same row as "C{{seq}}003"
+    And I click on "View" in the same row as "C{{seq}}003"
+    Then I see "Transcript Request" on the page
+    And I see "C{{seq}}003" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "JudgeC {{seq}}-10" in the same row as "Judge(s)"
+    And I see "DefC {{seq}}-10" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing Date"
+    And I see "Court Log" in the same row as "Request Type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Requesting transcript Court Log for one minute of audio selected via manually entering time." in the same row as "Instructions"
+    And I see "Yes" in the same row as "Judge approval"
+
+    #TODO: Try Assign to me and get audio or Assign to me and upload a transcript in different scenarios
+
+    When I select the "Assign to me" radio button
+    And I press the "Continue" button
+    Then I see "C{{seq}}003" on the page
+
+    When I click on the "Completed today" link
+    Then I do not see "C{{seq}}003" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I click on the "Your transcripts" link
+    Then I see "C{{seq}}003" in the same row as "With Transcriber"
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as a TRANSCRIBER user
+    And I click on the "Your work" link
+    And I click on "View" in the same row as "C{{seq}}003"
+    And I see "Requesting transcript Court Log for one minute of audio selected via manually entering time." in the same row as "Instructions"
+    And I upload the file "file-sample_1MB.doc" at "Upload transcript file"
+    And I press the "Attach file and complete" button
+    Then I see "Transcript request complete" on the page
+
+    When I click on the "Go to your work" link
+    And I click on the "Completed today" link
+    Then I see "C{{seq}}003" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I click on the "Your transcripts" link
+    Then I see "C{{seq}}003" in the same row as "Complete"
+
+    When I click on "View" in the same row as "C{{seq}}003"
+    Then I see "Requesting transcript Court Log for one minute of audio selected via manually entering time." in the same row as "Instructions"
+    And I see "Complete" on the page
+
+    When I click on the "Search" link
+    And I set "Case ID" to "C{{seq}}003"
+    And I press the "Search" button
+    And I click on "C{{seq}}003" in the same row as "Harrow Crown Court"
+    And I click on the "All Transcripts" link
+    Then I see "Court Log" in the same row as "Complete"
+
+    #DMP-868 Check transcript after clicking View link - Case Details
+    When I click on "View" in the same row as "Court Log"
+    Then I see "file-sample_1MB.doc" on the page
+    And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
+
+    When I click on the breadcrumb link "C{{seq}}003"
+    #@DMP-862-AC1 See complete transcript in Hearing Details
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "Court Log" in the same row as "Complete"
+
+    #@DMP-862-AC2 Check transcript after clicking View link - Hearing Details
+    When I click on "View" in the same row as "Court Log"
+    Then I see "file-sample_1MB.doc" on the page
+    And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
+
+    #TODO: Download transcript possible via Auto?
+    #TODO: More row checks similar to earlier in test or excessive?
+
+  @DMP-872 @DMP-862 @regression
+  Scenario: No Audio Available for Transcript Request
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "C{{seq}}001"
+    And I press the "Search" button
+    And I click on "C{{seq}}001" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    #DMP-862-AC3 Request transcript from Hearing screen, in transcripts section
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    #DMP-872 No audio available
+    Then I see "Audio list" on the page
+    And I see "There is no audio for this hearing date." on the page
+
+    When I click on the "Cancel and go back to case level" link
+    Then I see "testprosecutoreight" on the page
+    And I do not see "Also known as a case reference or court reference. There should be no spaces." on the page
+
+    When I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+    And I see "There is no audio for this hearing date." on the page
+
+    When I click on the "Cancel and go back to the search results" link
+    Then I verify the HTML table contains the following values
+      | Case ID     | Courthouse         | Courtroom | Judge(s)         | Defendant(s)   |
+      | C{{seq}}001 | Harrow Crown Court | {{seq}}-8 | JudgeC {{seq}}-8 | DefC {{seq}}-8 |
+
+  @DMP-892 @DMP-917 @DMP-1012 @regression
+  Scenario: Transcript - Request a new transcript cancel links
+
+    #TODO: Are cancel links working as intended? AC seems to indicate cancel takes you back to Hearing Details rather than back a screen. Check this.
+
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    When I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+
+    #@DMP-892-AC3 Cancel and return to previous screen
+    When I select "Court Log" from the "Request Type" dropdown
+    And I click on the "Cancel" link
+    Then I see "Transcripts for this hearing" on the page
+
+    When I press the "Request a new transcript" button
+    And I select "Court Log" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+
+    When I click on the "Cancel" link
+    Then I see "C{{seq}}002" on the page
+
+    When I press the "Continue" button
+    And I check the checkbox in the same row as "10:30:00" "Hearing started"
+    And I check the checkbox in the same row as "10:31:00" "Hearing ended"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+
+    #@DMP-1012-AC2
+    When I click on the "Cancel" link
+    Then I see "Events, audio and specific times requests" on the page
+
+  @DMP-892 @DMP-1012 @regression
+  Scenario: Request Transcription Errors
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+
+    #DMP-892-AC5 Transcription type and/or urgency not populated
+    When I press the "Continue" button
+    Then I see an error message "Please select a transcription type"
+    And I see an error message "Please select an urgency"
+
+    When I select "Court Log" from the "Request Type" dropdown
+    And I press the "Continue" button
+    Then I see an error message "Please select an urgency"
+
+    When I click on the "Cancel" link
+    And I press the "Request a new transcript" button
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I see "There is a problem" on the page
+    Then I see an error message "Please select a transcription type"
+
+    When I select "Court Log" from the "Request Type" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+
+    When I press the "Continue" button
+    Then I see an error message "Select a start time"
+    And I see an error message "Select an end time"
+
+    When I set the time fields below "Start time" to "10:30:00"
+    And I set the time fields below "End time" to "10:31:00"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+
+    #@DMP-1012-AC3
+    When I press the "Submit request" button
+    Then I see an error message "You must confirm that you have authority to request a transcript"
+    And I see "You must have authorisation from a judge to confirm this request." on the page
+
+  @DMP-892 @regression
+  Scenario: Request Transcript Dropdowns
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+
+    #DMP-892 Dropdown checks
+    And the dropdown "Urgency" contains the options
+      | Please select         |
+      | Overnight             |
+      | Up to 2 working days  |
+      | Up to 3 working days  |
+      | Up to 7 working days  |
+      | Up to 12 working days |
+      | Other                 |
+
+    And the dropdown "Request Type" contains the options
+      | Please select                     |
+      | Sentencing remarks                |
+      | Summing up (including verdict)    |
+      | Antecedents                       |
+      | Argument and submission of ruling |
+      | Court Log                         |
+      | Mitigation                        |
+      | Proceedings after verdict         |
+      | Prosecution opening of facts      |
+      | Specified Times                   |
+      | Other                             |
+
+  @DMP-917
+  Scenario: Verify Audio list pagination
+
+    #TODO: Will sort later, need a case with many audio files?
+
     Given I am logged on to DARTS as an external user
     And I click on the "Search" link
     And I see "Search for a case" on the page
@@ -15,384 +516,10 @@ Feature: Request Transcript
     And I click on "15 Aug 2023" in the same row as "ROOM_A"
     And I see "Swansea" on the page
     And I see "ROOM_A" on the page
-
-  @DMP-862-AC1
-  Scenario: View Transcript
-    #And I see the transcription-count is "2"
-    Then I click on the "Transcripts" link
-    And I verify the HTML table contains the following values
-      | Type               | Requested on         | Requested by | Status   |
-      | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | COMPLETE |
-
-  @DMP-862-AC2
-  Scenario: Transcript - View link
-    Then I click on the "Transcripts" link
-    And I verify the HTML table contains the following values
-      | Type               | Requested on         | Requested by | Status   |
-      | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | COMPLETE |
-    And I click on "View" in the same row as "system"
-
-  @DMP-862-AC3
-  Scenario: Transcript - Request a new transcript button works
-    Then I click on the "Transcripts" link
-    And I verify the HTML table contains the following values
-      | Type               | Requested on         | Requested by | Status   |
-      | Sentencing remarks | 19 Sep 2023 00:00:00 | system       | COMPLETE |
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-
-  @DMP-868
-  Scenario Outline: View Transcript Screen
-
-    #All Transcripts
-
-    When I click on the breadcrumb link "<CaseID>"
-    And I click on the "All Transcripts" link
-    And I see "All transcripts for this case" on the page
-    And I click on the "View" link
-    #Then I see "DMP-test-2.docx" on the page - Currently showing "Document not found"?
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Defendant>" on the page
-    And I see "<Judge>" on the page
-    And I see "Download transcript file" on the page
-
-  #Transcripts
-    When I click on the breadcrumb link "<CaseID>"
-    And I click on "<HearingDate>" in the same row as "<Courtroom>"
-    And I click on the "Transcripts" link
-    And I see "Transcripts for this hearing" on the page
-    And I click on the "View" link
-    #Then I see "DMP-test-2.docx" on the page - Currently showing "Document not found"?
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Defendant>" on the page
-    And I see "<Judge>" on the page
-    And I see "Download transcript file" on the page
-
-    Examples:
-      | CaseID   | Courthouse | HearingDate | Courtroom | Defendant  | Judge    |
-      | CASE1009 | Swansea    | 15 Aug 2023 | ROOM_A    | Jow Bloggs | Mr Judge |
-
-  @DMP-872
-  Scenario Outline: No Audio Available for Transcript Request
-    Given I am logged on to DARTS as an external user
-    And I click on the "Search" link
-    And I see "Search for a case" on the page
-    And I set "Case ID" to "<CaseID>"
-    And I press the "Search" button
-    Then I verify the HTML table contains the following values
-      | Case ID        | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-      | Swansea_case_3 | Swansea    | 2         |          |               |
-
-  #No audio available
-    When I click on "<CaseID>" in the same row as "<Courthouse>"
-    And I click on the "<HearingDate>" link
-    And I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    Then I see "Audio list" on the page
-    And I see "There is no audio for this hearing date." on the page
-
-    When I click on the "Cancel and go back to case level" link
-    Then I see "Case ID" on the page
-    And I do not see "Also known as a case reference or court reference. There should be no spaces." on the page
-
-    When I click on the "<HearingDate>" link
-    And I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    Then I see "Audio list" on the page
-    And I see "There is no audio for this hearing date." on the page
-
-    When I click on the "Cancel and go back to the search results" link
-    Then I verify the HTML table contains the following values
-      | Case ID        | Courthouse | Courtroom | Judge(s) | Defendants(s) |
-      | Swansea_case_3 | Swansea    | 2         |          |               |
-
-    Examples:
-      | CaseID         | Courthouse | HearingDate |
-      | Swansea_case_3 | Swansea    | 10 Aug 2023 |
-
-  @DMP-892
-  Scenario Outline: Transcript - Request a new transcript
     Then I click on the "Transcripts" link
     And I press the "Request a new transcript" button
     And I see "Request a new transcript" on the page
-    And I see "<Restriction>" on the page
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Defendants>" on the page
-    And I see "<HearingDate>" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Check and confirm your transcript request" on the page
-    Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Sentencing remarks | Overnight |
-
-  @DMP-892-AC3
-  Scenario Outline: Transcript - Request a new transcript - Cancel link
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I see "<Restriction>" on the page
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Defendants>" on the page
-    And I see "<HearingDate>" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I click on the "Cancel" link
-    Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Sentencing remarks | Overnight |
-
-  @DMP-892-AC5
-  Scenario: Transcript - Request a new transcript - Error
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I press the "Continue" button
-    And I see "There is a problem" on the page
-    And I see "Please select a transcription type" on the page
-    And I see "Please select an urgency" on the page
-    And I select "Summing up (including verdict)" from the "Request Type" dropdown
-    And I press the "Continue" button
-    And I see "There is a problem" on the page
-    And I see "Please select an urgency" on the page
-
-  @DMP-892-AC5
-  Scenario: Transcript - Request a new transcript - Error1
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I select "Summing up (including verdict)" from the "Request Type" dropdown
-    And I press the "Continue" button
-    And I see "There is a problem" on the page
-    And I see "Please select an urgency" on the page
-
-  @DMP-892-AC5
-  Scenario: Transcript - Request a new transcript - Error2
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I select "Overnight" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "There is a problem" on the page
-    And I see "Please select a transcription type" on the page
-
-  @DMP-892
-  Scenario: Transcript - Request a new transcript - Urgency dropdown
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    Then the dropdown "Urgency" contains the options "Please select,Overnight, 3 working days, 7 working days, 12 working days"
-
-  @DMP-892
-  Scenario: Transcript - Request a new transcript - Verify transcription-type dropdown
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    Then the dropdown "Request Type" contains the options
-      | Please select                     |
-      | Sentencing remarks                |
-      | Summing up (including verdict)    |
-      | Antecedents                       |
-      | Argument and submission of ruling |
-      | Court Log                         |
-      | Mitigation                        |
-      | Proceedings after verdict         |
-      | Prosecution opening of facts      |
-      | Specified Times                   |
-      | Other                             |
-
-  @DMP-917
-  Scenario Outline: Request Transcript - Audio Times/Events using checkbox - Specified times
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I see "<Restriction>" on the page
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Defendants>" on the page
-    And I see "<HearingDate>" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Events, audio and specific times requests" on the page
-    And I see "Select events or specify start and end times to request a transcript." on the page
-    And I see "Specific times requests cover all events and audio between the transcript start and end time." on the page
-    And I see "Audio list" on the page
-    And I verify the HTML table contains the following values
-      | Start Time | End Time | *IGNORE*        |
-      | 10:00:00   | 11:14:05 | Audio Recording |
-    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-    And I press the "Continue" button
-    And I see "Check and confirm your transcript request" on the page
-    Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Specified Times    | Overnight |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Court Log          | Overnight |
-
-  @DMP-917
-  Scenario Outline: Request Transcript - Audio Times/Events - manually entering time
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I see "<Restriction>" on the page
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Defendants>" on the page
-    And I see "<HearingDate>" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Events, audio and specific times requests" on the page
-    And I see "Select events or specify start and end times to request a transcript." on the page
-    And I see "Specific times requests cover all events and audio between the transcript start and end time." on the page
-    And I see "Audio list" on the page
-    And I verify the HTML table contains the following values
-      | Start Time | End Time | *IGNORE*        |
-      | 10:00:00   | 11:14:05 | Audio Recording |
-    And I set the time fields of "Start time" to "<StartTime>"
-    And I set the time fields of "End time" to "<EndTime>"
-    And I press the "Continue" button
-    And I see "Check and confirm your transcript request" on the page
-    Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | Restriction                                           | transcription-type | urgency  | StartTime | EndTime  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Specified Times    | Overnight | 13:07:33  | 13:07:33 |
-
-  @DMP-917
-  Scenario Outline: Request Transcript - Audio Times/Events - Cancel link
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Events, audio and specific times requests" on the page
-    And I click on the "Cancel" link
-    And I see "Hearing" on the page
-    Examples:
-      | transcription-type | urgency  |
-      | Sentencing remarks | Overnight |
-
-  @DMP-917-AC4
-  Scenario: Verify Audio list pagination
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
+    #DMP-917-AC4 Audio pagination
     And I click on the pagination link "2"
     And I see "Next" on the page
     And I see "Previous" on the page
-
-  @DMP-934 @DMP-1012
-  Scenario Outline: Request Transcript - Check and confirm your transcript request
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Events, audio and specific times requests" on the page
-    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-    And I press the "Continue" button
-    And I see "Check and confirm your transcript request" on the page
-    And I see "Case Details" on the page
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Defendants>" on the page
-    And I see "Request Details" on the page
-    And I see "<HearingDate>" on the page
-    And I see "<transcription-type>" on the page
-    And I see "<urgency>" on the page
-    And I see "Comments to the Transcriber (optional)" on the page
-    And I see "Provide any further instructions or comments for the transcriber." on the page
-    And I see "You have 2000 characters remaining" on the page
-    And I check the "I confirm I have received authorisation from the judge." checkbox
-    And I press the "Submit request" button
-    And I see "Transcript request submitted" on the page
-    Examples:
-      | CaseID   | Courthouse | Defendants | HearingDate | transcription-type | urgency  |
-      | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Specified Times    | Overnight |
-
-  @DMP-1012-AC3
-  Scenario Outline: Request Transcript - Error No Authorisation
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Events, audio and specific times requests" on the page
-    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-    And I press the "Continue" button
-    And I see "Check and confirm your transcript request" on the page
-    And I press the "Submit request" button
-    And I see "There is a problem" on the page
-    And I see "You must confirm that you have authority to request a transcript" on the page
-    Examples:
-      | transcription-type | urgency  |
-      | Specified Times    | Overnight |
-
-  @DMP-1012-AC2
-  Scenario Outline: Request Transcript - Cancel Link
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Events, audio and specific times requests" on the page
-    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-    And I press the "Continue" button
-    And I see "Check and confirm your transcript request" on the page
-    And I click on the "Cancel" link
-    And I see "Hearing" on the page
-    Examples:
-      | transcription-type | urgency  |
-      | Specified Times    | Overnight |
-
-  @DMP-1138-AC1
-  Scenario Outline: Transcript request confirmation screen
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Events, audio and specific times requests" on the page
-    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-    And I press the "Continue" button
-    And I see "Check and confirm your transcript request" on the page
-    And I check the "I confirm I have received authorisation from the judge." checkbox
-    And I press the "Submit request" button
-    And I see "Transcript request submitted" on the page
-    And I see "Your request ID" on the page
-    And I see "What happens next?" on the page
-    And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
-    Examples:
-      | transcription-type | urgency  |
-      | Specified Times    | Overnight |
-
-  @DMP-1138-AC2
-  Scenario Outline: Transcript request confirmation screen- Return to Hearing link
-    Then I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    And I see "Request a new transcript" on the page
-    And I select "<transcription-type>" from the "Request Type" dropdown
-    And I select "<urgency>" from the "Urgency" dropdown
-    And I press the "Continue" button
-    And I see "Events, audio and specific times requests" on the page
-    And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
-    And I press the "Continue" button
-    And I see "Check and confirm your transcript request" on the page
-    And I check the "I confirm I have received authorisation from the judge." checkbox
-    And I press the "Submit request" button
-    And I see "Transcript request submitted" on the page
-    And I click on the "Return to hearing date" link
-    And I see "Hearing" on the page
-    Examples:
-      | transcription-type | urgency  |
-      | Specified Times    | Overnight |
-
