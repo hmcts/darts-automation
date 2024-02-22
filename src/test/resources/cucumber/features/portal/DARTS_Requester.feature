@@ -26,7 +26,7 @@ Feature: User as a Requester
       And I set "Case ID" to "Case1009"
       And I press the "Search" button
       Then I verify the HTML table contains the following values
-        | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+        | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
         | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
         | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
       Given I click on "CASE1009" in the same row as "Swansea"
@@ -67,7 +67,7 @@ Feature: User as a Requester
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
     Given I click on "CASE1009" in the same row as "Swansea"
@@ -108,7 +108,7 @@ Feature: User as a Requester
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
     Given I click on "CASE1009" in the same row as "Swansea"

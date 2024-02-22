@@ -18,7 +18,7 @@ Feature: Transcriber
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on "<case_number>" in the same row as "<courthouse>"
@@ -106,7 +106,7 @@ Feature: Transcriber
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendants(s) |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
     When I click on "<case_number>" in the same row as "<courthouse>"

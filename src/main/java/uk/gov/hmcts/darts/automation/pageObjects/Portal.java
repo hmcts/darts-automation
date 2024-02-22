@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import com.jayway.jsonpath.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -284,8 +285,16 @@ public class Portal {
     	String userName = Credentials.userName(user);
     	String user_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userName, "usr_id");
         int waitTimeInSeconds = 300;
-        String expectedResponse = "\"case_number\":\"" + caseNumber + "\",\"courthouse_name\":\"" + courthouse + "\",\"hearing_date\":\"" + DateUtils.dateAsYyyyMmDd(hearingDate) + "\"";
-        log.info("WAIT TIME {}", waitTimeInSeconds);
+        String jsonQuery = new StringBuilder("$..[?(@.case_number=='")
+        		.append(caseNumber)
+        		.append("' && @.courthouse_name=='")
+        		.append(courthouse)
+        		.append("' && @.hearing_date =='")
+        		.append(DateUtils.dateAsYyyyMmDd(hearingDate))
+        		.append("' && @.media_request_status=='COMPLETED')].media_request_status")
+        		.toString();
+        log.info(jsonQuery);
+        log.info("wait time {} for user {}, courthouse {}, case {}, date {}", waitTimeInSeconds, user_id, courthouse, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
                 .pollingEvery(Duration.ofSeconds(10));  
@@ -293,13 +302,16 @@ public class Portal {
             @Override
             public Boolean apply(WebDriver webDriver) {
             	ApiResponse apiResponse = jsonApi.getApiWithParams("audio-requests/v2", "user_id=" + user_id, "expired=false", "");
-        		return apiResponse.responseString.contains(expectedResponse);
+            	List<String> audioCount = JsonPath.read(apiResponse.responseString, jsonQuery);
+            	log.info(audioCount);
+            	return audioCount.size() > 0;
             };
         };
         try {
             wait.until(audioIsLoaded);
+            log.info("Audio loaded");
         } catch (TimeoutException e) {
-            log.info("Wait complete");
+            log.info("Wait complete - not found");
         }
     }
 
