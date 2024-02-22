@@ -1,5 +1,5 @@
 Feature: Restricted Page Access
-@DMP-1486 @regression
+@DMP-1486 @regression @demo
   Scenario: Error for Restricted Page Access
     Given I am logged on to DARTS as an REQUESTER user
     And I navigate to the url "/work"
@@ -7,7 +7,7 @@ Feature: Restricted Page Access
     And I see "If you believe you should have permission, contact Crown IT Support" on the page
     And I click on the "contact Crown IT Support" link
 
-  @DMP-1479 @regression
+  @DMP-1479 @regression @demo
   Scenario: Error - 404 - Page not found
     Given I am logged on to DARTS as an external user
     And I navigate to the url "/case/1"
