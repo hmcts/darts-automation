@@ -10,7 +10,7 @@ Feature: Request Audio for transcribers
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
     And I see "Restriction: Judge directed on reporting restrictions" on the page
@@ -58,7 +58,7 @@ Feature: Request Audio for transcribers
     And I set "Case ID" to "Case1009"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+      | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
       | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
     And I see "Restriction: Judge directed on reporting restrictions" on the page

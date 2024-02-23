@@ -104,12 +104,12 @@ ext['spring-security.version'] = '6.0.3' // https://spring.io/security/cve-2023-
 
 dependencies {
 
-	implementation(platform("org.apache.logging.log4j:log4j-bom:2.22.1"))
+	implementation(platform("org.apache.logging.log4j:log4j-bom:2.23.0"))
 	implementation 'org.apache.logging.log4j:log4j-api'
 	implementation 'org.apache.logging.log4j:log4j-core'
 	testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl'
 	
-	implementation 'org.seleniumhq.selenium:selenium-java:4.17.0'
+	implementation 'org.seleniumhq.selenium:selenium-java:4.18.1'
 	
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
 	
@@ -142,10 +142,12 @@ dependencies {
 	
 //	implementation group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.20.0.0'	
 	
-	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.1'
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.2'
 	
 	// Rest assured
 	implementation 'io.rest-assured:rest-assured:5.4.0'
+	
+	implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
 	
   // Use JUnit Jupiter for testing.
   testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'

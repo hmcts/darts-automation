@@ -30,7 +30,7 @@ Scenario: Request Audio with Request Type Playback Only
   And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID     | Courthouse         | Courtroom | Judge(s)        | Defendants(s) |
+    | Case ID     | Courthouse         | Courtroom | Judge(s)        | Defendant(s) |
     | B{{seq}}006 | Harrow Crown Court | {{seq}}-6 | Judge {{seq}}-6 | Def {{seq}}-6 |
 
   #Case Details
@@ -83,7 +83,7 @@ Scenario: Request Audio with Request Type Download NEW
   And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID     | Courthouse         | Courtroom | Judge(s)        | Defendants(s) |
+    | Case ID     | Courthouse         | Courtroom | Judge(s)        | Defendant(s) |
     | B{{seq}}006 | Harrow Crown Court | {{seq}}-6 | Judge {{seq}}-6 | Def {{seq}}-6 |
 
   #Case Details
@@ -284,7 +284,7 @@ Scenario Outline: Request Audio Events only available for hearing
   And I set "Case ID" to "Case1009"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
     | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
     | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
     | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
@@ -342,7 +342,7 @@ Scenario Outline: Preview Audio Player Loading
   And I set "Case ID" to "Case1009"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
     | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
     | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
     | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
@@ -372,7 +372,7 @@ Scenario: Hearing table sorted with time
   And I set "Case ID" to "Case1009"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendants(s) |
+    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
     | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
     | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
     | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
