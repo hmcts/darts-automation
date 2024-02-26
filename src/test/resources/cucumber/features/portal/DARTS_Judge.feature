@@ -53,3 +53,4 @@ Feature: User as a Judge
     When I click on the "Return to hearing date" link
     And I click on the "Your transcripts" link
     Then I see "CASE1009" in the same row as "Mitigation"
+
