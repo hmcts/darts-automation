@@ -423,6 +423,7 @@ Scenario: Default retention policy
     Then I click on the pagination link "Next"
 
   @DMP-1612
+
   Scenario: Delete annotation screen
 
     Given I create a case using json
