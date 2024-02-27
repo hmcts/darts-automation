@@ -37,11 +37,3 @@ Feature: Admin
       And I see "Active users" on the page
       And I see "Inactive users" on the page
       And I see "All" on the page
-
-
-      
-
-
-
-
-
