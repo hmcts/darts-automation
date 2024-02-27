@@ -311,7 +311,7 @@ public class Portal {
             wait.until(audioIsLoaded);
             log.info("Audio loaded");
         } catch (TimeoutException e) {
-            log.info("Wait complete - not found");
+            log.warn("Wait complete - not found");
         }
     }
 
