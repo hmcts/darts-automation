@@ -53,7 +53,16 @@ def secrets = [
     secret('DarPCMidTierPassword', 'DAR_PC_MID_TIER_PASSWORD'),
     secret('DarPCUserName', 'DAR_PC_USERNAME'),
     secret('DarPCPassword', 'DAR_PC_PASSWORD'),
-    secret('DartsAdminUserName', 'DARTS_ADMIN_USERNAME')
+    secret('DartsAdminUserName', 'DARTS_ADMIN_USERNAME'),
+    secret('ViQExternalPassword', 'VIQ_EXTERNAL_PASSWORD'),
+    secret('ViQExternalUserName', 'VIQ_EXTERNAL_USERNAME'),
+    secret('ViQInternalPassword', 'VIQ_INTERNAL_PASSWORD'),
+    secret('XhibitExternalPassword', 'XHIBIT_EXTERNAL_PASSWORD'),
+    secret('XhibitExternalUserName', 'XHIBIT_EXTERNAL_USERNAME'),
+    secret('XhibitInternalPassword', 'XHIBIT_INTERNAL_PASSWORD'),
+    secret('CPExternalPassword', 'CP_EXTERNAL_PASSWORD'),
+    secret('CPExternalUserName', 'CP_EXTERNAL_USERNAME'),
+    secret('CPInternalPassword', 'CP_INTERNAL_PASSWORD')
   ],
 ]
 

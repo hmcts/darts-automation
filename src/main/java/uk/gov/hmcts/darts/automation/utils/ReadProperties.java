@@ -84,10 +84,20 @@ public class ReadProperties {
 	public static String cppPassword = getSystemValue("CPP_PASSWORD");
 	public static String darMidTierUserName = getSystemValue("DAR_MID_TIER_USERNAME");
 	public static String darMidTierPassword = getSystemValue("DAR_MID_TIER_PASSWORD");
-	public static String DarPCMidTierUsername = getSystemValue("DAR_PC_MID_TIER_USERNAME");
-	public static String DarPCMidTierPassword = getSystemValue("DAR_PC_MID_TIER_PASSWORD");
-	public static String DarPCUsername = getSystemValue("DAR_PC_USERNAME");
-	public static String DarPCPassword = getSystemValue("DAR_PC_PASSWORD");
+	public static String darPCMidTierUsername = getSystemValue("DAR_PC_MID_TIER_USERNAME");
+	public static String darPCMidTierPassword = getSystemValue("DAR_PC_MID_TIER_PASSWORD");
+	public static String darPCUsername = getSystemValue("DAR_PC_USERNAME");
+	public static String darPCPassword = getSystemValue("DAR_PC_PASSWORD");
+// new credentials 2024-02-26
+	public static String cpExternalUserName = getSystemValue("CP_EXTERNAL_USERNAME");
+	public static String cpExternalPassword = getSystemValue("CP_EXTERNAL_PASSWORD");
+	public static String cpInternalPassword = getSystemValue("CP_INTERNAL_PASSWORD");
+	public static String viqExternalUserName = getSystemValue("VIQ_EXTERNAL_USERNAME");
+	public static String viqExternalPassword = getSystemValue("VIQ_EXTERNAL_PASSWORD");
+	public static String viqInternalPassword = getSystemValue("VIQ_INTERNAL_PASSWORD");
+	public static String xhibitExternalUserName = getSystemValue("XHIBIT_EXTERNAL_USERNAME");
+	public static String xhibitExternalPassword = getSystemValue("XHIBIT_EXTERNAL_PASSWORD");
+	public static String xhibitInternalPassword = getSystemValue("XHIBIT_INTERNAL_PASSWORD");
 	
 	public static LogDetail setupRequestLogLevel = runLocal ? LogDetail.ALL : LogDetail.URI;
 	public static LogDetail setupResponseLogLevel = runLocal ? LogDetail.ALL : LogDetail.STATUS;
