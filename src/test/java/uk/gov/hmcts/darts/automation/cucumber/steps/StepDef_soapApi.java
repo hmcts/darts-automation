@@ -92,7 +92,7 @@ public class StepDef_soapApi extends StepDef_base {
 // |message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|
 	@When("^I create an event$")
 	public void createEventXml(List<Map<String,String>> dataTable) {
-		soapApi.setDefaultSource(SOURCE_VIQ);
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddEventXml(
 					getValue(map, "message_id"),
