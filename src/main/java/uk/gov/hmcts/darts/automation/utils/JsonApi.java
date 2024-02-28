@@ -98,6 +98,16 @@ public class JsonApi {
         case "INTERNAL":
         	internalAuthenticate();
         	break;
+        case "VIQ":
+        	internalAuthenticate(ReadProperties.viqExternalUserName, ReadProperties.viqExternalPassword);
+        	break;
+        case "XHIBIT":
+        	internalAuthenticate(ReadProperties.xhibitExternalUserName, ReadProperties.xhibitExternalPassword);
+        	break;
+        case "CP":
+        case "CPP":
+        	internalAuthenticate(ReadProperties.cpExternalUserName, ReadProperties.cpExternalPassword);
+        	break;
         case "":
         	log.warn("Authentication - no role provided - using external");
         	externalAuthenticate();
@@ -298,22 +308,22 @@ public class JsonApi {
 		log.info(body);
 		response =
 				given()
-						.spec(requestLogLevel(ReadProperties.requestLogLevel))
-						.accept("*/*")
-						.header(USER_AGENT, USER_AGENT_STRING)
-						.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-						.header(CONNECTION, CONNECTION_STRING)
-						.header(AUTHORIZATION, authorization)
-						.contentType(ContentType.MULTIPART)
-						.multiPart("file",audioFile, "multipart/form-data")
-						.formParams("metadata",body)
-						.baseUri(baseUri)
-						.basePath("")
-						.when()
-						.post(endpoint)
-						.then()
-						.spec(responseLogLevel(ReadProperties.responseLogLevel))
-						.extract().response();
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept("*/*")
+					.header(USER_AGENT, USER_AGENT_STRING)
+					.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+					.header(CONNECTION, CONNECTION_STRING)
+					.header(AUTHORIZATION, authorization)
+					.contentType(ContentType.MULTIPART)
+					.multiPart("file",audioFile, "multipart/form-data")
+					.formParams("metadata",body)
+					.baseUri(baseUri)
+					.basePath("")
+					.when()
+					.post(endpoint)
+					.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
 	}
     
@@ -347,21 +357,21 @@ public class JsonApi {
 		log.info("Patch: " + endpoint);
 		response =
 				given()
-						.spec(requestLogLevel(ReadProperties.requestLogLevel))
-						.accept(ACCEPT_JSON_STRING)
-						.header(USER_AGENT, USER_AGENT_STRING)
-						.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-						.header(CONNECTION, CONNECTION_STRING)
-						.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
-						.header(AUTHORIZATION, authorization)
-						.baseUri(baseUri)
-						.basePath("")
-						.body(body)
-						.when()
-						.patch(endpoint)
-						.then()
-						.spec(responseLogLevel(ReadProperties.responseLogLevel))
-						.extract().response();
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept(ACCEPT_JSON_STRING)
+					.header(USER_AGENT, USER_AGENT_STRING)
+					.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+					.header(CONNECTION, CONNECTION_STRING)
+					.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+					.header(AUTHORIZATION, authorization)
+					.baseUri(baseUri)
+					.basePath("")
+					.body(body)
+					.when()
+					.patch(endpoint)
+					.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
 	}
     
