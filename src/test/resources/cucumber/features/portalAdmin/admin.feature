@@ -37,3 +37,12 @@ Feature: Admin
       And I see "Active users" on the page
       And I see "Inactive users" on the page
       And I see "All" on the page
+
+      @DMP-725
+      Scenario: Search page for Courthouses
+        When I am logged on to DARTS as an ADMIN user
+        And I click on the "Courthouses" link
+        Then I see "Search for courthouse" on the page
+        And I see "Courthouse name" on the page
+        And I see "Display name" on the page
+        And I see "Region" on the page

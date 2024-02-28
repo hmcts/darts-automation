@@ -1,7 +1,7 @@
 @DMP-1048-RequestAudio
 Feature: Request Audio
 
-@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @regression
+@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-2121 @regression
 Scenario: Request Audio data creation
 
   Given I create a case
@@ -400,3 +400,16 @@ Scenario: Hearing table sorted with time
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+
+@DMP-2121
+  Scenario: Update preview button on hearing screen
+    Given I am logged on to DARTS as a requester user
+    When I click on the "Search" link
+    And I set "Case ID" to "B{{seq}}006"
+    And I press the "Search" button
+    And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
+    And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
+    And I see "{{seq}}ABC-6" on the page
+
+    Then I click on the "Play preview" link
+

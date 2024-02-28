@@ -46,3 +46,13 @@ export DAR_MID_TIER_PASSWORD="$(az keyvault secret show --vault-name darts-stg -
 export DAR_PC_MID_TIER_USERNAME="$(az keyvault secret show --vault-name darts-stg --name DarPCMidTierUserName | jq .value -r)"
 export DAR_PC_MID_TIER_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name DarPCMidTierPassword | jq .value -r)"
 export DARTS_ADMIN_USERNAME="$(az keyvault secret show --vault-name darts-stg --name DartsAdminUserName | jq .value -r)"
+
+export VIQ_EXTERNAL_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name ViQExternalPassword | jq .value -r)"
+export VIQ_EXTERNAL_USERNAME="$(az keyvault secret show --vault-name darts-stg --name ViQExternalUserName | jq .value -r)"
+export VIQ_INTERNAL_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name ViQInternalPassword | jq .value -r)"
+export XHIBIT_EXTERNAL_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name XhibitExternalPassword | jq .value -r)"
+export XHIBIT_EXTERNAL_USERNAME="$(az keyvault secret show --vault-name darts-stg --name XhibitExternalUserName | jq .value -r)"
+export XHIBIT_INTERNAL_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name XhibitInternalPassword | jq .value -r)"
+export CP_EXTERNAL_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name CPExternalPassword | jq .value -r)"
+export CP_EXTERNAL_USERNAME="$(az keyvault secret show --vault-name darts-stg --name CPExternalUserName | jq .value -r)"
+export CP_INTERNAL_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name CPInternalPassword | jq .value -r)"
