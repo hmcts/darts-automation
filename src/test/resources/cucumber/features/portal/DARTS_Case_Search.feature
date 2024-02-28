@@ -408,7 +408,7 @@ Scenario: Default retention policy
 	    And I click on the "View or change" link
 	    Then I see "Default" on the page
 
- @DMP-772 @regression @demo
+@DMP-772 @regression @demo
   Scenario: Search Results Pagination
     Given I am logged on to DARTS as an APPROVER user
     When I click on the "Search" link
@@ -422,8 +422,7 @@ Scenario: Default retention policy
     Then I click on the pagination link "Previous"
     Then I click on the pagination link "Next"
 
-
-@DMP-1614 
+@DMP-1614
   Scenario: Annotation template
 
   Given I create a case using json
@@ -444,10 +443,41 @@ Scenario: Default retention policy
   And I click on the "26 Feb 2024" link
   And I click on the "Annotations" link
   And I press the "Download annotation template" button
+  
+ @DMP-1616 
+  Scenario: Annotation template
+
+  Given I create a case using json
+    | courthouse         | case_number | defendants     | judges           | prosecutors    | defenders    |
+    | Harrow Crown Court | K{{seq}}001 | Def {{seq}}-28 | Judge {{seq}}-28 | testprosecutor | testdefender |
+
+  Given I create an event using json
+    | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text   | date_time              |
+    | {{seq}}001 | 1100  |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-28 | K{{seq}}001  | {{seq}}KH1   | {{timestamp-10:00:00}} |
+
+  Given I am logged on to DARTS as an JUDGE user
+
+  #Upload Annotation
+  When I click on the "Search" link
+  And I see "Search for a case" on the page
+  And I set "Case ID" to "K{{seq}}001"
+  And I press the "Search" button
+  And I click on the "K{{seq}}001" link
+  And I click on the "26 Feb 2024" link
+  And I click on the "Annotations" link
+  And I press the "Upload annotation" button
+  Then I upload the file "file-sample_1MB.doc" at "Upload annotation file"
+
+  #Cancel Upload
+  Then I click on the "Cancel" link
+
+  #  Upload Comment
+  #  And I set "Comments" to "AC3"
+  #  Then I see "You have 197 characters remaining" on the page
 
   @DMP-1612
 
-  Scenario: Delete annotation screen
+    Scenario: Delete annotation screen
 
     Given I create a case using json
       | courthouse         | case_number | defendants     | judges           | prosecutors    | defenders    |
