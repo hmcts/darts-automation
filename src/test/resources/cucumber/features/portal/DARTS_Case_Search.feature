@@ -585,3 +585,30 @@ Scenario: Default retention policy
     And I press the "Search" button
     And I click on the "K{{seq}}001" link
     Then I do not see "All annotations" on the page
+
+  @DMP-1623
+  Scenario: Add All Annotations to Case File screen
+
+    Given I create a case using json
+      | courthouse         | case_number | defendants     | judges           | prosecutors    | defenders    |
+      | Harrow Crown Court | K{{seq}}001 | Def {{seq}}-28 | Judge {{seq}}-28 | testprosecutor | testdefender |
+
+    Given I create an event using json
+      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text   | date_time              |
+      | {{seq}}001 | 1100  |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-28 | K{{seq}}001  | {{seq}}KH1   | {{timestamp-10:00:00}} |
+
+    Given I am logged on to DARTS as an JUDGE user
+
+    #Upload Annotation
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "K{{seq}}001"
+    And I press the "Search" button
+    And I click on the "K{{seq}}001" link
+    And I click on the "26 Feb 2024" link
+    And I click on the "Annotations" link
+    And I press the "Upload annotation" button
+    And I upload the file "file-sample_1MB.doc" at "Upload annotation file"
+    And I press the "Upload" button
+    Then I see "You have added an annotation" on the page
+    
