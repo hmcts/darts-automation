@@ -36,6 +36,9 @@ public class StepDef_soapApi extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_soapApi");
 	private SoapApi soapApi;
+	private static String SOURCE_XHIBIT = "XHIBIT";
+	private static String SOURCE_CPP = "CPP";
+	private static String SOURCE_VIQ = "VIQ";
 	
 	
 	public StepDef_soapApi(SeleniumWebDriver driver, TestData testdata) {
@@ -68,6 +71,7 @@ public class StepDef_soapApi extends StepDef_base {
 // |courthouse|case_number|defendants|judges|prosecutors|defenders|
 	@When("^I create a case$")
 	public void createAddCaseXml(List<Map<String,String>> dataTable) {
+		soapApi.setDefaultSource(SOURCE_VIQ);
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddCaseXml(
 					getValue(map, "courthouse"),
@@ -88,6 +92,7 @@ public class StepDef_soapApi extends StepDef_base {
 // |message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|
 	@When("^I create an event$")
 	public void createEventXml(List<Map<String,String>> dataTable) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddEventXml(
 					getValue(map, "message_id"),
@@ -115,6 +120,7 @@ public class StepDef_soapApi extends StepDef_base {
 // |courthouse|courtroom|case_numbers|text|dateTime|
 	@When("^I add courtlogs$")
 	public void createAddLogsXml(List<Map<String,String>> dataTable) {
+		soapApi.setDefaultSource(SOURCE_VIQ);
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddLogXml(
 					getValue(map, "courthouse"),
@@ -134,6 +140,7 @@ public class StepDef_soapApi extends StepDef_base {
 // | ... | datatable follows
 	@When("I add (a) daily list(s)")
 	public void createAddDailyListXml(List<Map<String,String>> dataTable) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddDailyListXml(
 					getValue(map, "messageId"),
@@ -158,6 +165,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST SOAP API using soap body:")
 	public void callPostApiWithXmlBody(String docString) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		ApiResponse apiResponse = soapApi.postSoap("", Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -165,6 +173,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST SOAP API using soap action {word} and body:")
 	public void callPostSoapActionApiWithBody(String soapAction, String docString) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -172,6 +181,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST SOAP API using SOAPAction {word} and encoded body:")
 	public void callPostSoapActionApiWithEncodedBody(String soapAction, String docString) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString), true);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -179,6 +189,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST SOAP API using SOAPAction {word} and unencoded body:")
 	public void callPostSoapActionApiWithUnencodedBody(String soapAction, String docString) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString), false);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -186,6 +197,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST {word} SOAP API using soap body:")
 	public void callPostApiWithBody(String endPoint, String docString) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		ApiResponse apiResponse = soapApi.postSoap(endPoint, Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -193,6 +205,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body:")
 	public void callPostSoapActionApiWithBody(String endPoint, String soapAction, String docString) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -200,6 +213,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST {word} SOAP API using SOAPAction {word} and encoded body:")
 	public void callPostSoapActionApiWithEncodedBody(String endPoint, String soapAction, String docString) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString), true);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -207,6 +221,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST {word} SOAP API using SOAPAction {word} and body:")
 	public void callPostSoapActionApiWithNotEncodedBody(String endPoint, String soapAction, String docString) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString), false);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -219,6 +234,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body file {string}")
 	public void callPostSoapActionApiWithBodyFile(String endPoint, String soapAction, String filename) {
+		soapApi.setDefaultSource(SOURCE_VIQ);
 		ApiResponse apiResponse = soapApi.postSoapXmlFile(endPoint, soapAction, filename);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -226,6 +242,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@When("I call POST {word} SOAP API using soap action {word} and audio file {string}")
 	public void callPostSoapActionApiWithAudioFile(String endPoint, String soapAction, String filename) {
+		soapApi.setDefaultSource(SOURCE_VIQ);
 		ApiResponse apiResponse = soapApi.postSoapBinaryFile(endPoint, soapAction, filename);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;

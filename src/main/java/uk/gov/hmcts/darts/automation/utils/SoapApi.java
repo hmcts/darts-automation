@@ -49,11 +49,18 @@ public class SoapApi {
 	static final String AUTHORIZATION = "Authorization";
 	static final String SOAP_ACTION = "SOAPAction";
 	String username;
-	String password;
+	String soapPassword;
+	String tokenPassword;
+	String defaultSource = "XHIBIT";
+	String suppliedSource = "";
 
 
 	public SoapApi() {
-		
+		this("XHIBIT");
+	}
+	
+	public SoapApi(String defaultSource) {
+		this.defaultSource = defaultSource;
 	}
 
     public RequestSpecification requestLogLevel(LogDetail loggingLevel){
@@ -66,29 +73,37 @@ public class SoapApi {
         return loglevel;
     }
     
-    public void authenticateAsSource(String source) {
+    public void setDefaultSource(String source) {
+    	this.defaultSource = source;
+    }
+    
+    public void authenticate(String source) {
         switch (source.toUpperCase()) {
         case "EXTERNAL":
         	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
         	break;
         case "XHIBIT":
-        	externalAuthenticate(ReadProperties.xhibitUserName, ReadProperties.xhibitPassword);
+        	externalAuthenticate(ReadProperties.xhibitExternalUserName, ReadProperties.xhibitInternalPassword, ReadProperties.xhibitExternalPassword);
         	break;
+        case "CP":
         case "CPP":
-        	externalAuthenticate(ReadProperties.cppUserName, ReadProperties.cppPassword);
+        	externalAuthenticate(ReadProperties.cpExternalUserName, ReadProperties.cpInternalPassword, ReadProperties.cpExternalPassword);
         	break;
         case "DARMIDTIER":
         	externalAuthenticate(ReadProperties.darMidTierUserName, ReadProperties.darMidTierPassword);
         	break;
         case "DARPCMIDTIER":
-        	externalAuthenticate(ReadProperties.DarPCMidTierUsername, ReadProperties.DarPCMidTierPassword);
+        	externalAuthenticate(ReadProperties.darPCMidTierUsername, ReadProperties.darPCMidTierPassword);
         	break;
         case "DARPC":
-        	externalAuthenticate(ReadProperties.DarPCUsername, ReadProperties.DarPCPassword);
+        	externalAuthenticate(ReadProperties.darPCUsername, ReadProperties.darPCPassword);
+        	break;
+        case "VIQ":
+        	externalAuthenticate(ReadProperties.viqExternalUserName, ReadProperties.viqInternalPassword, ReadProperties.viqExternalPassword);
         	break;
         case "":
-        	log.warn("Authentication - no role provided - using external");
-        	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
+        	log.warn("Authentication - no role provided - using default");
+        	externalAuthenticate();
         	break;
         default:
             log.fatal("Unknown user type - {}"+ source);
@@ -96,14 +111,27 @@ public class SoapApi {
         }
     }
     
+    public void authenticateAsSource(String source) {
+    	suppliedSource = source;
+    	authenticate(source);
+    }
+    
     public void externalAuthenticate() {
-    	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
+    	authenticate(defaultSource);
     }
     
     public void externalAuthenticate(String username, String password) {
     	this.username = username;
-    	this.password = password;
+    	this.tokenPassword = password;
+    	this.soapPassword = password;
     	authenticate(username, password);
+    }
+    
+    public void externalAuthenticate(String username, String tokenPassword, String soapPassword) {
+    	this.username = username;
+    	this.tokenPassword = tokenPassword;
+    	this.soapPassword = soapPassword;
+    	authenticate(username, tokenPassword);
     }
     
     public void authenticate() {
@@ -111,6 +139,11 @@ public class SoapApi {
     	log.info(alreadyAuthenticated ? "already Authenticated" : "Not already Authenticated");
     	if (!alreadyAuthenticated) {
     		externalAuthenticate();
+    	} else {
+// always authenticate with default for this call unless explicitly authenticated
+    		if (suppliedSource.isBlank()) {
+    			externalAuthenticate();
+    		}
     	}
     }
     
@@ -260,7 +293,7 @@ public class SoapApi {
 	String addSoapAuthHeader() {
 		return  "  <soap:Header>\n"
 				+ "    <ServiceContext token=\"temporary/127.0.0.1-1694086218480-789961425\" xmlns=\"http://context.core.datamodel.fs.documentum.emc.com/\">\n"
-				+ "      <Identities xsi:type=\"RepositoryIdentity\" userName=\"" + username + "\" password=\"" + password + "\" repositoryName=\"moj_darts\" domain=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n"
+				+ "      <Identities xsi:type=\"RepositoryIdentity\" userName=\"" + username + "\" password=\"" + soapPassword + "\" repositoryName=\"moj_darts\" domain=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n"
 				+ "      <RuntimeProperties/>\n"
 				+ "    </ServiceContext>\n"
 				+ "  </soap:Header>";

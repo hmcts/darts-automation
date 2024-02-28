@@ -27,6 +27,24 @@ Feature: Admin
       | Email                        | Password   |
       | darts.transcriber@hmcts.net  | Password@1 |
       | darts.languageshop@hmcts.net | Password@1 |
+ @DMP-634
+    Scenario: Search for Users in Portal Primary page
+      When I am logged on to DARTS as an ADMIN user
+      And I see "Users" on the page
+      Then I see "Full name" on the page
+      And I see "Email" on the page
+      And I see "Active users" on the page
+      And I see "Inactive users" on the page
+      And I see "All" on the page
+
+      @DMP-725
+      Scenario: Search page for Courthouses
+        When I am logged on to DARTS as an ADMIN user
+        And I click on the "Courthouses" link
+        Then I see "Search for courthouse" on the page
+        And I see "Courthouse name" on the page
+        And I see "Display name" on the page
+        And I see "Region" on the page      
 
   @DMP-2178
   Scenario Outline: New user account - Check user details
