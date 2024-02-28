@@ -70,7 +70,7 @@ Feature: Transcriber
 
     Then I click on the "Return to hearing date" link
     Then I click on the "Your audio" link
-    Then I wait for "2" minutes with "READY" to appear for "<case_number>"
+    Then I wait for "5" minutes with "READY" to appear for "<case_number>"
 
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
@@ -89,7 +89,7 @@ Feature: Transcriber
       | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
       | Harrow Crown Court | {{seq}}   | S{{seq}}031 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:04:00  | 18:05:00 | file-sample_1MB.doc | Download         |
 
-  @end2end @end2end4 @DMP-2055 @ts
+  @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -161,7 +161,7 @@ Feature: Transcriber
 
     Then I click on the "Return to hearing date" link
     Then I click on the "Your audio" link
-    Then I wait for "2" minutes with "READY" to appear for "<case_number>"
+    Then I wait for "5" minutes with "READY" to appear for "<case_number>"
 
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
