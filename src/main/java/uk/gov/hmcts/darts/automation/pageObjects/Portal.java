@@ -276,7 +276,7 @@ public class Portal {
         try {
             wait.until(justWait);
         } catch (TimeoutException e) {
-            log.info("Wait complete");
+            log.info("Wait {} seconds complete", waitTime);
         }
     }
     
@@ -303,7 +303,7 @@ public class Portal {
             public Boolean apply(WebDriver webDriver) {
             	ApiResponse apiResponse = jsonApi.getApiWithParams("audio-requests/v2", "user_id=" + user_id, "expired=false", "");
             	List<String> audioCount = JsonPath.read(apiResponse.responseString, jsonQuery);
-            	log.info(audioCount);
+            	log.warn(audioCount);
             	return audioCount.size() > 0;
             };
         };
@@ -346,7 +346,7 @@ public class Portal {
         try {
             wait.until(checkForAudioFile);
         } catch (TimeoutException e) {
-            log.info("Audio file not found within the specified wait time.");
+            log.warn("Audio file not found within the specified wait time.");
         }
     }
 }
