@@ -86,7 +86,7 @@ GradleBuilder builder = new GradleBuilder(this, product)
 // here we run the same "withNightlyPipeline" as the Jenkinsfile_CNP
 withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
-  enableFullFunctionalTest(60)
+  enableFullFunctionalTest(90)
   enableSlackNotifications('#darts-builds')
 
   before('fullFunctionalTest') {
