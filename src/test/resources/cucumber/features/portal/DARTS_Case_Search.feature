@@ -422,6 +422,29 @@ Scenario: Default retention policy
     Then I click on the pagination link "Previous"
     Then I click on the pagination link "Next"
 
+   @DMP-2246
+   Scenario: Download Annotation Document
+     Given I create a case using json
+       | courthouse         | case_number | defendants     | judges           | prosecutors    | defenders    |
+       | Harrow Crown Court | P{{seq}}001 | Def {{seq}}-999 | Judge {{seq}}-999 | testprosecutor | testdefender |
+     Given I create an event using json
+       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text   | date_time              |
+       | {{seq}}001 | 1100  |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-999 | P{{seq}}001  | {{seq}}MP1   | {{timestamp-10:00:00}} |
+     Given I am logged on to DARTS as an JUDGE user
+     When I click on the "Search" link
+     And I see "Search for a case" on the page
+     And I set "Case ID" to "P{{seq}}001"
+     And I press the "Search" button
+     And I click on the "P{{seq}}001" link
+     And I click on the "29 Feb 2024" link
+     And I click on the "Annotations" link
+     And I press the "Upload annotation" button
+     And I upload the file "file-sample_1MB.doc" at "Upload annotation file"
+     And I press the "Upload" button
+     And I click on the "Return to hearing level" link
+     And I click on the "Annotations" link
+     Then I click on the "Download" link
+     
 @DMP-1614
   Scenario: Annotation template
 
@@ -611,4 +634,4 @@ Scenario: Default retention policy
     And I upload the file "file-sample_1MB.doc" at "Upload annotation file"
     And I press the "Upload" button
     Then I see "You have added an annotation" on the page
-    
+   
