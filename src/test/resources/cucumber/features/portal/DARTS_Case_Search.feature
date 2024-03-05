@@ -10,13 +10,13 @@ Scenario: Case Search data creation
       | Harrow Crown Court | A{{seq}}004 | Def {{seq}}-22 | Judge {{seq}}-2  | testprosecutorfour     | testdefenderfour     |
       | Harrow Crown Court | A{{seq}}005 | Def {{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive     | testdefenderfive     |
 
-  Given I create an event using json
-    | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-    | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-1  | A{{seq}}001  | {{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}002  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}003  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}004  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}001 | 21200 | 11008    | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}005  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
+    Given I create an event using json
+      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-1  | A{{seq}}001  | {{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}002  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}003  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | {{seq}}-11 | A{{seq}}004  | {{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 21200 | 11008    | {{seq}}1001 | Harrow Crown Court | {{seq}}-2  | A{{seq}}005  | {{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
 
 
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression @demo
