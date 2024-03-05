@@ -1,8 +1,9 @@
 Feature: Annotation
 
-  @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9 @DMP-2246 @KH
+  @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9 @DMP-2246
   Scenario: Annotation data creation
-    Given I create a case using json
+    Given I create a case
+      | courthouse         | case_number | defendants     | judges           | prosecutors            | defenders            |
       | Harrow Crown Court | K{{seq}}002 | Def {{seq}}-29 | Judge {{seq}}-29 | testprosecutorsix      | testdefendersix      |
       | Harrow Crown Court | K{{seq}}003 | Def {{seq}}-30 | Judge {{seq}}-30 | testprosecutorsevem    | testdefenderseven    |
       | Harrow Crown Court | K{{seq}}004 | Def {{seq}}-31 | Judge {{seq}}-31 | testprosecutoreight    | testdefendereight    |
@@ -13,20 +14,23 @@ Feature: Annotation
       | Harrow Crown Court | K{{seq}}009 | Def {{seq}}-36 | Judge {{seq}}-36 | testprosecutorthirteen | testdefenderthirteen |
       | Harrow Crown Court | K{{seq}}010 | Def {{seq}}-37 | Judge {{seq}}-37 | testprosecutorfourteen | testdefenderfourteen |
       | Harrow Crown Court | K{{seq}}011 | Def {{seq}}-38 | Judge {{seq}}-38 | testprosecutorfifteen  | testdefenderfifteen  |
+      | Harrow Crown Court | K{{seq}}012 | Def {{seq}}-39 | Judge {{seq}}-39 | testprosecutorsixteen  | testdefendersixteen  |
 
-    Given I create an event using json
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-29 | K{{seq}}002 | {{seq}}KH1 | {{timestamp-10:00:00}} | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-30 | K{{seq}}003 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-31 | K{{seq}}004 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-32 | K{{seq}}005 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-33 | K{{seq}}006 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-34 | K{{seq}}007 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-35 | K{{seq}}008 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-36 | K{{seq}}009 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-37 | K{{seq}}010 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-38 | P{{seq}}011 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+    Given I create an event
+      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-29 | K{{seq}}002  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-30 | K{{seq}}003  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-31 | K{{seq}}004  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-32 | K{{seq}}005  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-33 | K{{seq}}006  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-34 | K{{seq}}007  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-35 | K{{seq}}008  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-36 | K{{seq}}009  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-37 | K{{seq}}010  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-38 | K{{seq}}011  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-39 | K{{seq}}012  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
 
-  @DMP-1614 @KH
+  @DMP-1614
   Scenario: Annotation template
 
     Given I am logged on to DARTS as an JUDGE user
@@ -213,10 +217,10 @@ Feature: Annotation
 
     When I click on the "Search" link
     And I see "Search for a case" on the page
-    And I set "Case ID" to "P{{seq}}001"
+    And I set "Case ID" to "K{{seq}}011"
     And I press the "Search" button
-    And I click on the "P{{seq}}001" link
-    And I click on the "29 Feb 2024" link
+    And I click on the "K{{seq}}011" link
+    And I click on the "{{displaydate}}" link
     And I click on the "Annotations" link
     And I press the "Upload annotation" button
     And I upload the file "file-sample_1MB.doc" at "Upload annotation file"
@@ -224,3 +228,33 @@ Feature: Annotation
     And I click on the "Return to hearing level" link
     And I click on the "Annotations" link
     Then I click on the "Download" link
+
+  @DMP-2456
+  Scenario: Delete annotation from case screen
+
+    Given I am logged on to DARTS as an JUDGE user
+
+    #Upload Annotation
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "K{{seq}}012"
+    And I press the "Search" button
+    And I click on the "K{{seq}}012" link
+    And I click on the "{{displaydate}}" link
+    And I click on the "Annotations" link
+    And I press the "Upload annotation" button
+    Then I upload the file "file-sample_1MB.doc" at "Upload annotation file"
+    And I press the "Upload" button
+    And I press the "back" button on my browser
+
+    #Cancel Annotation
+    And I click on the breadcrumb link "K{{seq}}012"
+    And  I click on the "All annotations" link
+    And  I click on the "Delete" link
+    And I see "Are you sure you want to delete this item?" on the page
+    Then I click on the "Cancel" link
+
+    #Delete Annotation
+    And  I click on the "Delete" link
+    And I see "Are you sure you want to delete this item?" on the page
+    Then I press the "Yes - delete" button
