@@ -1,6 +1,6 @@
 Feature: Annotation
 
-  @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9  @KH
+  @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9 @DMP-2246 @KH
   Scenario: Annotation data creation
     Given I create a case using json
       | Harrow Crown Court | K{{seq}}002 | Def {{seq}}-29 | Judge {{seq}}-29 | testprosecutorsix      | testdefendersix      |
@@ -12,6 +12,7 @@ Feature: Annotation
       | Harrow Crown Court | K{{seq}}008 | Def {{seq}}-35 | Judge {{seq}}-35 | testprosecutortwelve   | testdefendertwelve   |
       | Harrow Crown Court | K{{seq}}009 | Def {{seq}}-36 | Judge {{seq}}-36 | testprosecutorthirteen | testdefenderthirteen |
       | Harrow Crown Court | K{{seq}}010 | Def {{seq}}-37 | Judge {{seq}}-37 | testprosecutorfourteen | testdefenderfourteen |
+      | Harrow Crown Court | K{{seq}}011 | Def {{seq}}-38 | Judge {{seq}}-38 | testprosecutorfifteen  | testdefenderfifteen  |
 
     Given I create an event using json
       | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-29 | K{{seq}}002 | {{seq}}KH1 | {{timestamp-10:00:00}} | case_retention_fixed_policy | case_total_sentence |
@@ -23,6 +24,7 @@ Feature: Annotation
       | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-35 | K{{seq}}008 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
       | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-36 | K{{seq}}009 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
       | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-37 | K{{seq}}010 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |  | {{seq}}1167 | Harrow Crown Court | {{seq}}-38 | P{{seq}}011 | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
 
   @DMP-1614 @KH
   Scenario: Annotation template
@@ -204,3 +206,21 @@ Feature: Annotation
     And I click on the "{{displaydate}}" link
     And I click on the "Annotations" link
     Then I see "There are no annotations for this hearing." on the page
+
+  @DMP-2246
+  Scenario: Download Annotation Document
+    Given I am logged on to DARTS as an JUDGE user
+
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "P{{seq}}001"
+    And I press the "Search" button
+    And I click on the "P{{seq}}001" link
+    And I click on the "29 Feb 2024" link
+    And I click on the "Annotations" link
+    And I press the "Upload annotation" button
+    And I upload the file "file-sample_1MB.doc" at "Upload annotation file"
+    And I press the "Upload" button
+    And I click on the "Return to hearing level" link
+    And I click on the "Annotations" link
+    Then I click on the "Download" link
