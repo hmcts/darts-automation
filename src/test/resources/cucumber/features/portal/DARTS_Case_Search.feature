@@ -390,15 +390,14 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
 	And I click on the "11 Aug 2023" link
 	Then I do not see "There are restrictions against this case" on the page
 
-@DMP-1899 
+@DMP-1899
 Scenario: Default retention policy
-	Given I create a case
+	Given I create a case using json
 		| courthouse         | case_number | defendants     | judges           | prosecutors    | defenders    |
 		| Harrow Crown Court | K{{seq}}001 | Def {{seq}}-28 | Judge {{seq}}-28 | testprosecutor | testdefender |
-	Given I create an event
+	Given I create an event using json
 		| message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text   | date_time              |
 		| {{seq}}001 | 30300 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-28 | K{{seq}}001  | {{seq}}KH1   | {{timestamp-10:00:00}} |
-
 	Given I am logged on to DARTS as an JUDGE user
 		When I click on the "Search" link
 		And I see "Search for a case" on the page
@@ -408,7 +407,92 @@ Scenario: Default retention policy
 	    And I click on the "View or change" link
 	    Then I see "Default" on the page
 
-@DMP-772 @regression @demo
+@DMP-2161-AC1-AC3-AC4-AC5 @PM
+Scenario Outline: Get propose retention date and error message
+    Given I create a case using json
+      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+    Given I create an event using json
+      | message_id   | type   | sub_type   | event_id   | courthouse   | courtroom   | case_numbers  | event_text   | date_time   |
+      | <message_id> | <type> | <sub_type> | <event_id> | <courthouse> | <courtroom> | <case_number> | <event_text> | <date_time> |
+    Then I select column cas_id from table darts.court_case where case_number = "<case_number>"
+    Then I set table darts.case_retention column current_state to "COMPLETE" where cas_id = "{{cas_id}}"
+    Given I am logged on to DARTS as an JUDGE user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    And I click on the "<case_number>" link
+    And I click on the "View or change" link
+    Then I see "Default" on the page
+  #AC1
+  And I click on the "Change retention date" link
+  And I click on the "Retain until a specific date" link
+  And I set "Enter a date to retain the case until" to "01/01/2136"
+  And I set "Why are you making this change?" to "AC1"
+  And I click on the "Continue" link
+  Then I see "Change case retention date" on the page
+  And I see an error message "You cannot retain a case for more than 99 years after the case closed"
+#AC3
+  And I click on the "Cancel" link
+  And I click on the "Change retention date" link
+  And I click on the "Retain until a specific date" link
+  And I set "Enter a date to retain the case until" to "01/11/2024"
+  And I set "Why are you making this change?" to "AC3"
+  And I click on the "Continue" link
+  Then I see "Change case retention date" on the page
+  #And I see an error message "You cannot set retention date earlier than 06/03/2031"
+  And I see an error message "You cannot set retention date earlier than {{date+2556/}}"
+  And I click on the "Cancel" link
+  And I see "Change retention date" on the page
+  #And I see "06 Mar 2031" on the page
+  And I see "{{date+2556/}}" on the page
+
+    Examples:
+      | courthouse              | courtroom  | case_number | defendants     | judges           | prosecutors    | defenders    | message_id | type  | sub_type | event_id    | event_text | date_time              |
+      | {{staging_courthouse1}} | {{seq}}-28 | K{{seq}}001    | Def {{seq}}-28 | Judge {{seq}}-28 | testprosecutor | testdefender | {{seq}}001 | 30300 |          | {{seq}}1167 | {{seq}}KH1 | {{timestamp-10:00:00}} |
+
+  @DMP-2161-AC2
+  Scenario Outline: No permission to reduce the retention error message
+    Given I create a case using json
+      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+    Given I create an event using json
+      | message_id   | type   | sub_type   | event_id   | courthouse   | courtroom   | case_numbers  | event_text   | date_time   |
+      | <message_id> | <type> | <sub_type> | <event_id> | <courthouse> | <courtroom> | <case_number> | <event_text> | <date_time> |
+    Then I select column cas_id from table darts.court_case where case_number = "<case_number>"
+    Then I set table darts.case_retention column current_state to "COMPLETE" where cas_id = "{{cas_id}}"
+    Given I am logged on to DARTS as an REQUESTER user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    And I click on the "<case_number>" link
+    And I click on the "View or change" link
+    Then I see "Default" on the page
+    And I click on the "Change retention date" link
+    And  I click on the "Retain until a specific date" link
+    And I set "Enter a date to retain the case until" to "01/11/2023"
+    And I set "Why are you making this change?" to "AC2"
+    And I click on the "Continue" link
+    And I see "Change case retention date" on the page
+    Then I see an error message "You do not have permission to reduce the current retention date."
+    Then I see an error message "Please refer to the DARTS retention policy guidance."
+    Examples:
+      | courthouse              | courtroom  | case_number | defendants     | judges           | prosecutors    | defenders    | message_id | type  | sub_type | event_id    | event_text | date_time              |
+      | {{staging_courthouse1}} | {{seq}}-28 | K{{seq}}001    | Def {{seq}}-28 | Judge {{seq}}-28 | testprosecutor | testdefender | {{seq}}001 | 30300 |          | {{seq}}1167 | {{seq}}KH1 | {{timestamp-10:00:00}} |
+
+
+
+
+
+
+
+
+
+
+
+  @DMP-772 @regression @demo
   Scenario: Search Results Pagination
     Given I am logged on to DARTS as an APPROVER user
     When I click on the "Search" link
