@@ -202,12 +202,29 @@ public class StepDef_jsonApi extends StepDef_base {
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
+
+	@When("I process the daily list for courthouse {}")
+	public void processTheDailyListForCourthouse(String courthouse) {
+		String endpoint = "/dailylists/run";
+		ApiResponse apiResponse = jsonApi.postApiWithQueryParams(endpoint, courthouse);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+	}
 	
 	@When("I call POST {word} API using json body:")
 	public void callPostApiWithJsonBody(String endPoint, String docString) {
 		ApiResponse apiResponse = jsonApi.postApi(endPoint, Substitutions.substituteValue(docString));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
+	}
+
+	@When("^I call POST ([^\"]*) API with query params:$")
+	public void callPOSTApiWithQueryParams(String endpoint, List<Map<String, String>> dataTable) {
+		for (Map<String, String> map : dataTable) {
+			ApiResponse apiResponse = jsonApi.postApiWithQueryParams(endpoint, map);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+		}
 	}
 	
 	@When("I call GET {word} API")
