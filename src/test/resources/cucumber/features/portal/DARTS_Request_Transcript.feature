@@ -1,6 +1,6 @@
 Feature: Request Transcript
 
-  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-934 @DMP-1012 @DMP-1138 @regression
+  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1138 @regression
   Scenario: Request Transcription data creation
     Given I create a case using json
       | courthouse         | case_number | defendants      | judges            | prosecutors          | defenders          |
@@ -30,7 +30,7 @@ Feature: Request Transcript
       | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{date+0/}} | 11:30:00  | 11:31:00 | sample1   |
       | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{date+0/}} | 12:00:00  | 12:01:00 | sample1   |
 
-  @DMP-862 @DMP-917 @DMP-934 @DMP-1012 @DMP-1138 @regression
+  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @regression
   Scenario: Request Transcription, Specified Times with Event Checkboxes
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -87,6 +87,7 @@ Feature: Request Transcript
     Then I see "Transcripts for this hearing" on the page
     And I see "Specified Times" in the same row as "Awaiting Authorisation"
 
+    #DMP-1025-AC1 In progress on Your transcripts screen
     When I click on the "Your transcripts" link
     Then I see "C{{seq}}002" in the same row as "Awaiting Authorisation"
 
@@ -158,9 +159,11 @@ Feature: Request Transcript
     When I Sign out
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an REQUESTER user
+    #DMP-1025-AC2 Ready on Your transcripts screen
     And I click on the "Your transcripts" link
     Then I see "C{{seq}}002" in the same row as "Complete"
 
+    #DMP-1033 View link from My Transcripts (shows additional fields not seen elsewhere)
     When I click on "View" in the same row as "C{{seq}}002"
     Then I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
     And I see "Complete" on the page
@@ -187,6 +190,59 @@ Feature: Request Transcript
     When I click on "View" in the same row as "Specified Times"
     Then I see "file-sample_1MB.doc" on the page
     And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for transcript"
+
+    When I click on the "Search" link
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I select "Specified Times" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I check the checkbox in the same row as "10:30:00" "Hearing started"
+    And I check the checkbox in the same row as "10:31:00" "Hearing ended"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+
+    #DMP-925-AC1 Transcript already exists
+    When I set "Comments to the Transcriber (optional)" to "Doing repeat request, shouldn't go through."
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "This transcript was requested already" on the page
+    And I see "If the request is complete, a transcript will be available below." on the page
+
+    #DMP-925-AC2 Go to transcript link
+    When I click on the "Go to transcript" link
+    Then I see "file-sample_1MB.doc" on the page
+    And I see "C{{seq}}002" on the page
+    And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for transcript"
+
+    When I click on the "Search" link
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I select "Specified Times" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I check the checkbox in the same row as "10:30:00" "Hearing started"
+    And I check the checkbox in the same row as "10:31:00" "Hearing ended"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+
+    When I set "Comments to the Transcriber (optional)" to "Doing repeat request, shouldn't go through."
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "This transcript was requested already" on the page
+
+    ##DMP-925-AC3 Return to hearing link
+    When I click on the "Return to hearing" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Complete" in the same row as "Specified Times"
 
   @DMP-917 @DMP-862 @DMP-868 @DMP-934 @DMP-1012 @DMP-1138 @regression
   Scenario: Request Transcription, Court Log by Manually Entering Time
@@ -509,7 +565,7 @@ Feature: Request Transcript
     Then I see "file-sample_1MB.doc" on the page
     And I see "Start time 11:30:00 - End time 11:31:00" in the same row as "Audio for transcript"
 
-  @regression
+  @DMP-1025 @DMP-1028 @regression
   Scenario: Request Transcription, Rejected by Approver
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -595,14 +651,43 @@ Feature: Request Transcript
     And I click on the "Transcripts" link
     Then I see "Court Log" in the same row as "Rejected"
 
+    #DMP-1025-AC3 Rejected on Your transcripts screen
     When I click on the "Your transcripts" link
     And I see "C{{seq}}005" in the same row as "Rejected"
+    #DMP-1028-AC1 View rejected transcript request
     And I click on "View" in the same row as "C{{seq}}005"
     Then I see "Your request was rejected" on the page
     And I see "Rejecting this request, for specific reason" on the page
     And I see "Requesting transcript Court Log for one minute of audio, this will test negative path." in the same row as "Instructions"
 
-    #TODO: Request again button here, can be tested further
+    #DMP-1028-AC3 Cancel link takes user back to Your Transcripts screen
+    When I click on the "Cancel" link
+    And I see "C{{seq}}005" in the same row as "Rejected"
+    And I click on "View" in the same row as "C{{seq}}005"
+    #DMP-1028-AC2 Request again functionality
+    And I press the "Request again" button
+    Then I see "Request a new transcript" on the page
+    And I see "Audio list" on the page
+
+    When I select "Specified Times" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+
+    When I set the time fields below "Start time" to "12:00:00"
+    And I set the time fields below "End time" to "12:01:00"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+
+    When I set "Comments to the Transcriber (optional)" to "Requesting this again, as first request was rejected."
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "Transcript request submitted" on the page
+
+    When I click on the "Return to hearing date" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Court Log" in the same row as "Reje"
+    And I see "Specified Times" in the same row as "Awaiting Authorisation"
 
   @DMP-872 @DMP-862 @regression
   Scenario: No Audio Available for Transcript Request

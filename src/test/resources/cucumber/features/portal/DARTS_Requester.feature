@@ -3,7 +3,7 @@ Feature: User as a Requester
   Background:
     Given I am logged on to DARTS as an REQUESTER user
 
-  @DMP-1025
+  @DMP-1025 @obsolete
   Scenario: Verify Your Transcript Screen - "In Progress" or "Ready"
     When I click on the "Your Transcripts" link
     And I see "Your Transcripts" on the page
@@ -19,7 +19,7 @@ Feature: User as a Requester
     Then I click on "Status" in the table header
     Then "Status" has sort "descending" icon
 
-    @DMP-925-AC1
+    @DMP-925-AC1 @obsolete
     Scenario Outline: Transcript already exists
       When I click on the "Search" link
       And I see "Search for a case" on the page
@@ -60,7 +60,7 @@ Feature: User as a Requester
         | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Specified Times    | Overnight |
         | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | Restriction: Judge directed on reporting restrictions | Court Log          | Overnight |
 
-  @DMP-925-AC2
+  @DMP-925-AC2 @obsolete
   Scenario Outline: Go to this Transcript Link
     When I click on the "Search" link
     And I see "Search for a case" on the page
@@ -101,7 +101,7 @@ Feature: User as a Requester
       | CASE1009 | Swansea    | Jow Bloggs | Restriction: Judge directed on reporting restrictions | Specified Times    | Overnight |
       | CASE1009 | Swansea    | Jow Bloggs | Restriction: Judge directed on reporting restrictions | Court Log          | Overnight |
 
-  @DMP-925-AC3
+  @DMP-925-AC3 @obsolete
   Scenario Outline: Return to hearing Link
     When I click on the "Search" link
     And I see "Search for a case" on the page
@@ -137,7 +137,7 @@ Feature: User as a Requester
       | Restriction: Judge directed on reporting restrictions | Specified Times    | Overnight |
       | Restriction: Judge directed on reporting restrictions | Court Log          | Overnight |
 
-  @DMP-1033
+  @DMP-1033 @obsolete
   Scenario Outline: View Transcript - Via Your Transcriptions screen
     When I click on the "Your Transcripts" link
     And I see "Your Transcripts" on the page
@@ -162,7 +162,7 @@ Feature: User as a Requester
       | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType               | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
       | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Proceedings after verdict | Up to 7 working days | COMPLETE | 14 Aug 2023 | Requester | DMP-1025     | Yes           |
 
-  @DMP-1028-AC1
+  @DMP-1028-AC1 @obsolete
   Scenario Outline: View reject Transcription request
 
     When I click on the "Your transcripts" link
@@ -190,7 +190,7 @@ Feature: User as a Requester
       | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
       | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
 
-    @DMP-1028-AC2
+    @DMP-1028-AC2 @obsolete
     Scenario Outline: User wants to request again
 
       When I click on the "Your transcripts" link
@@ -223,7 +223,7 @@ Feature: User as a Requester
         | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
         | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
 
-  @DMP-1028-AC3
+  @DMP-1028-AC3 @obsolete
   Scenario Outline: View rejected transcript - A user clicks on the cancel hyperlink
 
     When I click on the "Your transcripts" link
