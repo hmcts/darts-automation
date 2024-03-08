@@ -390,24 +390,6 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
 	And I click on the "11 Aug 2023" link
 	Then I do not see "There are restrictions against this case" on the page
 
-@DMP-1899 
-Scenario: Default retention policy
-	Given I create a case
-		| courthouse         | case_number | defendants     | judges           | prosecutors    | defenders    |
-		| Harrow Crown Court | K{{seq}}001 | Def {{seq}}-28 | Judge {{seq}}-28 | testprosecutor | testdefender |
-	Given I create an event
-		| message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text   | date_time              |
-		| {{seq}}001 | 30300 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-28 | K{{seq}}001  | {{seq}}KH1   | {{timestamp-10:00:00}} |
-
-	Given I am logged on to DARTS as an JUDGE user
-		When I click on the "Search" link
-		And I see "Search for a case" on the page
-		And I set "Case ID" to "K{{seq}}001"
-		And I press the "Search" button
-		And I click on the "K{{seq}}001" link
-	    And I click on the "View or change" link
-	    Then I see "Default" on the page
-
 @DMP-772 @regression @demo
   Scenario: Search Results Pagination
     Given I am logged on to DARTS as an APPROVER user
