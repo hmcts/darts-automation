@@ -62,15 +62,15 @@ public class DateUtils {
 
 	
 	public static String datePlusMonths(String interval) {
-		return datePlusMonths(Integer.parseInt(interval));
+		return datePlusMonths(Integer.parseInt(interval.strip()));
 	}
 	
 	public static String datePlusYears(String interval) {
-		return datePlusYears(Integer.parseInt(interval));
+		return datePlusYears(Integer.parseInt(interval.strip()));
 	}
 	
 	public static String dateMinusMonths(String interval) {
-		return dateMinusMonths(Integer.parseInt(interval));
+		return dateMinusMonths(Integer.parseInt(interval.strip()));
 	}
 	
 	public static String datePlusMonths(int interval) {
@@ -272,11 +272,11 @@ public class DateUtils {
 					if (subsString.endsWith("n")) {
 						substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-1)).replace("-", "");
 					} else {
-						if (subsString.endsWith(" months")) {
-							substitutionString = datePlusMonths(subsString.substring(4, subsString.length()-7));
+						if (subsString.endsWith("months")) {
+							substitutionString = datePlusMonths(subsString.substring(4, subsString.length()-6));
 						} else {
-							if (subsString.endsWith(" years")) {
-								substitutionString = datePlusYears(subsString.substring(4, subsString.length()-6));
+							if (subsString.endsWith("years")) {
+								substitutionString = datePlusYears(subsString.substring(4, subsString.length()-5));
 							} else {
 								substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-0));
 							}
@@ -519,15 +519,22 @@ public class DateUtils {
 	public void test3() {
 		System.out.println("-----------------------");
 		System.out.println(substituteDateValue("date-7 months"));
+		System.out.println(substituteDateValue("date-7months"));
+		System.out.println(substituteDateValue("date-84 months"));
+		System.out.println(substituteDateValue("date-84months"));
 		System.out.println(substituteDateValue("date-7 years/"));
+		System.out.println(substituteDateValue("date-7years/"));
 		System.out.println(substituteDateValue("date-7/"));
 		System.out.println(substituteDateValue("date-7c/"));
 		System.out.println(substituteDateValue("date-7w/"));
 		System.out.println(substituteDateValue("date-7n"));
 		System.out.println("-----------------------");
 		System.out.println(substituteDateValue("date+7 months"));
+		System.out.println(substituteDateValue("date+7months"));
 		System.out.println(substituteDateValue("date+84 months"));
+		System.out.println(substituteDateValue("date+84months"));
 		System.out.println(substituteDateValue("date+7 years/"));
+		System.out.println(substituteDateValue("date+7years/"));
 		System.out.println(substituteDateValue("date+7/"));
 		System.out.println(substituteDateValue("date+7c/"));
 		System.out.println(substituteDateValue("date+7w/"));
