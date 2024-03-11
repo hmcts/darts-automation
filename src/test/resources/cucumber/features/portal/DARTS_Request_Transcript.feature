@@ -1,12 +1,14 @@
 Feature: Request Transcript
 
-  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-934 @DMP-1012 @DMP-1138 @regression
+  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1138 @regression
   Scenario: Request Transcription data creation
     Given I create a case using json
-      | courthouse         | case_number | defendants      | judges            | prosecutors         | defenders         |
-      | Harrow Crown Court | C{{seq}}001 | DefC {{seq}}-8  | JudgeC {{seq}}-8  | testprosecutoreight | testdefenderright |
-      | Harrow Crown Court | C{{seq}}002 | DefC {{seq}}-9  | JudgeC {{seq}}-9  | testprosecutornine  | testdefendernine  |
-      | Harrow Crown Court | C{{seq}}003 | DefC {{seq}}-10 | JudgeC {{seq}}-10 | testprosecutorten   | testdefenderten   |
+      | courthouse         | case_number | defendants      | judges            | prosecutors          | defenders          |
+      | Harrow Crown Court | C{{seq}}001 | DefC {{seq}}-8  | JudgeC {{seq}}-8  | testprosecutoreight  | testdefenderright  |
+      | Harrow Crown Court | C{{seq}}002 | DefC {{seq}}-9  | JudgeC {{seq}}-9  | testprosecutornine   | testdefendernine   |
+      | Harrow Crown Court | C{{seq}}003 | DefC {{seq}}-10 | JudgeC {{seq}}-10 | testprosecutorten    | testdefenderten    |
+      | Harrow Crown Court | C{{seq}}004 | DefC {{seq}}-11 | JudgeC {{seq}}-11 | testprosecutoreleven | testdefendereleven |
+      | Harrow Crown Court | C{{seq}}005 | DefC {{seq}}-12 | JudgeC {{seq}}-12 | testprosecutortwelve | testdefendertwelve |
 
     Given I create an event using json
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
@@ -16,13 +18,19 @@ Feature: Request Transcript
       | {{seq}}001 | 1200  |          | {{seq}}1011 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}GHI-9  | {{timestamp-10:31:00}} |                             |                     |
       | {{seq}}001 | 1100  |          | {{seq}}1012 | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{seq}}ABC-10 | {{timestamp-11:00:00}} |                             |                     |
       | {{seq}}001 | 1200  |          | {{seq}}1013 | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{seq}}DEF-10 | {{timestamp-11:01:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}1014 | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{seq}}ABC-11 | {{timestamp-11:30:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}1015 | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{seq}}DEF-11 | {{timestamp-11:31:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}1016 | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{seq}}ABC-12 | {{timestamp-12:00:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}1017 | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{seq}}DEF-12 | {{timestamp-12:01:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
       | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1   |
       | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{date+0/}} | 11:00:00  | 11:01:00 | sample1   |
+      | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{date+0/}} | 11:30:00  | 11:31:00 | sample1   |
+      | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{date+0/}} | 12:00:00  | 12:01:00 | sample1   |
 
-  @DMP-862 @DMP-917 @DMP-934 @DMP-1012 @DMP-1138 @regression
+  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @regression
   Scenario: Request Transcription, Specified Times with Event Checkboxes
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -79,6 +87,7 @@ Feature: Request Transcript
     Then I see "Transcripts for this hearing" on the page
     And I see "Specified Times" in the same row as "Awaiting Authorisation"
 
+    #DMP-1025-AC1 In progress on Your transcripts screen
     When I click on the "Your transcripts" link
     Then I see "C{{seq}}002" in the same row as "Awaiting Authorisation"
 
@@ -120,8 +129,6 @@ Feature: Request Transcript
     And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
 
-    #TODO: Try Assign to me and get audio or Assign to me and upload a transcript in different scenarios
-
     When I select the "Assign to me" radio button
     And I press the "Continue" button
     Then I see "C{{seq}}002" on the page
@@ -152,9 +159,11 @@ Feature: Request Transcript
     When I Sign out
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an REQUESTER user
+    #DMP-1025-AC2 Ready on Your transcripts screen
     And I click on the "Your transcripts" link
     Then I see "C{{seq}}002" in the same row as "Complete"
 
+    #DMP-1033 View link from My Transcripts (shows additional fields not seen elsewhere)
     When I click on "View" in the same row as "C{{seq}}002"
     Then I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
     And I see "Complete" on the page
@@ -181,6 +190,59 @@ Feature: Request Transcript
     When I click on "View" in the same row as "Specified Times"
     Then I see "file-sample_1MB.doc" on the page
     And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for transcript"
+
+    When I click on the "Search" link
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I select "Specified Times" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I check the checkbox in the same row as "10:30:00" "Hearing started"
+    And I check the checkbox in the same row as "10:31:00" "Hearing ended"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+
+    #DMP-925-AC1 Transcript already exists
+    When I set "Comments to the Transcriber (optional)" to "Doing repeat request, shouldn't go through."
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "This transcript was requested already" on the page
+    And I see "If the request is complete, a transcript will be available below." on the page
+
+    #DMP-925-AC2 Go to transcript link
+    When I click on the "Go to transcript" link
+    Then I see "file-sample_1MB.doc" on the page
+    And I see "C{{seq}}002" on the page
+    And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for transcript"
+
+    When I click on the "Search" link
+    And I set "Case ID" to "C{{seq}}002"
+    And I press the "Search" button
+    And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    And I select "Specified Times" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    And I check the checkbox in the same row as "10:30:00" "Hearing started"
+    And I check the checkbox in the same row as "10:31:00" "Hearing ended"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+
+    When I set "Comments to the Transcriber (optional)" to "Doing repeat request, shouldn't go through."
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "This transcript was requested already" on the page
+
+    ##DMP-925-AC3 Return to hearing link
+    When I click on the "Return to hearing" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Complete" in the same row as "Specified Times"
 
   @DMP-917 @DMP-862 @DMP-868 @DMP-934 @DMP-1012 @DMP-1138 @regression
   Scenario: Request Transcription, Court Log by Manually Entering Time
@@ -278,7 +340,7 @@ Feature: Request Transcript
     And I see "Requesting transcript Court Log for one minute of audio selected via manually entering time." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
 
-    #TODO: Try Assign to me and get audio or Assign to me and upload a transcript in different scenarios
+    #TODO: Try Assign to me and upload a transcript in different scenario
 
     When I select the "Assign to me" radio button
     And I press the "Continue" button
@@ -341,7 +403,291 @@ Feature: Request Transcript
     And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
 
     #TODO: Download transcript possible via Auto?
-    #TODO: More row checks similar to earlier in test or excessive?
+
+  @regression
+  Scenario: Request Transcription, Court Log, Assign to me and get audio, complete
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "C{{seq}}004"
+    And I press the "Search" button
+    When I click on "C{{seq}}004" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+    And I see "C{{seq}}004" on the page
+    And I see "Harrow Crown Court" on the page
+    And I see "DefC {{seq}}-11" on the page
+    And I see "{{displaydate}}" on the page
+
+    When I select "Court Log" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+
+    When I set the time fields below "Start time" to "11:30:00"
+    And I set the time fields below "End time" to "11:31:00"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+    And I see "C{{seq}}004" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "DefC {{seq}}-11" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Court Log" in the same row as "Request type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Provide any further instructions or comments for the transcriber." on the page
+
+    When I set "Comments to the Transcriber (optional)" to "Requesting transcript Court Log for one minute of audio, please request audio if needed."
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "Transcript request submitted" on the page
+    And I see "What happens next?" on the page
+    And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
+
+    When I click on the "Return to hearing date" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Court Log" in the same row as "Awaiting Authorisation"
+
+    When I click on the "Your transcripts" link
+    Then I see "C{{seq}}004" in the same row as "Awaiting Authorisation"
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an APPROVER user
+    And I click on the "Your transcripts" link
+    And I click on "View" in the same row as "C{{seq}}004"
+    Then I see "Approve transcript request" on the page
+    And I see "C{{seq}}004" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "JudgeC {{seq}}-11" in the same row as "Judge(s)"
+    And I see "DefC {{seq}}-11" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing Date"
+    And I see "Court Log" in the same row as "Request Type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
+    And I see "Yes" in the same row as "Judge approval"
+
+    When I select the "Yes" radio button
+    And I press the "Submit" button
+    Then I see "Requests to approve or reject" on the page
+    And I do not see "C{{seq}}004" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as a TRANSCRIBER user
+    And I click on the "Transcript requests" link
+    And I see "Manual" in the same row as "C{{seq}}004"
+    And I click on "View" in the same row as "C{{seq}}004"
+    Then I see "Transcript Request" on the page
+    And I see "C{{seq}}004" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "JudgeC {{seq}}-11" in the same row as "Judge(s)"
+    And I see "DefC {{seq}}-11" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing Date"
+    And I see "Court Log" in the same row as "Request Type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
+    And I see "Yes" in the same row as "Judge approval"
+
+    When I select the "Assign to me and get audio" radio button
+    And I press the "Continue" button
+    Then I see "Events and audio recordings" on the page
+
+    When I select the "Playback Only" radio button
+    And I press the "Get Audio" button
+    Then I see "Confirm your Order" on the page
+    And I see "C{{seq}}004" on the page
+
+    When I press the "Confirm" button
+    Then I see "Your order is complete" on the page
+
+    When I click on the "Return to hearing date" link
+    Then I see "Events and audio recordings" on the page
+
+    When I click on the "Your audio" link
+    And I wait for "5" minutes with "READY" to appear for "C{{seq}}004"
+    And I click on "View" in the same row as "C{{seq}}004"
+    Then I see "Play all audio" on the page
+    And I see "mp3" on the page
+
+    When I click on the "Your work" link
+    And I click on the "Completed today" link
+    Then I do not see "C{{seq}}004" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I click on the "Your transcripts" link
+    Then I see "C{{seq}}004" in the same row as "With Transcriber"
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as a TRANSCRIBER user
+    And I click on the "Your work" link
+    And I click on "View" in the same row as "C{{seq}}004"
+    And I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
+    And I upload the file "file-sample_1MB.doc" at "Upload transcript file"
+    And I press the "Attach file and complete" button
+    Then I see "Transcript request complete" on the page
+
+    When I click on the "Go to your work" link
+    And I click on the "Completed today" link
+    Then I see "C{{seq}}004" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I click on the "Your transcripts" link
+    Then I see "C{{seq}}004" in the same row as "Complete"
+
+    When I click on "View" in the same row as "C{{seq}}004"
+    Then I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
+    And I see "Complete" on the page
+
+    When I click on the "Search" link
+    And I set "Case ID" to "C{{seq}}004"
+    And I press the "Search" button
+    And I click on "C{{seq}}004" in the same row as "Harrow Crown Court"
+    And I click on the "All Transcripts" link
+    Then I see "Court Log" in the same row as "Complete"
+
+    When I click on "View" in the same row as "Court Log"
+    Then I see "file-sample_1MB.doc" on the page
+    And I see "Start time 11:30:00 - End time 11:31:00" in the same row as "Audio for transcript"
+
+    When I click on the breadcrumb link "C{{seq}}004"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "Court Log" in the same row as "Complete"
+
+    When I click on "View" in the same row as "Court Log"
+    Then I see "file-sample_1MB.doc" on the page
+    And I see "Start time 11:30:00 - End time 11:31:00" in the same row as "Audio for transcript"
+
+  @DMP-1025 @DMP-1028 @regression
+  Scenario: Request Transcription, Rejected by Approver
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "C{{seq}}005"
+    And I press the "Search" button
+    When I click on "C{{seq}}005" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+    And I see "C{{seq}}005" on the page
+    And I see "Harrow Crown Court" on the page
+    And I see "DefC {{seq}}-12" on the page
+    And I see "{{displaydate}}" on the page
+
+    When I select "Court Log" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+
+    When I set the time fields below "Start time" to "12:00:00"
+    And I set the time fields below "End time" to "12:01:00"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+    And I see "C{{seq}}005" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "DefC {{seq}}-12" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Court Log" in the same row as "Request type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Provide any further instructions or comments for the transcriber." on the page
+
+    When I set "Comments to the Transcriber (optional)" to "Requesting transcript Court Log for one minute of audio, this will test negative path."
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "Transcript request submitted" on the page
+    And I see "What happens next?" on the page
+    And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
+
+    When I click on the "Return to hearing date" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Court Log" in the same row as "Awaiting Authorisation"
+
+    When I click on the "Your transcripts" link
+    Then I see "C{{seq}}005" in the same row as "Awaiting Authorisation"
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an APPROVER user
+    And I click on the "Your transcripts" link
+    And I click on "View" in the same row as "C{{seq}}005"
+    Then I see "Approve transcript request" on the page
+    And I see "C{{seq}}005" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "JudgeC {{seq}}-12" in the same row as "Judge(s)"
+    And I see "DefC {{seq}}-12" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing Date"
+    And I see "Court Log" in the same row as "Request Type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Requesting transcript Court Log for one minute of audio, this will test negative path." in the same row as "Instructions"
+    And I see "Yes" in the same row as "Judge approval"
+
+    When I select the "No" radio button
+    And I see "You have 2000 characters remaining" on the page
+    And I set "Why can you not approve this request?" to "Rejecting this request, for specific reason"
+    #And I see "You have 1956 characters remaining" on the page
+    And I press the "Submit" button
+    Then I see "Requests to approve or reject" on the page
+    And I do not see "C{{seq}}005" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I set "Case ID" to "C{{seq}}005"
+    And I press the "Search" button
+    And I click on "C{{seq}}005" in the same row as "Harrow Crown Court"
+    And I click on the "All Transcripts" link
+    Then I see "Court Log" in the same row as "Rejected"
+
+    When I click on the "Hearings" link
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "Court Log" in the same row as "Rejected"
+
+    #DMP-1025-AC3 Rejected on Your transcripts screen
+    When I click on the "Your transcripts" link
+    And I see "C{{seq}}005" in the same row as "Rejected"
+    #DMP-1028-AC1 View rejected transcript request
+    And I click on "View" in the same row as "C{{seq}}005"
+    Then I see "Your request was rejected" on the page
+    And I see "Rejecting this request, for specific reason" on the page
+    And I see "Requesting transcript Court Log for one minute of audio, this will test negative path." in the same row as "Instructions"
+
+    #DMP-1028-AC3 Cancel link takes user back to Your Transcripts screen
+    When I click on the "Cancel" link
+    And I see "C{{seq}}005" in the same row as "Rejected"
+    And I click on "View" in the same row as "C{{seq}}005"
+    #DMP-1028-AC2 Request again functionality
+    And I press the "Request again" button
+    Then I see "Request a new transcript" on the page
+    And I see "Audio list" on the page
+
+    When I select "Specified Times" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+
+    When I set the time fields below "Start time" to "12:00:00"
+    And I set the time fields below "End time" to "12:01:00"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+
+    When I set "Comments to the Transcriber (optional)" to "Requesting this again, as first request was rejected."
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "Transcript request submitted" on the page
+
+    When I click on the "Return to hearing date" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Court Log" in the same row as "Reje"
+    And I see "Specified Times" in the same row as "Awaiting Authorisation"
 
   @DMP-872 @DMP-862 @regression
   Scenario: No Audio Available for Transcript Request
