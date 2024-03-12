@@ -104,14 +104,14 @@ ext['spring-security.version'] = '6.0.3' // https://spring.io/security/cve-2023-
 
 dependencies {
 
-	implementation(platform("org.apache.logging.log4j:log4j-bom:2.23.0"))
+	implementation(platform("org.apache.logging.log4j:log4j-bom:2.23.1"))
 	implementation 'org.apache.logging.log4j:log4j-api'
 	implementation 'org.apache.logging.log4j:log4j-core'
 	testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl'
 	
 	implementation 'org.seleniumhq.selenium:selenium-java:4.18.1'
 	
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.2'
 	
 	implementation(platform("io.cucumber:cucumber-bom:7.15.0"))
 	implementation 'io.cucumber:cucumber-picocontainer'
