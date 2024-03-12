@@ -111,7 +111,7 @@ public class StepDef_soapApi extends StepDef_base {
 			ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
-			Assertions.assertEquals("201", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+			Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 		}
 	}
 	
@@ -129,6 +129,25 @@ public class StepDef_soapApi extends StepDef_base {
 					getValue(map, "text"),
 					DateUtils.makeTimestamp(getValue(map, "dateTime"), getValue(map, "date"), getValue(map, "time")));
 			ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
+		}
+	}
+
+	// sample cucumber:
+	// When I get courtlogs
+	// | courthouse | case_number | start | end |
+	@When("^I get courtlogs$")
+	public void getLogsXml(List<Map<String,String>> dataTable) {
+		soapApi.setDefaultSource(SOURCE_XHIBIT);
+		for (Map<String, String> map : dataTable) {
+			String xml = XmlUtils.buildGetLogXml(
+					getValue(map, "courthouse"),
+					getValue(map, "case_number"),
+					DateUtils.makeTimestamp(getValue(map, "startDateTime"), getValue(map, "startDate"), getValue(map, "startTime")),
+					DateUtils.makeTimestamp(getValue(map, "endDateTime"), getValue(map, "endDate"), getValue(map, "endTime")));
+			ApiResponse apiResponse = soapApi.postSoap("", "getLogEntry", xml, true);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
 			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
