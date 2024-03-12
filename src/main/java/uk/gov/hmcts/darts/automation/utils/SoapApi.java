@@ -13,6 +13,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
 
@@ -48,9 +49,9 @@ public class SoapApi {
 	static final String CONNECTION_STRING = "keep-alive";
 	static final String AUTHORIZATION = "Authorization";
 	static final String SOAP_ACTION = "SOAPAction";
-	String username;
-	String soapPassword;
-	String tokenPassword;
+	String username = "";
+	String soapPassword = "";
+	String tokenPassword = "";
 	String defaultSource = "XHIBIT";
 	String suppliedSource = "";
 
@@ -74,7 +75,10 @@ public class SoapApi {
     }
     
     public void setDefaultSource(String source) {
-    	this.defaultSource = source;
+    	if (!this.defaultSource.equalsIgnoreCase(source)) {
+    		this.defaultSource = source;
+    		authorization = "";
+    	}
     }
     
     public void authenticate(String source) {
@@ -131,7 +135,8 @@ public class SoapApi {
     	this.username = username;
     	this.tokenPassword = tokenPassword;
     	this.soapPassword = soapPassword;
-    	authenticate(username, tokenPassword);
+//    	authenticate(username, tokenPassword);
+    	registerUser(username, soapPassword);
     }
     
     public void authenticate() {
@@ -145,6 +150,49 @@ public class SoapApi {
     			externalAuthenticate();
     		}
     	}
+    }
+	
+    public void registerUser(String username, String password) {
+    	log.info("registerUser");
+    	String authXml = "<S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
+    			+ "   <S:Header>\n"
+    			+ "      <ServiceContext token=\"temporary/127.0.0.1-1700061962100--7690714146928305881\" xmlns=\"http://context.core.datamodel.fs.documentum.emc.com/\" xmlns:ns2=\"http://properties.core.datamodel.fs.documentum.emc.com/\" xmlns:ns3=\"http://profiles.core.datamodel.fs.documentum.emc.com/\" xmlns:ns4=\"http://query.core.datamodel.fs.documentum.emc.com/\" xmlns:ns5=\"http://content.core.datamodel.fs.documentum.emc.com/\" xmlns:ns6=\"http://core.datamodel.fs.documentum.emc.com/\">\n"
+    			+ "         <Identities password=\"" + password + "\" repositoryName=\"moj_darts\" userName=\"" + username + "\" xsi:type=\"RepositoryIdentity\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></Identities>\n"
+    			+ "         <Profiles allowAsyncContentTransfer=\"false\" allowCachedContentTransfer=\"false\" isProcessOLELinks=\"false\" transferMode=\"MTOM\" xsi:type=\"ns3:ContentTransferProfile\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></Profiles>\n"
+    			+ "      </ServiceContext>\n"
+    			+ "   </S:Header>\n"
+    			+ "   <S:Body>\n"
+    			+ "      <ns8:register xmlns:ns8=\"http://services.rt.fs.documentum.emc.com/\" xmlns:ns7=\"http://core.datamodel.fs.documentum.emc.com/\" xmlns:ns6=\"http://content.core.datamodel.fs.documentum.emc.com/\" xmlns:ns5=\"http://query.core.datamodel.fs.documentum.emc.com/\" xmlns:ns4=\"http://profiles.core.datamodel.fs.documentum.emc.com/\" xmlns:ns3=\"http://properties.core.datamodel.fs.documentum.emc.com/\" xmlns:ns2=\"http://context.core.datamodel.fs.documentum.emc.com/\">\n"
+    			+ "         <context>\n"
+    			+ "            <ns2:Identities xsi:type=\"ns2:RepositoryIdentity\" repositoryName=\"moj_darts\" password=\"" + password + "\" userName=\"" + username + "\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></ns2:Identities>\n"
+    			+ "            <ns2:Profiles xsi:type=\"ns4:ContentTransferProfile\" isProcessOLELinks=\"false\" allowAsyncContentTransfer=\"false\" allowCachedContentTransfer=\"false\" transferMode=\"MTOM\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></ns2:Profiles>\n"
+    			+ "         </context>\n"
+    			+ "         <host>http://darts-gateway.staging.platform.hmcts.net/service/darts//</host>\n"
+    			+ "      </ns8:register>\n"
+    			+ "   </S:Body>\n"
+    			+ "</S:Envelope>\n";
+    	response  = 
+    		given()
+				.spec(requestLogLevel(ReadProperties.authRequestLogLevel))
+				.accept(ACCEPT_XML_STRING)
+				.header(USER_AGENT, USER_AGENT_STRING) 
+				.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+				.header(CONNECTION, CONNECTION_STRING)
+				.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
+    			.header("X-Requested-With", "XMLHttpRequest")
+    			.header("Accept-Language", "en-GB,en;q=0.5")
+    			.urlEncodingEnabled(true)
+    			.baseUri(baseUri)
+    			.body(authXml)
+    		.when()
+    			.post()
+			.then()
+				.spec(responseLogLevel(ReadProperties.authResponseLogLevel))
+				.assertThat().statusCode(200)
+				.extract().response()
+    			;
+    	String access_token = response.asString().split("<return>")[1].split("</return>")[0];
+    	authorization = access_token;
     }
     
     public void authenticate(String username, String password) {
