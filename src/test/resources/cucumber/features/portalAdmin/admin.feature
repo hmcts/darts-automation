@@ -5,8 +5,8 @@ Feature: Admin
     When  I am logged on to DARTS as an ADMIN user
     Then  I see "Users" on the page
     And   I see links with text:
-      | Users   | Groups  | Organisations | Courthouses | Events | Node registry | Transformed media | Transcript requests |
-      | Y       | Y       | Y             | Y           | Y      | Y             | Y                 | Y                   |
+      | Users | Groups | Organisations | Courthouses | Events | Node registry | Transformed media | Transcript requests |
+      | Y     | Y      | Y             | Y           | Y      | Y             | Y                 | Y                   |
     And   I see link with text "HMCTS"
     And   I see link with text "DARTS"
     And   I see link with text "Sign out"
@@ -27,26 +27,27 @@ Feature: Admin
       | Email                        | Password   |
       | darts.transcriber@hmcts.net  | Password@1 |
       | darts.languageshop@hmcts.net | Password@1 |
- @DMP-634
-    Scenario: Search for Users in Portal Primary page
-      When I am logged on to DARTS as an ADMIN user
-      And I see "Users" on the page
-      Then I see "Full name" on the page
-      And I see "Email" on the page
-      And I see "Active users" on the page
-      And I see "Inactive users" on the page
-      And I see "All" on the page
 
-      @DMP-725
-      Scenario: Search page for Courthouses
-        When I am logged on to DARTS as an ADMIN user
-        And I click on the "Courthouses" link
-        Then I see "Search for courthouse" on the page
-        And I see "Courthouse name" on the page
-        And I see "Display name" on the page
-        And I see "Region" on the page      
+  @DMP-634
+  Scenario: Search for Users in Portal Primary page
+    When I am logged on to DARTS as an ADMIN user
+    And I see "Users" on the page
+    Then I see "Full name" on the page
+    And I see "Email" on the page
+    And I see "Active users" on the page
+    And I see "Inactive users" on the page
+    And I see "All" on the page
 
-  @DMP-2178
+  @DMP-725
+  Scenario: Search page for Courthouses
+    When I am logged on to DARTS as an ADMIN user
+    And I click on the "Courthouses" link
+    Then I see "Search for courthouse" on the page
+    And I see "Courthouse name" on the page
+    And I see "Display name" on the page
+    And I see "Region" on the page
+
+  @DMP-2178 @DMP-630-AC1-AC2
   Scenario Outline: New user account - Check user details
     When I am logged on to DARTS as an ADMIN user
     Then I see "Users" on the page
@@ -84,5 +85,116 @@ Feature: Admin
     And I press the "Create user" button
 
     Examples:
-      |Full name  | Email                  | Description  |
-      |Joe Bloggs | darts.test4@hmcts.net  | Test         |
+      | Full name  | Email                 | Description |
+      | Joe Bloggs | darts.test4@hmcts.net | Test        |
+
+  @DMP-630-AC3-1
+  Scenario Outline: Create a new user account with existing email address
+    When I am logged on to DARTS as an ADMIN user
+    Then I see "Users" on the page
+    And I see the "Create new user" button
+    And I press the "Create new user" button
+    And I see "Create user" on the page
+    And I see "Enter user details" on the page
+    And I see "Full name" on the page
+    And I see "Email" on the page
+    And I see "Description (optional)" on the page
+    Then I set "Full name" to "<Full name>"
+    And I set "Email" to "<Email>"
+    And I set "Description (optional)" to "<Description>"
+    And I press the "Continue" button
+    Then I see "There is a problem" on the page
+    And I see an error message "Enter a unique email address"
+    Then I see "email" on the page
+    And I see an error message "Enter a unique email address"
+    Examples:
+      | Full name    | Email                 | Description |
+      | global_judge | darts.judge@hmcts.net |             |
+
+  @DMP-630-AC3-2
+  Scenario Outline: Create a new user account with invalid email format
+    When I am logged on to DARTS as an ADMIN user
+    Then I see "Users" on the page
+    And I press the "Create new user" button
+    And I see "Create user" on the page
+    And I see "Enter user details" on the page
+    And I see "Full name" on the page
+    And I see "Email" on the page
+    And I see "Description (optional)" on the page
+    Then I set "Full name" to "<Full name>"
+    And I set "Email" to "<Email>"
+    And I set "Description (optional)" to "<Description>"
+    And I press the "Continue" button
+    Then I see "There is a problem" on the page
+    And I see an error message "Enter an email address in the correct format, like name@example.com"
+    Then I see "email" on the page
+    And I see an error message "Enter an email address in the correct format, like name@example.com"
+    Examples:
+      | Full name    | Email       | Description |
+      | global_judge | darts.judge |             |
+
+  @DMP-630-AC3-3
+  Scenario Outline: Create a new user account without full name
+    When I am logged on to DARTS as an ADMIN user
+    Then I see "Users" on the page
+    And I press the "Create new user" button
+    And I see "Create user" on the page
+    And I see "Enter user details" on the page
+    And I see "Full name" on the page
+    And I see "Email" on the page
+    And I see "Description (optional)" on the page
+    Then I set "Full name" to "<Full name>"
+    And I set "Email" to "<Email>"
+    And I set "Description (optional)" to "<Description>"
+    And I press the "Continue" button
+    Then I see "There is a problem" on the page
+    And I see an error message "Enter a full name"
+    Then I see "Full name" on the page
+    And I see an error message "Enter a full name"
+    Examples:
+      | Full name | Email                | Description |
+      |           | darts.judge@hmct.net |             |
+
+  @DMP-630-AC3-4
+  Scenario Outline: Create a new user account without Email address
+    When I am logged on to DARTS as an ADMIN user
+    Then I see "Users" on the page
+    And I press the "Create new user" button
+    And I see "Create user" on the page
+    And I see "Enter user details" on the page
+    And I see "Full name" on the page
+    And I see "Email" on the page
+    And I see "Description (optional)" on the page
+    Then I set "Full name" to "<Full name>"
+    And I set "Email" to "<Email>"
+    And I set "Description (optional)" to "<Description>"
+    And I press the "Continue" button
+    Then I see "There is a problem" on the page
+    And I see an error message "Enter an email address"
+    Then I see "email" on the page
+    And I see an error message "Enter an email address"
+    Examples:
+      | Full name | Email | Description |
+      | Test      |       |             |
+
+  @DMP-630-AC3-5
+  Scenario Outline: Create a new user account with more than 256 characters
+    When I am logged on to DARTS as an ADMIN user
+    Then I see "Users" on the page
+    And I press the "Create new user" button
+    And I see "Enter user details" on the page
+    And I see "Full name" on the page
+    And I see "Email" on the page
+    And I see "Description (optional)" on the page
+    Then I set "Full name" to "<Full name>"
+    And I set "Email" to "<Email>"
+    And I set "Description (optional)" to "<Description>"
+    And I press the "Continue" button
+    Then I see "Description (optional)" on the page
+    And I see "Enter a description shorter than 256 characters" on the page
+    And I press the "Continue" button
+    Then I see "There is a problem" on the page
+    And I see an error message "Enter a description shorter than 256 characters"
+    Examples:
+      | Full name | Email             | Description                                                                                                                                                                                                                                                           |
+      | Test      | Test999@hmcts.net | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test |
