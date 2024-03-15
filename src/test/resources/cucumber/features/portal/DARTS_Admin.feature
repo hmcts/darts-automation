@@ -12,7 +12,7 @@ Feature: Admin portal
     And I see "Check user details" on the page
     Then I press the "Create user" button
 
-  @2340 @KH
+  @2340
   Scenario: Admin portal data creation - User 2 - Deactivated user
   #Login admin
     Given I am logged on to DARTS as an ADMIN user
@@ -97,7 +97,7 @@ Feature: Admin portal
     Then I press the "Yes - continue" button
     Then I see "This user is not a member of any groups." on the page
 
-  @DMP-2340 @KH
+  @DMP-2340
   Scenario: Reactivate a user
   #Login admin
     Given I am logged on to DARTS as an ADMIN user
