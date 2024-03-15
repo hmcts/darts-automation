@@ -123,18 +123,8 @@ public class XmlUtils {
     			.addTag("getCourtLog")
 				.addTag("courthouse", courthouse)
     			.addTag("case_number", caseNumber)
-    			.addTag("startTime", DateUtils.datePart(startTime, "Y")
-    					+ DateUtils.datePart(startTime, "M")
-    					+ DateUtils.datePart(startTime, "D")
-    					+ DateUtils.datePart(startTime, "H")
-    					+ DateUtils.datePart(startTime, "MIN")
-    	    			+ DateUtils.datePart(startTime, "S"))
-    			.addTag("endTime", DateUtils.datePart(endTime, "Y")
-    					+ DateUtils.datePart(endTime, "M")
-    					+ DateUtils.datePart(endTime, "D")
-    					+ DateUtils.datePart(endTime, "H")
-    					+ DateUtils.datePart(endTime, "MIN")
-    	    			+ DateUtils.datePart(endTime, "S"))
+    			.addTag("startTime", DateUtils.makeNumericDateTime(startTime))
+    			.addTag("endTime", DateUtils.makeNumericDateTime(endTime))
     			.addEndTag();
 		return xmlString.xmlValue();
     }
