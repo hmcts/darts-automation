@@ -1,7 +1,7 @@
 Feature: Admin portal
 
   @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224
-  Scenario: Admin portal data creation
+  Scenario: Admin portal data creation - User 1
   #Login admin
     Given I am logged on to DARTS as an ADMIN user
   #Create new user
@@ -11,6 +11,21 @@ Feature: Admin portal
     And I press the "Continue" button
     And I see "Check user details" on the page
     Then I press the "Create user" button
+
+  @2340 @KH
+  Scenario: Admin portal data creation - User 2 - Deactivated user
+  #Login admin
+    Given I am logged on to DARTS as an ADMIN user
+  #Create new user
+    And I press the "Create new user" button
+    And I set "Full name" to "KH{{seq}}002"
+    Then I set "Email" to "KH{{seq}}002@test.net"
+    And I press the "Continue" button
+    And I see "Check user details" on the page
+    Then I press the "Create user" button
+  #Deactivate user in database
+    Then I select column usr_id from table darts.user_account where user_email_address = "KH{{seq}}002@test.net"
+    Then I set table darts.user_account  column is_active to "false" where usr_id = "{{usr_id}}"
 
   @DMP-724
   Scenario: Update user personal detail
@@ -81,6 +96,21 @@ Feature: Admin portal
   #AC2 - Removing a group
     Then I press the "Yes - continue" button
     Then I see "This user is not a member of any groups." on the page
+
+  @DMP-2340 @KH
+  Scenario: Reactivate a user
+  #Login admin
+    Given I am logged on to DARTS as an ADMIN user
+  #Viewing user groups
+    And I click on the "Users" navigation link
+    And I set "Email" to "KH{{seq}}002@test.net"
+    And I select the "Inactive users" radio button
+    And I press the "Search" button
+    And I click on "View" in the same row as "KH{{seq}}002@test.net"
+    Then I press the "Activate user" button
+    Then I see "Reactivating this user will give them access to DARTS. They will not be able to see any data until they are added to at least one group." on the page
+    Then I press the "Reactivate user" button
+    Then I see "User record activated" on the page
 
 
 
