@@ -142,7 +142,7 @@ dependencies {
 	
 //	implementation group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.20.0.0'	
 	
-	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.2'
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 	
 	// Rest assured
 	implementation 'io.rest-assured:rest-assured:5.4.0'
