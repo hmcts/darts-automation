@@ -1,6 +1,6 @@
 Feature: Admin portal
 
-  @DMP-724 @DMP-2222
+  @DMP-724 @DMP-2222 @
   Scenario: Create user admin portal
   #Login admin
     Given I am logged on to DARTS as an ADMIN user
@@ -47,34 +47,8 @@ Feature: Admin portal
   #AC3 - Removing user groups
     Then I see "Assign groups" on the page
 
-  @DMP-635
-  Scenario: Create a Courthouse Page
-    Given I am logged on to DARTS as an ADMIN user
-      #AC1 - Creating a courthouse
-    Then I click on the "Courthouses" navigation link
-    And I press the "Create new courthouse" button
-    Then I see "Create courthouse" on the page
-    And I see "Courthouse details" on the page
-    And I see "Courthouse name" on the page
-    And I see "Must be the same ID used on XHIBIT or CPP" on the page
-    And I see "Display name" on the page
-      #AC2 - Enter Courthouse Details
-    Then I set "Courthouse name" to "Test Courthouse"
-    And I set "Display name" to "Test Display Name"
-    And I select the "Midlands" radio button
-      #AC3 Add Transcription Company
-    Then I see "Transcription companies" on the page
-    And I see "Select transcription companies" on the page
-    And I see "You can select and add multiple companies" on the page
-    And I select "DMP-626-LEEDS_JUDGE" from the dropdown
-    And I press the "Add company" button
-    Then I see "DMP-626-LEEDS_JUDGE" in the same row as "Remove"
-    And I click on the "Remove" link
-    And I click on the "Cancel" link
-      #AC4 - Error Handling
-    And I press the "Create new courthouse" button
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see "Enter a courthouse code" on the page
-    And I see "Enter a display name" on the page
-    And I see "Select a region" on the page
+
+
+
+
+

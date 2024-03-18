@@ -119,7 +119,7 @@ public class StepDef_soapApi extends StepDef_base {
 // When I add courtlogs
 // |courthouse|courtroom|case_numbers|text|dateTime|
 	@When("^I add courtlogs$")
-	public void createAddLogsXml(List<Map<String,String>> dataTable) {
+	public void addLogsXml(List<Map<String,String>> dataTable) {
 		soapApi.setDefaultSource(SOURCE_VIQ);
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddLogXml(
@@ -147,7 +147,7 @@ public class StepDef_soapApi extends StepDef_base {
 					getValue(map, "case_number"),
 					DateUtils.makeTimestamp(getValue(map, "startDateTime"), getValue(map, "startDate"), getValue(map, "startTime")),
 					DateUtils.makeTimestamp(getValue(map, "endDateTime"), getValue(map, "endDate"), getValue(map, "endTime")));
-			ApiResponse apiResponse = soapApi.postSoap("", "getLogEntry", xml, true);
+			ApiResponse apiResponse = soapApi.postSoap("", xml);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
 			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
@@ -248,7 +248,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@Then("^the SOAP response contains:$")
 	public void verifyApiResponse(String docString) {
-		Assertions.assertTrue(testdata.responseString.replaceAll(">\\R|\\s<", "><").contains(docString.replaceAll(">\\R|\\s<", "><")), "Response contents not matched:\r" + testdata.responseString);
+		Assertions.assertTrue(testdata.responseString.replaceAll(">\\R|\\s<", "><").contains(Substitutions.substituteValue(docString).replaceAll(">\\R|\\s<", "><")), "Response contents not matched:\r" + testdata.responseString);
 	}
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body file {string}")
