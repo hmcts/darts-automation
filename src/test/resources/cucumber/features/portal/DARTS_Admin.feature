@@ -1,6 +1,6 @@
 Feature: Admin portal
 
-  @DMP-724 @DMP-2222 @
+  @DMP-724 @DMP-2222
   Scenario: Create user admin portal
   #Login admin
     Given I am logged on to DARTS as an ADMIN user
@@ -47,7 +47,7 @@ Feature: Admin portal
   #AC3 - Removing user groups
     Then I see "Assign groups" on the page
 
-  @DMP-635 @DM
+  @DMP-635
   Scenario: Create a Courthouse Page
     Given I am logged on to DARTS as an ADMIN user
       #AC1 - Creating a courthouse
