@@ -57,6 +57,16 @@ public class XmlString {
 * Add field to xml 
 * 
 */
+	public XmlString addTag(String tag, String attributes, String value) {
+		if (value != null && !value.isBlank()) {
+			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
+				value = "";
+			}
+			xmlString = xmlString + sep() + "<" + tag + " " + Substitutions.substituteValue(attributes) + ">" + Substitutions.substituteValue(value) + "</" + tag + ">"; 
+			sep = lineEnd;
+		}
+		return this;
+	}
 	public XmlString addTag(String tag, String value) {
 		if (value != null && !value.isBlank()) {
 			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {

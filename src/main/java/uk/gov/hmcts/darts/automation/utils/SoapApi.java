@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 public class SoapApi {
 	private static Logger log = LogManager.getLogger("SoapApi");
     static Response response;
-	String authorization;
+	String authorizationToken;
 	static String baseUri = ReadProperties.main("soapApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
@@ -54,6 +54,7 @@ public class SoapApi {
 	String tokenPassword = "";
 	String defaultSource = "XHIBIT";
 	String suppliedSource = "";
+	boolean useToken;
 
 
 	public SoapApi() {
@@ -77,20 +78,25 @@ public class SoapApi {
     public void setDefaultSource(String source) {
     	if (!this.defaultSource.equalsIgnoreCase(source)) {
     		this.defaultSource = source;
-    		authorization = "";
+    		authorizationToken = "";
     	}
     }
-    
+
+// it is possible that all but XHIBIT, CPP & VIQ are invalid
     public void authenticate(String source) {
+    	useToken = false;
         switch (source.toUpperCase()) {
         case "EXTERNAL":
+        	useToken = true;
         	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
         	break;
         case "XHIBIT":
+        	useToken = true;
         	externalAuthenticate(ReadProperties.xhibitExternalUserName, ReadProperties.xhibitInternalPassword, ReadProperties.xhibitExternalPassword);
         	break;
         case "CP":
         case "CPP":
+        	useToken = true;
         	externalAuthenticate(ReadProperties.cpExternalUserName, ReadProperties.cpInternalPassword, ReadProperties.cpExternalPassword);
         	break;
         case "DARMIDTIER":
@@ -111,7 +117,7 @@ public class SoapApi {
         	break;
         default:
             log.fatal("Unknown user type - {}"+ source);
-            authorization = "";
+            authorizationToken = "";
         }
     }
     
@@ -123,12 +129,14 @@ public class SoapApi {
     public void externalAuthenticate() {
     	authenticate(defaultSource);
     }
-    
+   
+// unsure whether it is valid to use the ids with only 1 password or whether this should use soap or json
     public void externalAuthenticate(String username, String password) {
     	this.username = username;
     	this.tokenPassword = password;
     	this.soapPassword = password;
-    	authenticate(username, password);
+//    	authenticate(username, password);
+    	registerUser(username, soapPassword);
     }
     
     public void externalAuthenticate(String username, String tokenPassword, String soapPassword) {
@@ -140,7 +148,7 @@ public class SoapApi {
     }
     
     public void authenticate() {
-    	boolean alreadyAuthenticated = !(authorization == null || authorization.isBlank());
+    	boolean alreadyAuthenticated = !(authorizationToken == null || authorizationToken.isBlank());
     	log.info(alreadyAuthenticated ? "already Authenticated" : "Not already Authenticated");
     	if (!alreadyAuthenticated) {
     		externalAuthenticate();
@@ -192,9 +200,10 @@ public class SoapApi {
 				.extract().response()
     			;
     	String access_token = response.asString().split("<return>")[1].split("</return>")[0];
-    	authorization = access_token;
+    	authorizationToken = access_token;
     }
-    
+
+// this is the previous method of generating a token and MAY be obsolete
     public void authenticate(String username, String password) {
     	log.info("authentication");
     	response  = 
@@ -225,7 +234,7 @@ public class SoapApi {
     			;
 		String access_token = (response.jsonPath().getString("access_token"));
 		String token_type  = (response.jsonPath().getString("token_type"));
-		authorization = token_type + " " + access_token;
+		authorizationToken = token_type + " " + access_token;
     }
 
     /*
@@ -246,7 +255,7 @@ public class SoapApi {
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
-					.header(AUTHORIZATION, authorization)
+//					.header(AUTHORIZATION, authorizationToken)
 					.baseUri(baseUri)
 					.basePath("")
 					.body(addSoapHeader(body))
@@ -279,7 +288,7 @@ public class SoapApi {
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
-					.header(AUTHORIZATION, authorization)
+//					.header(AUTHORIZATION, authorizationToken)
 					.header(SOAP_ACTION, soapAction)
 					.baseUri(baseUri)
 					.basePath("")
@@ -312,7 +321,7 @@ public class SoapApi {
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
-					.header(AUTHORIZATION, authorization)
+//					.header(AUTHORIZATION, authorizationToken)
 					.header(SOAP_ACTION, soapAction)
 					.baseUri(baseUri)
 					.basePath("")
@@ -339,11 +348,25 @@ public class SoapApi {
 	}
 	
 	String addSoapAuthHeader() {
+		if (useToken) {
+			return addSoapAuthHeaderToken();
+		} else {
+			return addSoapAuthHeaderUser();
+		}
+	}
+	
+	String addSoapAuthHeaderUser() {
 		return  "  <soap:Header>\n"
 				+ "    <ServiceContext token=\"temporary/127.0.0.1-1694086218480-789961425\" xmlns=\"http://context.core.datamodel.fs.documentum.emc.com/\">\n"
 				+ "      <Identities xsi:type=\"RepositoryIdentity\" userName=\"" + username + "\" password=\"" + soapPassword + "\" repositoryName=\"moj_darts\" domain=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n"
 				+ "      <RuntimeProperties/>\n"
 				+ "    </ServiceContext>\n"
+				+ "  </soap:Header>";
+	}
+	
+	String addSoapAuthHeaderToken() {
+		return  "  <soap:Header>\n"
+				+ "      <wsse:Security xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\"><wsse:BinarySecurityToken QualificationValueType=\"http://schemas.emc.com/documentum#ResourceAccessToken\" xmlns:wsu=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd\" wsu:Id=\"RAD\">" + authorizationToken + "</wsse:BinarySecurityToken></wsse:Security>\n"
 				+ "  </soap:Header>";
 	}
 
