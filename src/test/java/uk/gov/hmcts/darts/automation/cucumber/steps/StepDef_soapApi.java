@@ -248,7 +248,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@Then("^the SOAP response contains:$")
 	public void verifyApiResponse(String docString) {
-		Assertions.assertTrue(testdata.responseString.replaceAll(">\\R|\\s<", "><").contains(docString.replaceAll(">\\R|\\s<", "><")), "Response contents not matched:\r" + testdata.responseString);
+		Assertions.assertTrue(testdata.responseString.replaceAll(">\\R|\\s<", "><").contains(Substitutions.substituteValue(docString).replaceAll(">\\R|\\s<", "><")), "Response contents not matched:\r" + testdata.responseString);
 	}
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body file {string}")

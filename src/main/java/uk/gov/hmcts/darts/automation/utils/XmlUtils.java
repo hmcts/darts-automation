@@ -121,10 +121,19 @@ public class XmlUtils {
     		String endTime) {
     	XmlString xmlString = new XmlString()
     			.addTag("getCourtLog")
-				.addTag("courthouse", courthouse)
-    			.addTag("case_number", caseNumber)
-    			.addTag("startTime", DateUtils.makeNumericDateTime(startTime))
-    			.addTag("endTime", DateUtils.makeNumericDateTime(endTime))
+    			.addAttribute("xmlns", "http://com.synapps.mojdarts.service.com")
+				.addTag("courthouse")
+				.addAttribute("xmlns", "")
+				.addValue(courthouse)
+    			.addTag("caseNumber")
+				.addAttribute("xmlns", "")
+    			.addValue(caseNumber)
+    			.addTag("startTime")
+				.addAttribute("xmlns", "")
+    			.addValue(DateUtils.makeNumericDateTime(startTime))
+    			.addTag("endTime")
+				.addAttribute("xmlns", "")
+    			.addValue(DateUtils.makeNumericDateTime(endTime))
     			.addEndTag();
 		return xmlString.xmlValue();
     }
