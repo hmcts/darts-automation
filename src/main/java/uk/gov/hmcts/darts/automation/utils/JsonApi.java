@@ -302,28 +302,32 @@ public class JsonApi {
 		return new ApiResponse(response.statusCode(), response.asString());
     }
 
-	public ApiResponse postApi(String endpoint, String body, File audioFile) {
+
+	public ApiResponse postApiWithQueryParams (String endpoint, String queryParams){
+			return postApiWithQueryParams(endpoint, stringToMap(queryParams));
+		}
+
+
+	public ApiResponse postApiWithQueryParams(String endpoint, Map<String, String> queryParams) {
 		authenticate();
 		log.info("post: " + endpoint);
-		log.info(body);
 		response =
 				given()
-					.spec(requestLogLevel(ReadProperties.requestLogLevel))
-					.accept("*/*")
-					.header(USER_AGENT, USER_AGENT_STRING)
-					.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
-					.header(CONNECTION, CONNECTION_STRING)
-					.header(AUTHORIZATION, authorization)
-					.contentType(ContentType.MULTIPART)
-					.multiPart("file",audioFile, "multipart/form-data")
-					.formParams("metadata",body)
-					.baseUri(baseUri)
-					.basePath("")
-					.when()
-					.post(endpoint)
-					.then()
-					.spec(responseLogLevel(ReadProperties.responseLogLevel))
-					.extract().response();
+						.spec(requestLogLevel(ReadProperties.requestLogLevel))
+						.accept(ACCEPT_JSON_STRING)
+						.header(USER_AGENT, USER_AGENT_STRING)
+						.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+						.header(CONNECTION, CONNECTION_STRING)
+						.header(CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+						.header(AUTHORIZATION, authorization)
+						.queryParams(queryParams)
+						.baseUri(baseUri)
+						.basePath("")
+						.when()
+						.post(endpoint)
+						.then()
+						.spec(responseLogLevel(ReadProperties.responseLogLevel))
+						.extract().response();
 		return new ApiResponse(response.statusCode(), response.asString());
 	}
     

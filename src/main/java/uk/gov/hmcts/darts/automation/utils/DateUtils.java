@@ -25,11 +25,11 @@ public class DateUtils {
 	}
 	
 	public static String datePlusCalDays(String calDays) {
-		return datePlusCalDays(Integer.parseInt(calDays), "dd-MM-yyyy");
+		return datePlusCalDays(Integer.parseInt(calDays));
 	}
 	
 	public static String dateMinusCalDays(String calDays) {
-		return dateMinusCalDays(Integer.parseInt(calDays), "dd-MM-yyyy");
+		return dateMinusCalDays(Integer.parseInt(calDays));
 	}
 	
 	public static String datePlusCalDays(int calDays) {
@@ -41,44 +41,56 @@ public class DateUtils {
 	}
 	
 	public static String datePlusWeekDays(String weekDays) {
-		return datePlusWeekDays(Integer.parseInt(weekDays), "dd-MM-yyyy");
+		return datePlusWeekDays(Integer.parseInt(weekDays));
 	}
 	
 	public static String dateMinusWeekDays(String weekDays) {
-		return dateMinusWeekDays(Integer.parseInt(weekDays), "dd-MM-yyyy");
+		return dateMinusWeekDays(Integer.parseInt(weekDays));
 	}
 	
 	public static String datePlusWeekDays(int weekDays) {
-		return datePlusWeekDays(weekDays, "dd-MM-yyyy");
+		if (weekDays < 0) {
+			return dateMinusWeekDays(0 - weekDays, "dd-MM-yyyy");
+		} else {
+			return datePlusWeekDays(weekDays, "dd-MM-yyyy");
+		}
 	}
 	
 	public static String dateMinusWeekDays(int weekDays) {
 		return dateMinusWeekDays(weekDays, "dd-MM-yyyy");
 	}
+
 	
-	
-	public static String datePlusMonths(String weekDays) {
-		return datePlusMonths(Integer.parseInt(weekDays), "dd-MM-yyyy");
+	public static String datePlusMonths(String interval) {
+		return datePlusMonths(Integer.parseInt(interval.strip()));
 	}
 	
-	public static String dateMinusMonths(String weekDays) {
-		return dateMinusMonths(Integer.parseInt(weekDays), "dd-MM-yyyy");
+	public static String datePlusYears(String interval) {
+		return datePlusYears(Integer.parseInt(interval.strip()));
 	}
 	
-	public static String datePlusMonths(int calDays) {
-		return datePlusMonths(calDays, "dd-MM-yyyy");
+	public static String dateMinusMonths(String interval) {
+		return dateMinusMonths(Integer.parseInt(interval.strip()));
 	}
 	
-	public static String dateMinusMonths(int calDays) {
-		return dateMinusMonths(calDays, "dd-MM-yyyy");
+	public static String datePlusMonths(int interval) {
+		return datePlusMonths(interval, "dd-MM-yyyy");
+	}
+	
+	public static String dateMinusMonths(int interval) {
+		return dateMinusMonths(interval, "dd-MM-yyyy");
+	}
+	
+	public static String datePlusYears(int interval) {
+		return datePlusYears(interval, "dd-MM-yyyy");
 	}
 	
 	public static String numdatePlusCalDays(String weekDays) {
-		return datePlusCalDays(Integer.parseInt(weekDays), "ddMMyyyy");
+		return numdatePlusCalDays(Integer.parseInt(weekDays));
 	}
 	
 	public static String numdateMinusCalDays(String weekDays) {
-		return dateMinusCalDays(Integer.parseInt(weekDays), "ddMMyyyy");
+		return numdateMinusCalDays(Integer.parseInt(weekDays));
 	}
 	
 	public static String numdatePlusCalDays(int calDays) {
@@ -90,15 +102,19 @@ public class DateUtils {
 	}
 	
 	public static String numdatePlusWeekDays(String weekDays) {
-		return datePlusWeekDays(Integer.parseInt(weekDays), "ddMMyyyy");
+		return numdatePlusWeekDays(Integer.parseInt(weekDays));
 	}
 	
 	public static String numdateMinusWeekDays(String weekDays) {
-		return dateMinusWeekDays(Integer.parseInt(weekDays), "ddMMyyyy");
+		return numdateMinusWeekDays(Integer.parseInt(weekDays));
 	}
 	
 	public static String numdatePlusWeekDays(int weekDays) {
-		return datePlusWeekDays(weekDays, "ddMMyyyy");
+		if (weekDays < 0) {
+			return dateMinusWeekDays(0 - weekDays, "ddMMyyyy");
+		} else {
+			return datePlusWeekDays(weekDays, "ddMMyyyy");
+		}
 	}
 	
 	public static String numdateMinusWeekDays(int weekDays) {
@@ -226,6 +242,15 @@ public class DateUtils {
 		return dateFormat.format((Date)cal.getTime());
 	}
 	
+	public static String datePlusYears(int years, String format) {
+		Date dateToday = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dateToday);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		cal.add(Calendar.YEAR, years);
+		return dateFormat.format((Date)cal.getTime());
+	}
+	
 	public static String dateMinusMonths(int months, String format) {
 		return datePlusMonths(0-months, format);
 	}
@@ -233,7 +258,7 @@ public class DateUtils {
 	public static String substituteDateValue(String subsString) {
 		String substitutedValue = "";
 		String substitutionString = "";
-		if (subsString.startsWith("date-")) {
+		if (subsString.startsWith("date-") || subsString.startsWith("date+")) {
 			boolean requireDelimChange = (subsString.endsWith("/"));
 			if (requireDelimChange) {
 				subsString = subsString.substring(0, subsString.length()-1);
@@ -247,10 +272,14 @@ public class DateUtils {
 					if (subsString.endsWith("n")) {
 						substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-1)).replace("-", "");
 					} else {
-						if (subsString.endsWith(" months")) {
-							substitutionString = datePlusMonths(subsString.substring(4, subsString.length()-7));
+						if (subsString.endsWith("months")) {
+							substitutionString = datePlusMonths(subsString.substring(4, subsString.length()-6));
 						} else {
-							substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-0));
+							if (subsString.endsWith("years")) {
+								substitutionString = datePlusYears(subsString.substring(4, subsString.length()-5));
+							} else {
+								substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-0));
+							}
 						}
 					}
 				}
@@ -259,86 +288,43 @@ public class DateUtils {
 				substitutionString = substitutionString.replace("-", "/");
 			}
 		} else {
-			if (subsString.toLowerCase().startsWith("date+")) {
-				boolean requireDelimChange = (subsString.endsWith("/"));
-				if (requireDelimChange) {
-					subsString = subsString.substring(0, subsString.length()-1);
-				}
+			if (subsString.startsWith("numdate-") || subsString.startsWith("numdate+")) {
 				if (subsString.endsWith("w")) {
-					substitutionString = datePlusWeekDays(subsString.substring(5, subsString.length()-1));
+					substitutionString = numdatePlusWeekDays(subsString.substring(7, subsString.length()-1));
 				} else {
 					if (subsString.endsWith("c")) {
-						substitutionString = datePlusCalDays(subsString.substring(5, subsString.length()-1));
+						substitutionString = numdatePlusCalDays(subsString.substring(7, subsString.length()-1));
 					} else {
 						if (subsString.endsWith("n")) {
-							substitutionString = datePlusCalDays(subsString.substring(5, subsString.length()-1)).replace("-", "");
+							substitutionString = numdatePlusCalDays(subsString.substring(7, subsString.length()-1)).replace("-", "");
 						} else {
-							if (subsString.endsWith(" months")) {
-								substitutionString = datePlusMonths(subsString.substring(5, subsString.length()-7));
-							} else {
-								substitutionString = datePlusCalDays(subsString.substring(5, subsString.length()-0));
-							}
+							substitutionString = numdatePlusCalDays(subsString.substring(7, subsString.length()-0));	
 						}
 					}
-				}
-				if (requireDelimChange) {
-					substitutionString = substitutionString.replace("-", "/");
 				}
 			} else {
-				if (subsString.startsWith("numdate-")) {
-					if (subsString.endsWith("w")) {
-						substitutionString = numdateMinusWeekDays(subsString.substring(8, subsString.length()-1));
-					} else {
-						if (subsString.endsWith("c")) {
-							substitutionString = numdateMinusCalDays(subsString.substring(8, subsString.length()-1));
-						} else {
-							if (subsString.endsWith("n")) {
-								substitutionString = numdateMinusCalDays(subsString.substring(8, subsString.length()-1)).replace("-", "");
-							} else {
-								substitutionString = numdateMinusCalDays(subsString.substring(8, subsString.length()-0));	
-							}
-						}
-					}
+				if (subsString.startsWith("datetime")) {
+					substitutionString = numDateTime();
 				} else {
-					if (subsString.toLowerCase().startsWith("numdate+")) {
-						if (subsString.endsWith("w")) {
-							substitutionString = numdatePlusWeekDays(subsString.substring(8, subsString.length()-1));
-						} else {
-							if (subsString.endsWith("c")) {
-								substitutionString = numdatePlusCalDays(subsString.substring(8, subsString.length()-1));
-							} else {
-								if (subsString.endsWith("n")) {
-									substitutionString = numdatePlusCalDays(subsString.substring(8, subsString.length()-1)).replace("-", "");
-								} else {
-									substitutionString = numdatePlusCalDays(subsString.substring(8, subsString.length()-0));		
-								}
-							}
-						}
+					if (subsString.equals("yyyymmdd")) {
+						substitutionString = todayYyyymmdd();
 					} else {
-						if (subsString.toLowerCase().startsWith("datetime")) {
-							substitutionString = numDateTime();
+						if (subsString.startsWith("dd-")) {
+							substitutionString = subsString.substring(3, 5);
 						} else {
-							if (subsString.toLowerCase().equals("yyyymmdd")) {
-								substitutionString = todayYyyymmdd();
+							if (subsString.startsWith("mm-")) {
+								substitutionString = subsString.substring(6, 8);
 							} else {
-								if (subsString.toLowerCase().startsWith("dd-")) {
-									substitutionString = subsString.substring(3, 5);
+								if (subsString.startsWith("yyyy-")) {
+									substitutionString = subsString.substring(11, 15);
 								} else {
-									if (subsString.toLowerCase().startsWith("mm-")) {
-										substitutionString = subsString.substring(6, 8);
+									if (subsString.startsWith("timestamp-")) {
+										substitutionString = timestamp(subsString.substring(10, 18));
 									} else {
-										if (subsString.toLowerCase().startsWith("yyyy-")) {
-											substitutionString = subsString.substring(11, 15);
+										if (subsString.startsWith("displaydate-")) {
+											substitutionString = displayDate(subsString.substring(12));
 										} else {
-											if (subsString.toLowerCase().startsWith("timestamp-")) {
-												substitutionString = timestamp(subsString.substring(10, 18));
-											} else {
-												if (subsString.toLowerCase().startsWith("displaydate-")) {
-													substitutionString = displayDate(subsString.substring(12));
-												} else {
-													Assertions.fail("Invalid value to substitute =>" + subsString );
-												}
-											}
+											Assertions.fail("Invalid value to substitute =>" + subsString );
 										}
 									}
 								}
@@ -506,14 +492,9 @@ public class DateUtils {
 		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("2023-12-09", "12:00:00"));
 		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("09-12-2023", "12:00:00"));
 		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("09/12/23", "12:00:00"));
-		System.out.println(makeTimestamp("", "12:00:00"));
 		Assertions.assertEquals(makeTimestamp("", "12:00:00"), makeTimestamp("12:00:00"));
 		Assertions.assertEquals("9 Dec 2023", displayDate("2023-12-09"));
 		Assertions.assertEquals("31 Dec 2023", displayDate("31-12-2023"));
-		System.out.println(todayDisplay());
-		System.out.println(timestamp());
-		System.out.println(timestamp("12:34:45"));
-		System.out.println(substituteDateValue("timestamp-12:34:45"));
 		Assertions.assertEquals("12", datePart("12-34-45", "dd"));
 		Assertions.assertEquals("12", datePart("12/34/2045", "dd"));
 		Assertions.assertEquals("12", datePart("2045/34/12", "dd"));
@@ -521,8 +502,53 @@ public class DateUtils {
 		Assertions.assertEquals("2045", datePart("12-34-45", "yy"));
 		Assertions.assertEquals("2045", datePart("12/34/2045", "yy"));
 		Assertions.assertEquals("2045", datePart("2045/34/12", "yy"));
+	}
+	
+	@Test
+	public void test2() {
+		System.out.println(makeTimestamp("", "12:00:00"));
+		System.out.println(todayDisplay());
+		System.out.println(timestamp());
+		System.out.println(timestamp("12:34:45"));
+		System.out.println(substituteDateValue("timestamp-12:34:45"));
 		System.out.println(datePart("", "dd"));
 		System.out.println(substituteDateValue("date+0/"));
+	}
+	
+	@Test
+	public void test3() {
+		System.out.println("-----------------------");
+		System.out.println(substituteDateValue("date-7 months"));
+		System.out.println(substituteDateValue("date-7months"));
+		System.out.println(substituteDateValue("date-84 months"));
+		System.out.println(substituteDateValue("date-84months"));
+		System.out.println(substituteDateValue("date-7 years/"));
+		System.out.println(substituteDateValue("date-7years/"));
+		System.out.println(substituteDateValue("date-7/"));
+		System.out.println(substituteDateValue("date-7c/"));
+		System.out.println(substituteDateValue("date-7w/"));
+		System.out.println(substituteDateValue("date-7n"));
+		System.out.println("-----------------------");
+		System.out.println(substituteDateValue("date+7 months"));
+		System.out.println(substituteDateValue("date+7months"));
+		System.out.println(substituteDateValue("date+84 months"));
+		System.out.println(substituteDateValue("date+84months"));
+		System.out.println(substituteDateValue("date+7 years/"));
+		System.out.println(substituteDateValue("date+7years/"));
+		System.out.println(substituteDateValue("date+7/"));
+		System.out.println(substituteDateValue("date+7c/"));
+		System.out.println(substituteDateValue("date+7w/"));
+		System.out.println(substituteDateValue("date+7n"));
+		System.out.println("-----------------------");
+		System.out.println(substituteDateValue("numdate+7"));
+		System.out.println(substituteDateValue("numdate+7c"));
+		System.out.println(substituteDateValue("numdate+7w"));
+		System.out.println(substituteDateValue("numdate+7n"));
+		System.out.println("-----------------------");
+		System.out.println(substituteDateValue("numdate-7"));
+		System.out.println(substituteDateValue("numdate-7c"));
+		System.out.println(substituteDateValue("numdate-7w"));
+		System.out.println(substituteDateValue("numdate-7n"));
 	}
 
 }

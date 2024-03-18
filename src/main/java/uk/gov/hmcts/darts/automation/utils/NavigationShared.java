@@ -1836,6 +1836,7 @@ public class NavigationShared {
 	}
 
 	public void verifyErrorMessage (String message) {
+		message = Substitutions.substituteValue(message);
 		try {
 			driver.findElement(By.xpath(String.format(
 					"//div[./h2[text()[contains(., \"There is a problem\")]]]//li/*[text()[contains(., \"%s\")]]",
