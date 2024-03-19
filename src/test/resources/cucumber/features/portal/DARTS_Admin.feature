@@ -112,6 +112,33 @@ Feature: Admin portal
     Then I press the "Reactivate user" button
     Then I see "User record activated" on the page
 
+  @DMP-2278
+  Scenario: Groups primary page
+  #Login admin
+    Given I am logged on to DARTS as an ADMIN user
+  #AC1 - Viewing user groups
+    Then I click on the "Groups" link
+  #AC2 - Filter
+    Then I set "Filter by name" to "judge"
+    Then I select "Judge" from the "Role" dropdown
+
+  @DMP-2252
+  Scenario: Edit a courthouse
+  #Login admin
+    Given I am logged on to DARTS as an ADMIN user
+  #AC1 - Edit a courthouse
+    And I click on the "Courthouses" link
+    And I set "Courthouse name" to "Swansea"
+    And I press the "Search" button
+    And I click on the "Swansea" link
+    Then I press the "Edit courthouse" button
+    And I see "Courthouse details" on the page
+    
+
+
+
+
+
 
 
 
