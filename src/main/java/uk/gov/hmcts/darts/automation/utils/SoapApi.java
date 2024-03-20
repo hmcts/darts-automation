@@ -13,6 +13,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
 
@@ -33,7 +34,7 @@ import org.junit.jupiter.api.Test;
 public class SoapApi {
 	private static Logger log = LogManager.getLogger("SoapApi");
     static Response response;
-	String authorization;
+	String authorizationToken;
 	static String baseUri = ReadProperties.main("soapApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
@@ -48,11 +49,12 @@ public class SoapApi {
 	static final String CONNECTION_STRING = "keep-alive";
 	static final String AUTHORIZATION = "Authorization";
 	static final String SOAP_ACTION = "SOAPAction";
-	String username;
-	String soapPassword;
-	String tokenPassword;
+	String username = "";
+	String soapPassword = "";
+	String tokenPassword = "";
 	String defaultSource = "XHIBIT";
 	String suppliedSource = "";
+	boolean useToken;
 
 
 	public SoapApi() {
@@ -74,19 +76,27 @@ public class SoapApi {
     }
     
     public void setDefaultSource(String source) {
-    	this.defaultSource = source;
+    	if (!this.defaultSource.equalsIgnoreCase(source)) {
+    		this.defaultSource = source;
+    		authorizationToken = "";
+    	}
     }
-    
+
+// it is possible that all but XHIBIT, CPP & VIQ are invalid
     public void authenticate(String source) {
+    	useToken = false;
         switch (source.toUpperCase()) {
         case "EXTERNAL":
+        	useToken = true;
         	externalAuthenticate(ReadProperties.apiGlobalUserName, ReadProperties.apiGlobalPassword);
         	break;
         case "XHIBIT":
+        	useToken = true;
         	externalAuthenticate(ReadProperties.xhibitExternalUserName, ReadProperties.xhibitInternalPassword, ReadProperties.xhibitExternalPassword);
         	break;
         case "CP":
         case "CPP":
+        	useToken = true;
         	externalAuthenticate(ReadProperties.cpExternalUserName, ReadProperties.cpInternalPassword, ReadProperties.cpExternalPassword);
         	break;
         case "DARMIDTIER":
@@ -107,7 +117,7 @@ public class SoapApi {
         	break;
         default:
             log.fatal("Unknown user type - {}"+ source);
-            authorization = "";
+            authorizationToken = "";
         }
     }
     
@@ -119,23 +129,26 @@ public class SoapApi {
     public void externalAuthenticate() {
     	authenticate(defaultSource);
     }
-    
+   
+// unsure whether it is valid to use the ids with only 1 password or whether this should use soap or json
     public void externalAuthenticate(String username, String password) {
     	this.username = username;
     	this.tokenPassword = password;
     	this.soapPassword = password;
-    	authenticate(username, password);
+//    	authenticate(username, password);
+    	registerUser(username, soapPassword);
     }
     
     public void externalAuthenticate(String username, String tokenPassword, String soapPassword) {
     	this.username = username;
     	this.tokenPassword = tokenPassword;
     	this.soapPassword = soapPassword;
-    	authenticate(username, tokenPassword);
+//    	authenticate(username, tokenPassword);
+    	registerUser(username, soapPassword);
     }
     
     public void authenticate() {
-    	boolean alreadyAuthenticated = !(authorization == null || authorization.isBlank());
+    	boolean alreadyAuthenticated = !(authorizationToken == null || authorizationToken.isBlank());
     	log.info(alreadyAuthenticated ? "already Authenticated" : "Not already Authenticated");
     	if (!alreadyAuthenticated) {
     		externalAuthenticate();
@@ -146,7 +159,51 @@ public class SoapApi {
     		}
     	}
     }
-    
+	
+    public void registerUser(String username, String password) {
+    	log.info("registerUser");
+    	String authXml = "<S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
+    			+ "   <S:Header>\n"
+    			+ "      <ServiceContext token=\"temporary/127.0.0.1-1700061962100--7690714146928305881\" xmlns=\"http://context.core.datamodel.fs.documentum.emc.com/\" xmlns:ns2=\"http://properties.core.datamodel.fs.documentum.emc.com/\" xmlns:ns3=\"http://profiles.core.datamodel.fs.documentum.emc.com/\" xmlns:ns4=\"http://query.core.datamodel.fs.documentum.emc.com/\" xmlns:ns5=\"http://content.core.datamodel.fs.documentum.emc.com/\" xmlns:ns6=\"http://core.datamodel.fs.documentum.emc.com/\">\n"
+    			+ "         <Identities password=\"" + password + "\" repositoryName=\"moj_darts\" userName=\"" + username + "\" xsi:type=\"RepositoryIdentity\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></Identities>\n"
+    			+ "         <Profiles allowAsyncContentTransfer=\"false\" allowCachedContentTransfer=\"false\" isProcessOLELinks=\"false\" transferMode=\"MTOM\" xsi:type=\"ns3:ContentTransferProfile\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></Profiles>\n"
+    			+ "      </ServiceContext>\n"
+    			+ "   </S:Header>\n"
+    			+ "   <S:Body>\n"
+    			+ "      <ns8:register xmlns:ns8=\"http://services.rt.fs.documentum.emc.com/\" xmlns:ns7=\"http://core.datamodel.fs.documentum.emc.com/\" xmlns:ns6=\"http://content.core.datamodel.fs.documentum.emc.com/\" xmlns:ns5=\"http://query.core.datamodel.fs.documentum.emc.com/\" xmlns:ns4=\"http://profiles.core.datamodel.fs.documentum.emc.com/\" xmlns:ns3=\"http://properties.core.datamodel.fs.documentum.emc.com/\" xmlns:ns2=\"http://context.core.datamodel.fs.documentum.emc.com/\">\n"
+    			+ "         <context>\n"
+    			+ "            <ns2:Identities xsi:type=\"ns2:RepositoryIdentity\" repositoryName=\"moj_darts\" password=\"" + password + "\" userName=\"" + username + "\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></ns2:Identities>\n"
+    			+ "            <ns2:Profiles xsi:type=\"ns4:ContentTransferProfile\" isProcessOLELinks=\"false\" allowAsyncContentTransfer=\"false\" allowCachedContentTransfer=\"false\" transferMode=\"MTOM\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></ns2:Profiles>\n"
+    			+ "         </context>\n"
+    			+ "         <host>http://darts-gateway.staging.platform.hmcts.net/service/darts//</host>\n"
+    			+ "      </ns8:register>\n"
+    			+ "   </S:Body>\n"
+    			+ "</S:Envelope>\n";
+    	response  = 
+    		given()
+				.spec(requestLogLevel(ReadProperties.authRequestLogLevel))
+				.accept(ACCEPT_XML_STRING)
+				.header(USER_AGENT, USER_AGENT_STRING) 
+				.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+				.header(CONNECTION, CONNECTION_STRING)
+				.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
+    			.header("X-Requested-With", "XMLHttpRequest")
+    			.header("Accept-Language", "en-GB,en;q=0.5")
+    			.urlEncodingEnabled(true)
+    			.baseUri(baseUri)
+    			.body(authXml)
+    		.when()
+    			.post()
+			.then()
+				.spec(responseLogLevel(ReadProperties.authResponseLogLevel))
+				.assertThat().statusCode(200)
+				.extract().response()
+    			;
+    	String access_token = response.asString().split("<return>")[1].split("</return>")[0];
+    	authorizationToken = access_token;
+    }
+
+// this is the previous method of generating a token and MAY be obsolete
     public void authenticate(String username, String password) {
     	log.info("authentication");
     	response  = 
@@ -177,7 +234,7 @@ public class SoapApi {
     			;
 		String access_token = (response.jsonPath().getString("access_token"));
 		String token_type  = (response.jsonPath().getString("token_type"));
-		authorization = token_type + " " + access_token;
+		authorizationToken = token_type + " " + access_token;
     }
 
     /*
@@ -198,7 +255,7 @@ public class SoapApi {
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
-					.header(AUTHORIZATION, authorization)
+//					.header(AUTHORIZATION, authorizationToken)
 					.baseUri(baseUri)
 					.basePath("")
 					.body(addSoapHeader(body))
@@ -231,7 +288,7 @@ public class SoapApi {
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
-					.header(AUTHORIZATION, authorization)
+//					.header(AUTHORIZATION, authorizationToken)
 					.header(SOAP_ACTION, soapAction)
 					.baseUri(baseUri)
 					.basePath("")
@@ -264,7 +321,7 @@ public class SoapApi {
 	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
 	    			.header(CONNECTION, CONNECTION_STRING)
 	    			.header(CONTENT_TYPE, CONTENT_TYPE_TEXT_XML)
-					.header(AUTHORIZATION, authorization)
+//					.header(AUTHORIZATION, authorizationToken)
 					.header(SOAP_ACTION, soapAction)
 					.baseUri(baseUri)
 					.basePath("")
@@ -291,11 +348,25 @@ public class SoapApi {
 	}
 	
 	String addSoapAuthHeader() {
+		if (useToken) {
+			return addSoapAuthHeaderToken();
+		} else {
+			return addSoapAuthHeaderUser();
+		}
+	}
+	
+	String addSoapAuthHeaderUser() {
 		return  "  <soap:Header>\n"
 				+ "    <ServiceContext token=\"temporary/127.0.0.1-1694086218480-789961425\" xmlns=\"http://context.core.datamodel.fs.documentum.emc.com/\">\n"
 				+ "      <Identities xsi:type=\"RepositoryIdentity\" userName=\"" + username + "\" password=\"" + soapPassword + "\" repositoryName=\"moj_darts\" domain=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n"
 				+ "      <RuntimeProperties/>\n"
 				+ "    </ServiceContext>\n"
+				+ "  </soap:Header>";
+	}
+	
+	String addSoapAuthHeaderToken() {
+		return  "  <soap:Header>\n"
+				+ "      <wsse:Security xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\"><wsse:BinarySecurityToken QualificationValueType=\"http://schemas.emc.com/documentum#ResourceAccessToken\" xmlns:wsu=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd\" wsu:Id=\"RAD\">" + authorizationToken + "</wsse:BinarySecurityToken></wsse:Security>\n"
 				+ "  </soap:Header>";
 	}
 

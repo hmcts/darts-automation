@@ -443,12 +443,20 @@ public class DateUtils {
 	}
 	
 	public static String makeTimestamp(String dateTime) {
-		String [] split = dateTime.split(" ");
+		String [] split = dateTime.contains("T") ? dateTime.split("T") : dateTime.split(" ");
 		if (split.length == 2) {
 			return makeTimestamp(split[0], split[1]);
 		} else {
-			if ((dateTime.length() == 8) && dateTime.contains(":")) {
-				return makeTimestamp("", dateTime);
+			if (dateTime.length() == 8) {
+				if (dateTime.contains(":")) {
+					return makeTimestamp("", dateTime);
+				} else {
+					if (dateTime.contains("-") || dateTime.contains("/")) {
+						return makeTimestamp(dateTime, "");
+					} else {
+						return dateTime;
+					}
+				}
 			} else {
 				return dateTime;
 			}
@@ -459,7 +467,7 @@ public class DateUtils {
 		String [] split = date.split(date.contains("/") ? "/" : "-");
 		if (split.length == 3) {
 			if (split[0].length() > 2) {
-				return String.format("%s-%s-%sT%s.000Z", split[0], split[1], split[2], time);
+				return String.format("%s-%s-%sT%s.000Z", split[0], split[1], split[2], time.substring(0, 8));
 			} else {
 				if (split[2].length() > 2) {
 					return String.format("%s-%s-%sT%s.000Z", split[2], split[1], split[0], time);
@@ -478,7 +486,98 @@ public class DateUtils {
 				if (time.isBlank()) {
 					return date;
 				} else {
-					return date + " " + time;
+					return timestamp(time);
+				}
+			}
+		}
+	}
+	
+	public static String returnNumericDateCcyymmdd(String date) {
+		String [] split = date.split(date.contains("/") ? "/" : "-");
+		if (split.length == 3) {
+			if (split[0].length() > 2) {
+				return split[0] + split[1] + split[2];
+			} else {
+				if (split[2].length() > 2) {
+					return split[2] + split[1] + split[0];
+				} else {
+					return "20" + split[2] + split[1] + split[0];
+				}
+			}
+		} else {
+			if (date.length() == 6) {
+				return  "20" + date;
+			} else {
+				return date;
+			}
+		}
+	}
+	
+	public static String returnNumericTime(String time) {
+		if (time.length() > 8) {
+			time = time.substring(0, 8);
+		}
+		String []  split = time.split(":");
+		switch (split.length) {
+		case 3:
+			return split[0] + split[1] + split[2];
+		case 2:
+			return split[0] + split[1] + "00";
+		default:
+			if (time.length() > 6) {
+				return time.substring(0, 6);
+			} else {
+				return time + "000000".substring(0, 6 - time.length());
+			}
+			
+		}
+	}
+	
+	public static String makeNumericDateTime(String dateTime, String date, String time) {
+		if (dateTime.isBlank()) {
+			return makeNumericDateTime(date, time);
+		} else {
+			return makeNumericDateTime(dateTime);
+		}
+	}
+	
+	public static String makeNumericDateTime(String dateTime) {
+		String [] split = dateTime.contains("T") ? dateTime.split("T") : dateTime.split(" ");
+		if (split.length == 2) {
+			return makeNumericDateTime(split[0], split[1]);
+		} else {
+			if (dateTime.contains(":")) {
+				return makeNumericDateTime("", dateTime);
+			} else {
+				return dateTime;
+			}
+		}
+	}
+	
+	public static String makeNumericDateTime(String date, String time) {
+		String [] split = date.split(date.contains("/") ? "/" : "-");
+		if (split.length == 3) {
+			if (split[0].length() > 2) {
+				return String.format("%s%s%s%s", split[0], split[1], split[2], returnNumericTime(time));
+			} else {
+				if (split[2].length() > 2) {
+					return String.format("%s-%s-%sT%s.000Z", split[2], split[1], split[0], returnNumericTime(time));
+				} else {
+					return String.format("20%s-%s-%sT%s.000Z", split[2], split[1], split[0], returnNumericTime(time));
+				}
+			}
+		} else {
+			if (date.isBlank()) {
+				if (time.isBlank()) {
+					return "";
+				} else {
+					return makeNumericDateTime(todayYyyymmdd(), time);
+				}
+			} else {
+				if (time.isBlank()) {
+					return date;
+				} else {
+					return date + returnNumericTime(time);
 				}
 			}
 		}
@@ -549,6 +648,17 @@ public class DateUtils {
 		System.out.println(substituteDateValue("numdate-7c"));
 		System.out.println(substituteDateValue("numdate-7w"));
 		System.out.println(substituteDateValue("numdate-7n"));
+	}
+	
+	@Test
+	public void test4() {
+		System.out.println("========================");
+		System.out.println(makeNumericDateTime("20220311091900", "", ""));
+		System.out.println(makeNumericDateTime(timestamp(), "", ""));
+		System.out.println(makeNumericDateTime(timestamp("12:00:00"), "", ""));
+		System.out.println(makeNumericDateTime("12:00:00", "", ""));
+		System.out.println(makeNumericDateTime("", "", "12:00:00"));
+		System.out.println(makeNumericDateTime("", "20240101", "12:00:00.000Z"));
 	}
 
 }
