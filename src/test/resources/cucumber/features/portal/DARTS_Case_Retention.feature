@@ -11,7 +11,7 @@ Feature: Case Retention
       | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-28 | R{{seq}}001  | {{seq}}KH1    | {{timestamp-10:00:00}} |
       | {{seq}}001 | 1100 |          | {{seq}}1168 | Harrow Crown Court | {{seq}}-29 | R{{seq}}002  | {{seq}}ABC-29 | {{timestamp-10:00:00}} |
 
-  @DMP-1406 @DMP-1899 @DMP-1369 @regression
+  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @regression
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history
     #Case is open
     Given I am logged on to DARTS as an JUDGE user
@@ -77,6 +77,98 @@ Feature: Case Retention
     And I press the "Search" button
     And I click on the "<case_number>" link
     And I do not see "Retained until" on the page
+
+    #DMP-2161-AC5 Permanent retention
+    Then I Sign out
+    Then I see "Sign in to the DARTS Portal" on the page
+    Given I am logged on to DARTS as an Judge user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    And I click on the "<case_number>" link
+    And I click on the "View or change" link
+    Then I see "Default" on the page
+    And I click on the "Change retention date" link
+    And I click on the "Retain permanently (99 years)" link
+    And I set "Why are you making this change?" to "AC5 99 Years Permanent Retention"
+    And I click on the "Continue" link
+    Then I see "Check retention date change" on the page
+    And I see "<case_number>" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "Def {{seq}}-28" in the same row as "Defendant(s)"
+    And I see "Change case retention date" on the page
+    And I see "{{displaydate(date+99years)}} (Permanent)" in the same row as "Retain case until"
+    And I see "AC5 99 Years Permanent Retention" in the same row as "Reason for change"
+    And I press the "Confirm retention date change" button
+    Then I see "Case retention date changed." on the page
+    And I see "{{displaydate(date+99years)}}" in the same row as "Retain case until"
+
+    #DMP-2161-AC4 Valid specific date
+    And I click on the "Change retention date" link
+    And I click on the "Retain until a specific date" link
+    And I set "Enter a date to retain the case until" to "01/11/2035"
+    And I set "Why are you making this change?" to "AC4"
+    And I click on the "Continue" link
+    Then I see "Check retention date change" on the page
+    And I see "01 Nov 2035" on the page
+    And I click on the "Confirm retention date change" link
+    And I see "Case retention date changed." on the page
+    And I see "Case retention date" on the page
+
+    #DMP-1450-AC3 Mandtory reason field
+    And I click on the "Change retention date" link
+    And I click on the "Retain until a specific date" link
+    And I set "Enter a date to retain the case until" to "01/11/2032"
+    And I set "Why are you making this change?" to ""
+    And I click on the "Continue" link
+    Then I see "Change case retention date" on the page
+    And I see "You must explain why you are making this change" on the page
+    And I see "Why are you making this change?" on the page
+    And I see "You must explain why you are making this change" on the page
+    And I click on the "Cancel" link
+
+    #DMP-2161-AC1 Max retention exceeded
+    And I click on the "Change retention date" link
+    And I click on the "Retain until a specific date" link
+    And I set "Enter a date to retain the case until" to "01/01/2136"
+    And I set "Why are you making this change?" to "AC1"
+    And I click on the "Continue" link
+    Then I see "Change case retention date" on the page
+    And I see an error message "You cannot retain a case for more than 99 years after the case closed"
+
+    #DMP-2161-AC3 ,DMP-1450-AC2 Retention date too early
+    And I click on the "Cancel" link
+    And I click on the "Change retention date" link
+    And I click on the "Retain until a specific date" link
+    And I set "Enter a date to retain the case until" to "01/11/2024"
+    And I set "Why are you making this change?" to "AC3"
+    And I click on the "Continue" link
+    Then I see "Change case retention date" on the page
+    And I see "You cannot set retention date earlier than {{date+2556/}}" on the page
+    And I see "Enter a date to retain the case until" on the page
+    And I see "You cannot set retention date earlier than {{date+2556/}}" on the page
+    And I click on the "Cancel" link
+
+    # DMP-2161-AC2 DMP-1450-AC1 Sign in as a Requester
+    Then I Sign out
+    Then I see "Sign in to the DARTS Portal" on the page
+    Given I am logged on to DARTS as an REQUESTER user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    And I click on the "<case_number>" link
+    And I click on the "View or change" link
+    Then I see "Default" on the page
+    And I click on the "Change retention date" link
+    And  I click on the "Retain until a specific date" link
+    And I set "Enter a date to retain the case until" to "01/11/2023"
+    And I set "Why are you making this change?" to "AC2"
+    And I click on the "Continue" link
+    And I see "Change case retention date" on the page
+    Then I see an error message "You do not have permission to reduce the current retention date."
+    Then I see an error message "Please refer to the DARTS retention policy guidance."
 
     Examples:
       | case_number |
