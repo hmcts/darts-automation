@@ -424,7 +424,7 @@ Scenario: Hearing table sorted with time
 
   @DMP-2300
     #NOTE:DMP-2300 NEEDS TO RUN STRAIGHT AFTER THE DATA CREATION TO GET THE PREVIEW MESSAGE
-  Scenario: Audio is not available to preview message
+  Scenario: Audio is not available to preview message.
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
   And I set "Case ID" to "B{{seq}}006"
