@@ -75,6 +75,7 @@ public class Portal {
             case "TRANSCRIBER":
             case "LANGUAGESHOP":
             case "ADMIN":
+            case "SUPERUSER":
                 loginToPortal_ExternalUser(userName, password);
                 break;
             case "REQUESTER":
@@ -280,7 +281,35 @@ public class Portal {
         }
     }
     
-    public void waitForAudioToBeLoaded(String user, String courthouse, String caseNumber, String hearingDate) throws Exception {
+    public void waitForAudioToBeLoaded(String courthouse, String courtroom, String caseNumber, String hearingDate) throws Exception {
+    	log.info("Waiting for audio file to be loaded - {} {} {} for {}", courthouse, courtroom, caseNumber, hearingDate);
+    	String mediaId = DB.returnSingleValue("CASE_AUDIO", 
+    			"courthouse_name", "Harrow Crown Court",  
+    			"courtroom_name", "1171",
+				"cas.case_number", "S1171021",
+				"hearing_date", "2024-03-20",
+				"max(med_id)");
+        int waitTimeInSeconds = 300;
+        log.info("wait time {} courthouse {}, courtroom {}, case {}, date {}", waitTimeInSeconds, courthouse, courtroom, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
+                .pollingEvery(Duration.ofSeconds(10));  
+        Function<WebDriver, Boolean> audioIsLoaded = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+            	ApiResponse apiResponse = jsonApi.getApi("audio/preview/" + mediaId);
+            	return apiResponse.statusCode.equals("200");
+            };
+        };
+        try {
+            wait.until(audioIsLoaded);
+            log.info("Audio loaded");
+        } catch (TimeoutException e) {
+            log.warn("Wait complete - not found");
+        }
+    }
+    
+    public void waitForAudioRequestToBeReady(String user, String courthouse, String caseNumber, String hearingDate) throws Exception {
     	log.info("Waiting for audio file to be loaded - {} {} {} for {}", courthouse, caseNumber, hearingDate, user);
     	String userName = Credentials.userName(user);
     	String user_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userName, "usr_id");

@@ -77,6 +77,7 @@ public class ReadProperties {
 	public static String automationRequesterApproverTestPassword = getSystemValue("AUTOMATION_REQUESTER_APPROVER_PASSWORD");
 	public static String automationRequesterApproverTestUserId = getSystemValue("AUTOMATION_REQUESTER_APPROVER_USERNAME");
 	public static String dartsAdminUserName = getSystemValue("DARTS_ADMIN_USERNAME");
+	public static String dartsSuperUserUserName = getSystemValue("AUTOMATION_SUPER_USER_USERNAME");
 
 	public static String xhibitUserName = getSystemValue("XHIBIT_USERNAME");
 	public static String xhibitPassword = getSystemValue("XHIBIT_PASSWORD");

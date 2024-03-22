@@ -30,6 +30,7 @@ replay_pid*
 
 # Ignore Gradle build output directory
 build
+!bin/secrets-stg.sh
 bin/*
 !bin/secrets-stg.sh
 

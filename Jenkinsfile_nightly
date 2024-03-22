@@ -48,6 +48,7 @@ def secrets = [
     secret('DartsInternalUserTestPassword', 'AUTOMATION_INTERNAL_PASSWORD'),
     secret('DartsRequesterApproverUsername', 'AUTOMATION_REQUESTER_APPROVER_USERNAME'),
     secret('DartsRequesterApproverPassword', 'AUTOMATION_REQUESTER_APPROVER_PASSWORD'),
+    secret('DartsSuperUser', 'AUTOMATION_SUPER_USER_USERNAME'),
     secret('XhibitUserName', 'XHIBIT_USERNAME'),
     secret('XhibitPassword', 'XHIBIT_PASSWORD'),
     secret('CppUserName', 'CPP_USERNAME'),

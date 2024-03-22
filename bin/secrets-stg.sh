@@ -46,6 +46,7 @@ export DAR_MID_TIER_PASSWORD="$(az keyvault secret show --vault-name darts-stg -
 export DAR_PC_MID_TIER_USERNAME="$(az keyvault secret show --vault-name darts-stg --name DarPCMidTierUserName | jq .value -r)"
 export DAR_PC_MID_TIER_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name DarPCMidTierPassword | jq .value -r)"
 export DARTS_ADMIN_USERNAME="$(az keyvault secret show --vault-name darts-stg --name DartsAdminUserName | jq .value -r)"
+export AUTOMATION_SUPER_USER_USERNAME="$(az keyvault secret show --vault-name darts-stg --name DartsSuperUser | jq .value -r)"
 
 export VIQ_EXTERNAL_PASSWORD="$(az keyvault secret show --vault-name darts-stg --name ViQExternalPassword | jq .value -r)"
 export VIQ_EXTERNAL_USERNAME="$(az keyvault secret show --vault-name darts-stg --name ViQExternalUserName | jq .value -r)"
