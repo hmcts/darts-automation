@@ -1,6 +1,6 @@
 Feature: Request Transcript
 
-  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1138 @regression @AG
+  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1138 @regression
   Scenario: Request Transcription data creation
     Given I create a case using json
       | courthouse         | case_number | defendants      | judges            | prosecutors            | defenders            |
