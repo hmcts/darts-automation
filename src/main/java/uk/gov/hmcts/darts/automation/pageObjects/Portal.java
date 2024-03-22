@@ -49,7 +49,7 @@ public class Portal {
         String substitutedValue = Substitutions.substituteValue(label);
         //webDriver.findElement(By.xpath("//a[text()=\"" + label + "\" and contains(@class,'govuk-breadcrumbs__link')]")).click();
         webDriver.findElement(By.xpath("//a[@class='govuk-breadcrumbs__link'][contains(text(),'" + substitutedValue + "')]")).click();
-
+        NAV.waitForPageLoad();
     }
 
     public void TranscriptionCountOnPage(String count) {
