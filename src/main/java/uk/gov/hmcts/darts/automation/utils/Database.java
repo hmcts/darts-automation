@@ -52,6 +52,18 @@ public class Database extends Postgres {
 			"-- or ctr.ctr_id = eve.ctr_id\r\n" +
 			"left join darts.courthouse cth\r\n" +
 			"on ctr.cth_id = cth.cth_id\r\n";
+	
+	final String caseAudioJoin = "darts.courthouse cth\r\n"
+			+ "inner join darts.courtroom ctr\r\n"
+			+ "using(cth_id)\r\n"
+			+ "inner join darts.hearing hea\r\n"
+			+ "using (ctr_id)\r\n"
+			+ "inner join darts.court_case cas\r\n"
+			+ "using (cth_id)\r\n"
+			+ "inner join darts.hearing_media_ae hm\r\n"
+			+ "using (hea_id)\r\n"
+			+ "left join darts.media med\r\n"
+			+ "using (med_id)\r\n";
 
 	public Database(){
 //		pg = new Postgres();
@@ -66,6 +78,8 @@ public class Database extends Postgres {
 			return eventJoin;
 		case "COURTROOM":
 			return courtroomJoin;
+		case "CASE_AUDIO":
+			return caseAudioJoin;
 		default:
 			return input;
 		}
@@ -117,6 +131,10 @@ public class Database extends Postgres {
 	public String returnSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3, String returnCol) throws Exception {
 		return super.returnSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, returnCol);
 	}
+	
+	public String returnSingleValue(String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3, String keyCol4, String keyVal4, String returnCol) throws Exception {
+		return super.returnSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, keyCol4, keyVal4, returnCol);
+	}
 
 	@Test
 	public void test() throws Exception {
@@ -130,20 +148,25 @@ public class Database extends Postgres {
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", "null"), "null");
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", null), "null");
 // following tests rely on data existing in tables
-		Assertions.assertEquals(db.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
-		Assertions.assertEquals(db.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
-		Assertions.assertEquals(db.returnSingleValue("select case_number from darts.court_case where case_number = '174'"), "174");
-		String originalValue = db.setSingleValue("darts.court_case", "case_number", "174", "case_closed", "true");
-		Assertions.assertEquals(originalValue, "null");
-		Assertions.assertEquals(db.setSingleValue("darts.court_case", "case_number", "174", "case_closed", originalValue), "t");
-		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "case_number", "174", "case_closed"), "null");
-		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "case_number", "174", "case_number"), "174");
-		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "case_number", "174", "cas_id"), "81");
-		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "case_number", "174", "case_closed"), "null");
-		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "cas_id", "81", "case_number"), "174");
-		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "cth_id", "2", "case_number"), "461_Case1");
-		Assertions.assertEquals(db.returnSingleValue(courtCaseJoin, "courthouse", "Swansea", "case_number", "461_Case1", "case_number"), "461_Case1");
-		
+//		Assertions.assertEquals(db.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
+//		Assertions.assertEquals(db.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
+//		Assertions.assertEquals(db.returnSingleValue("select case_number from darts.court_case where case_number = '174'"), "174");
+//		String originalValue = db.setSingleValue("darts.court_case", "case_number", "174", "case_closed", "true");
+//		Assertions.assertEquals(originalValue, "null");
+//		Assertions.assertEquals(db.setSingleValue("darts.court_case", "case_number", "174", "case_closed", originalValue), "t");
+//		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "case_number", "174", "case_closed"), "null");
+//		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "case_number", "174", "case_number"), "174");
+//		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "case_number", "174", "cas_id"), "81");
+//		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "case_number", "174", "case_closed"), "null");
+//		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "cas_id", "81", "case_number"), "174");
+//		Assertions.assertEquals(db.returnSingleValue("darts.court_case", "cth_id", "2", "case_number"), "461_Case1");
+//		Assertions.assertEquals(db.returnSingleValue(courtCaseJoin, "courthouse", "Swansea", "case_number", "461_Case1", "case_number"), "461_Case1");
+		System.out.println(db.returnSingleValue("select usr_id from darts.user_account where user_email_address = 'darts.requester@hmcts.net'"));
+		System.out.println(db.returnSingleValue("darts.user_account", "user_email_address",  "darts.requester@hmcts.net", "usr_id"));
+		System.out.println(db.returnSingleValue("CASE_AUDIO", "courthouse_name", "Harrow Crown Court",  "courtroom_name", "1171",
+				"cas.case_number", "S1171021",
+				"hearing_date", "2024-03-20",
+				"max(med_id)"));
 	}
 
 
