@@ -1,6 +1,6 @@
 Feature: Request Transcript
 
-  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1138 @regression
+  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1138 @DMP-1053 @DMP-2123 @DMP-1054 @DMP-2124 @regression
   Scenario: Request Transcription data creation
     Given I create a case using json
       | courthouse         | case_number | defendants      | judges            | prosecutors            | defenders            |
@@ -408,7 +408,7 @@ Feature: Request Transcript
     Then I see "file-sample_1MB.doc" on the page
     And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
 
-  @regression @DMP-1053 @DMP-2123
+  @DMP-1053 @DMP-2123 @regression
   Scenario: Request Transcription, Court Log, Assign to me and get audio, complete and single delete
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -585,7 +585,7 @@ Feature: Request Transcript
     Then I see "Your transcripts" on the page
     And I do not see "C{{seq}}004" on the page
 
-  @regression @DMP-1054 @DMP-2124
+  @DMP-1054 @DMP-2124 @regression
   Scenario: Request two transcriptions, assign to me and attach transcript, complete and multiple delete
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
