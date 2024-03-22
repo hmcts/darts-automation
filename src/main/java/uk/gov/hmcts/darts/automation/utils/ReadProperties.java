@@ -50,8 +50,9 @@ public class ReadProperties {
 	public static String apiGlobalUserName = getSystemValue("FUNC_TEST_ROPC_GLOBAL_USERNAME");
 	public static String apiGlobalPassword = getSystemValue("FUNC_TEST_ROPC_GLOBAL_PASSWORD");
 	public static String apiExtClientId = getSystemValue("AAD_B2C_ROPC_CLIENT_ID");
-	public static String apiExtClientIdKey = getSystemValue("AAD_B2C_ROPC_CLIENT_ID_KEY");
-	public static String apiExtClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+//	public static String apiExtClientIdKey = getSystemValue("AAD_B2C_ROPC_CLIENT_ID_KEY");
+//	public static String apiExtClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+	public static String apiExtClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET");
 	public static String apiIntClientId = getSystemValue("AAD_CLIENT_ID");
 	public static String apiIntTenantId = getSystemValue("AAD_TENANT_ID");
 	public static String apiIntClientSecret = getSystemValue("AAD_CLIENT_SECRET");
