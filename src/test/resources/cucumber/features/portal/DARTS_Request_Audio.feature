@@ -4,22 +4,28 @@ Feature: Request Audio
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-2121 @regression
 Scenario: Request Audio data creation
 
-  Given I create a case
-    | courthouse         | case_number | defendants    | judges          | prosecutors         | defenders         |
-    | Harrow Crown Court | B{{seq}}006 | Def {{seq}}-6 | Judge {{seq}}-6 | testprosecutorsix   | testdefendersix   |
-    | Harrow Crown Court | B{{seq}}007 | Def {{seq}}-7 | Judge {{seq}}-7 | testprosecutorseven | testdefenderseven |
+  Given I create a case using json
+    | courthouse         | case_number | defendants     | judges           | prosecutors         | defenders         |
+    | Harrow Crown Court | B{{seq}}006 | Def B{{seq}}-6 | Judge B{{seq}}-6 | testprosecutorsix   | testdefendersix   |
+    | Harrow Crown Court | B{{seq}}007 | Def B{{seq}}-7 | Judge B{{seq}}-7 | testprosecutorseven | testdefenderseven |
+    | Harrow Crown Court | B{{seq}}008 | Def B{{seq}}-8 | Judge B{{seq}}-8 | testprosecutoreight | testdefendereight |
+    | Harrow Crown Court | B{{seq}}009 | Def B{{seq}}-9 | Judge B{{seq}}-9 | testprosecutornine  | testdefendernine  |
 
-  Given I create an event
+  Given I create an event using json
     | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-    | {{seq}}006 | 1100 | 	     | {{seq}}1006 | Harrow Crown Court | {{seq}}-6  | B{{seq}}006  | {{seq}}ABC-6  | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}007 | 1100 | 	     | {{seq}}1007 | Harrow Crown Court | {{seq}}-7  | B{{seq}}007  | {{seq}}ABC-7  | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}006 | 1100 |          | {{seq}}1006 | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006  | B{{seq}}ABC-6 | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}007 | 1100 |          | {{seq}}1007 | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007  | B{{seq}}ABC-7 | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}008 | 1100 |          | {{seq}}1008 | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | B{{seq}}ABC-8 | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}009 | 1100 |          | {{seq}}1009 | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | B{{seq}}ABC-9 | {{timestamp-10:00:00}} |                             |                     |
 
   #When I authenticate from the darmidtier source system
 
   When I load an audio file
-    | courthouse         | courtroom | case_numbers | date        | startTime | endTime  | audioFile |
-    | Harrow Crown Court | {{seq}}-6 | B{{seq}}006  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
-    | Harrow Crown Court | {{seq}}-7 | B{{seq}}007  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
+    | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
+    | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
+    | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
+    | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
+    | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
 
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @regression
 Scenario: Request Audio with Request Type Playback Only
@@ -30,8 +36,8 @@ Scenario: Request Audio with Request Type Playback Only
   And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID     | Courthouse         | Courtroom | Judge(s)        | Defendant(s) |
-    | B{{seq}}006 | Harrow Crown Court | {{seq}}-6 | Judge {{seq}}-6 | Def {{seq}}-6 |
+    | Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
+    | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | Judge B{{seq}}-6 | Def B{{seq}}-6 |
 
   #Case Details
 
@@ -39,9 +45,9 @@ Scenario: Request Audio with Request Type Playback Only
 
   #Hearing Details
 
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
   Then I see "Events and audio recordings" on the page
-  And I see "{{seq}}ABC-6" on the page
+  And I see "B{{seq}}ABC-6" on the page
 
   When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
   And I select the "Playback Only" radio button
@@ -54,7 +60,7 @@ Scenario: Request Audio with Request Type Playback Only
   And I see "Case details" on the page
   And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-6" on the page
+  And I see "Def B{{seq}}-6" on the page
   And I see "Audio details" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
@@ -67,7 +73,7 @@ Scenario: Request Audio with Request Type Playback Only
   #And I see "<Restriction>" on the page
   And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-6" on the page
+  And I see "Def B{{seq}}-6" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
   And I see "10:02:00" on the page
@@ -75,7 +81,7 @@ Scenario: Request Audio with Request Type Playback Only
   And I see "When it is ready we will send an email to Transcriber and notify you in the DARTS application." on the page
 
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @regression
-Scenario: Request Audio with Request Type Download NEW
+Scenario: Request Audio with Request Type Download
 
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
@@ -83,8 +89,8 @@ Scenario: Request Audio with Request Type Download NEW
   And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID     | Courthouse         | Courtroom | Judge(s)        | Defendant(s) |
-    | B{{seq}}006 | Harrow Crown Court | {{seq}}-6 | Judge {{seq}}-6 | Def {{seq}}-6 |
+    | Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
+    | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | Judge B{{seq}}-6 | Def B{{seq}}-6 |
 
   #Case Details
 
@@ -92,9 +98,9 @@ Scenario: Request Audio with Request Type Download NEW
 
   #Hearing Details
 
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
   Then I see "Events and audio recordings" on the page
-  And I see "{{seq}}ABC-6" on the page
+  And I see "B{{seq}}ABC-6" on the page
 
   When I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
   And I select the "Download" radio button
@@ -107,7 +113,7 @@ Scenario: Request Audio with Request Type Download NEW
   And I see "Case details" on the page
   And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-6" on the page
+  And I see "Def B{{seq}}-6" on the page
   And I see "Audio details" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
@@ -120,7 +126,7 @@ Scenario: Request Audio with Request Type Download NEW
   #And I see "<Restriction>" on the page
   And I see "B{{seq}}006" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-6" on the page
+  And I see "Def B{{seq}}-6" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
   And I see "10:02:00" on the page
@@ -134,8 +140,8 @@ Scenario: Request Audio Confirm your Order Cancel link
   And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-  Then I see "{{seq}}ABC-6" on the page
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
+  Then I see "B{{seq}}ABC-6" on the page
 
   When I select the "Audio preview and events" radio button
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
@@ -143,7 +149,7 @@ Scenario: Request Audio Confirm your Order Cancel link
   And I press the "Get Audio" button
   And I see "Confirm your Order" on the page
   And I click on the "Cancel" link
-  Then I see "{{seq}}ABC-6" on the page
+  Then I see "B{{seq}}ABC-6" on the page
 
 @DMP-685 @regression
 Scenario: Request Audio Confirm Order Back link
@@ -152,8 +158,8 @@ Scenario: Request Audio Confirm Order Back link
   And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-  Then I see "{{seq}}ABC-6" on the page
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
+  Then I see "B{{seq}}ABC-6" on the page
 
   When I select the "Audio preview and events" radio button
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
@@ -161,7 +167,7 @@ Scenario: Request Audio Confirm Order Back link
   And I press the "Get Audio" button
   And I see "Confirm your Order" on the page
   And I click on the "Back" link
-  Then I see "{{seq}}ABC-6" on the page
+  Then I see "B{{seq}}ABC-6" on the page
 
 @DMP-694 @regression
 Scenario: Request Audio Error Messages
@@ -170,8 +176,8 @@ Scenario: Request Audio Error Messages
   And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-  Then I see "{{seq}}ABC-6" on the page
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
+  Then I see "B{{seq}}ABC-6" on the page
 
   When I press the "Get Audio" button
   Then I see "You must include a start time for your audio recording" on the page
@@ -185,8 +191,8 @@ Scenario: Request Audio request type error message
   And I set "Case ID" to "B{{seq}}006"
   And I press the "Search" button
   And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-  Then I see "{{seq}}ABC-6" on the page
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
+  Then I see "B{{seq}}ABC-6" on the page
 
   When I select the "Audio preview and events" radio button
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
@@ -197,11 +203,11 @@ Scenario: Request Audio request type error message
 Scenario: Order Confirmation - Return to hearing date link
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "B{{seq}}006"
+  And I set "Case ID" to "B{{seq}}008"
   And I press the "Search" button
-  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-  Then I see "{{seq}}ABC-6" on the page
+  And I click on "B{{seq}}008" in the same row as "Harrow Crown Court"
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-8"
+  Then I see "B{{seq}}ABC-8" on the page
 
   When I select the "Audio preview and events" radio button
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
@@ -212,7 +218,7 @@ Scenario: Order Confirmation - Return to hearing date link
   When I press the "Confirm" button
   Then I see "Your order is complete" on the page
   And I click on the "Return to hearing date" link
-  And I see "{{seq}}ABC-6" on the page
+  And I see "B{{seq}}ABC-8" on the page
 
 @DMP-686 @regression
 Scenario: Order Confirmation - Back to search results link
@@ -221,8 +227,8 @@ Scenario: Order Confirmation - Back to search results link
   And I set "Case ID" to "B{{seq}}007"
   And I press the "Search" button
   And I click on "B{{seq}}007" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-7"
-  Then I see "{{seq}}ABC-7" on the page
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-7"
+  Then I see "B{{seq}}ABC-7" on the page
 
   When I select the "Audio preview and events" radio button
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
@@ -235,15 +241,18 @@ Scenario: Order Confirmation - Back to search results link
   And I click on the "Back to search results" link
   Then I see "Search for a case" on the page
 
-@DMP-695 @regression #Manually enter in Start Time and End Time
+@DMP-695 @regression
 Scenario: Request Audio by setting Start Time and End Time
+
+  #Manually enter in Start Time and End Time
+
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "B{{seq}}006"
+  And I set "Case ID" to "B{{seq}}009"
   And I press the "Search" button
-  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-  Then I see "{{seq}}ABC-6" on the page
+  And I click on "B{{seq}}009" in the same row as "Harrow Crown Court"
+  And I click on "{{displaydate}}" in the same row as "B{{seq}}-9"
+  Then I see "B{{seq}}ABC-9" on the page
 
   When I select the "Audio preview and events" radio button
   And I set the time fields of "Start Time" to "10:01:00"
@@ -255,9 +264,9 @@ Scenario: Request Audio by setting Start Time and End Time
 
   Then I see "Confirm your Order" on the page
   And I see "Case details" on the page
-  And I see "B{{seq}}006" on the page
+  And I see "B{{seq}}009" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-6" on the page
+  And I see "Def B{{seq}}-9" on the page
   And I see "Audio details" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
@@ -267,9 +276,9 @@ Scenario: Request Audio by setting Start Time and End Time
 
   When I press the "Confirm" button
   Then I see "Your order is complete" on the page
-  And I see "B{{seq}}006" on the page
+  And I see "B{{seq}}009" on the page
   And I see "Harrow Crown Court" on the page
-  And I see "Def {{seq}}-6" on the page
+  And I see "Def B{{seq}}-9" on the page
   And I see "{{displaydate}}" on the page
   And I see "10:01:00" on the page
   And I see "10:02:00" on the page
