@@ -178,6 +178,21 @@ public class Postgres {
 		return returnSingleValue(sql);
 	}
 
+	public String returnSingleValue(String table, 
+			String keyCol1, String keyVal1, 
+			String keyCol2, String keyVal2, 
+			String keyCol3, String keyVal3, 
+			String keyCol4, String keyVal4, 
+			String returnCol) throws Exception {
+		String sql = "select " + returnCol
+				+ " from " + table
+				+ " where " + sqlCondition(table, keyCol1, keyVal1)
+				+ " and " + sqlCondition(table, keyCol2, keyVal2)
+				+ " and " + sqlCondition(table, keyCol3, keyVal3)
+				+ " and " + sqlCondition(table, keyCol4, keyVal4);
+		return returnSingleValue(sql);
+	}
+
 	public ResultSet executeSql(String sql) throws Exception {
 		connect();
 		try (Statement stmt = conn.createStatement();

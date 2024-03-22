@@ -26,6 +26,8 @@ public class Credentials {
 	        return ReadProperties.automationAppealCourtTestUserId;
 	    case "ADMIN":
 	        return ReadProperties.dartsAdminUserName;
+	    case "SUPERUSER":
+	        return ReadProperties.dartsSuperUserUserName;
 	    default:
 	        log.fatal("Unknown user type - {}" + type.toUpperCase());
 	        return null;
@@ -51,6 +53,8 @@ public class Credentials {
 	    case "APPEALCOURT":
 	        return ReadProperties.automationInternalUserTestPassword;
 	    case "ADMIN":
+	        return ReadProperties.automationExternalPassword;
+	    case "SUPERUSER":
 	        return ReadProperties.automationExternalPassword;
 	    default:
 	        log.fatal("Unknown user type - {}" + type.toUpperCase());

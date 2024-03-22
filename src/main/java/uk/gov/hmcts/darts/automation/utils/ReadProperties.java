@@ -50,8 +50,9 @@ public class ReadProperties {
 	public static String apiGlobalUserName = getSystemValue("FUNC_TEST_ROPC_GLOBAL_USERNAME");
 	public static String apiGlobalPassword = getSystemValue("FUNC_TEST_ROPC_GLOBAL_PASSWORD");
 	public static String apiExtClientId = getSystemValue("AAD_B2C_ROPC_CLIENT_ID");
-	public static String apiExtClientIdKey = getSystemValue("AAD_B2C_ROPC_CLIENT_ID_KEY");
-	public static String apiExtClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+//	public static String apiExtClientIdKey = getSystemValue("AAD_B2C_ROPC_CLIENT_ID_KEY");
+//	public static String apiExtClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET_KEY");
+	public static String apiExtClientSecret = getSystemValue("AAD_B2C_ROPC_CLIENT_SECRET");
 	public static String apiIntClientId = getSystemValue("AAD_CLIENT_ID");
 	public static String apiIntTenantId = getSystemValue("AAD_TENANT_ID");
 	public static String apiIntClientSecret = getSystemValue("AAD_CLIENT_SECRET");
@@ -77,6 +78,7 @@ public class ReadProperties {
 	public static String automationRequesterApproverTestPassword = getSystemValue("AUTOMATION_REQUESTER_APPROVER_PASSWORD");
 	public static String automationRequesterApproverTestUserId = getSystemValue("AUTOMATION_REQUESTER_APPROVER_USERNAME");
 	public static String dartsAdminUserName = getSystemValue("DARTS_ADMIN_USERNAME");
+	public static String dartsSuperUserUserName = getSystemValue("AUTOMATION_SUPER_USER_USERNAME");
 
 	public static String xhibitUserName = getSystemValue("XHIBIT_USERNAME");
 	public static String xhibitPassword = getSystemValue("XHIBIT_PASSWORD");
