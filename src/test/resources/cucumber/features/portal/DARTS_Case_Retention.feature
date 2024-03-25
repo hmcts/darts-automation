@@ -11,7 +11,7 @@ Feature: Case Retention
       | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-28 | R{{seq}}001  | {{seq}}KH1    | {{timestamp-10:00:00}} |
       | {{seq}}001 | 1100 |          | {{seq}}1168 | Harrow Crown Court | {{seq}}-29 | R{{seq}}002  | {{seq}}ABC-29 | {{timestamp-10:00:00}} |
 
-  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @regression
+  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history
     #Case is open
     Given I am logged on to DARTS as an JUDGE user
@@ -247,14 +247,27 @@ Scenario: Change Retention Date by increasing it with specific date
   And I set "Why are you making this change?" to "Reason for reducing retention date by one year"
   And I see "You have 154 characters remaining" on the page
   And I press the "Continue" button
+
+  #DMP-1437 Check your retention date change screen
   Then I see "Check retention date change" on the page
   And I see "R{{seq}}002" in the same row as "Case ID"
   And I see "Harrow Crown Court" in the same row as "Courthouse"
   And I see "Def {{seq}}-29" in the same row as "Defendant(s)"
   And I see "Reason for reducing retention date by one year" in the same row as "Reason for change"
 
+  Then I click on "Change" in the same row as "Retain case until"
+  And I press the "Continue" button
+
+  Then I click on "Change" in the same row as "Reason for change"
+  And I press the "Continue" button
+
   When I press the "Confirm retention date change" button
+
+  #DMP-1439 Confirmation of retention date change screen
   Then I see "Case retention date changed." on the page
+  And I see "R{{seq}}002" in the same row as "Case ID"
+  And I see "Harrow Crown Court" in the same row as "Courthouse"
+  And I see "Def {{seq}}-29" in the same row as "Defendant(s)"
   And I see "{{displaydate}}" in the same row as "Date applied"
   Then I verify the HTML table "Retention audit history" contains the following values
     | Date retention changed | Retention date | Amended by   | Retention policy | Comments                                            | Status   |
