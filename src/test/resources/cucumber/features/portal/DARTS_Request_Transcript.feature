@@ -1,10 +1,10 @@
 Feature: Request Transcript
 
-  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1138 @DMP-1053 @DMP-2123 @DMP-1054 @DMP-2124 @regression
+  @DMP-917 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-925 @DMP-934 @DMP-1009 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1138 @DMP-1053 @DMP-2123 @DMP-1054 @DMP-2124 @regression
   Scenario: Request Transcription data creation
     Given I create a case using json
       | courthouse         | case_number | defendants      | judges            | prosecutors            | defenders            |
-      | Harrow Crown Court | C{{seq}}001 | DefC {{seq}}-8  | JudgeC {{seq}}-8  | testprosecutoreight    | testdefenderright    |
+      | Harrow Crown Court | C{{seq}}001 | DefC {{seq}}-8  | JudgeC {{seq}}-8  | testprosecutoreight    | testdefendereight    |
       | Harrow Crown Court | C{{seq}}002 | DefC {{seq}}-9  | JudgeC {{seq}}-9  | testprosecutornine     | testdefendernine     |
       | Harrow Crown Court | C{{seq}}003 | DefC {{seq}}-10 | JudgeC {{seq}}-10 | testprosecutorten      | testdefenderten      |
       | Harrow Crown Court | C{{seq}}004 | DefC {{seq}}-11 | JudgeC {{seq}}-11 | testprosecutoreleven   | testdefendereleven   |
@@ -38,7 +38,7 @@ Feature: Request Transcript
       | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1   |
       | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1   |
 
-  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @regression
+  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @regression
   Scenario: Request Transcription, Specified Times with Event Checkboxes
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -114,6 +114,8 @@ Feature: Request Transcript
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
+
+    #DMP-1011-AC1 Approve request
 
     When I select the "Yes" radio button
     And I press the "Submit" button
@@ -252,7 +254,7 @@ Feature: Request Transcript
     Then I see "Transcripts for this hearing" on the page
     And I see "Complete" in the same row as "Specified Times"
 
-  @DMP-917 @DMP-862 @DMP-868 @DMP-934 @DMP-1012 @DMP-1138 @regression
+  @DMP-917 @DMP-862 @DMP-868 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1138 @regression
   Scenario: Request Transcription, Court Log by Manually Entering Time
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -325,6 +327,8 @@ Feature: Request Transcript
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio selected via manually entering time." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
+
+    #DMP-1011-AC1 Approve request
 
     When I select the "Yes" radio button
     And I press the "Submit" button
@@ -736,7 +740,7 @@ Feature: Request Transcript
     And I do not see "C{{seq}}006" on the page
     And I do not see "C{{seq}}007" on the page
 
-  @DMP-1025 @DMP-1028 @regression
+  @DMP-1009 @DMP-1011 @DMP-1025 @DMP-1028 @regression
   Scenario: Request Transcription, Rejected by Approver
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -784,6 +788,8 @@ Feature: Request Transcript
     When I click on the "Your transcripts" link
     Then I see "C{{seq}}005" in the same row as "Awaiting Authorisation"
 
+    #DMP-1009 Approver screen and rejection reason
+
     When I Sign out
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
@@ -799,6 +805,8 @@ Feature: Request Transcript
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio, this will test negative path." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
+
+    #DMP-1011-AC2 Reject request
 
     When I select the "No" radio button
     And I see "You have 2000 characters remaining" on the page
