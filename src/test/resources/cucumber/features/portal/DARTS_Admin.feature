@@ -14,7 +14,7 @@ Feature: Admin portal
 
   @DMO-2340
   Scenario: Admin portal data creation - User 2 - Deactivated user
-  #Login admin
+  #Login admin portal
     Given I am logged on to DARTS as an ADMIN user
   #Create new user
     And I press the "Create new user" button
