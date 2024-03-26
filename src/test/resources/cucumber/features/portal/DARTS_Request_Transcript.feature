@@ -506,7 +506,7 @@ Feature: Request Transcript
     Then I see "Events and audio recordings" on the page
 
     When I click on the "Your audio" link
-    And I wait for "5" minutes with "READY" to appear for "C{{seq}}004"
+    And I wait for text "READY" on same row as link "C{{seq}}004"
     And I click on "View" in the same row as "C{{seq}}004"
     Then I see "Play all audio" on the page
     And I see "mp3" on the page

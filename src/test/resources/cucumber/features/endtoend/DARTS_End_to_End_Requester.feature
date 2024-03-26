@@ -24,6 +24,11 @@ Feature: Requester
     Then I see "<case_number>" on the page
     When I click on "<HearingDate>" in the same row as "<courtroom>"
     Then I see "There are restrictions against this hearing" on the page
+    Then I wait for text "<startTime> - <endTime>" on the same row as link "Play preview"
+#    Then I wait for the audio file to be ready
+#      | courthouse   | courtroom   | case_number   | hearing_date |
+#      | <courthouse> | <courtroom> | <case_number> | {{date+0/}}  |
+#    When I refresh the page
     #Then I play the audio player
     When I check the checkbox in the same row as "<startTime> - <endTime>" "Audio recording"
     And  I press the "Get Audio" button
@@ -39,12 +44,12 @@ Feature: Requester
     And  I see "You have already ordered this audio and the request is 'pending'." on the page
     When I click on the "HMCTS" link
 
-#    Then I wait for "2" minutes with "READY" to appear for "<case_number>"
-    Then I wait for the audio file to be ready
-      | courthouse   | case_number   | hearing_date | user      |
-      | <courthouse> | <case_number> | {{date+0/}}  | REQUESTER |
+    Then I wait for the requested audio file to be ready
+      | user      | courthouse   | case_number   | hearing_date |
+      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
       
     When I click on the "Your audio" link
+    Then I wait for text "READY" on the same row as link "<case_number>"
     And  I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
     #Then I play the audio player
@@ -102,4 +107,4 @@ Feature: Requester
 
     Examples:
       | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}021 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}021 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc |

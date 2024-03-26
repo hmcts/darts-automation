@@ -70,7 +70,7 @@ Feature: Transcriber
 
     Then I click on the "Return to hearing date" link
     Then I click on the "Your audio" link
-    Then I wait for "5" minutes with "READY" to appear for "<case_number>"
+    Then I wait for text "READY" on the same row as link "<case_number>"
 
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
@@ -161,7 +161,7 @@ Feature: Transcriber
 
     Then I click on the "Return to hearing date" link
     Then I click on the "Your audio" link
-    Then I wait for "5" minutes with "READY" to appear for "<case_number>"
+    Then I wait for text "READY" on the same row as link "<case_number>"
 
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
@@ -178,6 +178,6 @@ Feature: Transcriber
 
     Examples:
       | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}032 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}032 | {{seq}}1032 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | file-sample_1MB.doc | Playback Only    |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}032 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}032 | {{seq}}1032 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc | Playback Only    |
 
 
