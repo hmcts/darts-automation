@@ -1,6 +1,6 @@
 Feature: Admin portal
 
-  @DMP-724 @DMP-2222 @
+  @DMP-724 @DMP-2222
   Scenario: Create user admin portal
   #Login admin
     Given I am logged on to DARTS as an ADMIN user
@@ -78,6 +78,32 @@ Feature: Admin portal
     And I see "Enter a courthouse code" on the page
     And I see "Enter a display name" on the page
     And I see "Select a region" on the page
+
+  @DMP-2466 @KH
+  Scenario: Retention Policies primary page
+    Given I am logged on to DARTS as an ADMIN user
+      #AC1 - View active polices
+    And I click on the "Retention policies" navigation link
+    And I see "Retention policies" on the page
+    Then I verify the HTML table contains the following values
+      | Name                         | Description | Fixed policy key | Duration | Policy start | Policy end | *SKIP* |
+      | DARTS Permanent Retention v3 | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | DARTS Standard Retention v3  | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | DARTS Not Guilty Policy      | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | DARTS Non Custodial Policy   | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | DARTS Custodial Policy       | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | DARTS Default Policy         | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | DARTS Permanent Policy       | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | DARTS Manual Policy          | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | DARTS Life Policy            | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+
+      #AC 2 - View inactive polices
+    And I click on the "Inactive" link
+    Then I see "No data to display." on the page
+
+
+
+
 
 
 
