@@ -79,7 +79,7 @@ Feature: Admin portal
     And I see "Enter a display name" on the page
     And I see "Select a region" on the page
 
-  @DMP-2186
+  @DMP-2186 @DM
   Scenario: Create a Courthouse Page - Check Details
     Given I am logged on to DARTS as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -87,7 +87,7 @@ Feature: Admin portal
     Then I set "Courthouse name" to "Test Courthouse {{seq}}"
     And I set "Display name" to "Test Display Name {{seq}}"
     And I select the "Midlands" radio button
-    And I select "LEEDS_DMP381_TRANSCRIBER" from the dropdown
+    And I select "Swansea_Transcribers" from the dropdown
     And I press the "Add company" button
     And I press the "Continue" button
     #AC1 - Review Courthouse Details
@@ -101,7 +101,7 @@ Feature: Admin portal
     And I see "Courthouse name" in the same row as "Test Courthouse {{seq}}"
     And I see "Display name" in the same row as "Test Display Name {{seq}}"
     And I see "Region" in the same row as "Midlands"
-    And I see "Transcription companies" in the same row as "LEEDS_DMP381_TRANSCRIBER"
+    And I see "Transcription companies" in the same row as "Swansea_Transcribers"
     And I see "Cancel" on the page
     And I see the "Create courthouse" button
     #AC2 - Change user details
@@ -109,7 +109,7 @@ Feature: Admin portal
     Then I see "Test Courthouse {{seq}}" on the page
     And I see "Test Display Name {{seq}}" on the page
     And I see "Midlands" on the page
-    And I see "LEEDS_DMP381_TRANSCRIBER" on the page
+    And I see "Swansea_Transcribers" on the page
     #AC3 - Cancel Courthouse Creation
     And I press the "Continue" button
     Then I click on the "Cancel" link
@@ -119,7 +119,7 @@ Feature: Admin portal
     Then I set "Courthouse name" to "Test Courthouse {{seq}}"
     And I set "Display name" to "Test Display Name {{seq}}"
     And I select the "Midlands" radio button
-    And I select "LEEDS_DMP381_TRANSCRIBER" from the dropdown
+    And I select "Swansea_Transcribers" from the dropdown
     And I press the "Add company" button
     And I press the "Continue" button
     And I press the "Create courthouse" button
