@@ -52,7 +52,7 @@ public class Database extends Postgres {
 			"-- or ctr.ctr_id = eve.ctr_id\r\n" +
 			"left join darts.courthouse cth\r\n" +
 			"on ctr.cth_id = cth.cth_id\r\n";
-	
+
 	final String caseHearingJoin = "darts.courthouse cth\r\n"
 			+ "inner join darts.courtroom ctr\r\n"
 			+ "using(cth_id)\r\n"
@@ -60,8 +60,8 @@ public class Database extends Postgres {
 			+ "using (ctr_id)\r\n"
 			+ "inner join darts.court_case cas\r\n"
 			+ "using (cth_id)\r\n";
-	
-	final String caseAudioJoin = "darts.courthouse cth\r\n"
+
+  final String caseAudioJoin = "darts.courthouse cth\r\n"
 			+ "inner join darts.courtroom ctr\r\n"
 			+ "using(cth_id)\r\n"
 			+ "inner join darts.hearing hea\r\n"

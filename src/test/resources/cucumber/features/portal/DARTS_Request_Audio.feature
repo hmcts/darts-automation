@@ -422,3 +422,17 @@ Scenario: Hearing table sorted with time
 
     Then I click on the "Play preview" link
 
+  @DMP-2300
+    #NOTE:DMP-2300 NEEDS TO RUN STRAIGHT AFTER THE DATA CREATION TO GET THE PREVIEW MESSAGE
+  Scenario: Audio is not available to preview message.
+  Given I am logged on to DARTS as a transcriber user
+  When I click on the "Search" link
+  And I set "Case ID" to "B{{seq}}006"
+  And I press the "Search" button
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
+  Then I see "{{seq}}ABC-6" on the page
+  And I select the "Audio preview and events" radio button
+  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  Then I see "This audio is not currently available in DARTS, please try again later." on the page
+
