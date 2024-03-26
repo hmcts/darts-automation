@@ -1,6 +1,6 @@
 Feature: Admin portal
 
-  @DMP-724 @DMP-2222 @
+  @DMP-724 @DMP-2222
   Scenario: Create user admin portal
   #Login admin
     Given I am logged on to DARTS as an ADMIN user
@@ -79,8 +79,49 @@ Feature: Admin portal
     And I see "Enter a display name" on the page
     And I see "Select a region" on the page
 
-
-
-
-
-
+  @DMP-2186 @DM
+  Scenario: Create a Courthouse Page - Check Details
+    Given I am logged on to DARTS as an ADMIN user
+    Then I click on the "Courthouses" navigation link
+    And I press the "Create new courthouse" button
+    Then I set "Courthouse name" to "Test Courthouse {{seq}}"
+    And I set "Display name" to "Test Display Name {{seq}}"
+    And I select the "Midlands" radio button
+    And I select "Swansea_Transcribers" from the dropdown
+    And I press the "Add company" button
+    And I press the "Continue" button
+    #AC1 - Review Courthouse Details
+    Then I see "Create courthouse" on the page
+    And I see "Back" on the page
+    And I see "Check details" on the page
+    And I see "Check the courthouse name carefully, as it must exactly match the name on XHIBIT or CPP." on the page
+    And I see "Must be the same ID used on XHIBIT or CPP" on the page
+    And I see "Display name" on the page
+    And I see "Details" in the same row as "Change"
+    And I see "Courthouse name" in the same row as "Test Courthouse {{seq}}"
+    And I see "Display name" in the same row as "Test Display Name {{seq}}"
+    And I see "Region" in the same row as "Midlands"
+    And I see "Transcription companies" in the same row as "Swansea_Transcribers"
+    And I see "Cancel" on the page
+    And I see the "Create courthouse" button
+    #AC2 - Change user details
+    Then I click on the "Change" link
+    Then I see "Test Courthouse {{seq}}" on the page
+    And I see "Test Display Name {{seq}}" on the page
+    And I see "Midlands" on the page
+    And I see "Swansea_Transcribers" on the page
+    #AC3 - Cancel Courthouse Creation
+    And I press the "Continue" button
+    Then I click on the "Cancel" link
+    And I press the "Create new courthouse" button
+    And I see "Create courthouse" on the page
+    #AC4 - Creating a courthouse
+    Then I set "Courthouse name" to "Test Courthouse {{seq}}"
+    And I set "Display name" to "Test Display Name {{seq}}"
+    And I select the "Midlands" radio button
+    And I select "Swansea_Transcribers" from the dropdown
+    And I press the "Add company" button
+    And I press the "Continue" button
+    And I press the "Create courthouse" button
+    Then I see "Created Test Display Name {{seq}}" on the page
+    And I see "© Crown copyright" on the page
