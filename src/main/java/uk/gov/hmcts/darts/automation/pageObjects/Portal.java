@@ -343,28 +343,66 @@ public class Portal {
             log.warn("Wait complete - not found");
         }
     }
+    
+    public void waitForRequestedAudioToBeReady(String user, String courthouse, String caseNumber, String hearingDate) throws Exception {
+    	log.info("Waiting for requested audio file to be ready - {} {} {} for {}", courthouse, caseNumber, hearingDate, user);
+    	String userName = Credentials.userName(user);
+    	String usr_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userName, "usr_id");
+    	String mer_id = DB.returnSingleValue("HEARING_MEDIA_REQUEST", 
+    			"courthouse_name",  courthouse, 
+    			"case_number",  caseNumber,
+    			"hearing_date", DateUtils.dateAsYyyyMmDd(hearingDate),
+    			"requestor", usr_id,
+    			"max(mer_id)");
+        int waitTimeInSeconds = 300;
+        log.info("wait time {} for user {}, courthouse {}, case {}, date {}", waitTimeInSeconds, user, courthouse, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
+                .pollingEvery(Duration.ofSeconds(30));  
+        Function<WebDriver, Boolean> requestedAudioIsReady = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+            	String requestStatus = "";
+				try {
+					requestStatus = DB.returnSingleValue("darts.media_request",
+							"mer_id", mer_id, 
+							"request_status");
+				} catch (Exception e) {
+					log.warn("Exception in database call \r\n {e}");
+				}
+            	log.warn("Request status: {}", requestStatus);
+            	return requestStatus.equalsIgnoreCase("COMPLETED");
+            };
+        };
+        try {
+            wait.until(requestedAudioIsReady);
+            log.info("Audio request ready");
+        } catch (TimeoutException e) {
+            log.warn("Wait complete - request not ready");
+        }
+    }
 
-    public void waitForAudioFile(String waitTime, String startTime, String caseNumber) {
-        String substitutedValue = Substitutions.substituteValue(caseNumber);
-        String substitutedValue1 = Substitutions.substituteValue(startTime);
-        int waitTimeInSeconds = Integer.parseInt(waitTime) * 60;
+    public void waitForUpdatedRow(String text, String link) {
+        String substitutedValueLink = Substitutions.substituteValue(link);
+        String substitutedValueText = Substitutions.substituteValue(text);
+        int waitTimeInSeconds = 600;
         log.info("WAIT TIME {}", waitTimeInSeconds);
 
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
-                .pollingEvery(Duration.ofSeconds(10))
+                .pollingEvery(Duration.ofSeconds(30))
                 .ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class);
 
-        Function<WebDriver, Boolean> checkForAudioFile = new Function<WebDriver, Boolean>() {
+        Function<WebDriver, Boolean> checkForRowFieldsPresent = new Function<WebDriver, Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
                 log.info("Starting fluent wait");
                 NAV.waitForBrowserReadyState();
-                String xpath = "//tr[./td[normalize-space(.)='" + substitutedValue1 + "'] and ./td[a[normalize-space(.)='" + substitutedValue + "']]]";
+                String xpath = "//tr[./td[normalize-space(.)='" + substitutedValueText + "'] and ./td[a[normalize-space(.)='" + substitutedValueLink + "']]]";
                 List<WebElement> elements = webDriver.findElements(By.xpath(xpath));
                 if (elements.size() != 0) {
-                    log.info("Audio file found.");
+                    log.info("Link " + link + " found for " + text);
                     return true; // Element is present
                 } else {
                     NAV.refreshPage(); // Refresh the page if element not found
@@ -373,9 +411,9 @@ public class Portal {
             }
         };
         try {
-            wait.until(checkForAudioFile);
+            wait.until(checkForRowFieldsPresent);
         } catch (TimeoutException e) {
-            log.warn("Audio file not found within the specified wait time.");
+            log.warn("Link " + link + " NOT found for " + text + " within the specified wait time.");
         }
     }
 }

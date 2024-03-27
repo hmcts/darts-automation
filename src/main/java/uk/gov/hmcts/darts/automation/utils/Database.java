@@ -52,8 +52,16 @@ public class Database extends Postgres {
 			"-- or ctr.ctr_id = eve.ctr_id\r\n" +
 			"left join darts.courthouse cth\r\n" +
 			"on ctr.cth_id = cth.cth_id\r\n";
-	
-	final String caseAudioJoin = "darts.courthouse cth\r\n"
+
+	final String caseHearingJoin = "darts.courthouse cth\r\n"
+			+ "inner join darts.courtroom ctr\r\n"
+			+ "using(cth_id)\r\n"
+			+ "inner join darts.hearing hea\r\n"
+			+ "using (ctr_id)\r\n"
+			+ "inner join darts.court_case cas\r\n"
+			+ "using (cth_id)\r\n";
+
+  final String caseAudioJoin = "darts.courthouse cth\r\n"
 			+ "inner join darts.courtroom ctr\r\n"
 			+ "using(cth_id)\r\n"
 			+ "inner join darts.hearing hea\r\n"
@@ -64,6 +72,16 @@ public class Database extends Postgres {
 			+ "using (hea_id)\r\n"
 			+ "left join darts.media med\r\n"
 			+ "using (med_id)\r\n";
+	
+	final String hearingMediaRequestJoin = "darts.courthouse cth\r\n"
+			+ "inner join darts.courtroom ctr\r\n"
+			+ "using(cth_id)\r\n"
+			+ "inner join darts.hearing hea\r\n"
+			+ "using (ctr_id)\r\n"
+			+ "inner join darts.court_case cas\r\n"
+			+ "using (cth_id)\r\n"
+			+ "left join darts.media_request\r\n"
+			+ "using (hea_id)\r\n";
 
 	public Database(){
 //		pg = new Postgres();
@@ -78,8 +96,12 @@ public class Database extends Postgres {
 			return eventJoin;
 		case "COURTROOM":
 			return courtroomJoin;
+		case "CASE_HEARING":
+			return caseHearingJoin;
 		case "CASE_AUDIO":
 			return caseAudioJoin;
+		case "HEARING_MEDIA_REQUEST":
+			return hearingMediaRequestJoin;
 		default:
 			return input;
 		}
@@ -167,6 +189,20 @@ public class Database extends Postgres {
 				"cas.case_number", "S1171021",
 				"hearing_date", "2024-03-20",
 				"max(med_id)"));
+		System.out.println(db.returnSingleValue("HEARING_MEDIA_REQUEST",
+				"courthouse_name",  "Harrow Crown Court",
+				"case_number",  "S1200021",
+				"hearing_date", DateUtils.dateAsYyyyMmDd("26-03-2024"),
+				"requestor", "-37",
+				"max(mer_id)"));
+
+		System.out.println(db.returnSingleValue("darts.media_request",
+				"mer_id", "23645",
+				"request_status"));
+
+		System.out.println(db.returnSingleValue("darts.transformed_media",
+				"mer_id", "23645",
+				"trm_id"));
 	}
 
 

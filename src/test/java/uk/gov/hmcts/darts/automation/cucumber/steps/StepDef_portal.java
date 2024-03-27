@@ -131,18 +131,33 @@ public class StepDef_portal extends StepDef_base {
         portal.wait(waitTime);
     }
 
-    @Then("I wait until the audio file has been loaded for user  \"([^\"]*)\" courthouse  \"([^\"]*)\" case  \"([^\"]*)\" date  \"([^\"]*)\"")
-    public void waitForAudioToBeLoaded(String userId, String courthouse, String caseNumber, String hearingDate) throws Exception {
-    	portal.waitForAudioToBeLoaded(userId, courthouse, caseNumber, hearingDate);
+    @Then("I wait until the audio file has been loaded for courthouse  \"([^\"]*)\" courtroom  \"([^\"]*)\" case  \"([^\"]*)\" date  \"([^\"]*)\"")
+    public void waitForAudioToBeLoaded(String courthouse, String courtroom, String caseNumber, String hearingDate) throws Exception {
+    	portal.waitForAudioToBeLoaded(courthouse, courtroom, caseNumber, hearingDate);
     }
 	
  // sample cucumber:
  // Then I wait for the audio file to be ready
- // |user|courthouse|case_number|hearing_date|
- 	@Then("^I wait for the audio file to be ready$")
- 	public void loadAudioFile(List<Map<String,String>> dataTable) throws Exception {
+ // |courthouse|courtroom|case_number|hearing_date|
+ 	@Then("^I wait for the audio file to be loaded$")
+ 	public void waitForAudioToBeLoadedMap(List<Map<String,String>> dataTable) throws Exception {
  		for (Map<String, String> map : dataTable) {
  			portal.waitForAudioToBeLoaded(
+ 					getValue(map, "courthouse"),
+ 					getValue(map, "courtroom"),
+ 					getValue(map, "case_number"),
+ 					getValue(map, "hearing_date"));
+ 		}
+ 	}
+ 	
+	
+ // sample cucumber:
+ // Then I wait for the requested audio file to be ready
+ // |user|courthouse|case_number|hearing_date|
+ 	@Then("^I wait for the requested audio file to be ready$")
+ 	public void waitForRequestedAudioToBeReady(List<Map<String,String>> dataTable) throws Exception {
+ 		for (Map<String, String> map : dataTable) {
+ 			portal.waitForRequestedAudioToBeReady(
  					getValue(map, "user"),
  					getValue(map, "courthouse"),
  					getValue(map, "case_number"),
@@ -150,8 +165,8 @@ public class StepDef_portal extends StepDef_base {
  		}
  	}
 
-    @Then("I wait for \"([^\"]*)\" minutes with \"([^\"]*)\" to appear for \"([^\"]*)\"$")
-    public void waitForAudioFileWithStartTime(String waitTime, String startTime, String caseNumber) {
-        portal.waitForAudioFile(waitTime, startTime, caseNumber);
+    @Then("I wait for text \"([^\"]*)\" on the same row as link \"([^\"]*)\"$")
+    public void waitForUpdatedRow(String text, String link) {
+        portal.waitForUpdatedRow(text, link);
     }
 }
