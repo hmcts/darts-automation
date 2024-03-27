@@ -166,9 +166,22 @@ Feature: Admin portal
     And I click on the "Inactive" link
     Then I see "No data to display." on the page
 
-
-
-
+  @DMP-2252
+  Scenario: Edit a courthouse
+    Given I am logged on to DARTS as an ADMIN user
+      #AC1 - Editing a courthouse
+    Then I click on the "Courthouses" navigation link
+    And I set "Courthouse name" to "Swansea"
+    And I press the "Search" button
+    And I click on "Swansea" in the same row as "Wales"
+    And I press the "Edit courthouse" button
+    And I see "Courthouse details" on the page
+    And I see "Courthouse name" on the page
+    And I see "There is data associated with this courthouse name. It cannot be changed." on the page
+    And I see "Display name" on the page
+    And I see "Transcription companies" on the page
+    Then I press the "Continue" button
+    
 
 
 
