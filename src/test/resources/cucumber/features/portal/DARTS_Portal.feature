@@ -95,7 +95,7 @@ Examples:
 
 @Admin @smoketest @demo
 Scenario: Admin User
-	When  I am logged on to DARTS as an ADMIN user
+	When  I am logged on to the admin portal as an ADMIN user
 	Then  I see "Users" on the page
 	And   I see links with text:
 	| Users   | Groups  | Organisations | Courthouses | Events | Node registry | Transformed media | Transcript requests |

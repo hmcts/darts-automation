@@ -45,9 +45,14 @@ public class StepDef_portal extends StepDef_base {
         NAV.navigateToUrl(ReadProperties.main("portal_url"));
     }
 
+    @Given("I am logged on to the admin portal as an/a {word} user")
+    public void logonToAdminPortal(String type) throws Exception {
+    	portal.logonToAdminPortal(type);
+    }
+
     @Given("I am logged on to DARTS as an/a {word} user")
-    public void logonAsUser(String type) throws Exception {
-    	portal.logonAsUser(type);
+    public void logonToDartsPortal(String type) throws Exception {
+    	portal.logonToDartsPortal(type);
     }
 
     @When("^I enter the security code$")
