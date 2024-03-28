@@ -2,7 +2,7 @@ Feature: Admin
 
   @DMP-2187-AC1,AC-2
   Scenario: Admin access and landing page
-    When  I am logged on to DARTS as an ADMIN user
+    When  I am logged on to the admin portal as an ADMIN user
     Then  I see "Users" on the page
     And   I see links with text:
       | Users | Groups | Organisations | Courthouses | Events | Node registry | Transformed media | Transcript requests |
@@ -13,24 +13,24 @@ Feature: Admin
 
   @DMP-2187-AC3
   Scenario Outline: No ADMIN permissions
-    When I navigate to the url "/admin"
-    # And I select the "I work with the HM Courts and Tribunals Service" radio button with label "I work with the HM Courts and Tribunals Service"
-    And I click on the "I work with the HM Courts and Tribunals Service" link
-    And I see "I have an account for DARTS through my organisation." on the page
-    And I press the "Continue" button
-    When I set "Enter your email" to "<Email>"
-    And I set "Enter your password" to "<Password>"
-    And I press the "Continue" button
+    When  I am logged on to the admin portal as a <role> user
     Then I see "Page not found" on the page
 
     Examples:
-      | Email                        | Password   |
-      | darts.transcriber@hmcts.net  | Password@1 |
-      | darts.languageshop@hmcts.net | Password@1 |
+      | role              | 
+      | judge             |
+      | transcriber       |
+      | languageshop      |
+      | requester         |
+      | approver          |
+			| APPEALCOURT       |
+			| TRANSCRIBER       |
+			| LANGUAGESHOP      |
+			| REQUESTERAPPROVER |
 
   @DMP-634
   Scenario: Search for Users in Portal Primary page
-    When I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     And I see "Users" on the page
     Then I see "Full name" on the page
     And I see "Email" on the page
@@ -40,7 +40,7 @@ Feature: Admin
 
   @DMP-725
   Scenario: Search page for Courthouses
-    When I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     And I click on the "Courthouses" link
     Then I see "Search for courthouse" on the page
     And I see "Courthouse name" on the page
@@ -49,7 +49,7 @@ Feature: Admin
 
   @DMP-2178 @DMP-630-AC1-AC2
   Scenario Outline: New user account - Check user details
-    When I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     Then I see "Users" on the page
     And I see the "Create new user" button
     And I press the "Create new user" button
@@ -90,7 +90,7 @@ Feature: Admin
 
   @DMP-630-AC3-1
   Scenario Outline: Create a new user account with existing email address
-    When I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     Then I see "Users" on the page
     And I see the "Create new user" button
     And I press the "Create new user" button
@@ -113,7 +113,7 @@ Feature: Admin
 
   @DMP-630-AC3-2
   Scenario Outline: Create a new user account with invalid email format
-    When I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     Then I see "Users" on the page
     And I press the "Create new user" button
     And I see "Create user" on the page
@@ -135,7 +135,7 @@ Feature: Admin
 
   @DMP-630-AC3-3
   Scenario Outline: Create a new user account without full name
-    When I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     Then I see "Users" on the page
     And I press the "Create new user" button
     And I see "Create user" on the page
@@ -157,7 +157,7 @@ Feature: Admin
 
   @DMP-630-AC3-4
   Scenario Outline: Create a new user account without Email address
-    When I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     Then I see "Users" on the page
     And I press the "Create new user" button
     And I see "Create user" on the page
@@ -179,7 +179,7 @@ Feature: Admin
 
   @DMP-630-AC3-5
   Scenario Outline: Create a new user account with more than 256 characters
-    When I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     Then I see "Users" on the page
     And I press the "Create new user" button
     And I see "Enter user details" on the page

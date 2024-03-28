@@ -57,15 +57,21 @@ public class Portal {
         webDriver.findElement(By.xpath("//span[contains(@id, 'transcription-count') and contains(text(),'" + count + "')]"));
     }
 
+    public void logonToDartsPortal(String type) throws Exception {
+    	log.info("About to navigate to admin portal & login as user type " + type);
+    	NAV.navigateToUrl(ReadProperties.main("portal_url"));
+    	logonAsUser(type);
+    }
+
+    public void logonToAdminPortal(String type) throws Exception {
+    	log.info("About to navigate to DARTS portal & login as user type " + type);
+    	NAV.navigateToUrl(ReadProperties.main("portal_url") + "/admin");
+    	logonAsUser(type);
+    }
+
     public void logonAsUser(String type) throws Exception {
     	String userName = Credentials.userName(type);
     	String password = Credentials.password(type);
-    	log.info("About to navigate to homepage & login as user type " + type);
-    	if (type.equalsIgnoreCase("ADMIN")) {
-    		NAV.navigateToUrl(ReadProperties.main("portal_url") + "/admin");
-    	} else {
-    		NAV.navigateToUrl(ReadProperties.main("portal_url"));
-    	}
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
         WAIT.waitForTextOnPage("except where otherwise stated");
