@@ -153,7 +153,7 @@ Scenario: Simple and Advanced Case Search
     And I see "Harrow Crown Court" on the page
     And I see "testprosecutor" on the page
     And I see "testdefender" on the page
-    And I see "Def {{seq}}-1" on the page
+    And I see "Def A{{seq}}-1" on the page
     And I see "Hearings" on the page
 
 	#Hearing Details - Set permission for this particular CH as per confluence, may change
@@ -170,7 +170,7 @@ Scenario: Simple and Advanced Case Search
     And I see "{{seq}}-1" on the page
 	#And I see "Judge" on the page - Empty at the moment
     And I see "Hearing started" on the page
-    And I see "{{seq}}ABC-1" on the page
+    And I see "A{{seq}}ABC-1" on the page
 
   @DMP-509 @DMP-1135 @DMP-508 @DMP-515 @DMP-691 @regression @demo
   Scenario: Case Search error message verification
@@ -242,13 +242,13 @@ Scenario: Simple and Advanced Case Search
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
-      | A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
-      | A{{seq}}004                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
-      | A{{seq}}003                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
-      | A{{seq}}002                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
-      | A{{seq}}001                                              | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+      | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
+      | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | Judge {{seq}}-2  | Def A{{seq}}-11 |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*    | *IGNORE*         | *IGNORE*        |
+      | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-2  | Def A{{seq}}-22 |
+      | A{{seq}}003                                              | Harrow Crown Court | A{{seq}}-2  | Judge {{seq}}-11 | Def A{{seq}}-2  |
+      | A{{seq}}002                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-11 | Def A{{seq}}-11 |
+      | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | Judge {{seq}}-1  | Def A{{seq}}-1  |
 
     When I click on "A{{seq}}003" in the same row as "Harrow Crown Court"
     And I see "Prosecutor(s)" on the page
@@ -256,13 +256,13 @@ Scenario: Simple and Advanced Case Search
     And I click on the breadcrumb link "Search"
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
-      | A{{seq}}005                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-2  | Def {{seq}}-11 |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*   | *IGNORE*         | *IGNORE*       |
-      | A{{seq}}004                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-2  | Def {{seq}}-22 |
-      | A{{seq}}003                                              | Harrow Crown Court | {{seq}}-2  | Judge {{seq}}-11 | Def {{seq}}-2  |
-      | A{{seq}}002                                              | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
-      | A{{seq}}001                                              | Harrow Crown Court | {{seq}}-1  | Judge {{seq}}-1  | Def {{seq}}-1  |
+      | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
+      | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | Judge {{seq}}-2  | Def A{{seq}}-11 |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*    | *IGNORE*         | *IGNORE*        |
+      | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-2  | Def A{{seq}}-22 |
+      | A{{seq}}003                                              | Harrow Crown Court | A{{seq}}-2  | Judge {{seq}}-11 | Def A{{seq}}-2  |
+      | A{{seq}}002                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-11 | Def A{{seq}}-11 |
+      | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | Judge {{seq}}-1  | Def A{{seq}}-1  |
 
   @DMP-997 @regression @demo
   Scenario: Case file breadcrumbs
@@ -271,8 +271,8 @@ Scenario: Simple and Advanced Case Search
     And I set "Case ID" to "A{{seq}}002"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
-      | A{{seq}}002 | Harrow Crown Court | {{seq}}-11 | Judge {{seq}}-11 | Def {{seq}}-11 |
+      | Case ID     | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
+      | A{{seq}}002 | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-11 | Def A{{seq}}-11 |
 
     When I click on "A{{seq}}002" in the same row as "Harrow Crown Court"
     And I see "testprosecutortwo" on the page

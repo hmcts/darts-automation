@@ -258,7 +258,7 @@ Feature: User as a Requester
   | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType | urgency              | Status   | HearingDate | From      | Instructions | JudgeApproval |
   | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions | Mitigation  | Up to 3 working days | REJECTED | 14 Aug 2023 | system    | DMP-1025     | Yes           |
 
-  @DMP-1053
+  @DMP-1053 @obsolete
   Scenario: Delete single request from ready section of your transcripts
     When I click on the "Your transcripts" link
     And I check the checkbox in the same row as "CASE1009" "27 Nov 2023 14:29"
@@ -276,7 +276,7 @@ Feature: User as a Requester
 
   #Update will be needed to use clean data when available
 
-  @DMP-1054
+  @DMP-1054 @obsolete
   Scenario: Delete multiple requests from ready section of your transcripts
     When I click on the "Your transcripts" link
     And I check the checkbox in the same row as "CASE1009" "21 Nov 2023 10:18"
@@ -306,7 +306,7 @@ Feature: User as a Requester
       |*NO-CHECK* | CASE1009   | Swansea   | 15 Aug 2023    | 14:00:00  | 14:01:00  |  7713     | 09:20:02 13/12/2023  |  EXPIRED  |
       |*NO-CHECK* | CASE1009   | Swansea   | 15 Aug 2023    | 13:00:00  | 13:01:00  | 8385      | 16:30:00 19/12/2023  | EXPIRED   |
 
-  @DMP-2123
+  @DMP-2123 @obsolete
   Scenario: Delete single transcripts request warning
     When I click on the "Your transcripts" link
     And I check the checkbox in the same row as "DMP-1908" "Swansea"
@@ -321,7 +321,7 @@ Feature: User as a Requester
 
    #Update will be needed to use dynamic data when available.
 
-  @DMP-2124
+  @DMP-2124 @obsolete
   Scenario: Delete multiple transcripts request warning
     When I click on the "Your transcripts" link
     And I check the checkbox in the same row as "DMP-1908" "Swansea"
