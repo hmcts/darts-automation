@@ -290,10 +290,10 @@ public class Portal {
     public void waitForAudioToBeLoaded(String courthouse, String courtroom, String caseNumber, String hearingDate) throws Exception {
     	log.info("Waiting for audio file to be loaded - {} {} {} for {}", courthouse, courtroom, caseNumber, hearingDate);
     	String mediaId = DB.returnSingleValue("CASE_AUDIO", 
-    			"courthouse_name", "Harrow Crown Court",  
-    			"courtroom_name", "1171",
-				"cas.case_number", "S1171021",
-				"hearing_date", "2024-03-20",
+    			"courthouse_name", courthouse,  
+    			"courtroom_name", courtroom,
+				"cas.case_number", caseNumber,
+				"hearing_date", hearingDate,
 				"max(med_id)");
         int waitTimeInSeconds = 300;
         log.info("wait time {} courthouse {}, courtroom {}, case {}, date {}", waitTimeInSeconds, courthouse, courtroom, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
