@@ -18,6 +18,7 @@ Feature: Admin
 
     Examples:
       | role              | 
+      | judge             |
       | transcriber       |
       | languageshop      |
       | requester         |
