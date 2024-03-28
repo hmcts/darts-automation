@@ -90,6 +90,7 @@ Examples:
 	| TRANSCRIBER       | Y     | Y         | N               | Y                  | Y        |
 	| LANGUAGESHOP      | Y     | Y         | N               | N                  | N        |
 	| REQUESTERAPPROVER | Y     | Y         | Y               | N                  | N        |
+	| ADMIN             | Y     | Y         | N               | N                  | N        |
 	
 
 
