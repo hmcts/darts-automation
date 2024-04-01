@@ -229,3 +229,18 @@ Feature: Admin portal
     Then I see "Created Test Display Name {{seq}}" on the page
     And I see "© Crown copyright" on the page
 
+  @DMP-2299 @DM
+  Scenario: Viewing Group Details
+    Given I am logged on to DARTS as an ADMIN user
+    Then I click on the "Groups" navigation link
+    Then I set "Role" to "Judge"
+    And I click on the "Global Judge" link
+    #AC1 - View Group Details
+    And I see "Global Judge" on the page
+    And I see "-" on the page
+    And I see "Judge" on the page
+    #AC2 - Assign Courthouses
+    Then I select "Testing" from the dropdown
+    And I press the "Add courthouse" button
+    #AC3 - Remove a courthouse
+    And I click on the "Remove" link
