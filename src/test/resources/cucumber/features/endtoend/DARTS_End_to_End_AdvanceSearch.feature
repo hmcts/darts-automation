@@ -1,6 +1,6 @@
 Feature: Advance Search
 
-  @end2end @end2end6 @DMP-1927 @demo @PJ
+  @end2end @end2end6 @DMP-1927 @demo
   Scenario Outline: Advance Search for a case details created using Case and Courtlogs
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -161,7 +161,7 @@ Feature: Advance Search
       | REQUESTER | Harrow Crown Court | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
       | JUDGE     | Harrow Crown Court | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
 
-  @end2end @end2end6 @DMP-1927 @demo @PJ
+  @end2end @end2end6 @DMP-1927 @demo 
   Scenario Outline: Advance Search for a case details created using events
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
