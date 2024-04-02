@@ -157,7 +157,7 @@ Feature: Advance Search
     Then I see "using filters to restrict the number of results" on the page
 
     Examples:
-      | user      | courthouse         | case_number   | defendants           | judges           | prosecutors           | defenders           | courtroom | keywords             | dateTime      | todaysDate  |
+      | user      | courthouse      | case_number   | defendants           | judges           | prosecutors           | defenders           | courtroom | keywords             | dateTime      | todaysDate  |
       | REQUESTER | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
       | JUDGE     | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
 
@@ -320,6 +320,6 @@ Feature: Advance Search
     Then I see "using filters to restrict the number of results" on the page
 
     Examples:
-      | user      | courthouse         | courtroom | case_number   | dateTime      | message_id   | eventId       | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords             | todaysDate  |
+      | user      | courthouse      | courtroom | case_number   | dateTime      | message_id   | eventId       | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords             | todaysDate  |
       | REQUESTER | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042-B | {{seq}}1042-B | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
       | JUDGE     | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042-B | {{seq}}1042-B | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
