@@ -231,16 +231,14 @@ Feature: Admin portal
 
   @DMP-2299 @DM
   Scenario: Viewing Group Details
-    Given I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
-    Then I set "Role" to "Judge"
-    And I click on the "Global Judge" link
-    #AC1 - View Group Details
-    And I see "Global Judge" on the page
+    Then I select "XHIBIT" from the dropdown
+    And I click on the "Xhibit Group" link
+    And I see "Xhibit Group" on the page
     And I see "-" on the page
-    And I see "Judge" on the page
-    #AC2 - Assign Courthouses
-    Then I select "Testing" from the dropdown
-    And I press the "Add courthouse" button
-    #AC3 - Remove a courthouse
+    And I see "XHIBIT" on the page
     And I click on the "Remove" link
+    Then I select "Swansea" from the dropdown
+    And I press the "Add courthouse" button
+
