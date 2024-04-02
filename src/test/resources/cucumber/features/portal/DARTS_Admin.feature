@@ -256,4 +256,15 @@ Feature: Admin portal
     And I see "Details" on the page
     And I see "© Crown copyright" on the page
 
-
+@DMP-2299 @DM
+  Scenario: Viewing Group Details
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    Then I select "XHIBIT" from the dropdown
+    And I click on the "Xhibit Group" link
+    And I see "Xhibit Group" on the page
+    And I see "-" on the page
+    And I see "XHIBIT" on the page
+    And I click on the "Remove" link
+    Then I select "Swansea" from the dropdown
+    And I press the "Add courthouse" button
