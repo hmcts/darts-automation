@@ -231,7 +231,7 @@ Feature: Admin portal
 
   @DMP-1192 @DM
   Scenario: View Courthouse - Details Tab
-    Given I am logged on to DARTS as an ADMIN user
+    When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
     And I set "Courthouse name" to "Test Courthouse"
     And I press the "Search" button
