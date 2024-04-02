@@ -144,7 +144,9 @@ public class SoapApi {
     	this.tokenPassword = tokenPassword;
     	this.soapPassword = soapPassword;
 //    	authenticate(username, tokenPassword);
-    	registerUser(username, soapPassword);
+    	if (useToken) {
+    		registerUser(username, soapPassword);
+    	}
     }
     
     public void authenticate() {

@@ -170,7 +170,7 @@ public class StepDef_portal extends StepDef_base {
  		}
  	}
 
-    @Then("I wait for text \"([^\"]*)\" on the same row as link \"([^\"]*)\"$")
+    @Then("I wait for (the )text {string} on (the )same row as (the )link {string}")
     public void waitForUpdatedRow(String text, String link) {
         portal.waitForUpdatedRow(text, link);
     }
