@@ -146,6 +146,8 @@ public class SoapApi {
 //    	authenticate(username, tokenPassword);
     	if (useToken) {
     		registerUser(username, soapPassword);
+    	} else {
+    		authorizationToken = "No token";
     	}
     }
     
@@ -177,7 +179,7 @@ public class SoapApi {
     			+ "            <ns2:Identities xsi:type=\"ns2:RepositoryIdentity\" repositoryName=\"moj_darts\" password=\"" + password + "\" userName=\"" + username + "\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></ns2:Identities>\n"
     			+ "            <ns2:Profiles xsi:type=\"ns4:ContentTransferProfile\" isProcessOLELinks=\"false\" allowAsyncContentTransfer=\"false\" allowCachedContentTransfer=\"false\" transferMode=\"MTOM\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></ns2:Profiles>\n"
     			+ "         </context>\n"
-    			+ "         <host>http://darts-gateway.staging.platform.hmcts.net/service/darts//</host>\n"
+    			+ "         <host>" + baseUri + "</host>\n"
     			+ "      </ns8:register>\n"
     			+ "   </S:Body>\n"
     			+ "</S:Envelope>\n";
