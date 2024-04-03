@@ -286,7 +286,7 @@ Feature: Admin portal
     And I see "Cannot be changed." on the page
     And I see "XHIBIT" on the page
     And I see the "Save changes" button
-    #AC2 Error Handling
+    #AC2 - Error Handling
     And I set "Group name" to "Xhibit Group"
     And I press the "Save changes" button
     And I see "There is a problem" on the page
