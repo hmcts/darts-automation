@@ -166,8 +166,7 @@ Feature: Advance Search
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-    Given I authenticate from the XHIBIT source system
-    Given I create an event using json
+    Given I create an event
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
 
@@ -238,9 +237,10 @@ Feature: Advance Search
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
-
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+    
     #Keywords
     When I click on the "Clear search" link
     Then "Courthouse" is ""
@@ -250,7 +250,7 @@ Feature: Advance Search
     Then I verify the HTML table contains the following values
       | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
-
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
     #Judge
     When I click on the "Clear search" link
     Then "Keywords" is ""
@@ -259,7 +259,7 @@ Feature: Advance Search
     Then I verify the HTML table contains the following values
       | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
-
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
     #Case Number
     Then I set "Courthouse" to "<courthouse>" and click away
     Then I set "Case ID" to "<case_number>"
@@ -268,7 +268,7 @@ Feature: Advance Search
     Then I verify the HTML table contains the following values
       | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
-
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
     #Only Courtroom
     When I click on the "Clear search" link
     Then "Courthouse" is ""
@@ -320,6 +320,6 @@ Feature: Advance Search
     Then I see "using filters to restrict the number of results" on the page
 
     Examples:
-      | user      | courthouse      | courtroom | case_number   | dateTime      | message_id   | eventId       | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords             | todaysDate  |
-      | REQUESTER | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042-B | {{seq}}1042-B | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
-      | JUDGE     | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042-B | {{seq}}1042-B | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
+      | user      | courthouse      | courtroom | case_number   | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords             | todaysDate  |
+      | REQUESTER | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
+      | JUDGE     | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
