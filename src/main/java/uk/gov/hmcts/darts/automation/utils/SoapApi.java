@@ -1,5 +1,6 @@
 package uk.gov.hmcts.darts.automation.utils;
 
+import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -20,6 +21,7 @@ import uk.gov.hmcts.darts.automation.utils.ApiResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.List;
 
@@ -49,6 +51,8 @@ public class SoapApi {
 	static final String CONNECTION_STRING = "keep-alive";
 	static final String AUTHORIZATION = "Authorization";
 	static final String SOAP_ACTION = "SOAPAction";
+	static final String CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
+	static final String CONTENT_ID = "Content-ID";
 	String username = "";
 	String soapPassword = "";
 	String tokenPassword = "";
@@ -145,10 +149,10 @@ public class SoapApi {
     	this.soapPassword = soapPassword;
 //    	authenticate(username, tokenPassword);
     	if (useToken) {
-    		registerUser(username, soapPassword);
+    	  registerUser(username, soapPassword);
     	} else {
     		authorizationToken = "No token";
-    	}
+      }
     }
     
     public void authenticate() {
@@ -208,7 +212,7 @@ public class SoapApi {
     }
 
 // this is the previous method of generating a token and MAY be obsolete
-    public void authenticate(String username, String password) {
+    public void authenticate(String username, String password, Object preventCompile) {
     	log.info("authentication");
     	response  = 
     		given()
@@ -330,6 +334,46 @@ public class SoapApi {
 					.baseUri(baseUri)
 					.basePath("")
 					.body(addSoapHeader(soapAction, body))
+				.when()
+					.post(endpoint)
+				.then()
+					.spec(responseLogLevel(ReadProperties.responseLogLevel))
+					.assertThat().statusCode(200)
+					.extract().response();
+		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
+	}
+
+	public ApiResponse postSoapWithAudio(String endpoint, String soapAction, String body, String audioFileName) {
+
+		log.info("post soap request - SOAPAction: " + soapAction);
+    	authenticate();
+		response =
+				given()
+					.spec(requestLogLevel(ReadProperties.requestLogLevel))
+					.accept(ACCEPT_XML_STRING)
+	    			.header(USER_AGENT, USER_AGENT_STRING) 
+	    			.header(ACCEPT_ENCODING, ACCEPT_ENCODING_STRING)
+	    			.header(CONNECTION, CONNECTION_STRING)
+					.header("Content-Type", "multipart/related; type=\"application/xop+xml\"; start=\"document\"; start-info=\"text/xml\"")
+					.header(SOAP_ACTION, soapAction)
+					.baseUri(baseUri)
+					.basePath("")
+					.multiPart(new MultiPartSpecBuilder(addSoapHeader(body))
+							.header(CONTENT_TYPE, "application/xop+xml; charset=UTF-8; type=\"text/xml\"")
+							.header(CONTENT_TRANSFER_ENCODING, "8bit")
+							.header(CONTENT_ID, "document")
+							.controlName("document")
+							.mimeType("text/xml")
+							.build())
+					.multiPart(new MultiPartSpecBuilder(new File(ReadProperties.main("audioFileLocation") + audioFileName + (audioFileName.endsWith(".mp2") ? "" : ".mp2")))
+							.header(CONTENT_TYPE, "application/octet-stream")
+							.header(CONTENT_TRANSFER_ENCODING, "binary")
+							.header(CONTENT_ID, "<" + audioFileName + ">")
+							.header("Content-Disposition", "attachment; name=\"" + audioFileName + "\"")
+							.controlName("<" + audioFileName + ">")
+							.mimeType("audio/mp2")
+							.fileName(audioFileName)
+							.build())
 				.when()
 					.post(endpoint)
 				.then()
