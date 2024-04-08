@@ -229,3 +229,69 @@ Feature: Admin portal
     Then I see "Created Test Display Name {{seq}}" on the page
     And I see "© Crown copyright" on the page
 
+  @DMP-1192
+  Scenario: View Courthouse - Details Tab
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Courthouses" navigation link
+    And I set "Courthouse name" to "Test Courthouse"
+    And I press the "Search" button
+    And I click on "Test Courthouse" in the same row as "Test Courthouse"
+    #AC1
+    Then I see "Courthouse record" on the page
+    And I see "Test Courthouse" on the page
+    And I see the "Edit courthouse" button
+    And I see "Date created" on the page
+    And I see "Tue 26 Mar 2024" on the page
+    And I see "Last updated" on the page
+    And I see "Tue 26 Mar 2024" on the page
+    And I see "Details" on the page
+    And I see "Users" on the page
+    And I see "Details" on the page
+    And I see "Database ID" in the same row as "26992"
+    And I see "Courthouse name" in the same row as "Test Courthouse"
+    And I see "Region" in the same row as "Midlands"
+    And I see "Groups" in the same row as "TEST_COURTHOUSE_APPROVER"
+    And I see "TEST_COURTHOUSE_REQUESTER" on the page
+    And I see "LEEDS_DMP381_TRANSCRIBER" on the page
+    And I see "Details" on the page
+    And I see "© Crown copyright" on the page
+
+@DMP-2299
+  Scenario: Viewing Group Details
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    Then I select "XHIBIT" from the dropdown
+    And I click on the "Xhibit Group" link
+    And I see "Xhibit Group" on the page
+    And I see "-" on the page
+    And I see "XHIBIT" on the page
+    And I click on the "Remove" link
+    Then I select "Swansea" from the dropdown
+    And I press the "Add courthouse" button
+
+  @DMP-2302
+  Scenario: Edit a Group
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    Then I select "XHIBIT" from the dropdown
+    And I click on the "Group name" link
+    And I press the "Edit group details" button
+    #AC1 - Edit group details
+    Then I see "Edit group" on the page
+    And I see "Group details" on the page
+    And I see "Group name" on the page
+    And I see "Group name" on the page
+    And I see "Description" on the page
+    And I see "Role" on the page
+    And I see "Cannot be changed." on the page
+    And I see "XHIBIT" on the page
+    And I see the "Save changes" button
+    #AC2 - Error Handling
+    And I set "Group name" to "Xhibit Group"
+    And I press the "Save changes" button
+    And I see "There is a problem" on the page
+    And I see "There is an existing group with this name" on the page
+    And I see "There is an existing group with this name" on the page
+
+    
+    

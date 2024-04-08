@@ -149,10 +149,10 @@ public class SoapApi {
     	this.soapPassword = soapPassword;
 //    	authenticate(username, tokenPassword);
     	if (useToken) {
-    	registerUser(username, soapPassword);
+    	  registerUser(username, soapPassword);
     	} else {
     		authorizationToken = "No token";
-    }
+      }
     }
     
     public void authenticate() {
