@@ -378,6 +378,54 @@ public class XmlUtils {
 		return xmlString.xmlValue();
     }
     
+    public static String buildAddAudioXml(String courthouse,
+    		String courtroom,
+    		String caseNumbers,
+    		String startDateTime,
+    		String endDateTime,
+    		String fileName,
+    		String channel) {
+    	XmlString xmlString = new XmlString()
+    			.addTag("ns5:addAudio")
+    			.addAttribute("xmlns:ns2", "http://core.datamodel.fs.documentum.emc.com/")
+    			.addAttribute("xmlns:ns3", "http://properties.core.datamodel.fs.documentum.emc.com/")
+    			.addAttribute("xmlns:ns4", "http://content.core.datamodel.fs.documentum.emc.com/")
+    			.addAttribute("xmlns:ns5", "http://com.synapps.mojdarts.service.com")
+    			.addAttribute("xmlns:ns6", "http://rt.fs.documentum.emc.com/")
+    			.addTag("document")
+    			.addStartCdata()
+    			.addTag("audio")
+    			.addTag("start")
+    			.addAttribute("Y", DateUtils.datePart(startDateTime, "Y"))
+				.addAttribute("M", DateUtils.datePart(startDateTime, "M"))
+				.addAttribute("D", DateUtils.datePart(startDateTime, "D"))
+    			.addAttribute("H", DateUtils.timePart(startDateTime, "H"))
+				.addAttribute("MIN", DateUtils.timePart(startDateTime, "MIN"))
+				.addAttribute("S", DateUtils.timePart(startDateTime, "S"))
+				.addEndTag()
+    			.addTag("end")
+    			.addAttribute("Y", DateUtils.datePart(endDateTime, "Y"))
+				.addAttribute("M", DateUtils.datePart(endDateTime, "M"))
+				.addAttribute("D", DateUtils.datePart(endDateTime, "D"))
+    			.addAttribute("H", DateUtils.timePart(endDateTime, "H"))
+				.addAttribute("MIN", DateUtils.timePart(endDateTime, "MIN"))
+				.addAttribute("S", DateUtils.timePart(endDateTime, "S"))
+				.addEndTag()
+				.addTag("channel", channel)
+				.addTag("max_channels", "4")
+				.addTag("mediaformat", "mp2")
+				.addTag("mediafile", fileName)
+				.addTag("courthouse", courthouse)
+    			.addTag("courtroom", courtroom)
+    			.addTagGroup("case_numbers", "case_number", caseNumbers)
+    			.addEndTag()
+    			.addEndCdata()
+    			.addEndTag()
+    			.addEndTag();
+    			
+		return xmlString.xmlValue();
+    }
+    
     @Test
 	public void testXml1() {
 		Assertions.assertEquals("<case type=\"\" id=\"string2\">" + LINE_END
@@ -470,6 +518,17 @@ public class XmlUtils {
 				"2024-01-30T12:34:45+00:00",
 				"def name",
 				"62AA1010646"));
+    }
+    
+    @Test
+	public void testXml6() {
+    	System.out.println(buildAddAudioXml("ch",
+		    	 "cr",
+		    	 "c1,c2",
+		    	 "2024-03-01T12:00:00",
+		    	 "2024-03-02T12:00:00",
+		    	 "fn",
+		    	 "0"));
     }
 
 }
