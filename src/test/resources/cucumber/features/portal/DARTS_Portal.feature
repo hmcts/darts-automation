@@ -99,8 +99,8 @@ Scenario: Admin User
 	When  I am logged on to the admin portal as an ADMIN user
 	Then  I see "Users" on the page
 	And   I see links with text:
-	| Users   | Groups  | Organisations | Courthouses | Events | Node registry | Transformed media | Transcript requests | Search | Your audio |
-	| Y       | Y       | Y             | Y           | Y      | Y             | Y                 | Y                   | N      | N          |
+		| Users | Groups | Organisations | Courthouses | Events | Node registry | Transformed media | Transcript requests | Retention policies | Your audio |
+		| Y     | Y      | Y             | Y           | Y      | Y             | Y                 | Y                   | Y                  | N          |
 	And   I see link with text "HMCTS"
 	And   I see link with text "DARTS"
 	And   I see link with text "Sign out"
