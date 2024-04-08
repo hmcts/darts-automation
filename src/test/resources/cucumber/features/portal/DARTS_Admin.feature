@@ -374,3 +374,4 @@ Feature: Admin portal
       And I press the "Search" button
       Then I see "No search results" on the page
       And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+      

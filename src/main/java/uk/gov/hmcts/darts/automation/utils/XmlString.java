@@ -186,7 +186,11 @@ public class XmlString {
  */
 	public XmlString addEndTag() {
 		String tag = openTags.remove(openTags.size() - 1);
-		xmlString = xmlString + sep() + "</" + tag + ">"; 
+		if (sep.equals(">" + lineEnd)) {
+			xmlString = xmlString + " />";
+		} else {
+			xmlString = xmlString + sep() + "</" + tag + ">"; 
+		}
 		sep = lineEnd;
 		return this;
 	}

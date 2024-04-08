@@ -182,6 +182,31 @@ public class StepDef_soapApi extends StepDef_base {
 		}
 	}
 	
+	// sample cucumber:
+	// When I load an audio file
+	// |courthouse|courtroom|case_numbers|date|startTime|endTime|audioFile|channel|
+		@When("^I load an audio file$")
+		public void loadAudioFile(List<Map<String,String>> dataTable) {
+			for (Map<String, String> map : dataTable) {
+				String date = getValue(map, "date");
+				String audioFile = getValue(map, "audioFile");
+				String xml = XmlUtils.buildAddAudioXml(
+						getValue(map, "courthouse"),
+						getValue(map, "courtroom"),
+						getValue(map, "case_numbers"),
+						DateUtils.makeTimestamp(getValue(map, "startDateTime"), getValue(map, "date"), getValue(map, "startTime")),
+						DateUtils.makeTimestamp(getValue(map, "endDateTime"), getValue(map, "date"), getValue(map, "endTime")),
+						audioFile,
+						getValue(map, "channel", "0"));
+//				audioFile = ReadProperties.main("audioFileLocation") + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
+				soapApi.setDefaultSource(SOURCE_VIQ);
+				ApiResponse apiResponse = soapApi.postSoapWithAudio("", "addAudio", xml, audioFile);
+				testdata.statusCode = apiResponse.statusCode;
+				testdata.responseString = apiResponse.responseString;
+				Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+			}
+		}
+	
 	@When("I call POST SOAP API using soap body:")
 	public void callPostApiWithXmlBody(String docString) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
