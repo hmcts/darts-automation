@@ -5,7 +5,6 @@ Feature: Requester
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-    Given I authenticate from the XHIBIT source system
     And   I create an event
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -13,6 +12,7 @@ Feature: Requester
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
     When I am logged on to DARTS as an REQUESTER user
+    #Search
     And  I set "Case ID" to "<case_number>"
     And  I press the "Search" button
     Then I see "1 result" on the page
@@ -20,6 +20,7 @@ Feature: Requester
       | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
+    #Hearings Tab
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     When I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -107,4 +108,4 @@ Feature: Requester
 
     Examples:
       | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}021 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}021 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | 703f7fe6-73ea-4e2b-9f2b-bd7c37dabdd7.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc |
