@@ -229,7 +229,7 @@ Feature: Admin portal
     Then I see "Created Test Display Name {{seq}}" on the page
     And I see "© Crown copyright" on the page
 
-  @DMP-1192 @DM
+  @DMP-1192
   Scenario: View Courthouse - Details Tab
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -256,7 +256,7 @@ Feature: Admin portal
     And I see "Details" on the page
     And I see "© Crown copyright" on the page
 
-@DMP-2299 @DM
+@DMP-2299
   Scenario: Viewing Group Details
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -268,3 +268,109 @@ Feature: Admin portal
     And I click on the "Remove" link
     Then I select "Swansea" from the dropdown
     And I press the "Add courthouse" button
+
+  @DMP-2302
+  Scenario: Edit a Group
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    Then I select "XHIBIT" from the dropdown
+    And I click on the "Group name" link
+    And I press the "Edit group details" button
+    #AC1 - Edit group details
+    Then I see "Edit group" on the page
+    And I see "Group details" on the page
+    And I see "Group name" on the page
+    And I see "Group name" on the page
+    And I see "Description" on the page
+    And I see "Role" on the page
+    And I see "Cannot be changed." on the page
+    And I see "XHIBIT" on the page
+    And I see the "Save changes" button
+    #AC2 - Error Handling
+    And I set "Group name" to "Xhibit Group"
+    And I press the "Save changes" button
+    And I see "There is a problem" on the page
+    And I see "There is an existing group with this name" on the page
+    And I see "There is an existing group with this name" on the page
+
+  @DMP-2581
+  Scenario: Viewing groups - Adding a user
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    Then I select "XHIBIT" from the dropdown
+    And I click on the "Xhibit Group" link
+    And I see "Xhibit Group" on the page
+    And I click on the "Xhibit Group" link
+    Then I click on the "Group users" link
+    And I see "Search for a user" on the page
+    And I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
+    And I click on the "Add user" link
+    Then I see "Darts Admin" in the same row as "darts.admin@hmcts.net"
+
+    @DMP-2269
+    Scenario: Search Courthouse
+      When I am logged on to the admin portal as an ADMIN user
+     Then I click on the "Courthouses" navigation link
+      And I set "Courthouse name" to "Bristol"
+      Then I press the "Search" button
+      And I see "3 result" on the page
+      And I verify the HTML table contains the following values
+      | Courthouse name       | Display name          | Region|
+      | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
+      | Bristol               | Bristol               |       |
+      | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
+      Then I click on "Courthouse name" in the table header
+      And I verify the HTML table contains the following values
+        | Courthouse name       | Display name          | Region|
+        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
+        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
+        | Bristol               | Bristol               |       |
+
+     When I click on the "Clear search" link
+      Then I set "Display name" to "Bristol"
+      Then I press the "Search" button
+      And I see "3 result" on the page
+      And I verify the HTML table contains the following values
+        | Courthouse name       | Display name          | Region|
+        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
+        | Bristol               | Bristol               |       |
+        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
+      Then I click on "Display name" in the table header
+      And I verify the HTML table contains the following values
+        | Courthouse name       | Display name          | Region|
+        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
+        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
+        | Bristol               | Bristol               |       |
+
+      When I click on the "Clear search" link
+      Then I set "Region" to "South East"
+      Then I press the "Search" button
+      And I see "2 result" on the page
+      And I verify the HTML table contains the following values
+        | Courthouse name            | Display name                | Region      |
+        | Guildford Court            | GF Court                    | South East  |
+        | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East  |
+      Then I click on "Region" in the table header
+      And I verify the HTML table contains the following values
+        | Courthouse name       | Display name          | Region|
+        | Guildford Court            | GF Court                    | South East  |
+        | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East  |
+      When I click on the "Clear search" link
+
+      #AC2 Search Courthouse-No results
+     When I set "Courthouse name" to "111"
+      And I press the "Search" button
+      Then I see "No search results" on the page
+      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+      And I click on the "Clear search" link
+
+      When I set "Display name" to "111"
+      And I press the "Search" button
+      Then I see "No search results" on the page
+      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+      And I click on the "Clear search" link
+
+      When I set "Region" to "111"
+      And I press the "Search" button
+      Then I see "No search results" on the page
+      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
