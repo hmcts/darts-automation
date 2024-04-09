@@ -197,7 +197,7 @@ public class StepDef_soapApi extends StepDef_base {
 						DateUtils.makeTimestamp(getValue(map, "startDateTime"), getValue(map, "date"), getValue(map, "startTime")),
 						DateUtils.makeTimestamp(getValue(map, "endDateTime"), getValue(map, "date"), getValue(map, "endTime")),
 						audioFile,
-						getValue(map, "channel", "0"));
+						getValue(map, "channel", "1"));
 //				audioFile = ReadProperties.main("audioFileLocation") + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
 				soapApi.setDefaultSource(SOURCE_VIQ);
 				ApiResponse apiResponse = soapApi.postSoapWithAudio("", "addAudio", xml, audioFile);

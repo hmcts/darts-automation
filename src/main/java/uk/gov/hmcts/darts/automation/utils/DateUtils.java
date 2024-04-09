@@ -130,13 +130,22 @@ public class DateUtils {
 		return dateFormat.format((Date)cal.getTime());
 	}
 	
-	public static String timestamp() {
+	public static String zonedTimestamp() {
 		return DateTimeFormatter
-// Alternative - previous version - local time is not used for BST - in case with time zone is required in future
-//				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXX")
-//				.format(ZonedDateTime.now());
+				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXX")
+				.format(ZonedDateTime.now());
+	}
+	
+	public static String localTimestamp() {
+		return DateTimeFormatter
 				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 				.format(LocalDateTime.now());
+	}
+	
+	public static String timestamp() {
+		return zonedTimestamp();
+// Alternative if local time is required for BST - check format to be used
+//		return localTimestamp();
 	}
 
 	
