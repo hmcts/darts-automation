@@ -205,7 +205,7 @@ public class StepDef_jsonApi extends StepDef_base {
 
 	@When("I process the daily list for courthouse {}")
 	public void processTheDailyListForCourthouse(String courthouse) {
-		String endpoint = "/dailylists/run";
+		String endpoint = "/dailylists/run?isting_courthouse=";
 		ApiResponse apiResponse = jsonApi.postApiWithQueryParams(endpoint, courthouse);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
