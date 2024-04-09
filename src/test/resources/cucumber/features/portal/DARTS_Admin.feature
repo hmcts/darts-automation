@@ -12,6 +12,7 @@ Feature: Admin portal
     And I see "Check user details" on the page
     Then I press the "Create user" button
 
+
   @DMO-2340
   Scenario: Admin portal data creation - User 2 - Deactivated user
   #Login admin portal
@@ -181,8 +182,8 @@ Feature: Admin portal
     And I see "Display name" on the page
     And I see "Transcription companies" on the page
     Then I press the "Continue" button
-    
-  @DMP-2186 
+
+  @DMP-2263
   Scenario: Create a Courthouse Page - Check Details
     Given I am logged on to DARTS as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -292,6 +293,62 @@ Feature: Admin portal
     And I see "There is a problem" on the page
     And I see "There is an existing group with this name" on the page
     And I see "There is an existing group with this name" on the page
+
+
+  @DMP-2305
+  Scenario: Removing users from a group confirmation screen
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    And I click on the "Swansea_ADMIN" link
+    And I click on the "Group users" link
+    And I check the checkbox in the same row as "darts.superuser@hmcts.net" "Active"
+    And I press the "Remove users" button
+    And I see "Are you sure you want to remove 1 user from this group?" on the page
+    Then I press the "No - cancel" button
+
+  @DMP-2263
+  Scenario: Editing a courthouse - Check details
+    When I am logged on to the admin portal as an ADMIN user
+  #AC1- Review courthouse details
+    And I click on the "Courthouses" link
+    And I set "Courthouse name" to "Swansea"
+    And I press the "Search" button
+    And I click on "Swansea" in the same row as "Wales"
+    And I press the "Edit courthouse" button
+    And I press the "Continue" button
+    Then I see "Check details" on the page
+    Then I see "Check the courthouse name carefully, as it must exactly match the name on XHIBIT or CPP." on the page
+  #AC2- Change courthouse details
+    And I click on "Change" in the same row as "Display name"
+    And I see "Courthouse details" on the page
+    And I press the "Continue" button
+    And I click on "Change" in the same row as "Region"
+    And I see "Courthouse details" on the page
+    And I press the "Continue" button
+    And I click on "Change" in the same row as "Transcription companies"
+    And I see "Courthouse details" on the page
+    And I press the "Continue" button
+  #AC3- Cancel courthouse edit
+    Then I click on the "Cancel" link
+  #AC4- Save changes
+    And I press the "Edit courthouse" button
+    And I press the "Continue" button
+    Then I see "Update courthouse" on the page
+
+  @DMP-2303
+  Scenario: Viewing group details - Users
+    When I am logged on to the admin portal as an ADMIN user
+    #AC1 - View users
+    Then I click on the "Groups" navigation link
+    And I click on the "Swansea_ADMIN" link
+    And I click on the "Group users" link
+    And I see "0 of 5 selected" on the page
+
+    #AC1 - Remove users
+    And I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
+    And I press the "Add user" button
+    And I check the checkbox in the same row as "Darts Admin" "darts.admin@hmcts.net"
+    Then I press the "Remove users" button
 
   @DMP-2581
   Scenario: Viewing groups - Adding a user
