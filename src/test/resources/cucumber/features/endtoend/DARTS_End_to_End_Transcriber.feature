@@ -13,7 +13,7 @@ Feature: Transcriber
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
-    Given I am logged on to DARTS as an REQUESTER user
+    Given I am logged on to DARTS as a REQUESTER user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -86,8 +86,8 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}031 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:04:00  | 18:05:00 | file-sample_1MB.doc | Download         |
+      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile | startTime | endTime  | filename            | audioRequestType |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}031 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1   | 08:04:00  | 08:05:00 | file-sample_1MB.doc | Download         |
 
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback
