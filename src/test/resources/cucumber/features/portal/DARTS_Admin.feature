@@ -432,7 +432,7 @@ Feature: Admin portal
       Then I see "No search results" on the page
       And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
 
-  @DMP-2317
+  @DMP-2317 @DM
   Scenario: Create a new group (Translation or Transcriber)
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
