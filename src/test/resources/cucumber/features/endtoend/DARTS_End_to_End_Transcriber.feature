@@ -5,10 +5,9 @@ Feature: Transcriber
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-    Given I authenticate from the XHIBIT source system
     Given I create an event
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
 
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
