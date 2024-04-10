@@ -431,4 +431,31 @@ Feature: Admin portal
       And I press the "Search" button
       Then I see "No search results" on the page
       And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
-      
+
+  @DMP-2317
+  Scenario: Create a new group (Translation or Transcriber)
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    And I press the "Create group" button
+    #AC1 - Group Details
+    And I see "Create group" on the page
+    And I see "Group details" on the page
+    And I see "Group name" on the page
+    And I see "Description" on the page
+    And I see "Role" on the page
+    And I see "Transcriber" on the page
+    And I see "Translation QA" on the page
+    And I see the "Create group" button
+    And I see "Cancel" on the page
+    Then I press the "Create group" button
+    #AC2 - Error Handling
+    And I see "There is a problem" on the page
+    And I see "Enter a group name" on the page
+    And I see "Select a role" on the page
+    And I see "Enter a group name" on the page
+    And I see "Select a role" on the page
+    Then I set "Group name" to "Cpp Group"
+    And I set "Description" to "ttttttrfiehjuehnskrgvskgrhgsrilugrnsjurgilvsjrgnsjnurislrnhsierekrnhvsurivrugvsoigjrusrigri;hoireierguerihgurhgegueihgogeogirejrfjeofieofjerijfofergiejgoierjgierojgfigjieorjgioerjhgierhgiohgioerhgiohgigheohgierhgoehgieergrnbsgsgrlsgr.jslgs.ga.kenfkdjrgtnks"
+    Then I press the "Create group" button
+    And I see "There is an existing group with this name" on the page
+    And I see "Description must be less than 255 characters" on the page
