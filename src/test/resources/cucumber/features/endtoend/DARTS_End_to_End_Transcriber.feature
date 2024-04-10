@@ -6,8 +6,8 @@ Feature: Transcriber
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
-      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                    | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |
 
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
@@ -93,8 +93,8 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | keywords       | audioFile | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}031 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1   | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
+      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile | startTime | endTime  | filename            |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}031 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | sample1   | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
 
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback
@@ -102,8 +102,8 @@ Feature: Transcriber
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                    | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
@@ -190,5 +190,5 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}032 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}032 | {{seq}}1032 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc |
+      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}032 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}032 | {{seq}}1032 |               |               | {{timestamp}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc |
