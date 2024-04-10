@@ -2,7 +2,7 @@ plugins {
   // Apply the java-library plugin for API and implementation separation.
   id 'java-library'
   id 'org.owasp.dependencycheck' version '9.1.0'
-  id 'org.sonarqube' version '4.4.1.3373'
+  id 'org.sonarqube' version '5.0.0.4638'
   id 'jacoco'
 }
 
@@ -125,7 +125,7 @@ dependencies {
 	implementation "org.hamcrest:hamcrest:2.2"
 	implementation "org.hamcrest:hamcrest-core:2.2"
 	
-  implementation 'commons-io:commons-io:2.16.0'
+  implementation 'commons-io:commons-io:2.16.1'
 
 	implementation(platform("org.junit:junit-bom:5.10.2"))
 	runtimeOnly    "org.junit.platform:junit-platform-launcher"

@@ -5,22 +5,22 @@ Feature: Transcriber
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-    Given I authenticate from the XHIBIT source system
     Given I create an event
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
 
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
-    Given I am logged on to DARTS as an REQUESTER user
+    # Requester requests the Transcript
+    Given I am logged on to DARTS as a REQUESTER user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -37,6 +37,7 @@ Feature: Transcriber
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
+    # Approver approves the Transcript
     Then I see "Sign in to the DARTS Portal" on the page
     When I am logged on to DARTS as an APPROVER user
     Then I see "Search for a case" on the page
@@ -47,7 +48,7 @@ Feature: Transcriber
     Then I select the "Yes" radio button
     Then I press the "Submit" button
     Then I Sign out
-
+    #Transcriber
     Then I see "Sign in to the DARTS Portal" on the page
     Given I am logged on to DARTS as an TRANSCRIBER user
     When I click on the "Transcript requests" link
@@ -62,14 +63,18 @@ Feature: Transcriber
     When I select the "Audio preview and events" radio button
     And I set the time fields of "Start Time" to "<startTime>"
     And I set the time fields of "End Time" to "<endTime>"
-    And I select the "<audioRequestType>" radio button
+    And I select the "Download" radio button
     And I press the "Get Audio" button
     And I see "Confirm your Order" on the page
     Then I press the "Confirm" button
     Then I see "Your order is complete" on the page
-
     Then I click on the "Return to hearing date" link
-    Then I click on the "Your audio" link
+    #Wait for Requested Audio
+    When I click on the "Your audio" link
+    Then I wait for the requested audio file to be ready
+      | user      | courthouse   | case_number   | hearing_date |
+      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
+    Then I click on "Request ID" in the "Ready" table header
     Then I wait for text "READY" on the same row as link "<case_number>"
 
     Then I click on "View" in the same row as "<case_number>"
@@ -79,36 +84,39 @@ Feature: Transcriber
     Then I click on the "Delete audio file" link
     Then I press the "Yes - delete" button
 
+    #Transcript upload
     When I click on the "Your work" link
     Then I click on "View" in the same row as "<case_number>"
+    Then I press the "Attach file and complete" button
+    Then I see "You must upload a file to complete this request" on the page
     Then I upload the file "<filename>" at "Upload transcript file"
     Then I press the "Attach file and complete" button
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}031 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:04:00  | 18:05:00 | file-sample_1MB.doc | Download         |
+      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | keywords       | audioFile | startTime | endTime  | filename            |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}031 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1   | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
 
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-    Given I authenticate from the XHIBIT source system
     Given I create an event
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
+    # Requester requests the Transcript
     Given I am logged on to DARTS as an REQUESTER user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants>  |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*      |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -128,6 +136,7 @@ Feature: Transcriber
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
+    # Approver approves the Transcript
     Then I see "Sign in to the DARTS Portal" on the page
     When I am logged on to DARTS as an APPROVER user
     Then I see "Search for a case" on the page
@@ -137,8 +146,8 @@ Feature: Transcriber
     And I see "Do you approve this request?" on the page
     Then I select the "Yes" radio button
     Then I press the "Submit" button
-
     Then I Sign out
+    #Transcriber
     Then I see "Sign in to the DARTS Portal" on the page
     Given I am logged on to DARTS as an TRANSCRIBER user
     When I click on the "Transcript requests" link
@@ -153,7 +162,7 @@ Feature: Transcriber
     When I select the "Audio preview and events" radio button
     And I set the time fields of "Start Time" to "<startTime>"
     And I set the time fields of "End Time" to "<endTime>"
-    And I select the "<audioRequestType>" radio button
+    And I select the "Playback Only" radio button
     And I press the "Get Audio" button
     And I see "Confirm your Order" on the page
     Then I press the "Confirm" button
@@ -161,6 +170,12 @@ Feature: Transcriber
 
     Then I click on the "Return to hearing date" link
     Then I click on the "Your audio" link
+
+    Then I wait for the requested audio file to be ready
+      | user      | courthouse   | case_number   | hearing_date |
+      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
+    Then I click on "Request ID" in the "Ready" table header
+
     Then I wait for text "READY" on the same row as link "<case_number>"
 
     Then I click on "View" in the same row as "<case_number>"
@@ -177,7 +192,5 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            | audioRequestType |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}032 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}032 | {{seq}}1032 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc | Playback Only    |
-
-
+      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | filename            |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}032 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}032 | {{seq}}1032 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc |

@@ -12,6 +12,7 @@ Feature: Admin portal
     And I see "Check user details" on the page
     Then I press the "Create user" button
 
+
   @DMO-2340
   Scenario: Admin portal data creation - User 2 - Deactivated user
   #Login admin portal
@@ -181,8 +182,8 @@ Feature: Admin portal
     And I see "Display name" on the page
     And I see "Transcription companies" on the page
     Then I press the "Continue" button
-    
-  @DMP-2186 
+
+  @DMP-2263
   Scenario: Create a Courthouse Page - Check Details
     Given I am logged on to DARTS as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -293,5 +294,141 @@ Feature: Admin portal
     And I see "There is an existing group with this name" on the page
     And I see "There is an existing group with this name" on the page
 
-    
-    
+
+  @DMP-2305
+  Scenario: Removing users from a group confirmation screen
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    And I click on the "Swansea_ADMIN" link
+    And I click on the "Group users" link
+    And I check the checkbox in the same row as "darts.superuser@hmcts.net" "Active"
+    And I press the "Remove users" button
+    And I see "Are you sure you want to remove 1 user from this group?" on the page
+    Then I press the "No - cancel" button
+
+  @DMP-2263
+  Scenario: Editing a courthouse - Check details
+    When I am logged on to the admin portal as an ADMIN user
+  #AC1- Review courthouse details
+    And I click on the "Courthouses" link
+    And I set "Courthouse name" to "Swansea"
+    And I press the "Search" button
+    And I click on "Swansea" in the same row as "Wales"
+    And I press the "Edit courthouse" button
+    And I press the "Continue" button
+    Then I see "Check details" on the page
+    Then I see "Check the courthouse name carefully, as it must exactly match the name on XHIBIT or CPP." on the page
+  #AC2- Change courthouse details
+    And I click on "Change" in the same row as "Display name"
+    And I see "Courthouse details" on the page
+    And I press the "Continue" button
+    And I click on "Change" in the same row as "Region"
+    And I see "Courthouse details" on the page
+    And I press the "Continue" button
+    And I click on "Change" in the same row as "Transcription companies"
+    And I see "Courthouse details" on the page
+    And I press the "Continue" button
+  #AC3- Cancel courthouse edit
+    Then I click on the "Cancel" link
+  #AC4- Save changes
+    And I press the "Edit courthouse" button
+    And I press the "Continue" button
+    Then I see "Update courthouse" on the page
+
+  @DMP-2303
+  Scenario: Viewing group details - Users
+    When I am logged on to the admin portal as an ADMIN user
+    #AC1 - View users
+    Then I click on the "Groups" navigation link
+    And I click on the "Swansea_ADMIN" link
+    And I click on the "Group users" link
+    And I see "0 of 5 selected" on the page
+
+    #AC1 - Remove users
+    And I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
+    And I press the "Add user" button
+    And I check the checkbox in the same row as "Darts Admin" "darts.admin@hmcts.net"
+    Then I press the "Remove users" button
+
+  @DMP-2581
+  Scenario: Viewing groups - Adding a user
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    Then I select "XHIBIT" from the dropdown
+    And I click on the "Xhibit Group" link
+    And I see "Xhibit Group" on the page
+    And I click on the "Xhibit Group" link
+    Then I click on the "Group users" link
+    And I see "Search for a user" on the page
+    And I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
+    And I click on the "Add user" link
+    Then I see "Darts Admin" in the same row as "darts.admin@hmcts.net"
+
+    @DMP-2269
+    Scenario: Search Courthouse
+      When I am logged on to the admin portal as an ADMIN user
+     Then I click on the "Courthouses" navigation link
+      And I set "Courthouse name" to "Bristol"
+      Then I press the "Search" button
+      And I see "3 result" on the page
+      And I verify the HTML table contains the following values
+      | Courthouse name       | Display name          | Region|
+      | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
+      | Bristol               | Bristol               |       |
+      | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
+      Then I click on "Courthouse name" in the table header
+      And I verify the HTML table contains the following values
+        | Courthouse name       | Display name          | Region|
+        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
+        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
+        | Bristol               | Bristol               |       |
+
+     When I click on the "Clear search" link
+      Then I set "Display name" to "Bristol"
+      Then I press the "Search" button
+      And I see "3 result" on the page
+      And I verify the HTML table contains the following values
+        | Courthouse name       | Display name          | Region|
+        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
+        | Bristol               | Bristol               |       |
+        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
+      Then I click on "Display name" in the table header
+      And I verify the HTML table contains the following values
+        | Courthouse name       | Display name          | Region|
+        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
+        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
+        | Bristol               | Bristol               |       |
+
+      When I click on the "Clear search" link
+      Then I set "Region" to "South East"
+      Then I press the "Search" button
+      And I see "2 result" on the page
+      And I verify the HTML table contains the following values
+        | Courthouse name            | Display name                | Region      |
+        | Guildford Court            | GF Court                    | South East  |
+        | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East  |
+      Then I click on "Region" in the table header
+      And I verify the HTML table contains the following values
+        | Courthouse name       | Display name          | Region|
+        | Guildford Court            | GF Court                    | South East  |
+        | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East  |
+      When I click on the "Clear search" link
+
+      #AC2 Search Courthouse-No results
+     When I set "Courthouse name" to "111"
+      And I press the "Search" button
+      Then I see "No search results" on the page
+      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+      And I click on the "Clear search" link
+
+      When I set "Display name" to "111"
+      And I press the "Search" button
+      Then I see "No search results" on the page
+      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+      And I click on the "Clear search" link
+
+      When I set "Region" to "111"
+      And I press the "Search" button
+      Then I see "No search results" on the page
+      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+      

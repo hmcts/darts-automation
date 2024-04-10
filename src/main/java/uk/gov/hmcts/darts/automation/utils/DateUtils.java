@@ -130,13 +130,22 @@ public class DateUtils {
 		return dateFormat.format((Date)cal.getTime());
 	}
 	
-	public static String timestamp() {
+	public static String zonedTimestamp() {
 		return DateTimeFormatter
 				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXX")
 				.format(ZonedDateTime.now());
-// Alternatives if local time is required for BST - check format to be used
-//				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-//				.format(LocalDateTime.now());
+	}
+	
+	public static String localTimestamp() {
+		return DateTimeFormatter
+				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+				.format(LocalDateTime.now());
+	}
+	
+	public static String timestamp() {
+		return zonedTimestamp();
+// Alternative if local time is required for BST - check format to be used
+//		return localTimestamp();
 	}
 
 	
@@ -656,9 +665,16 @@ public class DateUtils {
 		System.out.println(makeNumericDateTime("20220311091900", "", ""));
 		System.out.println(makeNumericDateTime(timestamp(), "", ""));
 		System.out.println(makeNumericDateTime(timestamp("12:00:00"), "", ""));
+		
 		System.out.println(makeNumericDateTime("12:00:00", "", ""));
 		System.out.println(makeNumericDateTime("", "", "12:00:00"));
 		System.out.println(makeNumericDateTime("", "20240101", "12:00:00.000Z"));
+	}
+	
+	@Test
+	public void test5() {
+		System.out.println("========================");
+		System.out.println(makeTimestamp(timestamp()));
 	}
 
 }

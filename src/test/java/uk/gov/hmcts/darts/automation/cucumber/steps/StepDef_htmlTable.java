@@ -26,6 +26,10 @@ public class StepDef_htmlTable extends StepDef_base {
     public void i_click_on_in_the_table_header(String tableHeaderText) throws Exception {
         htmlTable.clickOnTableHeader(tableHeaderText);
     }
+    @Then("I click on \"([^\"]*)\" in the \"([^\"]*)\" table header$")
+    public void clickOnInTheTableHeader(String tableHeaderText, String tableName) {
+        htmlTable.clickOnTableHeaderWithTablename(tableHeaderText, tableName);
+    }
 
     @Then("\"([^\"]*)\" has sort \"([^\"]*)\" icon$")
     public void HasSortIcon(String tableheaderText, String sortOrder) {

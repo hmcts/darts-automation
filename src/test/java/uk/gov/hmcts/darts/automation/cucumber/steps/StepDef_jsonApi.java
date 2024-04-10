@@ -91,7 +91,8 @@ public class StepDef_jsonApi extends StepDef_base {
 // sample cucumber:
 // When I load an audio file
 // |courthouse|courtroom|case_numbers|date|startTime|endTime|audioFile|
-	@When("^I load an audio file$")
+	@When("^I load an audio file using json$")
+//	@When("^I load an audio file$")
 	public void loadAudioFile(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
 			String date = getValue(map, "date");
@@ -205,7 +206,7 @@ public class StepDef_jsonApi extends StepDef_base {
 
 	@When("I process the daily list for courthouse {}")
 	public void processTheDailyListForCourthouse(String courthouse) {
-		String endpoint = "/dailylists/run";
+		String endpoint = "/dailylists/run?isting_courthouse=";
 		ApiResponse apiResponse = jsonApi.postApiWithQueryParams(endpoint, courthouse);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
