@@ -89,6 +89,26 @@ public class HtmlTable {
             }
         }
     }
+    public void clickOnTableHeaderWithTablename(String tableheaderText, String tablename) {
+        NAV.waitForPageLoad();
+        log.info("Attempting to click on Table header => " + tableheaderText + " in table => " + tablename);
+        if (tableheaderText == null || tableheaderText.isEmpty() || tablename == null || tablename.isEmpty()) {
+            log.error("Invalid table header text or table name provided");
+            throw new IllegalArgumentException("Invalid table header text or table name");
+        }
+
+        String xpathForTableHeader = String.format("//*[text()=\"%s\"]/following::table[1]//th[normalize-space()=\"%s\"]", tablename, tableheaderText);
+        try {
+            WebElement tableHeaderElement = new WebDriverWait(webDriver, Duration.ofSeconds(3))
+                    .until(ExpectedConditions.elementToBeClickable(By.xpath(xpathForTableHeader)));
+            NAV.click_onElement(tableHeaderElement);
+            log.info("Clicked on the Table header => " + tableheaderText + " <= within table => " + tablename + " successfully");
+        } catch (TimeoutException e) {
+            log.error("Table header element with text '" + tableheaderText + "' within table '" + tablename + "' was not clickable within the specified time");
+        }
+        NAV.waitForBrowserReadyState();
+
+    }
 
     public void clickOnTableHeader(String tableheaderText) {
         log.info("Going to click on Table header =>" + tableheaderText);
