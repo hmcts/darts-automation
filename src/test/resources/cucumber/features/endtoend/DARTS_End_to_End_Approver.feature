@@ -6,8 +6,8 @@ Feature: Approver
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                    | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime | endTime  | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | 10:01:00  | 10:02:00 | <audioFile> |
@@ -50,8 +50,8 @@ Feature: Approver
     Then I Sign out
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}011 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 |
+      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}011 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 |               |               | {{timestamp}} | sample1.mp2 |
 
   @end2end @end2end3 @DMP-2201
   Scenario Outline: Approver - Rejects the request
@@ -59,8 +59,8 @@ Feature: Approver
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}}| <dateTime> | <caseRetention>             | <totalSentence>     |
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
@@ -101,8 +101,8 @@ Feature: Approver
     Then I press the "Submit" button
     Then I Sign out
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | Reason             |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}012 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | Reject for testing |
+      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | Reason             |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}012 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 |               |               | {{timestamp}} | sample1.mp2 | 18:03:00  | 18:04:00 | Reject for testing |
 
   @end2end @end2end3 @DMP-2201
   Scenario Outline: Requester Approver
@@ -110,8 +110,8 @@ Feature: Approver
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
@@ -146,5 +146,5 @@ Feature: Approver
     Then I click on the "Transcript requests to review" link
     Then I do not see "<case_number>" on the page
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId     | type  | subType | caseRetention | totalSentence | dateTime      | keywords       | audioFile   | startTime | endTime  | Reason             |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}012 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 | 21200 | 11000   |               |               | {{timestamp}} | SIT LOG{{seq}} | sample1.mp2 | 18:03:00  | 18:04:00 | Reject for testing |
+      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  |
+      | Harrow Crown Court | {{seq}}   | S{{seq}}012 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 |               |               | {{timestamp}} | sample1.mp2 | 18:03:00  | 18:04:00 |
