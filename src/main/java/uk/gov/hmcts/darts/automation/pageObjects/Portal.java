@@ -362,6 +362,12 @@ public class Portal {
     			"max(mer_id)");
         int waitTimeInSeconds = 300;
         log.info("wait time {} for user {}, courthouse {}, case {}, date {}", waitTimeInSeconds, user, courthouse, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
+        waitForRequestedAudioToBeReady(mer_id);
+    }
+    
+    public void waitForRequestedAudioToBeReady(String requestId) throws Exception {
+        int waitTimeInSeconds = 300;
+    	log.info("Waiting {} secs for requested audio file to be ready requestId: {}", waitTimeInSeconds, requestId);
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
                 .pollingEvery(Duration.ofSeconds(30));  
@@ -371,7 +377,7 @@ public class Portal {
             	String requestStatus = "";
 				try {
 					requestStatus = DB.returnSingleValue("darts.media_request",
-							"mer_id", mer_id, 
+							"mer_id", requestId, 
 							"request_status");
 				} catch (Exception e) {
 					log.warn("Exception in database call \r\n {e}");
@@ -421,5 +427,12 @@ public class Portal {
         } catch (TimeoutException e) {
             log.warn("Link " + link + " NOT found for " + text + " within the specified wait time.");
         }
+    }
+    
+    public String returnRequestId() {
+    	String requestId = webDriver.findElement(By.xpath("//h1[text()='Your order is complete']"
+    			+ "/following-sibling::div[starts-with(normalize-space(text()),'Your request ID')]"
+    			+ "/strong")).getText();
+    	return requestId;
     }
 }

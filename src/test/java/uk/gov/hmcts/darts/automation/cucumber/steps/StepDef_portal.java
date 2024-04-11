@@ -27,6 +27,7 @@ public class StepDef_portal extends StepDef_base {
     private Portal portal;
     private Prompt prompt;
     private WaitUtils WAIT;
+    private String savedRequestId;
   
 	public StepDef_portal(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
@@ -160,18 +161,34 @@ public class StepDef_portal extends StepDef_base {
  // Then I wait for the requested audio file to be ready
  // |user|courthouse|case_number|hearing_date|
  	@Then("^I wait for the requested audio file to be ready$")
- 	public void waitForRequestedAudioToBeReady(List<Map<String,String>> dataTable) throws Exception {
+ 	public void waitForRequestedAudioFileToBeReady(List<Map<String,String>> dataTable) throws Exception {
  		for (Map<String, String> map : dataTable) {
- 			portal.waitForRequestedAudioToBeReady(
- 					getValue(map, "user"),
- 					getValue(map, "courthouse"),
- 					getValue(map, "case_number"),
- 					getValue(map, "hearing_date"));
+ 			String requestId = getValue(map, "requestId");
+ 			if (requestId.isEmpty()) {
+	 			portal.waitForRequestedAudioToBeReady(
+	 					getValue(map, "user"),
+	 					getValue(map, "courthouse"),
+	 					getValue(map, "case_number"),
+	 					getValue(map, "hearing_date"));
+ 			} else {
+ 				portal.waitForRequestedAudioToBeReady(requestId);
+ 			}
  		}
+ 	}
+ 	
+ 	@Then("^I wait for the audio Request ID to be ready$")
+ 	public void waitForAudioRequestIdToBeReady() throws Exception {
+		portal.waitForRequestedAudioToBeReady(savedRequestId);
  	}
 
     @Then("I wait for (the )text {string} on (the )same row as (the )link {string}")
     public void waitForUpdatedRow(String text, String link) {
         portal.waitForUpdatedRow(text, link);
+    }
+    
+    @Then("I see the Request ID")
+    public void saveRequestId() {
+    	savedRequestId = portal.returnRequestId();
+    	testdata.setProperty("requestId", savedRequestId);
     }
 }
