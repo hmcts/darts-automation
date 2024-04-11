@@ -107,7 +107,7 @@ public class HtmlTable {
     public void clickOnTableHeader(String tableheaderText) {
         log.info("Going to click on Table header =>" + tableheaderText);
 
-        String xpathForTableHeader = "//button[normalize-space()='" + tableheaderText + "']";
+        String xpathForTableHeader = "//table//th//button[normalize-space()='" + tableheaderText + "']";
         WebElement tableHeaderElement = webDriver.findElement(By.xpath(xpathForTableHeader));
 
         try {
