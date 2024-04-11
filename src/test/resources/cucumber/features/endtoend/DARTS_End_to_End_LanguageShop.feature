@@ -1,6 +1,6 @@
 Feature: Language Shop User
 
-  @end2end @end2end7 @DMP-2201
+  @end2end @end2end7 @DMP-2056
   Scenario Outline: Language Shop User
     Given I create a case
       | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -22,11 +22,7 @@ Feature: Language Shop User
     Then I press the "Search" button
     Then I see "No search results" on the page
     And I see "Review the case ID, case reference or court reference you entered and try again." on the page
-
-    # Set Interpreter Flag on
-    #Then I select column cas_id from table darts.court_case where case_number = "<case_number>"
-    #Then I set table darts.court_case column interpreter_used to "true" where cas_id = "{{cas_id}}"
-
+    
     Given I create an event
       | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text             | date_time   | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | 2917 |   3979       | <eventId> | <courthouse> | <courtroom> | <case_number> | Interpreter sworn-in {{seq}} | <timeStamp> | <caseRetention>             | <totalSentence>     |
