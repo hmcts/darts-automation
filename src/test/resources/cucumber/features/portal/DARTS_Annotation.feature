@@ -2,7 +2,7 @@ Feature: Annotation
 
   @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9 @DMP-2246
   Scenario: Annotation data creation
-    Given I create a case using json
+    Given I create a case
       | courthouse         | case_number | defendants     | judges           | prosecutors            | defenders            |
       | Harrow Crown Court | K{{seq}}002 | Def {{seq}}-29 | Judge {{seq}}-29 | testprosecutorsix      | testdefendersix      |
       | Harrow Crown Court | K{{seq}}003 | Def {{seq}}-30 | Judge {{seq}}-30 | testprosecutorsevem    | testdefenderseven    |
@@ -16,7 +16,7 @@ Feature: Annotation
       | Harrow Crown Court | K{{seq}}011 | Def {{seq}}-38 | Judge {{seq}}-38 | testprosecutorfifteen  | testdefenderfifteen  |
       | Harrow Crown Court | K{{seq}}012 | Def {{seq}}-39 | Judge {{seq}}-39 | testprosecutorsixteen  | testdefendersixteen  |
 
-    Given I create an event using json
+    Given I create an event
       | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-29 | K{{seq}}002  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
       | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-30 | K{{seq}}003  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
