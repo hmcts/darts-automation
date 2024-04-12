@@ -459,3 +459,36 @@ Feature: Admin portal
     Then I press the "Create group" button
     And I see "There is an existing group with this name" on the page
     And I see "Description must be less than 255 characters" on the page
+
+  @DMP-2714
+  Scenario: Update admin portal navigation
+    When I am logged on to the admin portal as an ADMIN user
+  #AC1 - Updated nav
+    And I see "Users" on the page
+    And I see "Groups" on the page
+    And I see "Courthouses" on the page
+    And I see "Events" on the page
+    And I see "Audio cache" on the page
+    And I see "Transcripts" on the page
+    And I see "File deletion" on the page
+    And I see "System configuration" on the page
+  #AC2 - File deletion tabs
+    And I click on the "File deletion" navigation link
+    And I see "File deletion" on the page
+    And I see "Audio files" on the page
+    And I see "Transcripts" on the page
+  #AC3 - System configuration tabs
+    And I click on the "System configuration" navigation link
+    And I see "System configuration" on the page
+    And I see "Retention policies" on the page
+    And I see "Event mapping" on the page
+    And I see "Automated tasks" on the page
+
+
+
+
+
+  
+
+
+
