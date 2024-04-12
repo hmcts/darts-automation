@@ -2,14 +2,14 @@ Feature: Language Shop User
 
   @end2end @end2end7 @DMP-2056
   Scenario Outline: Language Shop User
-    Given I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
-#    Given I add a daily lists
-#      | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime   | endDate   | timeStamp   | defendant    | urn           |
-#      | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |
+#    Given I create a case
+#      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+#      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+    Given I add a daily lists
+      | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime   | endDate   | timeStamp   | defendant    | urn           |
+      | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |
     When I process the daily list for courthouse <courthouse>
-    
+
     Given I add courtlogs
       | dateTime    | courthouse   | courtroom   | case_numbers  | text         |
       | <timeStamp> | <courthouse> | <courtroom> | <case_number> | text {{seq}} |
@@ -22,10 +22,10 @@ Feature: Language Shop User
     Then I press the "Search" button
     Then I see "No search results" on the page
     And I see "Review the case ID, case reference or court reference you entered and try again." on the page
-    
+
     Given I create an event
-      | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text             | date_time   | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | 2917 |   3979       | <eventId> | <courthouse> | <courtroom> | <case_number> | Interpreter sworn-in {{seq}} | <timeStamp> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                   | date_time   | case_retention_fixed_policy | case_total_sentence |
+      | <message_id> | 2917 | 3979     | <eventId> | <courthouse> | <courtroom> | <case_number> | Interpreter sworn-in {{seq}} | <timeStamp> | <caseRetention>             | <totalSentence>     |
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
