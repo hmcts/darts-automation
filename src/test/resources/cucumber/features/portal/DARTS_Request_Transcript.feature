@@ -525,7 +525,9 @@ Feature: Request Transcript
     #DMP-1203-AC3 Your audio
 
     When I click on the "Your audio" link
+    And I click on "Request ID" in the "Ready" table header
     And I wait for text "READY" on the same row as the link "C{{seq}}004"
+    And I click on "Request ID" in the "Ready" table header
     And I click on "View" in the same row as "C{{seq}}004"
     Then I see "Play all audio" on the page
     And I see "mp3" on the page

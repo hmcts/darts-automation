@@ -1,15 +1,12 @@
 Feature: Request Audio for transcribers
 
-  #Background:
-    #Given I am logged on to DARTS as an TRANSCRIBER user
-
-  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @AG
-  Scenario: Request Transcription data creation
-    Given I create a case using json
+  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1255 @DMP-1326 @DMP-1331 @DMP-1351
+  Scenario: Request Transcription only data creation
+    Given I create a case
       | courthouse         | case_number | defendants      | judges            | prosecutors             | defenders             |
       | Harrow Crown Court | F{{seq}}001 | DefF {{seq}}-17 | JudgeF {{seq}}-17 | testprosecutorseventeen | testdefenderseventeen |
 
-    Given I create an event using json
+    Given I create an event
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 1100  |          | {{seq}}1026 | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{seq}}ABC-17 | {{timestamp-10:00:00}} |                             |                     |
       | {{seq}}001 | 1200  |          | {{seq}}1027 | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{seq}}DEF-17 | {{timestamp-10:01:00}} |                             |                     |
@@ -18,7 +15,7 @@ Feature: Request Audio for transcribers
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
       | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1   |
 
-  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @AG
+  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @DMP-1351
   Scenario: Transcriber behaviour, including audio request handling
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -93,7 +90,7 @@ Feature: Request Audio for transcribers
     And I click on the "Transcript requests" link
     #DMP-1198-AC1, AC3 and DMP-1203-AC4 Transcript request screen and column names/sortable columns to do
     And I see "Manual" in the same row as "F{{seq}}001"
-    #DMP-1198-AC2 and DMP-1234 View transcript request order
+    #DMP-1198-AC2, DMP-1234 and DMP-1255-AC3 View transcript request order
     And I click on "View" in the same row as "F{{seq}}001"
     Then I see "Transcript Request" on the page
     And I see "F{{seq}}001" in the same row as "Case ID"
@@ -141,12 +138,14 @@ Feature: Request Audio for transcribers
     #DMP-1203-AC3 Your audio
 
     When I click on the "Your audio" link
+    And I click on "Request ID" in the "Ready" table header
     And I wait for text "READY" on the same row as the link "F{{seq}}001"
+    And I click on "Request ID" in the "Ready" table header
     And I click on "View" in the same row as "F{{seq}}001"
     Then I see "Play all audio" on the page
     And I see "mp3" on the page
 
-    #DMP-1203-AC2 Your work
+    #DMP-1203-AC2 Your work and DMP-1351-AC1 Completed today
 
     When I click on the "Your work" link
     And I click on the "Completed today" link
@@ -161,19 +160,19 @@ Feature: Request Audio for transcribers
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an REQUESTER user
     And I click on the "Your transcripts" link
-    Then I see "C{{seq}}004" in the same row as "With Transcriber"
+    Then I see "F{{seq}}001" in the same row as "With Transcriber"
 
     When I Sign out
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as a TRANSCRIBER user
     And I click on the "Your work" link
-    And I click on "View" in the same row as "C{{seq}}004"
+    And I click on "View" in the same row as "F{{seq}}001"
     Then I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
 
     #DMP-1326-AC4 and DMP-1331-AC3 Cancel link
     When I click on the "Cancel" link
     And I see "To do" on the page
-    And I click on "View" in the same row as "C{{seq}}004"
+    And I click on "View" in the same row as "F{{seq}}001"
     #DMP-1326-AC2 and AC3 Upload transcript file and complete
     And I upload the file "file-sample_1MB.doc" at "Upload transcript file"
     And I press the "Attach file and complete" button
@@ -182,17 +181,28 @@ Feature: Request Audio for transcribers
     #DMP-1331-AC2 Complete transcript request and checks
 
     When I click on the "Go to your work" link
-    And I do not see "C{{seq}}004" on the page
+    And I do not see "F{{seq}}001" on the page
     And I click on the "Completed today" link
-    Then I see "C{{seq}}004" on the page
+    Then I see "F{{seq}}001" on the page
+
+    #DMP-1351-AC3 View link on completed today screen
+
+    When I click on "View" in the same row as "F{{seq}}001"
+    Then I see "F{{seq}}001" in the same row as "Case ID"
+    And I see "Court Log" in the same row as "Request Type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
+    And I see "Yes" in the same row as "Judge approval"
 
     #Continues from line 548 in other script
 
-  @DMP-1198-AC3
-  Scenario: Transcript Requests - Sortable Column descending
+  @DMP-1198 @DMP-1255 @DMP-1351
+  Scenario: Transcriber - Sortable Columns
     Given I am logged on to DARTS as an TRANSCRIBER user
+
+    #DMP-1198-AC3 Sortable columns for Transcript Requests
+
     When I click on the "Transcript requests" link
-    And I see "Transcript requests" on the page
     When I click on "Case ID" in the table header
     Then "Case ID" has sort "descending" icon
     When I click on "Court" in the table header
@@ -210,15 +220,14 @@ Feature: Request Audio for transcribers
     When I click on "Urgency" in the table header
     Then "Urgency" has sort "ascending" icon
 
-  @DMP-1351-AC2
-  Scenario: Your work - completed today tab - Sortable column
+    #DMP-1351-AC2 Sortable columns for Completed today
+
     When I click on the "Your work" link
-    And I see "Your work" on the page
     And I click on the "Completed today" link
     When I click on "Case ID" in the table header
     Then "Case ID" has sort "descending" icon
-    When I click on "Court" in the table header
-    Then "Court" has sort "descending" icon
+    When I click on "Courthouse" in the table header
+    Then "Courthouse" has sort "descending" icon
     When I click on "Hearing date" in the table header
     Then "Hearing date" has sort "descending" icon
     When I click on "Type" in the table header
@@ -228,21 +237,25 @@ Feature: Request Audio for transcribers
     When I click on "Urgency" in the table header
     Then "Urgency" has sort "descending" icon
 
-    @DMP-1351-AC1-AC3
-    Scenario Outline: Your work - completed today tab - View link
-      When I click on the "Your work" link
-      And I see "Your work" on the page
-      And I click on the "Completed today" link
-      And I see "Completed today" on the page
-      Then I click on "View" in the same row as "<CaseID>"
-      And I see "Transcript request" on the page
-    Examples:
-      | CaseID   |
-      | CASE1009 |
+    #DMP-1255-AC2 Sortable columns for To do
 
-  @DMP-1255-AC1
+    When I click on "Case ID" in the table header
+    Then "Case ID" has sort "descending" icon
+    When I click on "Courthouse" in the table header
+    Then "Courthouse" has sort "descending" icon
+    When I click on "Hearing date" in the table header
+    Then "Hearing date" has sort "descending" icon
+    When I click on "Type" in the table header
+    Then "Type" has sort "descending" icon
+    When I click on "Requested on" in the table header
+    Then "Requested on" has sort "descending" icon
+    When I click on "Urgency" in the table header
+    Then "Urgency" has sort "descending" icon
+
+  @DMP-1255-AC1 @later
   Scenario: Transcriber's Your Work - List all to do items
 
+    Given I am logged on to DARTS as an TRANSCRIBER user
     When I click on the "Your work" link
     And I see "Your work" on the page
     Then I verify the HTML table contains the following values
@@ -253,158 +266,9 @@ Feature: Request Audio for transcribers
       | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
       | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
 
-
-  @DMP-1255-AC2
-  Scenario: Transcriber's Your Work - Sortable columns
-
-    When I click on the "Your work" link
-    And I see "Your work" on the page
-      #checks first table header descending order
-    And I click on "Case ID" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type          | Requested on      | Urgency  |
-      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents   | 06 Dec 2023 14:48 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-
-      #checks first table header ascending order
-    And I click on "Case ID" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type               | Requested on      | Urgency  |
-      | CASE1009      | Swansea        | 15 Aug 2023  | Sentencing remarks | 04 Dec 2023 10:36 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-
-      #checks second table header descending order
-    And I click on "Court" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type               | Requested on      | Urgency  |
-      | CASE1009      | Swansea        | 15 Aug 2023  | Sentencing remarks | 04 Dec 2023 10:36 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-
-       #checks second table header ascending order
-    And I click on "Court" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type        | Requested on      | Urgency  |
-      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-
-       #checks third table header descending order
-    And I click on "Hearing date" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type        | Requested on      | Urgency  |
-      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-
-       #checks third table header ascending order
-    And I click on "Hearing date" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type               | Requested on      | Urgency  |
-      | CASE1009      | Swansea        | 15 Aug 2023  | Sentencing remarks | 04 Dec 2023 10:36 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*           | *IGNORE*          | *IGNORE* |
-
-        #checks fourth table header descending order
-    And I click on "Type" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type                           | Requested on      | Urgency  |
-      | CASE1009      | Swansea        | 15 Aug 2023  | Summing up (including verdict) | 01 Dec 2023 17:19 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
-
-       #checks fourth table header ascending order
-    And I click on "Type" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court            | Hearing date | Type        | Requested on      | Urgency  |
-      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48   | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-
-      #checks fourth table header descending order
-    And I click on "Requested on" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type        | Requested on      | Urgency  |
-      | DMP1600-case1 | London_DMP1600 | 01 Dec 2023  | Antecedents | 06 Dec 2023 14:48 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*    | *IGNORE*          | *IGNORE* |
-
-      #checks fourth table header ascending order
-    And I click on "Requested on" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court            | Hearing date | Type                           |  Requested on      | Urgency  |
-      | CASE1009      | Swansea          | 15 Aug 2023  | Summing up (including verdict) | 01 Dec 2023 17:19  | *IGNORE* |
-      | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE*                       | *IGNORE*           | *IGNORE* |
-      | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE*                       | *IGNORE*           | *IGNORE* |
-      | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE*                       | *IGNORE*           | *IGNORE* |
-      | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE*                       | *IGNORE*           | *IGNORE* |
-
-       #checks fifth table header descending order
-    And I click on "Urgency" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court          | Hearing date | Type                           | Requested on      | Urgency  |
-      | CASE1009      | Swansea        | 15 Aug 2023  | Summing up (including verdict) | 01 Dec 2023 17:19 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*                       | *IGNORE*          | *IGNORE* |
-
-      #checks fifth table header ascending order
-    And I click on "Urgency" in the table header
-    Then I verify the HTML table contains the following values
-      | Case ID       | Court            | Hearing date | Type        | Requested on      | Urgency  |
-      | CASE1009      | Swansea        | 15 Aug 2023  | Sentencing remarks | 04 Dec 2023 10:36 | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-      | *IGNORE*      | *IGNORE*       | *IGNORE*     | *IGNORE*      | *IGNORE*          | *IGNORE* |
-
-
-  @DMP-1255-AC3
-  Scenario Outline: Transcriber's Your Work -  View Link on manual requests takes to Manual Transcript request
-    When I click on the "Your work" link
-    And I see "Your work" on the page
-    Then I click on "View" in the same row as "<CaseID>"
-    And I see "<Restriction>" on the page
-    And I see "Case details" on the page
-    And I see "<CaseID>" on the page
-    And I see "<Courthouse>" on the page
-    And I see "<Defendants>" on the page
-    And I see "<Judge(s)>" on the page
-    And I see "Request details" on the page
-    And I see "<HearingDate>" on the page
-    And I see "<RequestType>" on the page
-    And I see "<RequestMethod>" on the page
-    And I see "<RequestID>" on the page
-    And I see "<urgency>" on the page
-    And I see "<JudgeApproval>" on the page
-
-    Examples:
-      | CaseID   | Courthouse | Defendants | Judge(s) | Restriction                                           | RequestType       | urgency   | RequestMethod | RequestID    |HearingDate | JudgeApproval |
-      | CASE1009 | Swansea    | Jow Bloggs | Mr Judge | Restriction: Judge directed on reporting restrictions |Sentencing remarks | Overnight | Manual        | 3773         |14 Aug 2023 | Yes           |
-
-  @DMP-1255-AC4
+  @DMP-1255-AC4 @later
   Scenario Outline: Transcriber's Your Work -  View Link on automatic requests takes to Manual Transcript request
+    Given I am logged on to DARTS as an TRANSCRIBER user
     When I click on the "Your work" link
     And I see "Your work" on the page
     Then I click on "View" in the same row as "<RequestedOn>"
@@ -423,9 +287,10 @@ Feature: Request Audio for transcribers
       | CaseID        |Courthouse       |RequestType                    | urgency               | RequestMethod | RequestID    |HearingDate | JudgeApproval | RequestedOn |
       | DMP1600-case1 |London_DMP1600   |Summing up (including verdict) | Up to 12 working days | Automated     | 	4013      |11 Oct 2023 | Yes           | 05 Dec 2023 10:44 |
 
-  @DMP-1353
+  @DMP-1353 @later
   Scenario: Check to ensure transcript request cannot be assigned to two different users
 
+    Given I am logged on to DARTS as an TRANSCRIBER user
     When I click on the "Transcript requests" link
     And I click on "View" in the same row as "PerfCase_spqjobwugk"
     And I select the "Assign to me" radio button with label "Assign to me"
