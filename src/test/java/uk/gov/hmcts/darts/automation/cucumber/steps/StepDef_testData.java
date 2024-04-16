@@ -53,12 +53,13 @@ public class StepDef_testData extends StepDef_base {
 	}
 	
 	@Given("^case \"([^\"]*)\" exists for courthouse \"([^\"]*)\"")
-	public void caseExistsForCourthouse(String caseNumber, String courtHouse) throws Exception {
+	public void caseExistsForCourthouse(String caseNumber, String courtHouse, String courtroom) throws Exception {
 		testdata.setProperty("case_numbers", caseNumber);
+		testdata.setProperty("courthouse_name", courtHouse);
 		testdata.setProperty("courthouse_name", courtHouse);
 		if (!DB.courtCaseExists(courtHouse, caseNumber)) {
 			courthouseExists(courtHouse);
-		String json = JsonUtils.buildAddCaseJson(courtHouse, caseNumber, "defendant for " + caseNumber,
+		String json = JsonUtils.buildAddCaseJson(courtHouse, courtroom, caseNumber, "defendant for " + caseNumber,
 				"judge for " + caseNumber,
 				"prosecutor for" + caseNumber,
 				"defender for " + caseNumber);

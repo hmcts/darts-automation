@@ -147,6 +147,7 @@ public class StepDef_jsonApi extends StepDef_base {
 		for (Map<String, String> map : dataTable) {
 			String json = JsonUtils.buildAddCaseJson(
 					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
 					getValue(map, "case_number"),
 					getValue(map, "defendants"),
 					getValue(map, "judges"),
@@ -196,9 +197,9 @@ public class StepDef_jsonApi extends StepDef_base {
 		}
 	}
 	
-	@When("^I call POST cases for courthouse \"([^\"]*)\" case_number \"([^\"]*)\"$")
-	public void callPostCases(String courthouse, String caseNumber) {
-		String json = JsonUtils.buildAddCaseJson(courthouse, caseNumber, "", "", "", "");
+	@When("^I call POST cases for courthouse \"([^\"]*)\" courtroom \"([^\"]*)\" case_number \"([^\"]*)\"$")
+	public void callPostCases(String courthouse, String courtroom, String caseNumber) {
+		String json = JsonUtils.buildAddCaseJson(courthouse, courtroom, caseNumber, "", "", "", "");
 		ApiResponse apiResponse = jsonApi.postApi("cases", json);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;

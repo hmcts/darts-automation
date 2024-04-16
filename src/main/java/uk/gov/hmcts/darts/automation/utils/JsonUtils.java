@@ -80,6 +80,7 @@ public class JsonUtils {
     }
     
     public static String buildAddCaseJson(String courthouse,
+    		String courtroom,
     		String caseNumber,
     		String defendant,
     		String judge,
@@ -87,6 +88,7 @@ public class JsonUtils {
     		String defender) {
     	JsonString jsonString = new JsonString();
     	jsonString.addJsonLine("courthouse", courthouse);
+    	jsonString.addJsonLine("courtroom", courtroom);
     	jsonString.addJsonLine("case_number", caseNumber);
     	jsonString.addJsonSeq("defendants", defendant);
     	jsonString.addJsonSeq("judges", judge);
