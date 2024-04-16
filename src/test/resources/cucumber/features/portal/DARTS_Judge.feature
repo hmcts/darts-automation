@@ -3,8 +3,8 @@ Feature: User as a Judge
   @DMP-1033 @DMP-1618 @regression
   Scenario: Judge data creation
     Given I create a case using json
-      | courthouse         | case_number | defendants      | judges            | prosecutors           | defenders           |
-      | Harrow Crown Court | E{{seq}}001 | DefE {{seq}}-16 | JudgeE {{seq}}-16 | testprosecutorsixteen | testdefendersixteen |
+      | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors           | defenders           |
+      | Harrow Crown Court | {{seq}}-16 | E{{seq}}001 | DefE {{seq}}-16 | JudgeE {{seq}}-16 | testprosecutorsixteen | testdefendersixteen |
 
     Given I create an event using json
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |

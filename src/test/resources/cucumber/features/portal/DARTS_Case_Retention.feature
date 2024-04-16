@@ -3,9 +3,9 @@ Feature: Case Retention
   @DMP-1369 @DMP-1406 @DMP-1413 @DMP-1899 @regression
   Scenario: Case retention data creation
     Given I create a case using json
-      | courthouse         | case_number | defendants     | judges           | prosecutors            | defenders            |
-      | Harrow Crown Court | R{{seq}}001 | Def {{seq}}-28 | Judge {{seq}}-28 | testprosecutor {{seq}} | testdefender {{seq}} |
-      | Harrow Crown Court | R{{seq}}002 | Def {{seq}}-29 | Judge {{seq}}-29 | testprosecutor {{seq}} | testdefender {{seq}} |
+      | courthouse         | courtroom  | case_number | defendants     | judges           | prosecutors            | defenders            |
+      | Harrow Crown Court | {{seq}}-28 | R{{seq}}001 | Def {{seq}}-28 | Judge {{seq}}-28 | testprosecutor {{seq}} | testdefender {{seq}} |
+      | Harrow Crown Court | {{seq}}-29 | R{{seq}}002 | Def {{seq}}-29 | Judge {{seq}}-29 | testprosecutor {{seq}} | testdefender {{seq}} |
     Given I create an event using json
       | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              |
       | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-28 | R{{seq}}001  | {{seq}}KH1    | {{timestamp-10:00:00}} |

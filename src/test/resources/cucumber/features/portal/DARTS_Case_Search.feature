@@ -3,12 +3,12 @@ Feature: Case Search
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression @demo
 Scenario: Case Search data creation
 	Given I create a case using json
-      | courthouse         | case_number | defendants      | judges           | prosecutors         | defenders         |
-      | Harrow Crown Court | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
-      | Harrow Crown Court | A{{seq}}002 | Def A{{seq}}-11 | Judge {{seq}}-11 | testprosecutortwo   | testdefendertwo   |
-      | Harrow Crown Court | A{{seq}}003 | Def A{{seq}}-2  | Judge {{seq}}-11 | testprosecutorthree | testdefenderthree |
-      | Harrow Crown Court | A{{seq}}004 | Def A{{seq}}-22 | Judge {{seq}}-2  | testprosecutorfour  | testdefenderfour  |
-      | Harrow Crown Court | A{{seq}}005 | Def A{{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive  | testdefenderfive  |
+      | courthouse         | courtroom   | case_number | defendants      | judges           | prosecutors         | defenders         |
+      | Harrow Crown Court | A{{seq}}-1  | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
+      | Harrow Crown Court | A{{seq}}-11 | A{{seq}}002 | Def A{{seq}}-11 | Judge {{seq}}-11 | testprosecutortwo   | testdefendertwo   |
+      | Harrow Crown Court | A{{seq}}-2  | A{{seq}}003 | Def A{{seq}}-2  | Judge {{seq}}-11 | testprosecutorthree | testdefenderthree |
+      | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004 | Def A{{seq}}-22 | Judge {{seq}}-2  | testprosecutorfour  | testdefenderfour  |
+      | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005 | Def A{{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive  | testdefenderfive  |
 
 	Given I create an event using json
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom   | case_numbers | event_text     | date_time              | case_retention_fixed_policy | case_total_sentence |

@@ -3,8 +3,8 @@ Feature: Advance Search
   @end2end @end2end6 @DMP-1927 @demo
   Scenario Outline: Advance Search for a case details created using Case and Courtlogs
     Given I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+      | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <courtroom> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I add courtlogs
       | dateTime   | courthouse   | courtroom   | case_numbers  | text       |
       | <dateTime> | <courthouse> | <courtroom> | <case_number> | <keywords> |
@@ -164,8 +164,8 @@ Feature: Advance Search
   @end2end @end2end6 @DMP-1927 @demo
   Scenario Outline: Advance Search for a case details created using events
     Given I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+      | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <courtroom> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
       | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |

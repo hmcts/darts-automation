@@ -3,8 +3,8 @@ Feature: Request Audio for transcribers
   @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1255 @DMP-1326 @DMP-1331 @DMP-1351
   Scenario: Request Transcription only data creation
     Given I create a case
-      | courthouse         | case_number | defendants      | judges            | prosecutors             | defenders             |
-      | Harrow Crown Court | F{{seq}}001 | DefF {{seq}}-17 | JudgeF {{seq}}-17 | testprosecutorseventeen | testdefenderseventeen |
+      | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors             | defenders             |
+      | Harrow Crown Court | {{seq}}-17 | F{{seq}}001 | DefF {{seq}}-17 | JudgeF {{seq}}-17 | testprosecutorseventeen | testdefenderseventeen |
 
     Given I create an event
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |

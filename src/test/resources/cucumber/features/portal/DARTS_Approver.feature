@@ -3,13 +3,13 @@ Feature: User as a Approver
   @DMP-1011 @DMP-1815 @regression
   Scenario: Approver data creation
     Given I create a case using json
-      | courthouse         | case_number | defendants      | judges            | prosecutors           | defenders           |
-      | Harrow Crown Court | D{{seq}}001 | DefD {{seq}}-15 | JudgeD {{seq}}-15 | testprosecutorfifteen | testdefenderfifteen |
+      | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors           | defenders           |
+      | Harrow Crown Court | {{seq}}-15 | D{{seq}}001 | DefD {{seq}}-15 | JudgeD {{seq}}-15 | testprosecutorfifteen | testdefenderfifteen |
 
     Given I create an event using json
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100  |          | {{seq}}1022 | Harrow Crown Court | {{seq}}-15 | D{{seq}}001  | {{seq}}ABC-15 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}1023 | Harrow Crown Court | {{seq}}-15 | D{{seq}}001  | {{seq}}DEF-15 | {{timestamp-10:01:00}} |                             |                     |
+      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}1022 | Harrow Crown Court | {{seq}}-15 | D{{seq}}001  | {{seq}}ABC-15 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}1023 | Harrow Crown Court | {{seq}}-15 | D{{seq}}001  | {{seq}}DEF-15 | {{timestamp-10:01:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
