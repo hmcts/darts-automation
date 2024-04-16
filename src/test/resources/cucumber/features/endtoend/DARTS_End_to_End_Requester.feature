@@ -21,13 +21,13 @@ Feature: Requester
       | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number>                                            | <courthouse> | <courtroom> | *IGNORE* | *IGNORE*     |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
-    #Hearings Tab and Reporting Restrictions
+    # Hearings Tab and Reporting Restrictions
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     When I click on "<HearingDate>" in the same row as "<courtroom>"
     Then I see "There are restrictions against this hearing" on the page
     Then I see "This audio is not currently available in DARTS, please try again later." in the same row as "<startTime> - <endTime>"
-    #Preview Audio
+    # Preview Audio
     Then I wait for text "<startTime> - <endTime>" on the same row as link "Play preview"
     Then I click on "Play preview" in the same row as "<startTime> - <endTime>"
     Then I wait for 1 minutes
@@ -46,19 +46,19 @@ Feature: Requester
     Then I see "You cannot order this audio" on the page
     And  I see "You have already ordered this audio and the request is 'pending'." on the page
     When I click on the "HMCTS" link
-    #Wait for Requested Audio
+    # Wait for Requested Audio
     When I click on the "Your audio" link
     Then I wait for the requested audio file to be ready
 #      | user      | courthouse   | case_number   | hearing_date |
 #      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
 
     Then I wait for text "READY" on the same row as link "<case_number>"
-    #Stream the Audio
+    # Stream the Audio
     And  I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
     Then I press the "Download audio file" button
 
-    #All Transcripts
+    # All Transcripts
     Then I click on the "Search" link
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button

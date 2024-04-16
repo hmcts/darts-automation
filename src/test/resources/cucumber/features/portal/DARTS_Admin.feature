@@ -431,4 +431,64 @@ Feature: Admin portal
       And I press the "Search" button
       Then I see "No search results" on the page
       And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
-      
+
+  @DMP-2317 @DM
+  Scenario: Create a new group (Translation or Transcriber)
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Groups" navigation link
+    And I press the "Create group" button
+    #AC1 - Group Details
+    And I see "Create group" on the page
+    And I see "Group details" on the page
+    And I see "Group name" on the page
+    And I see "Description" on the page
+    And I see "Role" on the page
+    And I see "Transcriber" on the page
+    And I see "Translation QA" on the page
+    And I see the "Create group" button
+    And I see "Cancel" on the page
+    Then I press the "Create group" button
+    #AC2 - Error Handling
+    And I see "There is a problem" on the page
+    And I see "Enter a group name" on the page
+    And I see "Select a role" on the page
+    And I see "Enter a group name" on the page
+    And I see "Select a role" on the page
+    Then I set "Group name" to "Cpp Group"
+    And I set "Description" to "ttttttrfiehjuehnskrgvskgrhgsrilugrnsjurgilvsjrgnsjnurislrnhsierekrnhvsurivrugvsoigjrusrigri;hoireierguerihgurhgegueihgogeogirejrfjeofieofjerijfofergiejgoierjgierojgfigjieorjgioerjhgierhgiohgioerhgiohgigheohgierhgoehgieergrnbsgsgrlsgr.jslgs.ga.kenfkdjrgtnks"
+    Then I press the "Create group" button
+    And I see "There is an existing group with this name" on the page
+    And I see "Description must be less than 255 characters" on the page
+
+  @DMP-2714
+  Scenario: Update admin portal navigation
+    When I am logged on to the admin portal as an ADMIN user
+  #AC1 - Updated nav
+    And I see "Users" on the page
+    And I see "Groups" on the page
+    And I see "Courthouses" on the page
+    And I see "Events" on the page
+    And I see "Audio cache" on the page
+    And I see "Transcripts" on the page
+    And I see "File deletion" on the page
+    And I see "System configuration" on the page
+  #AC2 - File deletion tabs
+    And I click on the "File deletion" navigation link
+    And I see "File deletion" on the page
+    And I see "Audio files" on the page
+    And I see "Transcripts" on the page
+  #AC3 - System configuration tabs
+    And I click on the "System configuration" navigation link
+    And I see "System configuration" on the page
+    And I see "Retention policies" on the page
+    And I see "Event mapping" on the page
+    And I see "Automated tasks" on the page
+
+
+
+
+
+  
+
+
+

@@ -89,25 +89,34 @@ public class HtmlTable {
             }
         }
     }
+    public void clickOnTableHeaderWithTablename(String tableheaderText, String tablename) {
+        log.info("Attempting to click on Table header => " + tableheaderText + " in table => " + tablename);
+
+        String xpathForTableHeader = String.format("//*[text()=\"%s\"]/following::table[1]//th[normalize-space()=\"%s\"]", tablename, tableheaderText);
+        WebElement tableHeaderElement = webDriver.findElement(By.xpath(xpathForTableHeader));
+        try {
+            NAV.click_onElement(tableHeaderElement);
+            log.info("Clicked on the Table header => " + tableheaderText + " <= within table => " + tablename + " successfully");
+        } catch (TimeoutException e) {
+            log.error("Table header element with text '" + tableheaderText + "' within table '" + tablename + "' was not clickable within the specified time");
+        }
+        NAV.waitForBrowserReadyState();
+
+    }
 
     public void clickOnTableHeader(String tableheaderText) {
         log.info("Going to click on Table header =>" + tableheaderText);
-        if (tableheaderText == null || tableheaderText.isEmpty()) {
-            log.error("Invalid table header text provided");
-            throw new IllegalArgumentException("Invalid table header text");
-        }
 
-        String tableHeaderPath = "//button[normalize-space()='" + tableheaderText + "']";
+        String xpathForTableHeader = "//table//th//button[normalize-space()='" + tableheaderText + "']";
+        WebElement tableHeaderElement = webDriver.findElement(By.xpath(xpathForTableHeader));
+
         try {
-            WebElement element = new WebDriverWait(webDriver, Duration.ofSeconds(3))
-                    .until(ExpectedConditions.elementToBeClickable(By.xpath(tableHeaderPath)));
-            NAV.click_onElement(element);
+            NAV.click_onElement(tableHeaderElement);
+            log.info("Clicked on the Table header =>" + tableheaderText + "<= successfully");
         } catch (TimeoutException e) {
             log.error("Table header element with text '" + tableheaderText + "' was not clickable within the specified time");
         }
         NAV.waitForBrowserReadyState();
-
-        log.info("Clicked on the Table header =>" + tableheaderText + "<= successfully");
     }
 
     public void hasSortIcon(String tableheaderText, String sortOrder_attribute) {
