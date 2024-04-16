@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 
 public class StepDef_portal extends StepDef_base {
@@ -178,6 +179,10 @@ public class StepDef_portal extends StepDef_base {
  	
  	@Then("^I wait for the audio Request ID to be ready$")
  	public void waitForAudioRequestIdToBeReady() throws Exception {
+    	if (savedRequestId.isBlank()) {
+    		log.fatal("Request ID must already have been already captured by the step \"* I see the Request ID\"");
+    		Assert.fail("Request ID must already have been captured by \"* I see the Request ID\"");
+    	}
 		portal.waitForRequestedAudioToBeReady(savedRequestId);
  	}
 

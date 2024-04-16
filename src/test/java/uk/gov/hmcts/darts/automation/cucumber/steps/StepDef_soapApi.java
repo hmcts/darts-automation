@@ -68,13 +68,14 @@ public class StepDef_soapApi extends StepDef_base {
 	
 // sample cucumber:
 // When I add a case
-// |courthouse|case_number|defendants|judges|prosecutors|defenders|
+// |courthouse|courtroom|case_number|defendants|judges|prosecutors|defenders|
 	@When("^I create a case$")
 	public void createAddCaseXml(List<Map<String,String>> dataTable) {
 		soapApi.setDefaultSource(SOURCE_VIQ);
 		for (Map<String, String> map : dataTable) {
 			String xml = XmlUtils.buildAddCaseXml(
 					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
 					getValue(map, "case_number"),
 					getValue(map, "defendants"),
 					getValue(map, "judges"),

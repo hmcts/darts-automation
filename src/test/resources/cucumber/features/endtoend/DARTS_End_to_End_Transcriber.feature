@@ -68,14 +68,16 @@ Feature: Transcriber
     And I see "Confirm your Order" on the page
     Then I press the "Confirm" button
     Then I see "Your order is complete" on the page
+     And I see the Request ID
+
     Then I click on the "Return to hearing date" link
-    #Wait for Requested Audio
-    When I click on the "Your audio" link
-    Then I wait for the requested audio file to be ready
-      | user      | courthouse   | case_number   | hearing_date |
-      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
+    Then I wait for the audio Request ID to be ready
+    Then I click on the "Your audio" link
+#    Then I wait for the requested audio file to be ready
+#      | user      | courthouse   | case_number   | hearing_date |
+#      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
     Then I click on "Request ID" in the "Ready" table header
-    #Then I wait for text "READY" on the same row as link "<case_number>"
+    Then I wait for text "READY" on the same row as link "<case_number>"
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
     Then I press the "Download audio file" button
