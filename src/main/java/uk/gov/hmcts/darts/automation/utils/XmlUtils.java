@@ -88,7 +88,7 @@ public class XmlUtils {
 				.addAttribute("type", "")
 				.addAttribute("id", caseNumber)
 				.addTag("courthouse", courthouse)
-				.addTag("courthouse", courtroom)
+				.addTag("courtroom", courtroom)
 				.addTagGroup("defendants", "defendant", defendants, "~")
 				.addTagGroup("judges", "judge", judges, "~")
 				.addTagGroup("prosecutors", "prosecutor", prosecutors, "~")

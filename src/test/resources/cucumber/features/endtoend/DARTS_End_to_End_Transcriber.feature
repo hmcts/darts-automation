@@ -3,8 +3,8 @@ Feature: Transcriber
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber - TranscriptionType - Sentencing Remarks - Audio requestType -Download
     Given I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+      | courthouse   | courtroom   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <courtroom> | <courtroom> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
       | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                    | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -68,7 +68,7 @@ Feature: Transcriber
     And I see "Confirm your Order" on the page
     Then I press the "Confirm" button
     Then I see "Your order is complete" on the page
-     And I see the Request ID
+    And I see the Request ID
 
     Then I click on the "Return to hearing date" link
     Then I wait for the audio Request ID to be ready
@@ -101,8 +101,8 @@ Feature: Transcriber
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback
     Given I create a case
-      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+      | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <courtroom> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
       | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                    | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |

@@ -5,11 +5,11 @@ Feature: Request Audio
 Scenario: Request Audio data creation
 
   Given I create a case using json
-    | courthouse         | case_number | defendants     | judges           | prosecutors         | defenders         |
-    | Harrow Crown Court | B{{seq}}006 | Def B{{seq}}-6 | Judge B{{seq}}-6 | testprosecutorsix   | testdefendersix   |
-    | Harrow Crown Court | B{{seq}}007 | Def B{{seq}}-7 | Judge B{{seq}}-7 | testprosecutorseven | testdefenderseven |
-    | Harrow Crown Court | B{{seq}}008 | Def B{{seq}}-8 | Judge B{{seq}}-8 | testprosecutoreight | testdefendereight |
-    | Harrow Crown Court | B{{seq}}009 | Def B{{seq}}-9 | Judge B{{seq}}-9 | testprosecutornine  | testdefendernine  |
+    | courthouse         | courtroom  | case_number | defendants     | judges           | prosecutors         | defenders         |
+    | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | Def B{{seq}}-6 | Judge B{{seq}}-6 | testprosecutorsix   | testdefendersix   |
+    | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007 | Def B{{seq}}-7 | Judge B{{seq}}-7 | testprosecutorseven | testdefenderseven |
+    | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008 | Def B{{seq}}-8 | Judge B{{seq}}-8 | testprosecutoreight | testdefendereight |
+    | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009 | Def B{{seq}}-9 | Judge B{{seq}}-9 | testprosecutornine  | testdefendernine  |
 
   Given I create an event using json
     | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
