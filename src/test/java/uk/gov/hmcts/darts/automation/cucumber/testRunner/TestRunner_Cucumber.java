@@ -24,6 +24,7 @@ import static io.cucumber.junit.platform.engine.Constants.EXECUTION_DRY_RUN_PROP
 
 @Suite
 @IncludeEngines("cucumber")
+@IncludeTags(value = "end2end4")
 //@IncludeTags(value = "end2end | smoketest | regression")
 @ExcludeTags(value = "broken | obsolete")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")

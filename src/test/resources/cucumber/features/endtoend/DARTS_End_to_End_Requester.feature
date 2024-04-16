@@ -37,6 +37,7 @@ Feature: Requester
     Then I see "Confirm your Order" on the page
     When I press the "Confirm" button
     Then I see "Your order is complete" on the page
+     And I see the Request ID
     #Duplicate audio request
     When I click on the "Return to hearing date" link
     And  I press the "Get Audio" button
@@ -48,8 +49,8 @@ Feature: Requester
     #Wait for Requested Audio
     When I click on the "Your audio" link
     Then I wait for the requested audio file to be ready
-      | user      | courthouse   | case_number   | hearing_date |
-      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
+#      | user      | courthouse   | case_number   | hearing_date |
+#      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
 
     Then I wait for text "READY" on the same row as link "<case_number>"
     #Stream the Audio
