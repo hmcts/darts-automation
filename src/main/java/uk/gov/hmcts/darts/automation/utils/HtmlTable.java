@@ -117,6 +117,7 @@ public class HtmlTable {
             log.error("Table header element with text '" + tableheaderText + "' was not clickable within the specified time");
         }
         NAV.waitForBrowserReadyState();
+        log.info("Clicked on the Table header =>" + tableheaderText + "<= successfully");
     }
 
     public void hasSortIcon(String tableheaderText, String sortOrder_attribute) {

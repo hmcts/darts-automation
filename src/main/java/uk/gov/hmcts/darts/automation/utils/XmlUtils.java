@@ -77,6 +77,7 @@ public class XmlUtils {
     }
     
     public static String buildAddCaseXml(String courthouse,
+    		String courtroom,
     		String caseNumber,
     		String defendants,
     		String judges,
@@ -87,6 +88,7 @@ public class XmlUtils {
 				.addAttribute("type", "")
 				.addAttribute("id", caseNumber)
 				.addTag("courthouse", courthouse)
+				.addTag("courthouse", courtroom)
 				.addTagGroup("defendants", "defendant", defendants, "~")
 				.addTagGroup("judges", "judge", judges, "~")
 				.addTagGroup("prosecutors", "prosecutor", prosecutors, "~")
@@ -430,6 +432,7 @@ public class XmlUtils {
 	public void testXml1() {
 		Assertions.assertEquals("<case type=\"\" id=\"string2\">" + LINE_END
 				+ "  <courthouse>string1</courthouse>" + LINE_END
+				+ "  <courtroom>cr</courtroom>" + LINE_END
 				+ "  <defendants>" + LINE_END
 				+ "    <defendant>string3A</defendant>" + LINE_END
 				+ "    <defendant>string3B</defendant>" + LINE_END
@@ -444,7 +447,7 @@ public class XmlUtils {
 				+ "    <defender>string6</defender>" + LINE_END
 				+ "  </defenders>" + LINE_END
 				+ "</case>",
-				buildAddCaseXml("string1", "string2", "string3A~string3B", "string4", "string5", "string6"));
+				buildAddCaseXml("string1", "cr", "string2", "string3A~string3B", "string4", "string5", "string6"));
     }
     
     @Test
