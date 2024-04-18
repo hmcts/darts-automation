@@ -15,19 +15,19 @@ Feature: Advance Search
     #Courthouse
     When I set "Courthouse" to "<courthouse>" and click away
     Then I press the "Search" button
-    Then I see "There are more than 500 results" on the page
-    Then I see "Refine your search by:" on the page
-    Then I see "adding more information to your search" on the page
-    Then I see "using filters to restrict the number of results" on the page
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
 
-    #Courthouse + Courtroom
+    #Courthouse + Courtroom + judge
     When I click on the "Clear search" link
     Then "Courthouse" is ""
     Then "Case ID" is ""
     Then I set "Courthouse" to "<courthouse>" and click away
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
-    Then I see "result" on the page
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Judge's name" to "<judges>"
 
     #Hearing Date - Specific date
     When I click on the "Clear search" link
