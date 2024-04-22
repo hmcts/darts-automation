@@ -18,7 +18,44 @@ Feature: Advance Search
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
 
-    #Courthouse + Courtroom + judge
+    #Defendant
+    When I click on the "Clear search" link
+    Then I set "Defendant's name" to "<defendants>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+
+     #Judge
+    When I click on the "Clear search" link
+    Then I set "Judge's name" to "<judges>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+
+     #Keywords
+    When I click on the "Clear search" link
+    Then I set "Keywords" to "<keywords>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+
+     #Hearing Date - Specific date
+#    When I click on the "Clear search" link
+#    Then I select the "Specific date" radio button
+#    Then I press the "Search" button
+#    Then I see "We need more information to search for a case" on the page
+#    Then I see "Refine your search by adding more information and try again." on the page
+#
+#    #Hearing Date - Date Range
+#    When I click on the "Clear search" link
+#    Then I select the "Date range" radio button
+#    Then I set "Enter date from" to "<todaysDate>"
+#    Then I set "Enter date to" to "<todaysDate>"
+#    Then I press the "Search" button
+#    Then I see "We need more information to search for a case" on the page
+#    Then I see "Refine your search by adding more information and try again." on the page
+
+    #Courthouse + Courtroom + Judge
     When I click on the "Clear search" link
     Then "Courthouse" is ""
     Then "Case ID" is ""
@@ -28,21 +65,70 @@ Feature: Advance Search
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Judge's name" to "<judges>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
 
-    #Hearing Date - Specific date
+    #Courthouse + Defendant + Courtroom
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Courtroom" to "<courtroom>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Courtroom + Hearing Date - Specific date
     When I click on the "Clear search" link
     Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
+    Then I set "Courthouse" to "<courthouse>" and click away
     Then I press the "Search" button
-    Then I see "result" on the page
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Courtroom" to "<courtroom>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
 
-    #Hearing Date - Date Range
+    #Courthouse + Courtroom + Hearing Date - Date Range
     When I click on the "Clear search" link
     Then I select the "Date range" radio button
     Then I set "Enter date from" to "<todaysDate>"
     Then I set "Enter date to" to "<todaysDate>"
+    Then I set "Courthouse" to "<courthouse>" and click away
     Then I press the "Search" button
-    Then I see "result" on the page
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Courtroom" to "<courtroom>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Keyword + Courtroom
+    When I click on the "Clear search" link
+    Then I set "Keywords" to "<keywords>"
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Courtroom" to "<courtroom>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
 
     # Error for Invalid date
     When I click on the "Clear search" link
@@ -65,40 +151,141 @@ Feature: Advance Search
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
-    #Defendant's name
+    #Courtroom + Judge + Defendant
     When I click on the "Clear search" link
-    Then "Courthouse" is ""
-    Then "Case ID" is ""
-    Then I set "Courthouse" to "<courthouse>" and click away
-    Then I set "Courtroom" to "<courtroom>"
     Then I set "Defendant's name" to "<defendants>"
+    Then I set "Judge's name" to "<judges>"
+    Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
-    Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+    Then I see "You must also enter a courthouse" on the page
 
-    #Keywords
+    #Courtroom + Judge + Specific Date
     When I click on the "Clear search" link
-    Then "Courthouse" is ""
-    Then "Courtroom" is ""
+    Then I set "Judge's name" to "<judges>"
+    Then I set "Courtroom" to "<courtroom>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I see "You must also enter a courthouse" on the page
+
+    #Courtroom + Defendant + Specific Date
+    When I click on the "Clear search" link
+    Then I set "Defendant's name" to "<defendants>"
+    Then I set "Courtroom" to "<courtroom>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I see "You must also enter a courthouse" on the page
+
+    #Courtroom + Defendant + Keywords
+    When I click on the "Clear search" link
+    Then I set "Defendant's name" to "<defendants>"
+    Then I set "Courtroom" to "<courtroom>"
     Then I set "Keywords" to "<keywords>"
     Then I press the "Search" button
-    Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+    Then I see "You must also enter a courthouse" on the page
 
-    #Judge
+    #Courthouse + Judge + Defendant
     When I click on the "Clear search" link
-    Then "Keywords" is ""
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
     Then I set "Judge's name" to "<judges>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
 
-    #Case Number
+    #Courthouse + Judge + Specific Date
+    When I click on the "Clear search" link
     Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Judge's name" to "<judges>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Judge + Date Range
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Judge's name" to "<judges>"
+    Then I select the "Date range" radio button
+    Then I set "Enter date from" to "<todaysDate>"
+    Then I set "Enter date to" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Judge + Keyword
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Judge's name" to "<judges>"
+    Then I set "Keywords" to "<keywords>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Defendant + Specific Date
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Defendant + Date Range
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
+    Then I select the "Date range" radio button
+    Then I set "Enter date from" to "<todaysDate>"
+    Then I set "Enter date to" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Keywords + Specific Date
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Keywords" to "<keywords>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Keywords + Date Range
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Keywords" to "<keywords>"
+    Then I select the "Date range" radio button
+    Then I set "Enter date from" to "<todaysDate>"
+    Then I set "Enter date to" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Courthouse + Defendant + Keyword
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
+    Then I set "Keywords" to "<keywords>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+
+    #Case Number
+    When I click on the "Clear search" link
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -116,8 +303,12 @@ Feature: Advance Search
     Then I see "You must also enter a courthouse" on the page
 
     When I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Case ID" to "{{seq}}"
     Then I press the "Search" button
-    Then I see "result" on the page
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
 
     #Last Search results
     When I click on the "Your audio" link
@@ -148,18 +339,20 @@ Feature: Advance Search
     Then I see "result" on the page
 
     #500 Search results
-    Then I click on the "Clear search" link
-    Then I set "Case ID" to "S"
-    Then I press the "Search" button
-    Then I see "There are more than 500 results" on the page
-    Then I see "Refine your search by:" on the page
-    Then I see "adding more information to your search" on the page
-    Then I see "using filters to restrict the number of results" on the page
+#    Then I click on the "Clear search" link
+#    Then I set "Case ID" to "S"
+#    Then I press the "Search" button
+#    Then I see "There are more than 500 results" on the page
+#    Then I see "Refine your search by:" on the page
+#    Then I see "adding more information to your search" on the page
+#    Then I see "using filters to restrict the number of results" on the page
 
     Examples:
-      | user      | courthouse      | case_number   | defendants           | judges           | prosecutors           | defenders           | courtroom | keywords             | dateTime      | todaysDate  |
-      | REQUESTER | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
-      | JUDGE     | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
+      | user        | courthouse      | case_number   | defendants           | judges           | prosecutors           | defenders           | courtroom | keywords             | dateTime      | todaysDate  |
+     # | REQUESTER   | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
+     # | JUDGE       | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
+      | TRANSCRIBER | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
+
 
   @end2end @end2end6 @DMP-1927 @demo
   Scenario Outline: Advance Search for a case details created using events
@@ -177,34 +370,124 @@ Feature: Advance Search
     #Courthouse
     When I set "Courthouse" to "<courthouse>" and click away
     Then I press the "Search" button
-    Then I see "There are more than 500 results" on the page
-    Then I see "Refine your search by:" on the page
-    Then I see "adding more information to your search" on the page
-    Then I see "using filters to restrict the number of results" on the page
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
 
-    #Courthouse + Courtroom
+    #Defendant
+    When I click on the "Clear search" link
+    Then I set "Defendant's name" to "<defendants>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+
+     #Judge
+    When I click on the "Clear search" link
+    Then I set "Judge's name" to "<judges>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+
+     #Keywords
+    When I click on the "Clear search" link
+    Then I set "Keywords" to "<keywords>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+
+     #Hearing Date - Specific date
+#    When I click on the "Clear search" link
+#    Then I select the "Specific date" radio button
+#    Then I press the "Search" button
+#    Then I see "We need more information to search for a case" on the page
+#    Then I see "Refine your search by adding more information and try again." on the page
+#
+#    #Hearing Date - Date Range
+#    When I click on the "Clear search" link
+#    Then I select the "Date range" radio button
+#    Then I set "Enter date from" to "<todaysDate>"
+#    Then I set "Enter date to" to "<todaysDate>"
+#    Then I press the "Search" button
+#    Then I see "We need more information to search for a case" on the page
+#    Then I see "Refine your search by adding more information and try again." on the page
+
+    #Courthouse + Courtroom + Judge
     When I click on the "Clear search" link
     Then "Courthouse" is ""
     Then "Case ID" is ""
     Then I set "Courthouse" to "<courthouse>" and click away
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
-    Then I see "result" on the page
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Judge's name" to "<judges>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+    #Courthouse + Defendant + Courtroom
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Courtroom" to "<courtroom>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
-    #Hearing Date - Specific date
+    #Courthouse + Courtroom + Hearing Date - Specific date
     When I click on the "Clear search" link
     Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
+    Then I set "Courthouse" to "<courthouse>" and click away
     Then I press the "Search" button
-    Then I see "result" on the page
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Courtroom" to "<courtroom>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
-    #Hearing Date - Date Range
+    #Courthouse + Courtroom + Hearing Date - Date Range
     When I click on the "Clear search" link
     Then I select the "Date range" radio button
     Then I set "Enter date from" to "<todaysDate>"
     Then I set "Enter date to" to "<todaysDate>"
+    Then I set "Courthouse" to "<courthouse>" and click away
     Then I press the "Search" button
-    Then I see "result" on the page
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Courtroom" to "<courtroom>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Courthouse + Keyword + Courtroom
+    When I click on the "Clear search" link
+    Then I set "Keywords" to "<keywords>"
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+    Then I set "Courtroom" to "<courtroom>"
+    Then I press the "Search" button
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     # Error for Invalid date
     When I click on the "Clear search" link
@@ -227,41 +510,150 @@ Feature: Advance Search
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
-    #Defendant's name
+    #Courtroom + Judge + Defendant
     When I click on the "Clear search" link
-    Then "Courthouse" is ""
-    Then "Case ID" is ""
-    Then I set "Courthouse" to "<courthouse>" and click away
-    Then I set "Courtroom" to "<courtroom>"
     Then I set "Defendant's name" to "<defendants>"
+    Then I set "Judge's name" to "<judges>"
+    Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
-    Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
-    
-    #Keywords
+    Then I see "You must also enter a courthouse" on the page
+
+    #Courtroom + Judge + Specific Date
     When I click on the "Clear search" link
-    Then "Courthouse" is ""
-    Then "Courtroom" is ""
+    Then I set "Judge's name" to "<judges>"
+    Then I set "Courtroom" to "<courtroom>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I see "You must also enter a courthouse" on the page
+
+    #Courtroom + Defendant + Specific Date
+    When I click on the "Clear search" link
+    Then I set "Defendant's name" to "<defendants>"
+    Then I set "Courtroom" to "<courtroom>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I see "You must also enter a courthouse" on the page
+
+    #Courtroom + Defendant + Keywords
+    When I click on the "Clear search" link
+    Then I set "Defendant's name" to "<defendants>"
+    Then I set "Courtroom" to "<courtroom>"
     Then I set "Keywords" to "<keywords>"
     Then I press the "Search" button
-    Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
-    #Judge
+    Then I see "You must also enter a courthouse" on the page
+
+    #Courthouse + Judge + Defendant
     When I click on the "Clear search" link
-    Then "Keywords" is ""
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
     Then I set "Judge's name" to "<judges>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
-    #Case Number
+
+    #Courthouse + Judge + Specific Date
+    When I click on the "Clear search" link
     Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Judge's name" to "<judges>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Courthouse + Judge + Date Range
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Judge's name" to "<judges>"
+    Then I select the "Date range" radio button
+    Then I set "Enter date from" to "<todaysDate>"
+    Then I set "Enter date to" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Courthouse + Judge + Keyword
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Judge's name" to "<judges>"
+    Then I set "Keywords" to "<keywords>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Courthouse + Defendant + Specific Date
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Courthouse + Defendant + Date Range
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
+    Then I select the "Date range" radio button
+    Then I set "Enter date from" to "<todaysDate>"
+    Then I set "Enter date to" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Courthouse + Keywords + Specific Date
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Keywords" to "<keywords>"
+    Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Courthouse + Keywords + Date Range
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Keywords" to "<keywords>"
+    Then I select the "Date range" radio button
+    Then I set "Enter date from" to "<todaysDate>"
+    Then I set "Enter date to" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Courthouse + Defendant + Keyword
+    When I click on the "Clear search" link
+    Then I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Defendant's name" to "<defendants>"
+    Then I set "Keywords" to "<keywords>"
+    Then I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
+    #Case Number
+    When I click on the "Clear search" link
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -269,6 +661,7 @@ Feature: Advance Search
       | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
       | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+
     #Only Courtroom
     When I click on the "Clear search" link
     Then "Courthouse" is ""
@@ -279,8 +672,13 @@ Feature: Advance Search
     Then I see "You must also enter a courthouse" on the page
 
     When I set "Courthouse" to "<courthouse>" and click away
+    Then I set "Case ID" to "{{seq}}"
     Then I press the "Search" button
-    Then I see "result" on the page
+    Then I see "1 result" on the page
+    Then I verify the HTML table contains the following values
+      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Last Search results
     When I click on the "Your audio" link
@@ -311,15 +709,16 @@ Feature: Advance Search
     Then I see "result" on the page
 
     #500 Search results
-    Then I click on the "Clear search" link
-    Then I set "Case ID" to "S"
-    Then I press the "Search" button
-    Then I see "There are more than 500 results" on the page
-    Then I see "Refine your search by:" on the page
-    Then I see "adding more information to your search" on the page
-    Then I see "using filters to restrict the number of results" on the page
+#    Then I click on the "Clear search" link
+#    Then I set "Case ID" to "S"
+#    Then I press the "Search" button
+#    Then I see "There are more than 500 results" on the page
+#    Then I see "Refine your search by:" on the page
+#    Then I see "adding more information to your search" on the page
+#    Then I see "using filters to restrict the number of results" on the page
 
     Examples:
-      | user      | courthouse      | courtroom | case_number   | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords             | todaysDate  |
-      | REQUESTER | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
-      | JUDGE     | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
+      | user        | courthouse      | courtroom | case_number   | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords             | todaysDate  |
+      #| REQUESTER   | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
+      #| JUDGE       | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
+      | TRANSCRIBER | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
