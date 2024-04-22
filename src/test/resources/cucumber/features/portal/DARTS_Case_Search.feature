@@ -2,7 +2,7 @@ Feature: Case Search
 
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression @demo
 Scenario: Case Search data creation
-	Given I create a case using json
+	Given I create a case
       | courthouse         | courtroom   | case_number | defendants      | judges           | prosecutors         | defenders         |
       | Harrow Crown Court | A{{seq}}-1  | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
       | Harrow Crown Court | A{{seq}}-11 | A{{seq}}002 | Def A{{seq}}-11 | Judge {{seq}}-11 | testprosecutortwo   | testdefendertwo   |
@@ -10,7 +10,7 @@ Scenario: Case Search data creation
       | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004 | Def A{{seq}}-22 | Judge {{seq}}-2  | testprosecutorfour  | testdefenderfour  |
       | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005 | Def A{{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive  | testdefenderfive  |
 
-	Given I create an event using json
+	Given I create an event
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom   | case_numbers | event_text     | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-1  | A{{seq}}001  | A{{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
       | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}002  | A{{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
@@ -23,10 +23,10 @@ Scenario: Simple and Advanced Case Search
 
   #Simple search
 
-    When I am logged on to DARTS as an APPROVER user
+    Given I am logged on to DARTS as an APPROVER user
     And I click on the "Search" link
     And I see "Also known as a case reference or court reference. There should be no spaces." on the page
-    And I set "Case ID" to "A{{seq}}"
+    And I set "Case ID" to "A{{seq}}00"
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
@@ -42,6 +42,7 @@ Scenario: Simple and Advanced Case Search
 
     When I click on the "Clear search" link
     And I click on the "Advanced search" link
+    And I set "Case ID" to "A{{seq}}"
     And I set "Courthouse" to "Harrow Crown Court"
     And I set "Courtroom" to "A{{seq}}-1"
     And I press the "Search" button
@@ -56,6 +57,7 @@ Scenario: Simple and Advanced Case Search
     And "Courthouse" is ""
     And "Courtroom" is ""
     And I set "Defendant's name" to "Def A{{seq}}-2"
+    And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
@@ -66,6 +68,7 @@ Scenario: Simple and Advanced Case Search
     When I click on the "Clear search" link
     And "Defendant's name" is ""
     And I set "Judge's name" to "Judge {{seq}}-1"
+    And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
@@ -77,6 +80,7 @@ Scenario: Simple and Advanced Case Search
     When I click on the "Clear search" link
     And "Judge's name" is ""
     And I set "Keywords" to "A{{seq}}ABC-1"
+    And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
@@ -133,6 +137,12 @@ Scenario: Simple and Advanced Case Search
     When I click on the "Clear search" link
     And I set "Case ID" to "1" and click away
     And I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    And I see "Refine your search by adding more information and try again." on the page
+
+    When I click on the "Clear search" link
+    And I set "Case ID" to "DMP461" and click away
+    And I press the "Search" button
     Then I see "There are more than 500 results" on the page
     And I see "Refine your search by:" on the page
     And I see "adding more information to your search" on the page
@@ -146,7 +156,7 @@ Scenario: Simple and Advanced Case Search
     Given I am logged on to DARTS as an APPROVER user
     When I click on the "Search" link
     And I see "Search for a case" on the page
-    And I set "Case ID" to "A{{seq}}"
+    And I set "Case ID" to "A{{seq}}001"
     And I press the "Search" button
     And I click on the "A{{seq}}001" link
     Then I see "A{{seq}}001" on the page
@@ -236,9 +246,9 @@ Scenario: Simple and Advanced Case Search
 
   @DMP-963 @regression @demo
   Scenario: Last Search results are retrievable on clicking Search in the breadcrumb trail
-    When I am logged on to DARTS as an APPROVER user
+    Given I am logged on to DARTS as an APPROVER user
     And I click on the "Search" link
-    And I set "Case ID" to "A{{seq}}"
+    And I set "Case ID" to "A{{seq}}00"
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
@@ -266,7 +276,7 @@ Scenario: Simple and Advanced Case Search
 
   @DMP-997 @regression @demo
   Scenario: Case file breadcrumbs
-    When I am logged on to DARTS as an APPROVER user
+    Given I am logged on to DARTS as an APPROVER user
     And I click on the "Search" link
     And I set "Case ID" to "A{{seq}}002"
     And I press the "Search" button
@@ -347,7 +357,7 @@ Scenario: Simple and Advanced Case Search
 
 @DMP-1798-AC4 @regression
 Scenario: Restrictions banner on hearing details screen - collapse restriction list
-	Given I am logged on to DARTS as an APPROVER user
+    Given I am logged on to DARTS as an APPROVER user
 	When I click on the "Search" link
 	And I see "Search for a case" on the page
 	And I set "Case ID" to "A{{seq}}005"
@@ -403,4 +413,3 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     Then I see "Previous" on the page
     Then I click on the pagination link "Previous"
     Then I click on the pagination link "Next"
-
