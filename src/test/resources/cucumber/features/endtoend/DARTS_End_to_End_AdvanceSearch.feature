@@ -42,6 +42,7 @@ Feature: Advance Search
      #Hearing Date - Specific date
    When I click on the "Clear search" link
     Then I select the "Specific date" radio button
+    Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
    Then I see "Refine your search by adding more information and try again." on the page
@@ -397,7 +398,8 @@ Feature: Advance Search
      #Hearing Date - Specific date
     When I click on the "Clear search" link
     Then I select the "Specific date" radio button
-   Then I press the "Search" button
+    Then I set "Enter a date" to "<todaysDate>"
+    Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
 
