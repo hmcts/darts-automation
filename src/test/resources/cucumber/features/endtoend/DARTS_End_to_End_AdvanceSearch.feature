@@ -40,20 +40,20 @@ Feature: Advance Search
     Then I see "Refine your search by adding more information and try again." on the page
 
      #Hearing Date - Specific date
-#    When I click on the "Clear search" link
-#    Then I select the "Specific date" radio button
-#    Then I press the "Search" button
-#    Then I see "We need more information to search for a case" on the page
-#    Then I see "Refine your search by adding more information and try again." on the page
-#
-#    #Hearing Date - Date Range
-#    When I click on the "Clear search" link
-#    Then I select the "Date range" radio button
-#    Then I set "Enter date from" to "<todaysDate>"
-#    Then I set "Enter date to" to "<todaysDate>"
-#    Then I press the "Search" button
-#    Then I see "We need more information to search for a case" on the page
-#    Then I see "Refine your search by adding more information and try again." on the page
+   When I click on the "Clear search" link
+    Then I select the "Specific date" radio button
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+   Then I see "Refine your search by adding more information and try again." on the page
+
+    #Hearing Date - Date Range
+    When I click on the "Clear search" link
+    Then I select the "Date range" radio button
+    Then I set "Enter date from" to "<todaysDate>"
+    Then I set "Enter date to" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+   Then I see "Refine your search by adding more information and try again." on the page
 
     #Courthouse + Courtroom + Judge
     When I click on the "Clear search" link
@@ -349,9 +349,9 @@ Feature: Advance Search
 
     Examples:
       | user        | courthouse      | case_number   | defendants           | judges           | prosecutors           | defenders           | courtroom | keywords             | dateTime      | todaysDate  |
-     # | REQUESTER   | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
-     # | JUDGE       | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
-      | TRANSCRIBER | {{courthouse1}} | S{{seq}}041-A | S{{seq}} defendant-A | S{{seq}} judge-A | S{{seq}} prosecutor-A | S{{seq}} defender-A | C{{seq}}  | SIT LOG-41-{{seq}}-A | {{timestamp}} | {{date+0/}} |
+      | REQUESTER   | {{courthouse1}} | S{{seq}}081-B | S{{seq}} defendant-B | S{{seq}} judge-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}  | SIT LOG-81-{{seq}}-B | {{timestamp}} | {{date+0/}} |
+      | JUDGE       | {{courthouse1}} | S{{seq}}081-B | S{{seq}} defendant-B | S{{seq}} judge-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}  | SIT LOG-81-{{seq}}-B | {{timestamp}} | {{date+0/}} |
+      | TRANSCRIBER | {{courthouse1}} | S{{seq}}081-B | S{{seq}} defendant-B | S{{seq}} judge-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}  | SIT LOG-81-{{seq}}-B | {{timestamp}} | {{date+0/}} |
 
 
   @end2end @end2end6 @DMP-1927 @demo
@@ -395,20 +395,20 @@ Feature: Advance Search
     Then I see "Refine your search by adding more information and try again." on the page
 
      #Hearing Date - Specific date
-#    When I click on the "Clear search" link
-#    Then I select the "Specific date" radio button
-#    Then I press the "Search" button
-#    Then I see "We need more information to search for a case" on the page
-#    Then I see "Refine your search by adding more information and try again." on the page
-#
-#    #Hearing Date - Date Range
-#    When I click on the "Clear search" link
-#    Then I select the "Date range" radio button
-#    Then I set "Enter date from" to "<todaysDate>"
-#    Then I set "Enter date to" to "<todaysDate>"
-#    Then I press the "Search" button
-#    Then I see "We need more information to search for a case" on the page
-#    Then I see "Refine your search by adding more information and try again." on the page
+    When I click on the "Clear search" link
+    Then I select the "Specific date" radio button
+   Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+
+    #Hearing Date - Date Range
+    When I click on the "Clear search" link
+    Then I select the "Date range" radio button
+    Then I set "Enter date from" to "<todaysDate>"
+    Then I set "Enter date to" to "<todaysDate>"
+    Then I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
 
     #Courthouse + Courtroom + Judge
     When I click on the "Clear search" link
@@ -437,8 +437,8 @@ Feature: Advance Search
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Courtroom + Hearing Date - Specific date
@@ -453,8 +453,8 @@ Feature: Advance Search
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Courtroom + Hearing Date - Date Range
@@ -470,8 +470,8 @@ Feature: Advance Search
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Keyword + Courtroom
@@ -485,8 +485,8 @@ Feature: Advance Search
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     # Error for Invalid date
@@ -551,8 +551,8 @@ Feature: Advance Search
     Then I set "Judge's name" to "<judges>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Judge + Specific Date
@@ -563,8 +563,8 @@ Feature: Advance Search
     Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Judge + Date Range
@@ -576,8 +576,8 @@ Feature: Advance Search
     Then I set "Enter date to" to "<todaysDate>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Judge + Keyword
@@ -587,8 +587,8 @@ Feature: Advance Search
     Then I set "Keywords" to "<keywords>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Defendant + Specific Date
@@ -599,8 +599,8 @@ Feature: Advance Search
     Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Defendant + Date Range
@@ -612,8 +612,8 @@ Feature: Advance Search
     Then I set "Enter date to" to "<todaysDate>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Keywords + Specific Date
@@ -624,8 +624,8 @@ Feature: Advance Search
     Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Keywords + Date Range
@@ -637,8 +637,8 @@ Feature: Advance Search
     Then I set "Enter date to" to "<todaysDate>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Courthouse + Defendant + Keyword
@@ -648,8 +648,8 @@ Feature: Advance Search
     Then I set "Keywords" to "<keywords>"
     Then I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Case Number
@@ -658,8 +658,8 @@ Feature: Advance Search
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Only Courtroom
@@ -676,8 +676,8 @@ Feature: Advance Search
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
+      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
       | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
 
     #Last Search results
@@ -719,6 +719,6 @@ Feature: Advance Search
 
     Examples:
       | user        | courthouse      | courtroom | case_number   | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords             | todaysDate  |
-      #| REQUESTER   | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
-      #| JUDGE       | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
-      | TRANSCRIBER | {{courthouse1}} | C{{seq}}  | S{{seq}}042-B | {{timestamp}} | {{seq}}042 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-42-{{seq}}-B | {{date+0/}} |
+      | REQUESTER   | {{courthouse1}} | C{{seq}}  | S{{seq}}082-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |
+      | JUDGE       | {{courthouse1}} | C{{seq}}  | S{{seq}}082-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |
+      | TRANSCRIBER | {{courthouse1}} | C{{seq}}  | S{{seq}}082-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |

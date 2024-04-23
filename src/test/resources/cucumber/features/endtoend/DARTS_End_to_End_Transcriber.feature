@@ -192,5 +192,5 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}032 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}032 | {{seq}}1032 |               |               | {{timestamp}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc |
+      | courthouse      | courtroom | case_number   | judges           | defendants           | prosecutors           | defenders           | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            |
+      | {{courthouse1}} | C{{seq}}  | S{{seq}}081-B | S{{seq}} judge-B | S{{seq}} defendant-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | {{todayDisplay()}} | Court Log          | Overnight | {{seq}}032 | {{seq}}1032 |               |               | {{timestamp}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc |

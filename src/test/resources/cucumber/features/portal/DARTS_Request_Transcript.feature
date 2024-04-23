@@ -2,7 +2,7 @@ Feature: Request Transcript
 
   @DMP-696 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-917 @DMP-925 @DMP-934 @DMP-1009 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1053 @DMP-1054 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-2123 @DMP-2124 @regression
   Scenario: Request Transcription data creation
-    Given I create a case using json
+    Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors            | defenders            |
       | Harrow Crown Court | {{seq}}-8  | C{{seq}}001 | DefC {{seq}}-8  | JudgeC {{seq}}-8  | testprosecutoreight    | testdefendereight    |
       | Harrow Crown Court | {{seq}}-9  | C{{seq}}002 | DefC {{seq}}-9  | JudgeC {{seq}}-9  | testprosecutornine     | testdefendernine     |
@@ -12,7 +12,7 @@ Feature: Request Transcript
       | Harrow Crown Court | {{seq}}-13 | C{{seq}}006 | DefC {{seq}}-13 | JudgeC {{seq}}-13 | testprosecutorthirteen | testdefenderthirteen |
       | Harrow Crown Court | {{seq}}-14 | C{{seq}}007 | DefC {{seq}}-14 | JudgeC {{seq}}-14 | testprosecutorfourteen | testdefenderfourteen |
 
-    Given I create an event using json
+    Given I create an event
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 1100  |          | {{seq}}1008 | Harrow Crown Court | {{seq}}-8  | C{{seq}}001  | {{seq}}ABC-8  | {{timestamp-10:00:00}} |                             |                     |
       | {{seq}}001 | 1100  |          | {{seq}}1009 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}ABC-9  | {{timestamp-10:30:00}} |                             |                     |

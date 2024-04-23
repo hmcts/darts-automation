@@ -2,7 +2,7 @@ Feature: Requester
 
   @end2end @end2end2 @DMP-2206
   Scenario Outline: Requester
-  Given I add a daily lists
+    Given I add a daily lists
       | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime      | endDate   | timeStamp   | defendant    | urn           |
       | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <DL_startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |
     When I process the daily list for courthouse <courthouse>
@@ -37,7 +37,7 @@ Feature: Requester
     Then I see "Confirm your Order" on the page
     When I press the "Confirm" button
     Then I see "Your order is complete" on the page
-     And I see the Request ID
+    And I see the Request ID
     #Duplicate audio request
     When I click on the "Return to hearing date" link
     And  I press the "Get Audio" button
@@ -48,7 +48,8 @@ Feature: Requester
     When I click on the "HMCTS" link
     # Wait for Requested Audio
     When I click on the "Your audio" link
-    Then I wait for the requested audio file to be ready
+    Then I click on "Request ID" in the "Ready" table header
+#   Then I wait for the requested audio file to be ready
 #      | user      | courthouse   | case_number   | hearing_date |
 #      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
 
@@ -147,5 +148,5 @@ Feature: Requester
     And I see "{{displaydate(date+99years)}}" in the same row as "Retain case until"
 
     Examples:
-      | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse         | courtroom | case_number | eventId     | defendants         | startDate  | DL_startTime | endDate     | timeStamp     | HearingDate        | transcription-type | urgency   | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            | reason                                            |
-      | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | Harrow Crown Court | {{seq}}   | S{{seq}}009 | {{seq}}1001 | S{{seq}} defendant | {{date+0}} | 10:00:00     | {{date+30}} | {{timestamp}} | {{todayDisplay()}} | Sentencing remarks | Overnight |               |               | {{timestamp}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc | 99 Years Permanent Retention for case S{{seq}}009 |
+      | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse      | courtroom | case_number   | eventId     | defendants         | startDate  | DL_startTime | endDate     | timeStamp     | HearingDate        | transcription-type | urgency   | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            | reason                                            |
+      | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | {{courthouse1}} | C{{seq}}  | S{{seq}}081-B | {{seq}}1001 | S{{seq}} defendant | {{date+0}} | 10:00:00     | {{date+30}} | {{timestamp}} | {{todayDisplay()}} | Sentencing remarks | Overnight |               |               | {{timestamp}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc | 99 Years Permanent Retention for case S{{seq}}009 |

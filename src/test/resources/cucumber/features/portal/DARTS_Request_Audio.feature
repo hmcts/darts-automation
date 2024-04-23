@@ -4,14 +4,14 @@ Feature: Request Audio
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-2121 @regression
 Scenario: Request Audio data creation
 
-  Given I create a case using json
+  Given I create a case
     | courthouse         | courtroom  | case_number | defendants     | judges           | prosecutors         | defenders         |
     | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | Def B{{seq}}-6 | Judge B{{seq}}-6 | testprosecutorsix   | testdefendersix   |
     | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007 | Def B{{seq}}-7 | Judge B{{seq}}-7 | testprosecutorseven | testdefenderseven |
     | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008 | Def B{{seq}}-8 | Judge B{{seq}}-8 | testprosecutoreight | testdefendereight |
     | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009 | Def B{{seq}}-9 | Judge B{{seq}}-9 | testprosecutornine  | testdefendernine  |
 
-  Given I create an event using json
+  Given I create an event
     | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
     | {{seq}}006 | 1100 |          | {{seq}}1006 | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006  | B{{seq}}ABC-6 | {{timestamp-10:00:00}} |                             |                     |
     | {{seq}}007 | 1100 |          | {{seq}}1007 | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007  | B{{seq}}ABC-7 | {{timestamp-10:00:00}} |                             |                     |
