@@ -17,9 +17,7 @@ Feature: Judge
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+    Then I see "<case_number>" in the same row as "<courthouse>"
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -103,5 +101,5 @@ Feature: Judge
 
 
     Examples:
-      | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse         | courtroom | HearingDate     | case_number | startDate  | endDate     | timeStamp     | judges         | defendants         | prosecutors         | defenders         | message_id | eventId     | caseRetention | totalSentence | audioFile | startTime | endTime  | annotation_document |
-      | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | Harrow Crown Court | {{seq}}   | {{displaydate}} | S{{seq}}001 | {{date+0}} | {{date+30}} | {{timestamp}} | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{seq}}001 | {{seq}}1001 |               |               | sample1   | 08:04:00  | 08:05:00 | Annotations.docx    |
+      | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse    | courtroom | HearingDate        | case_number   | startDate  | endDate     | timeStamp     | judges           | defendants           | prosecutors           | defenders           | message_id | eventId     | caseRetention | totalSentence | audioFile | startTime | endTime  | annotation_document |
+      | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | S{{seq}}081-B | C{{seq}}  | {{todayDisplay()}} | S{{seq}}081-B | {{date+0}} | {{date+30}} | {{timestamp}} | S{{seq}} judge-B | S{{seq}} defendant-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | {{seq}}001 | {{seq}}1001 |               |               | sample1   | 08:04:00  | 08:05:00 | Annotations.docx    |

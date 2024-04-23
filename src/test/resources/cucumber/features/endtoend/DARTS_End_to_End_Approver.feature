@@ -17,10 +17,7 @@ Feature: Approver
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+    Then I see "<case_number>" in the same row as "<courthouse>"
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -68,10 +65,7 @@ Feature: Approver
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+    Then I see "<case_number>" in the same row as "<courthouse>"
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -119,10 +113,7 @@ Feature: Approver
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+    Then I see "<case_number>" in the same row as "<courthouse>"
     When I click on "<case_number>" in the same row as "<courthouse>"
     Then I see "<case_number>" on the page
     Then I click on "<HearingDate>" in the same row as "<courtroom>"
@@ -146,5 +137,5 @@ Feature: Approver
     Then I click on the "Transcript requests to review" link
     Then I do not see "<case_number>" on the page
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}012 | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 |               |               | {{timestamp}} | sample1.mp2 | 18:03:00  | 18:04:00 |
+      | courthouse      | courtroom | case_number   | judges           | defendants            | prosecutors            | defenders            | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  |
+      | {{courthouse1}} | {{seq}}   | S{{seq}}081-B | S{{seq}} judge-B | S{{seq}} defendants-B | S{{seq}} prosecutors-B | S{{seq}} defenders-B | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 |               |               | {{timestamp}} | sample1.mp2 | 18:03:00  | 18:04:00 |

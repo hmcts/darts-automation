@@ -2,14 +2,14 @@ Feature: User as a Judge
 
   @DMP-1033 @DMP-1618 @regression
   Scenario: Judge data creation
-    Given I create a case using json
+    Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors           | defenders           |
       | Harrow Crown Court | {{seq}}-16 | E{{seq}}001 | DefE {{seq}}-16 | JudgeE {{seq}}-16 | testprosecutorsixteen | testdefendersixteen |
 
-    Given I create an event using json
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100  |          | {{seq}}1024 | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{seq}}ABC-16 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}1025 | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{seq}}DEF-16 | {{timestamp-10:01:00}} |                             |                     |
+    Given I create an event
+      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}1024 | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{seq}}ABC-16 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}1025 | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{seq}}DEF-16 | {{timestamp-10:01:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
