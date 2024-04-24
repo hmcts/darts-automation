@@ -132,7 +132,7 @@ public class DateUtils {
 	
 	public static String zonedTimestamp() {
 		return DateTimeFormatter
-				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXX")
+				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 				.format(ZonedDateTime.now());
 	}
 	
@@ -674,6 +674,7 @@ public class DateUtils {
 	@Test
 	public void test5() {
 		System.out.println("========================");
+		System.out.println(timestamp());
 		System.out.println(makeTimestamp(timestamp()));
 	}
 

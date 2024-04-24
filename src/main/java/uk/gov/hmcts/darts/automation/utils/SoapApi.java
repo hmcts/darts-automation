@@ -433,7 +433,11 @@ public class SoapApi {
 				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
 				+ addSoapAuthHeader()
 				+ "    <soap:Body>"
-				+ "        <ns5:" + soapAction + " xmlns:ns5=\"http://com.synapps.mojdarts.service.com\">"
+				+ "        <ns5:" + soapAction + " xmlns:ns2=\"http://properties.core.datamodel.fs.documentum.emc.com/\""
+						+ " xmlns:ns3=\"http://content.core.datamodel.fs.documentum.emc.com/\""
+						+ " xmlns:ns4=\"http://core.datamodel.fs.documentum.emc.com/\""
+						+ " xmlns:ns5=\"http://com.synapps.mojdarts.service.com\""
+						+ " xmlns:ns6=\"http://rt.fs.documentum.emc.com/\">"
 				+ soapBody
 				+ "        </ns5:" + soapAction + ">"
 				+ "    </soap:Body>"
