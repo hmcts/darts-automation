@@ -57,7 +57,7 @@ public class JsonUtils {
     		String caseRetentionFixedPolicy,
     		String caseTotalSentence,
     		String startTime,
-    		String endTime) {
+    		String endTime, String is_mid_tier) {
     	JsonString eventJson = new JsonString();
     	eventJson.addJsonLine("message_id", messageId);
     	eventJson.addJsonLine("type", type);
@@ -76,6 +76,7 @@ public class JsonUtils {
     	}
     	eventJson.addJsonLine("start_time", startTime);
     	eventJson.addJsonLine("end_time", endTime);
+		eventJson.addJsonLine("is_mid_tier", is_mid_tier);
 		return eventJson.jsonValue();
     }
     
@@ -153,7 +154,7 @@ public class JsonUtils {
     
     @Test
 	public void testJson() {
-		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11", "", ""), "{\r\n"
+		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "string10", "string11", "", "", "string12"), "{\r\n"
 				+ "  \"message_id\": \"string1\",\r\n"
 				+ "  \"type\": \"string2\",\r\n"
 				+ "  \"sub_type\": \"string3\",\r\n"
@@ -170,7 +171,7 @@ public class JsonUtils {
 				+ "  \"case_total_sentence\": \"string11\"\r\n"
 				+ "  }\r\n"
 				+ "}");
-		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "blank", "", "", ""), "{\r\n"
+		Assertions.assertEquals(buildAddEventJson("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "string9", "blank", "", "", "", ""), "{\r\n"
 				+ "  \"message_id\": \"string1\",\r\n"
 				+ "  \"type\": \"string2\",\r\n"
 				+ "  \"sub_type\": \"string3\",\r\n"

@@ -82,7 +82,8 @@ public class StepDef_jsonApi extends StepDef_base {
 				testdata.getProperty("case_retention_fixed_policy"),
 				testdata.getProperty("case_total_sentence"),
 				testdata.getProperty("start_time"),
-				testdata.getProperty("end_time"));
+				testdata.getProperty("end_time"),
+				"false");
 		ApiResponse apiResponse = jsonApi.postApi("events", json);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
@@ -131,7 +132,8 @@ public class StepDef_jsonApi extends StepDef_base {
 					getValue(map, "case_retention_fixed_policy", testdata.getProperty("case_retention_fixed_policy")),
 					getValue(map, "case_total_sentence", testdata.getProperty("case_total_sentence")),
 					getValue(map, "start_time", testdata.getProperty("start_time")),
-					getValue(map, "end_time", testdata.getProperty("end_time")));
+					getValue(map, "end_time", testdata.getProperty("end_time")),
+					getValue(map, "is_mid_tier", "false"));
 			ApiResponse apiResponse = jsonApi.postApi("events", json);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
