@@ -40,12 +40,12 @@ Feature: Advance Search
     Then I see "Refine your search by adding more information and try again." on the page
 
      #Hearing Date - Specific date
-   When I click on the "Clear search" link
+    When I click on the "Clear search" link
     Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
     Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
-   Then I see "Refine your search by adding more information and try again." on the page
+    Then I see "Refine your search by adding more information and try again." on the page
 
     #Hearing Date - Date Range
     When I click on the "Clear search" link
@@ -54,7 +54,7 @@ Feature: Advance Search
     Then I set "Enter date to" to "<todaysDate>"
     Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
-   Then I see "Refine your search by adding more information and try again." on the page
+    Then I see "Refine your search by adding more information and try again." on the page
 
     #Courthouse + Courtroom + Judge
     When I click on the "Clear search" link
@@ -361,8 +361,8 @@ Feature: Advance Search
       | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
       | <courthouse> | <courtroom> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
-      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     |
+      | message_id   | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text | date_time  | case_retention_fixed_policy | case_total_sentence | start_time    | end_time      | is_mid_tier |
+      | <message_id> | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <case_number> | <keywords> | <dateTime> | <caseRetention>             | <totalSentence>     | {{timestamp}} | {{timestamp}} | true        |
 
     When I am logged on to DARTS as an <user> user
     Then I click on the "Search" link
