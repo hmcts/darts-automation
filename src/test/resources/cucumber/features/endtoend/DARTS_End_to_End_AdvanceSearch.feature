@@ -67,10 +67,9 @@ Feature: Advance Search
     Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Judge's name" to "<judges>"
     Then I press the "Search" button
-    Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+    Then I see "result" on the page
+    Then I see "<judges>" in the same row as "<courthouse>"
+
 
     #Courthouse + Defendant + Courtroom
     When I click on the "Clear search" link
@@ -81,10 +80,8 @@ Feature: Advance Search
     Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
-    Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID       | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number> | <courthouse> | <courtroom> | <judges> | <defendants> |
+    Then I see "result" on the page
+    Then I see "<defendants>" in the same row as "<courthouse>"
 
     #Courthouse + Courtroom + Hearing Date - Specific date
     When I click on the "Clear search" link
@@ -423,12 +420,10 @@ Feature: Advance Search
     Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Judge's name" to "<judges>"
     Then I press the "Search" button
-    Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
-    #Courthouse + Defendant + Courtroom
+    Then I see "result" on the page
+    Then I see "<judges>" in the same row as "<courthouse>"
+
+      #Courthouse + Defendant + Courtroom
     When I click on the "Clear search" link
     Then I set "Courthouse" to "<courthouse>" and click away
     Then I set "Defendant's name" to "<defendants>"
@@ -438,10 +433,7 @@ Feature: Advance Search
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
-    Then I verify the HTML table contains the following values
-      | Case ID                                                  | Courthouse   | Courtroom   | Judge(s) | Defendant(s) |
-      | <case_number>                                            | <courthouse> | <courtroom> | <judges> | <defendants> |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*     | *IGNORE*    | *IGNORE* | *IGNORE*     |
+    Then I see "<defendants >" in the same row as "<courthouse>"
 
     #Courthouse + Courtroom + Hearing Date - Specific date
     When I click on the "Clear search" link

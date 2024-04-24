@@ -82,7 +82,8 @@ public class StepDef_jsonApi extends StepDef_base {
 				testdata.getProperty("case_retention_fixed_policy"),
 				testdata.getProperty("case_total_sentence"),
 				testdata.getProperty("start_time"),
-				testdata.getProperty("end_time"), testdata.getProperty("is_mid_tier"));
+				testdata.getProperty("end_time"),
+				testdata.getProperty("is_mid_tier"));
 		ApiResponse apiResponse = jsonApi.postApi("events", json);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
