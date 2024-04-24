@@ -1,6 +1,6 @@
 Feature: Case Search
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @regression @demo
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @DMP-2769 @regression @demo
 Scenario: Case Search data creation
 	Given I create a case
       | courthouse         | courtroom   | case_number | defendants      | judges           | prosecutors         | defenders         |
@@ -413,3 +413,57 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     Then I see "Previous" on the page
     Then I click on the pagination link "Previous"
     Then I click on the pagination link "Next"
+
+@DMP-2769 @regression
+  Scenario: Advanced Search Restrictions
+    Given I am logged on to DARTS as an APPROVER user
+    And I click on the "Search" link
+    And I click on the "Advanced search" link
+    And I set "Courthouse" to "Harrow Crown Court"
+    And I set "Courtroom" to "A{{seq}}-1"
+    And I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+
+    When I select the "Specific date" radio button
+    And I set "Enter a date" to "{{date+0/}}"
+    And I press the "Search" button
+    And I click on "Case ID" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
+      | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-2  | Def A{{seq}}-22 |
+      | A{{seq}}002                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-11 | Def A{{seq}}-11 |
+      | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | Judge {{seq}}-1  | Def A{{seq}}-1  |
+
+    When I click on the "Clear search" link
+    And I set "Courthouse" to "Harrow Crown Court"
+    And I set "Defendant's name" to "Def A"
+    And I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+
+    When I set "Judge's name" to "Judge {{seq}}-2"
+    And I press the "Search" button
+    And I click on "Case ID" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
+      | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | Judge {{seq}}-2  | Def A{{seq}}-11 |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*    | *IGNORE*         | *IGNORE*        |
+      | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-2  | Def A{{seq}}-22 |
+
+    When I click on the "Clear search" link
+    And I set "Keywords" to "A{{seq}}ABC"
+    And I select the "Specific date" radio button
+    And I set "Enter a date" to "{{date+0/}}"
+    And I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+
+    When I set "Courthouse" to "Harrow Crown Court"
+    And I press the "Search" button
+    And I click on "Case ID" in the table header
+    Then I verify the HTML table contains the following values
+      | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
+      | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | Judge {{seq}}-2  | Def A{{seq}}-11 |
+      | !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*    | *IGNORE*         | *IGNORE*        |
+      | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-2  | Def A{{seq}}-22 |
+      | A{{seq}}003                                              | Harrow Crown Court | A{{seq}}-2  | Judge {{seq}}-11 | Def A{{seq}}-2  |
+      | A{{seq}}002                                              | Harrow Crown Court | A{{seq}}-11 | Judge {{seq}}-11 | Def A{{seq}}-11 |
+      | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | Judge {{seq}}-1  | Def A{{seq}}-1  |
