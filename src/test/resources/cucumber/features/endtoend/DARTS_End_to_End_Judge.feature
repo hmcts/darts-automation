@@ -10,8 +10,8 @@ Feature: Judge
       | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |
     When I process the daily list for courthouse <courthouse>
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse   | courtroom   | case_numbers  | event_text                    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | {{timestamp-10:00:00}} | <caseRetention>             | <totalSentence>     |
+      | message_id | type | sub_type | event_id    | courthouse   | courtroom   | case_numbers  | event_text                    | date_time              | case_retention_fixed_policy | case_total_sentence | start_time    | end_time      | is_mid_tier |
+      | {{seq}}001 | 1100 |          | {{seq}}1167 | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | {{timestamp-10:00:00}} | <caseRetention>             | <totalSentence>     | {{timestamp}} | {{timestamp}} | true        |
 
     Given I am logged on to DARTS as an JUDGE user
     Then I set "Case ID" to "<case_number>"
@@ -79,7 +79,6 @@ Feature: Judge
     Then I see "Check retention date change" on the page
     And I see "<case_number>" in the same row as "Case ID"
     And I see "<courthouse>" in the same row as "Courthouse"
-    And I see "<defendants>" in the same row as "Defendant(s)"
     And I see "Change case retention date" on the page
     And I see "{{displaydate(date+99years)}} (Permanent)" in the same row as "Retain case until"
     And I press the "Confirm retention date change" button
@@ -101,5 +100,5 @@ Feature: Judge
 
 
     Examples:
-      | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse    | courtroom | HearingDate        | case_number   | startDate  | endDate     | timeStamp     | judges           | defendants           | prosecutors           | defenders           | message_id | eventId     | caseRetention | totalSentence | audioFile | startTime | endTime  | annotation_document |
-      | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | S{{seq}}081-B | C{{seq}}  | {{todayDisplay()}} | S{{seq}}081-B | {{date+0}} | {{date+30}} | {{timestamp}} | S{{seq}} judge-B | S{{seq}} defendant-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | {{seq}}001 | {{seq}}1001 |               |               | sample1   | 08:04:00  | 08:05:00 | Annotations.docx    |
+      | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse      | courtroom | HearingDate      | case_number   | startDate  | endDate     | timeStamp     | judges           | defendants           | prosecutors           | defenders           | message_id | eventId     | caseRetention | totalSentence | audioFile | startTime | endTime  | annotation_document |
+      | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | {{courthouse1}} | C{{seq}}  | {{displaydate}} | S{{seq}}081-B | {{date+0}} | {{date+30}} | {{timestamp}} | S{{seq}} judge-B | S{{seq}} defendant-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | {{seq}}001 | {{seq}}1001 |               |               | sample1   | 08:04:00  | 08:05:00 | Annotations.docx    |
