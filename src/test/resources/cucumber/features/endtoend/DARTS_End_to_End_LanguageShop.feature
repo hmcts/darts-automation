@@ -20,8 +20,8 @@ Feature: Language Shop User
     Given I am logged on to DARTS as an LANGUAGESHOP user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
+    Then I see "No search results" on the page
+    Then I see "Review the case ID, case reference or court reference you entered and try again." on the page
 
     Given I create an event
       | message_id   | type | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                   | date_time   | case_retention_fixed_policy | case_total_sentence |
