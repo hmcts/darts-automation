@@ -3,8 +3,8 @@ Feature: Transcriber
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber - TranscriptionType - Sentencing Remarks - Audio requestType -Download
     Given I create a case
-      | courthouse   | courtroom   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
-      | <courthouse> | <courtroom> | <courtroom> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
+      | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <courtroom> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I create an event
       | message_id   | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                    | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <message_id> | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -95,8 +95,8 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse         | courtroom | case_number | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile | startTime | endTime  | filename            |
-      | Harrow Crown Court | {{seq}}   | S{{seq}}031 | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender | {{todayDisplay()}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | sample1   | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
+      | courthouse      | courtroom | case_number   | judges         | defendants         | prosecutors         | defenders         | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile | startTime | endTime  | filename            |
+      | {{courthouse1}} | C{{seq}}  | S{{seq}}081-B | S{{seq}} judge | S{{seq}} defendant | S{{seq}} prosecutor | S{{seq}} defender |{{displaydate}}| Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | sample1   | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
 
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback
