@@ -1,6 +1,6 @@
 Feature: Annotation
 
-  @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9 @DMP-2246
+  @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9 @DMP-2246 @DMP-2639-AC1
   Scenario: Annotation data creation
     Given I create a case
       | courthouse         | case_number | defendants     | judges           | prosecutors            | defenders            |
@@ -258,3 +258,21 @@ Feature: Annotation
     And  I click on the "Delete" link
     And I see "Are you sure you want to delete this item?" on the page
     Then I press the "Yes - delete" button
+
+  @DMP-2639
+  Scenario: Fetch annotations for super admin
+    Given I am logged on to DARTS as a ADMIN user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "K{{seq}}002"
+    And I press the "Search" button
+    And I click on the "K{{seq}}002" link
+    And I see "Hearings" on the page
+    And I see "All Transcripts" on the page
+    And I see "All annotations" on the page
+    And I click on the "{{displaydate}}" link
+    And I click on the "Annotations" link
+    And I press the "Upload annotation" button
+    Then I upload the file "file-sample_1MB.doc" at "Upload annotation file"
+    And I press the "Upload" button
+    Then I see "You have added an annotation" on the page
