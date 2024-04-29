@@ -10,7 +10,7 @@ Feature: Test operation of post events
       | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}0001 | {{seq}}1001 | 20901 |         | text      |               |               |
 
 
-  @EVENT_API @SOAP_EVENT @regression
+  @EVENT_API @SOAP_EVENT
   Scenario Outline: Create standard events
     When  I create an event
       | message_id | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -323,7 +323,7 @@ Feature: Test operation of post events
       | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010 |         | text      |               |               |
 
 
-  @EVENT_API @SOAP_EVENT @regression
+  @EVENT_API @SOAP_EVENT
   Scenario Outline: Create a Sentencing event
     When  I create an event
       | message_id | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
