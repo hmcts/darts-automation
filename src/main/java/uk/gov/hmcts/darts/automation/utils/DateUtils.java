@@ -139,8 +139,9 @@ public class DateUtils {
 	}
 
 	public static String convertToUtc(String dateTime) {
-		DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-		DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+		final String TIMEFORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+		DateFormat outputFormat = new SimpleDateFormat(TIMEFORMAT);
+		DateFormat inputFormat = new SimpleDateFormat(TIMEFORMAT);
 
 		inputFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 		Date date = null;
