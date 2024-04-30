@@ -9,13 +9,19 @@ import org.junit.jupiter.api.Test;
 
 import io.restassured.path.xml.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.List;
 
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Date;
 
 
 public class XmlUtils {
@@ -45,7 +51,10 @@ public class XmlUtils {
     		String dateTime,
     		String caseRetentionFixedPolicy,
     		String caseTotalSentence) {
-    	XmlString xmlString = new XmlString()
+
+		String utcDateTime = DateUtils.convertToUtc(dateTime);
+
+		XmlString xmlString = new XmlString()
     			.addTag("messageId", messageId)
     			.addTag("type", type)
     			.addTag("subType", subType)
@@ -54,12 +63,12 @@ public class XmlUtils {
 				.addTag("be:DartsEvent")
     			.addAttribute("xmlns:be", "urn:integration-cjsonline-gov-uk:pilot:entities")
     			.addAttribute("ID", eventId)
-    			.addAttribute("Y", DateUtils.datePart(dateTime, "Y"))
-				.addAttribute("M", DateUtils.datePart(dateTime, "M"))
-				.addAttribute("D", DateUtils.datePart(dateTime, "D"))
-    			.addAttribute("H", DateUtils.timePart(dateTime, "H"))
-				.addAttribute("MIN", DateUtils.timePart(dateTime, "MIN"))
-				.addAttribute("S", DateUtils.timePart(dateTime, "S"))
+    			.addAttribute("Y", DateUtils.datePart(utcDateTime, "Y"))
+				.addAttribute("M", DateUtils.datePart(utcDateTime, "M"))
+				.addAttribute("D", DateUtils.datePart(utcDateTime, "D"))
+    			.addAttribute("H", DateUtils.timePart(utcDateTime, "H"))
+				.addAttribute("MIN", DateUtils.timePart(utcDateTime, "MIN"))
+				.addAttribute("S", DateUtils.timePart(utcDateTime, "S"))
 				.addTag("be:CourtHouse", courthouse)
     			.addTag("be:CourtRoom", courtroom)
     			.addTagGroup("be:CaseNumbers", "be:CaseNumber", caseNumbers)

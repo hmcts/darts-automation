@@ -1,6 +1,8 @@
 package uk.gov.hmcts.darts.automation.utils;
 
+import java.text.ParseException;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
 import java.text.DateFormat;
@@ -134,6 +136,20 @@ public class DateUtils {
 		return DateTimeFormatter
 				.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 				.format(ZonedDateTime.now());
+	}
+
+	public static String convertToUtc(String dateTime) {
+		DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+		DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+		inputFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		Date date = null;
+		try {
+			date = inputFormat.parse(dateTime);
+		} catch (ParseException e) {
+			log.error(e.getMessage());
+		}
+		return outputFormat.format(date);
 	}
 	
 	public static String localTimestamp() {
