@@ -436,3 +436,61 @@ Scenario: Hearing table sorted with time
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
   Then I see "This audio is not currently available in DARTS, please try again later." on the page
 
+  @DMP-2562
+  Scenario: Request download audio for Super Admin
+    When I am logged on to DARTS as an Admin user
+    And I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "B{{seq}}006"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
+      | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6  | Judge B{{seq}}-6 | Def B{{seq}}-6 |
+
+    When I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
+    And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
+    Then I see "Events and audio recordings" on the page
+    And I set the time fields of "Start Time" to "10:01:00"
+    And I set the time fields of "End Time" to "10:02:00"
+    And I select the "Playback Only" radio button
+    And I press the "Get Audio" button
+    Then I see "Confirm your Order" on the page
+    And I see "Case details" on the page
+    And I see "B{{seq}}006" on the page
+    And I see "Harrow Crown Court" on the page
+    And I see "Def B{{seq}}-6" on the page
+    And I see "Audio details" on the page
+    And I see "{{displaydate}}" on the page
+    And I see "10:01:00" on the page
+    And I see "10:02:00" on the page
+    When I press the "Confirm" button
+    Then I see "Your order is complete" on the page
+    And I see "B{{seq}}006" on the page
+    And I see "Harrow Crown Court" on the page
+    And I see "testdefendersix" on the page
+    And I see "{{displaydate}}" on the page
+    And I see "10:01:00" on the page
+    And I see "10:02:00" on the page
+    And I see "We are preparing your audio." on the page
+    And I see "When it is ready we will send an email to Darts Admin and notify you in the DARTS application." on the page
+    And I see "Return to hearing date" on the page
+    And I see "Back to search results" on the page
+    And I click on the "Back to search results" link
+
+    When I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
+    And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
+    Then I see "Events and audio recordings" on the page
+    And I set the time fields of "Start Time" to "10:01:00"
+    And I set the time fields of "End Time" to "10:02:00"
+    And I select the "Download" radio button
+    And I press the "Get Audio" button
+    Then I see "Confirm your Order" on the page
+    And I see "Case details" on the page
+    And I see "B{{seq}}006" on the page
+    And I see "Harrow Crown Court" on the page
+    And I see "Def B{{seq}}-6" on the page
+    And I see "Audio details" on the page
+    And I see "{{displaydate}}" on the page
+    And I see "10:01:00" on the page
+    And I see "10:02:00" on the page
+    When I press the "Confirm" button
