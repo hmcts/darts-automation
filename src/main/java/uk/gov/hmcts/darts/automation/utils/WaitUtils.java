@@ -4,13 +4,13 @@ import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
-
-
+import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -179,9 +179,22 @@ public class WaitUtils {
 		}
 
 	}
-
-	
-	
-	
+    
+    public void pause(int seconds) {
+        log.info("WAIT TIME {}", seconds);
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(seconds));  
+        Function<WebDriver, Boolean> justWait = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {  
+                return false;
+            };
+        };
+        try {
+            wait.until(justWait);
+        } catch (TimeoutException e) {
+            log.info("Wait {} seconds complete", seconds);
+        }
+    }
 
 }

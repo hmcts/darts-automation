@@ -22,6 +22,7 @@ import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.SoapApi;
 import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import uk.gov.hmcts.darts.automation.utils.XmlUtils;
+import uk.gov.hmcts.darts.automation.pageObjects.DbUtils;
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
 import uk.gov.hmcts.darts.automation.utils.DateUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
@@ -158,6 +159,9 @@ public class StepDef_soapApi extends StepDef_base {
 // sample cucumber:
 // When I add a daily list
 // | ... | datatable follows
+//
+// n.b. for CPP, case number is held in the URN field
+//
 	@When("I add (a) daily list(s)")
 	public void createAddDailyListXml(List<Map<String,String>> dataTable) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
@@ -173,9 +177,9 @@ public class StepDef_soapApi extends StepDef_base {
 					getValue(map, "startDate"),
 					getValue(map, "startTime"),
 					getValue(map, "endDate"),
-					getValue(map, "timeStamp"),
+					getValue(map, "timeStamp", DateUtils.timestamp()),
 					getValue(map, "defendant"),
-					getValue(map, "urn", "62AA1010646"));
+					getValue(map, "urn", getValue(map, "caseNumber")));
 			ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
@@ -291,6 +295,12 @@ public class StepDef_soapApi extends StepDef_base {
 		ApiResponse apiResponse = soapApi.postSoapBinaryFile(endPoint, soapAction, filename);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
+	}
+	
+	@Then("I wait for courtroom {string} courthouse {string} case {string} to be ready")
+	public void waitForCaseCreation(String courthouse, String courtroom, String caseNumber)  throws Exception {
+		DbUtils dbUtils = new DbUtils(webDriver, testdata);
+		dbUtils.waitForCaseCreation(courthouse, courtroom, caseNumber);
 	}
 	
 

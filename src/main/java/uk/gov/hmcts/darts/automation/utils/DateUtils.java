@@ -121,6 +121,14 @@ public class DateUtils {
 		return dateMinusWeekDays(weekDays, "ddMMyyyy");
 	}
 	
+	public static String yyyymmddDatePlusWeekDays(int weekDays) {
+		if (weekDays < 0) {
+			return dateMinusWeekDays(0 - weekDays, "ddMMyyyy");
+		} else {
+			return datePlusWeekDays(weekDays, "ddMMyyyy");
+		}
+	}
+	
 	public static String numDateTime() {
 		String format = "yyyyMMddHHmmssSSS";
 		Date dateToday = new Date();
@@ -171,6 +179,7 @@ public class DateUtils {
 		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		int dayToday = cal.get(Calendar.DAY_OF_WEEK);
 		if (weekDays < 0) {
+			weekDays = 0 - weekDays;
 			switch(cal.get(Calendar.DAY_OF_WEEK)) {
 			case Calendar.SATURDAY: 
 				extraDays = 1;
@@ -211,7 +220,8 @@ public class DateUtils {
 		}
 		return dateFormat.format((Date)cal.getTime());
 	}
-	
+
+// dateMinusWeekDays() is now superfluous - dateplusweekdays() handles negatives
 	public static String dateMinusWeekDays(int weekDays, String format) {
 		Date dateToday = new Date();
 		int extraDays = 0;
@@ -264,6 +274,22 @@ public class DateUtils {
 		return datePlusMonths(0-months, format);
 	}
 	
+	public static String datePlus(String offset, String format) {
+		if (offset.endsWith("w")) {
+			return datePlusWeekDays(Integer.parseInt(offset.substring(0, offset.length() - 1).strip()), format);
+		} else {
+			if (offset.endsWith("c")) {
+				return datePlusCalDays(Integer.parseInt(offset.substring(0, offset.length() - 1).strip()), format);
+			} else {
+				if (offset.isBlank()) {
+					return datePlusCalDays(0, format);
+				} else {
+					return datePlusCalDays(Integer.parseInt(offset.strip()), format);
+				}
+			}
+		}
+	}
+	
 	public static String substituteDateValue(String subsString) {
 		String substitutedValue = "";
 		String substitutionString = "";
@@ -272,22 +298,26 @@ public class DateUtils {
 			if (requireDelimChange) {
 				subsString = subsString.substring(0, subsString.length()-1);
 			}
-			if (subsString.endsWith("w")) {
-				substitutionString = datePlusWeekDays(subsString.substring(4, subsString.length()-1));
+			if (subsString.startsWith("date-yyyymmdd")) {
+				substitutionString = datePlus(subsString.substring(13), "yyyy-MM-dd");
 			} else {
-				if (subsString.endsWith("c")) {
-					substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-1));
+				if (subsString.endsWith("w")) {
+					substitutionString = datePlusWeekDays(subsString.substring(4, subsString.length()-1));
 				} else {
-					if (subsString.endsWith("n")) {
-						substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-1)).replace("-", "");
+					if (subsString.endsWith("c")) {
+						substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-1));
 					} else {
-						if (subsString.endsWith("months")) {
-							substitutionString = datePlusMonths(subsString.substring(4, subsString.length()-6));
+						if (subsString.endsWith("n")) {
+							substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-1)).replace("-", "");
 						} else {
-							if (subsString.endsWith("years")) {
-								substitutionString = datePlusYears(subsString.substring(4, subsString.length()-5));
+							if (subsString.endsWith("months")) {
+								substitutionString = datePlusMonths(subsString.substring(4, subsString.length()-6));
 							} else {
-								substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-0));
+								if (subsString.endsWith("years")) {
+									substitutionString = datePlusYears(subsString.substring(4, subsString.length()-5));
+								} else {
+									substitutionString = datePlusCalDays(subsString.substring(4, subsString.length()-0));
+								}
 							}
 						}
 					}
@@ -594,6 +624,9 @@ public class DateUtils {
 	
 	@Test
 	public void test1() {
+		System.out.println("========================");
+		System.out.println("          1");
+		System.out.println("========================");
 		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("2023-12-09 12:00:00"));
 		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("09-12-23 12:00:00"));
 		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("2023-12-09T12:00:00.000Z"));
@@ -614,6 +647,9 @@ public class DateUtils {
 	
 	@Test
 	public void test2() {
+		System.out.println("========================");
+		System.out.println("          2");
+		System.out.println("========================");
 		System.out.println(makeTimestamp("", "12:00:00"));
 		System.out.println(todayDisplay());
 		System.out.println(timestamp());
@@ -625,7 +661,9 @@ public class DateUtils {
 	
 	@Test
 	public void test3() {
-		System.out.println("-----------------------");
+		System.out.println("========================");
+		System.out.println("          3");
+		System.out.println("========================");
 		System.out.println(substituteDateValue("date-7 months"));
 		System.out.println(substituteDateValue("date-7months"));
 		System.out.println(substituteDateValue("date-84 months"));
@@ -662,6 +700,8 @@ public class DateUtils {
 	@Test
 	public void test4() {
 		System.out.println("========================");
+		System.out.println("          4");
+		System.out.println("========================");
 		System.out.println(makeNumericDateTime("20220311091900", "", ""));
 		System.out.println(makeNumericDateTime(timestamp(), "", ""));
 		System.out.println(makeNumericDateTime(timestamp("12:00:00"), "", ""));
@@ -674,8 +714,52 @@ public class DateUtils {
 	@Test
 	public void test5() {
 		System.out.println("========================");
+		System.out.println("          5");
+		System.out.println("========================");
 		System.out.println(timestamp());
 		System.out.println(makeTimestamp(timestamp()));
+	}
+	
+	@Test
+	public void test6() {
+		System.out.println("========================");
+		System.out.println("          6");
+		System.out.println("========================");
+		Assertions.assertEquals(datePlusWeekDays(-1, "dd-MM-yyyy"), dateMinusWeekDays(1, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-2, "dd-MM-yyyy"), dateMinusWeekDays(2, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-3, "dd-MM-yyyy"), dateMinusWeekDays(3, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-4, "dd-MM-yyyy"), dateMinusWeekDays(4, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-5, "dd-MM-yyyy"), dateMinusWeekDays(5, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-6, "dd-MM-yyyy"), dateMinusWeekDays(6, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-7, "dd-MM-yyyy"), dateMinusWeekDays(7, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-8, "dd-MM-yyyy"), dateMinusWeekDays(8, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-9, "dd-MM-yyyy"), dateMinusWeekDays(9, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-10, "dd-MM-yyyy"), dateMinusWeekDays(10, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-11, "dd-MM-yyyy"), dateMinusWeekDays(11, "dd-MM-yyyy"));
+		Assertions.assertEquals(datePlusWeekDays(-12, "dd-MM-yyyy"), dateMinusWeekDays(12, "dd-MM-yyyy"));
+	}
+	
+	@Test
+	public void test7() {
+		System.out.println("========================");
+		System.out.println("          7");
+		System.out.println("========================");
+		System.out.println(substituteDateValue("date-yyyymmdd"));
+		System.out.println(substituteDateValue("date-yyyymmdd-7"));
+		System.out.println(substituteDateValue("date-yyyymmdd-7 c"));
+		System.out.println(substituteDateValue("date-yyyymmdd-5 w"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd-7"), substituteDateValue("date-yyyymmdd-7 c"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd-7"), substituteDateValue("date-yyyymmdd-5 w"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd-7c"), substituteDateValue("date-yyyymmdd-7 c"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd-5w"), substituteDateValue("date-yyyymmdd-5 w"));
+		System.out.println(substituteDateValue("date-yyyymmdd+7"));
+		System.out.println(substituteDateValue("date-yyyymmdd+7 c"));
+		System.out.println(substituteDateValue("date-yyyymmdd+5 w"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd+7"), substituteDateValue("date-yyyymmdd+7 c"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd+7"), substituteDateValue("date-yyyymmdd+5 w"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd+7c"), substituteDateValue("date-yyyymmdd+7 c"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd+5w"), substituteDateValue("date-yyyymmdd+5 w"));
+		Assertions.assertEquals(substituteDateValue("date-yyyymmdd"), substituteDateValue("date-yyyymmdd+0"));
 	}
 
 }

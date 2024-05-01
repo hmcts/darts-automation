@@ -36,11 +36,13 @@ public class StepDef_jsonApi extends StepDef_base {
 	private static Logger log = LogManager.getLogger("StepDef_jsonApi");
 	private static String eventFields = "|message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|";
 	private JsonApi jsonApi;
+	private WaitUtils wait;
 	
 	
 	public StepDef_jsonApi(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
 		jsonApi = new JsonApi();
+		wait = new WaitUtils(webDriver);
 	}
 	
 	@Given("I authenticate as a/an {word} user") 
@@ -213,7 +215,9 @@ public class StepDef_jsonApi extends StepDef_base {
 		ApiResponse apiResponse = jsonApi.postApiWithQueryParams(endpoint, courthouse);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
+		wait.pause(5);
 	}
+	
 	@When("I call POST {word} API using json body:")
 	public void callPostApiWithJsonBody(String endPoint, String docString) {
 		ApiResponse apiResponse = jsonApi.postApi(endPoint, Substitutions.substituteValue(docString));
