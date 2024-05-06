@@ -111,7 +111,7 @@ dependencies {
 	
 	implementation 'org.seleniumhq.selenium:selenium-java:4.20.0'
 	
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
 	
 	implementation(platform("io.cucumber:cucumber-bom:7.17.0"))
 	implementation 'io.cucumber:cucumber-picocontainer'
