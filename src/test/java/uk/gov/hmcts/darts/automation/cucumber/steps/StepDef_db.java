@@ -77,19 +77,25 @@ public class StepDef_db extends StepDef_base {
 		String returnVal = DB.returnSingleValue(table, keyCol1, Substitutions.substituteValue(keyVal1), keyCol2, Substitutions.substituteValue(keyVal2), keyCol3, Substitutions.substituteValue(keyVal3), col);
 		testdata.setProperty(col, returnVal);
 	}
+	
+	void compareValue(String expected, String actual) {
+		if (!expected.equalsIgnoreCase("NOT NULL") || actual.equalsIgnoreCase("NULL")) {
+			Assertions.assertEquals(Substitutions.substituteValue(expected), actual);
+		}
+	}
 
 	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\"$")
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1 + " " + col + " " + expectedVal);
 		String returnVal = DB.returnSingleValue(table, keyCol1, Substitutions.substituteValue(keyVal1), col);
-		Assertions.assertEquals(Substitutions.substituteValue(expectedVal), returnVal);
+		compareValue(expectedVal, returnVal);
 	}
 
 	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2 + " " + col + " " + expectedVal);
 		String returnVal = DB.returnSingleValue(table, keyCol1, Substitutions.substituteValue(keyVal1), keyCol2, Substitutions.substituteValue(keyVal2), col);
-		Assertions.assertEquals(Substitutions.substituteValue(expectedVal), returnVal);
+		compareValue(expectedVal, returnVal);
 	}
 
 // Then I see table xxxx column yyy is "zzz" where col = "value" and col = "value" and col = "value"
@@ -97,7 +103,7 @@ public class StepDef_db extends StepDef_base {
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2  + " " + keyCol3 + " " + keyVal3 + " " + col + " " + expectedVal);
 		String returnVal = DB.returnSingleValue(table, keyCol1, Substitutions.substituteValue(keyVal1), keyCol2, Substitutions.substituteValue(keyVal2), keyCol3, Substitutions.substituteValue(keyVal3), col);
-		Assertions.assertEquals(Substitutions.substituteValue(expectedVal), returnVal);
+		compareValue(expectedVal, returnVal);
 	}
 	
 	@Then("I execute select sql:")
@@ -108,7 +114,7 @@ public class StepDef_db extends StepDef_base {
 	@Then("^I see sql returns value \"([^\"]*)\"")
 	public void executeSelectSql(String expectedVal, String docString) throws Exception {
 		String returnVal = DB.returnSingleValue(Substitutions.substituteValue(docString));
-		Assertions.assertEquals(Substitutions.substituteValue(expectedVal), returnVal);
+		compareValue(expectedVal, returnVal);
 	}
 	
 	@Then("^I execute sql and save the return value as ([^\"]*)")
