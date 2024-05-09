@@ -4,7 +4,7 @@ Feature: Cases EndPoint using SOAP
 # n.b. for CPP, case number is held in the URN field
 #
 	
-@Daily_List @SOAP_API @DMP-2968
+@Daily_List @SOAP_API @DMP-2968 @regression
 Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 		First is replaced
 		Second is ignored when processed
@@ -42,7 +42,7 @@ Examples:
   | CPP    | 58b211f4-426d-81be-00{{seq}}01 | CPPDL | DL      | DL {{date+0/}} {{seq}}01 | Harrow Crown Court | 1         | T{{seq}}111 | {{date+0}}   | 10:00:00  | {{date+0}} | {{timestamp}} | T{{seq}}111 defendant |
 
 	
-@Daily_List @SOAP_API @DMP-2968
+@Daily_List @SOAP_API @DMP-2968 @regression
 Scenario: Daily List VIQ User fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -134,7 +134,7 @@ Scenario: Daily List VIQ User fails
 	"""
 	Then the API status code is 500
 	
-@Daily_List @SOAP_API @DMP-2968
+@Daily_List @SOAP_API @DMP-2968 @regression
 Scenario: Daily List malformed fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -226,7 +226,7 @@ Scenario: Daily List malformed fails
 	"""
 	Then the API status code is 400
 	
-@Daily_List @SOAP_API @DMP-2968
+@Daily_List @SOAP_API @DMP-2968 @regression
 Scenario: Daily List successful
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addDocument and body:

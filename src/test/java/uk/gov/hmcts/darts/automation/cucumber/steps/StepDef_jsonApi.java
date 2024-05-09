@@ -164,7 +164,7 @@ public class StepDef_jsonApi extends StepDef_base {
 		}
 	}
 
-		@When("I add courtlog using json$")
+		@When("I add (a )courtlog using json$")
 		public void addCourtlogs(List<Map<String,String>> dataTable) {
 			for (Map<String, String> map : dataTable) {
 				String json = JsonUtils.buildAddCourtLogJson(

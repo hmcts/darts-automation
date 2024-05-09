@@ -385,10 +385,10 @@ public class SoapApi {
 	
 	String extractValue(String xml, String tag) {
 		String result = "";
-		String[] split1 = xml.split("<" + tag + ">");
-		if (split1.length > 0) {
+		String[] split1 = xml.split("<" + tag + "[^>]*>", 2);
+		if (split1.length > 1) {
 			String[] split2 = split1[1].split("</" + tag + ">");
-			if (split2.length > 0) {
+			if (split2.length > 1) {
 				result = split2[0];
 			}
 		}
