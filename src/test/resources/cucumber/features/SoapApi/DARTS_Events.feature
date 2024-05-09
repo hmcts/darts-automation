@@ -350,6 +350,17 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:20}} | {{seq}}245 | {{seq}}1244 | 20612 |         | text {{seq}} |               |               | Appeal interpreter sworn in |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}1244 | 20917 |         | text {{seq}} |               |               | Interpretor sworn           |       |
 
+  @EVENT_API @SOAP_EVENT @regression
+  Scenario Outline: Create a StopAndClose event
+    When  I create an event
+      | message_id | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+      | <msgId>    | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
+    Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+    Examples:
+      | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText | CaseRetention | totalSentence |
+      | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:00}} | {{seq}}247 | {{seq}}1247 | 3000  |         | text      |               |               |
+      | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:20}} | {{seq}}248 | {{seq}}1248 | 30500 |         | text      |               |               |
+      | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text      |               |               |
 
 @EVENT_API @SOAP_EVENT
 Scenario Outline: Create a TranscriptionRequest event
@@ -538,7 +549,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:04:40}} | {{seq}}370 | {{seq}}1370 | 20913 |         | text {{seq}} |               |               | Jury returns    |       |
   
   
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a DarStop event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -565,7 +576,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text {{seq}} |               |               | Hearing ended     | ex StopAndCloseHandler |
 
   
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a StopAndClose event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -589,7 +600,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:07:00}} | {{seq}}375 | {{seq}}1375 | 30300 |         | text {{seq}} |               |               | Case closed  | ex DarStopHandler |
   
   
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a Null event
 # An event row is not created
   Given I authenticate from the CPP source system

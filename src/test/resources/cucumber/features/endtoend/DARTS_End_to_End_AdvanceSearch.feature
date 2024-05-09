@@ -70,7 +70,6 @@ Feature: Advance Search
     Then I see "result" on the page
     Then I see "<judges>" in the same row as "<courthouse>"
 
-
     #Courthouse + Defendant + Courtroom
     When I click on the "Clear search" link
     Then I set "Courthouse" to "<courthouse>" and click away
@@ -301,7 +300,7 @@ Feature: Advance Search
     Then I see "You must also enter a courthouse" on the page
 
     When I set "Courthouse" to "<courthouse>" and click away
-    Then I set "Case ID" to "{{seq}}"
+    Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
@@ -666,7 +665,7 @@ Feature: Advance Search
     Then I see "You must also enter a courthouse" on the page
 
     When I set "Courthouse" to "<courthouse>" and click away
-    Then I set "Case ID" to "{{seq}}"
+    Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
     Then I see "1 result" on the page
     Then I verify the HTML table contains the following values
