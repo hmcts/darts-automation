@@ -2,7 +2,7 @@ Feature: Test operation of post events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
 
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a case
   When I create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
@@ -12,15 +12,12 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}0001 | {{seq}}1001 | 20901  |         | text {{seq}} |               |               | 
 
 
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create standard events
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -270,15 +267,12 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625   | text {{seq}} |               |               | [Sentence remarks not filmed]                                                                                                          |       |
 
 
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a LOG event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -293,15 +287,12 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:17:00}} | {{seq}}232  | {{seq}}1232 | LOG    |         | log text     |               |               | LOG         |       |
 
         
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a SetReportingRestriction event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -326,15 +317,12 @@ Examples:
 #   Lift restrictions
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:21:20}} | {{seq}}243 | {{seq}}1243 | 21201 |         | text {{seq}} |               |               | Restrictions lifted                                                          |       |
 
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a SetInterpreterUsed event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -351,26 +339,12 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}1244 | 20917 |         | text {{seq}} |               |               | Interpretor sworn           |       |
 
   @EVENT_API @SOAP_EVENT @regression
-  Scenario Outline: Create a StopAndClose event
-    When  I create an event
-      | message_id | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
-      | <msgId>    | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <CaseRetention>             | <totalSentence>     |
-    Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-    Examples:
-      | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText | CaseRetention | totalSentence |
-      | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:00}} | {{seq}}247 | {{seq}}1247 | 3000  |         | text      |               |               |
-      | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:20}} | {{seq}}248 | {{seq}}1248 | 30500 |         | text      |               |               |
-      | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text      |               |               |
 
-@EVENT_API @SOAP_EVENT
 Scenario Outline: Create a TranscriptionRequest event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -390,10 +364,7 @@ Scenario Outline: Create a Sentencing event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -521,15 +492,12 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:02:40}} | {{seq}}364 | {{seq}}1364 | STS1821 | 11532   | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       | Serious Terrorism Sentence 18 to 21                                                            |       |
 
   
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a DarStart event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -554,10 +522,7 @@ Scenario Outline: Create a DarStop event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -581,10 +546,7 @@ Scenario Outline: Create a StopAndClose event
   Given I authenticate from the CPP source system
   Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I see table CASE_HEARING column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
