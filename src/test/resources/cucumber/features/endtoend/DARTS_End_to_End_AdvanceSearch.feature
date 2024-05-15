@@ -345,10 +345,10 @@ Feature: Advance Search
 #    Then I see "using filters to restrict the number of results" on the page
 
     Examples:
-      | user        | courthouse      | case_number   | defendants           | judges           | prosecutors           | defenders           | courtroom | keywords             | dateTime      | todaysDate  |
-      | REQUESTER   | {{courthouse1}} | S{{seq}}081-B | S{{seq}} defendant-B | S{{seq}} judge-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}  | SIT LOG-81-{{seq}}-B | {{timestamp}} | {{date+0/}} |
-      | JUDGE       | {{courthouse1}} | S{{seq}}081-B | S{{seq}} defendant-B | S{{seq}} judge-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}  | SIT LOG-81-{{seq}}-B | {{timestamp}} | {{date+0/}} |
-      | TRANSCRIBER | {{courthouse1}} | S{{seq}}081-B | S{{seq}} defendant-B | S{{seq}} judge-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}  | SIT LOG-81-{{seq}}-B | {{timestamp}} | {{date+0/}} |
+      | user        | courthouse      | case_number   | defendants              | judges              | prosecutors           | defenders           | courtroom  | keywords             | dateTime      | todaysDate  |
+      | REQUESTER   | {{courthouse1}} | S{{seq}}081-B | S{{seq}} defendant-B081 | S{{seq}} judge-B081 | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}81 | SIT LOG-81-{{seq}}-B | {{timestamp}} | {{date+0/}} |
+      | JUDGE       | {{courthouse1}} | S{{seq}}082-B | S{{seq}} defendant-B082 | S{{seq}} judge-B082 | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}82 | SIT LOG-82-{{seq}}-B | {{timestamp}} | {{date+0/}} |
+      | TRANSCRIBER | {{courthouse1}} | S{{seq}}083-B | S{{seq}} defendant-B083 | S{{seq}} judge-B083 | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}83 | SIT LOG-83-{{seq}}-B | {{timestamp}} | {{date+0/}} |
 
 
   @end2end @end2end6 @DMP-1927 @demo
