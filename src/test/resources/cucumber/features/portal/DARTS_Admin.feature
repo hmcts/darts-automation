@@ -686,3 +686,51 @@ Feature: Admin portal
      And I set "Start date" to "{{date+0/}}"
      And I click on the "Create" link
      Then I see "Retention policy version created" on the page
+
+    @DMP-2669 @DMP2668
+    Scenario: Automated tasks- primary & details page
+      #DMP-2668-AC1-AC2
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Automated tasks" on the page
+      And I see "ID" on the page
+      And I see "Name" on the page
+      And I see "Description" on the page
+      And I see "Cron expression" on the page
+      And I see "Status" on the page
+      And I see "Run task" on the page
+      And I press the "Run task" button in the same row as "ApplyRetention" "11"
+      And I see "Task start request sent" on the page
+      #DMP2669 AC1  View Automated tasks
+      Then I click on the "1" link
+      And I see "Automated task" on the page
+      And I see "ProcessDailyList" on the page
+      And I see "ID" on the page
+      And I see "Name" on the page
+      And I see "Description" on the page
+      And I see "Cron expression" on the page
+      And I see "Cron editable" on the page
+      And I see "Date created" on the page
+      And I see "Created by" on the page
+      And I see "Date modified" on the page
+      And I see "Modified by" on the page
+      And I see "Run task" on the page
+      And I see "Make inactive" on the page
+      And I see "Active" on the page
+      #AC2 Run task
+      Then I press the "Run task" button
+      And I see "Task start request sent" on the page
+      #AC3 Disable task
+      Then I press the "Make inactive" button
+      And I see "Task 1 is inactive" on the page
+      And I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Inactive" in the same row as "ProcessDailyList" "1"
+      #AC4 Reenable task
+      And I click on the "1" link
+      Then I press the "Make active" button
+      And I see "Task 1 is active" on the page
+      And I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Active" in the same row as "ProcessDailyList" "1"
