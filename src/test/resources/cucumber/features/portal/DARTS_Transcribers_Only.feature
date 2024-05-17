@@ -67,6 +67,7 @@ Feature: Request Audio for transcribers
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "F{{seq}}001"
     Then I see "Approve transcript request" on the page
     And I see "F{{seq}}001" in the same row as "Case ID"
@@ -81,6 +82,8 @@ Feature: Request Audio for transcribers
 
     When I select the "Yes" radio button
     And I press the "Submit" button
+    And I see "Select to apply actions" on the page
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "F{{seq}}001" on the page
 

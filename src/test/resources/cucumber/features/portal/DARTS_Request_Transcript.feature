@@ -103,6 +103,7 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}002"
     Then I see "Approve transcript request" on the page
     And I see "C{{seq}}002" in the same row as "Case ID"
@@ -119,6 +120,8 @@ Feature: Request Transcript
 
     When I select the "Yes" radio button
     And I press the "Submit" button
+    And I see "Select to apply actions" on the page
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}002" on the page
 
@@ -322,6 +325,7 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}003"
     Then I see "Approve transcript request" on the page
     And I see "C{{seq}}003" in the same row as "Case ID"
@@ -338,6 +342,8 @@ Feature: Request Transcript
 
     When I select the "Yes" radio button
     And I press the "Submit" button
+    And I see "Select to apply actions" on the page
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}003" on the page
 
@@ -470,6 +476,7 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}004"
     Then I see "Approve transcript request" on the page
     And I see "C{{seq}}004" in the same row as "Case ID"
@@ -484,6 +491,8 @@ Feature: Request Transcript
 
     When I select the "Yes" radio button
     And I press the "Submit" button
+    And I see "Select to apply actions" on the page
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}004" on the page
 
@@ -677,12 +686,15 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}006"
     Then I see "Approve transcript request" on the page
     And I see "Requesting transcript Court Log for one minute of audio, attach transcript directly." in the same row as "Instructions"
 
     When I select the "Yes" radio button
     And I press the "Submit" button
+    And I see "Select to apply actions" on the page
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}006" on the page
 
@@ -813,6 +825,7 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}005"
     Then I see "Approve transcript request" on the page
     And I see "C{{seq}}005" in the same row as "Case ID"
@@ -832,6 +845,8 @@ Feature: Request Transcript
     And I set "Why can you not approve this request?" to "Rejecting this request, for specific reason"
     #And I see "You have 1956 characters remaining" on the page
     And I press the "Submit" button
+    And I see "Select to apply actions" on the page
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}005" on the page
 
