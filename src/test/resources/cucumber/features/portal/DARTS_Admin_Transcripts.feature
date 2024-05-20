@@ -9,6 +9,7 @@ Feature: Admin portal transcripts
       | Harrow Crown Court | {{seq}}-42 | G{{seq}}003 | DefG {{seq}}-42 | JudgeC {{seq}}-42 | testprosecutorfourtytwo   | testdefenderfourtytwo   |
       | Harrow Crown Court | {{seq}}-43 | G{{seq}}004 | DefG {{seq}}-43 | JudgeC {{seq}}-43 | testprosecutorfourtythree | testdefenderfourtythree |
       | Harrow Crown Court | {{seq}}-44 | G{{seq}}005 | DefG {{seq}}-44 | JudgeC {{seq}}-44 | testprosecutorfourtyfour  | testdefenderfourtyfour  |
+      | Harrow Crown Court | {{seq}}-45 | G{{seq}}006 | DefG {{seq}}-45 | JudgeC {{seq}}-45 | testprosecutorfourtyfive  | testdefenderfourtyfive  |
 
     Given I create an event
       | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
@@ -22,6 +23,8 @@ Feature: Admin portal transcripts
       | {{seq}}001 | 1200 |          | {{seq}}1047 | Harrow Crown Court | {{seq}}-43 | G{{seq}}004  | {{seq}}DEF-43 | {{timestamp-12:01:00}} |                             |                     |
       | {{seq}}001 | 1100 |          | {{seq}}1048 | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{seq}}ABC-44 | {{timestamp-12:30:00}} |                             |                     |
       | {{seq}}001 | 1200 |          | {{seq}}1049 | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{seq}}DEF-44 | {{timestamp-12:31:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}1050 | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{seq}}ABC-45 | {{timestamp-13:00:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}1051 | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{seq}}DEF-45 | {{timestamp-13:01:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
@@ -30,6 +33,7 @@ Feature: Admin portal transcripts
       | Harrow Crown Court | {{seq}}-42 | G{{seq}}003  | {{date+0/}} | 11:30:00  | 11:31:00 | sample1.mp2   |
       | Harrow Crown Court | {{seq}}-43 | G{{seq}}004  | {{date+0/}} | 12:00:00  | 12:01:00 | sample1.mp2   |
       | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2   |
+      | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2   |
 
   @DMP-1265 @DMP-2525
   Scenario: Change manual transcription status
@@ -301,7 +305,7 @@ Feature: Admin portal transcripts
     Then I see "Current status" on the page
     And I see "Awaiting Authorisation" in the same row as "Status"
     And I see "Assigned to" on the page
-    And I see "Associated groups" on the page
+    And I do not see "Associated groups" on the page
     And I see "Request details" on the page
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Specified Times" in the same row as "Request type"
@@ -327,6 +331,7 @@ Feature: Admin portal transcripts
     And I press the "Save changes" button
     Then I see "Status updated" on the page
     And I see "Requested" in the same row as "Status"
+    And I do not see "Associated groups" on the page
 
     When I click on the "History" link
     Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
@@ -344,6 +349,7 @@ Feature: Admin portal transcripts
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
     Then I see "Awaiting Authorisation" in the same row as "Status"
+    And I do not see "Associated groups" on the page
     And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
     And I see "This transcript request is for awaiting authorisation to closed scenario" in the same row as "Instructions"
     And I see "G{{seq}}002" in the same row as "Case ID"
@@ -367,7 +373,7 @@ Feature: Admin portal transcripts
     And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
     And I see "Changing status to closed for case 2" on the page
 
-    #TODO: Case 3: Approved -> Closed (Can't see change status link, ask Leanne or dev)
+    #Case 3: Approved -> Closed
 
     When I click on the "Transcripts" link
     And I click on the "Advanced search" link
@@ -376,6 +382,7 @@ Feature: Admin portal transcripts
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
     Then I see "Approved" in the same row as "Status"
+    And I see "Associated groups" on the page
     And I see "Start time 11:30:00 - End time 11:31:00" in the same row as "Audio for transcript"
     And I see "This transcript request is for approved to closed scenario" in the same row as "Instructions"
     And I see "G{{seq}}003" in the same row as "Case ID"
@@ -383,22 +390,22 @@ Feature: Admin portal transcripts
     And I see "JudgeG {{seq}}-42" in the same row as "Judge(s)"
     And I see "DefG {{seq}}-42" in the same row as "Defendant(s)"
 
-    #When I click on the "Change status" link
-    #And I select "Closed" from the "Select status" dropdown
-    #And I see "You have 256 characters remaining" on the page
-    #And I set "Comment (optional)" to "Changing status to closed for case 3"
-    #And I see "You have 220 characters remaining" on the page
-    #And I press the "Save changes" button
-    #Then I see "Status updated" on the page
-    #And I see "Closed" in the same row as "Status"
+    When I click on the "Change status" link
+    And I select "Closed" from the "Select status" dropdown
+    And I see "You have 256 characters remaining" on the page
+    And I set "Comment (optional)" to "Changing status to closed for case 3"
+    And I see "You have 220 characters remaining" on the page
+    And I press the "Save changes" button
+    Then I see "Status updated" on the page
+    And I see "Closed" in the same row as "Status"
 
-    #When I click on the "History" link
-    #Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
-    #And I see "This transcript request is for approved to closed scenario" on the page
-    #And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
-    #And I see "Approved by Approver (darts.approver@hmcts.net)" on the page
-    #And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
-    #And I see "Changing status to closed for case 3" on the page
+    When I click on the "History" link
+    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    And I see "This transcript request is for approved to closed scenario" on the page
+    And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
+    And I see "Approved by Approver (darts.approver@hmcts.net)" on the page
+    And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
+    And I see "Changing status to closed for case 3" on the page
 
     #Case 4: With transcriber -> Approved
 
@@ -409,6 +416,7 @@ Feature: Admin portal transcripts
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
     Then I see "With Transcriber" in the same row as "Status"
+    And I see "Associated groups" on the page
     And I see "Start time 12:00:00 - End time 12:01:00" in the same row as "Audio for transcript"
     And I see "This transcript request is for with transcriber to approved scenario" in the same row as "Instructions"
     And I see "G{{seq}}004" in the same row as "Case ID"
@@ -443,6 +451,7 @@ Feature: Admin portal transcripts
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
     Then I see "With Transcriber" in the same row as "Status"
+    And I see "Associated groups" on the page
     And I see "Start time 12:30:00 - End time 12:31:00" in the same row as "Audio for transcript"
     And I see "This transcript request is for with transcriber to closed scenario" in the same row as "Instructions"
     And I see "G{{seq}}005" in the same row as "Case ID"
@@ -468,6 +477,40 @@ Feature: Admin portal transcripts
     And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
     And I see "Changing status to closed for case 5" on the page
 
+    #Case 1: Requested -> Closed (using case 1 again)
+
+    And I click on the "Transcripts" link
+    And I click on the "Advanced search" link
+    And I set "Case ID" to "G{{seq}}001"
+    And I press the "Search" button
+    #TODO: This requires a way for auto to know the request ID
+    #And I click on the "Request ID" link
+    Then I see "Current status" on the page
+    And I see "Requested" in the same row as "Status"
+    And I do not see "Associated groups" on the page
+    And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for transcript"
+    And I see "This transcript request is for awaiting authorisation to requested scenario" in the same row as "Instructions"
+    And I see "G{{seq}}001" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "JudgeG {{seq}}-40" in the same row as "Judge(s)"
+    And I see "DefG {{seq}}-40" in the same row as "Defendant(s)"
+
+    When I click on the "Change status" link
+    And I select "Closed" from the "Select status" dropdown
+    And I set "Comment (optional)" to "Changing status to closed for case 1"
+    And I press the "Save changes" button
+    Then I see "Status updated" on the page
+    And I see "Closed" in the same row as "Status"
+
+    When I click on the "History" link
+    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    And I see "This transcript request is for awaiting authorisation to requested scenario" on the page
+    And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
+    And I see "Requested by Darts Admin (darts.admin@hmcts.net)" on the page
+    And I see "Changing status to requested for case 1" on the page
+    And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
+    And I see "Changing status to closed for case 1" on the page
+
     #Check back on requester to confirm correct statuses
 
     When I Sign out
@@ -478,12 +521,12 @@ Feature: Admin portal transcripts
     And I press the "Search" button
     And I click on "G{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on the "All Transcripts" link
-    And I see "Requested" in the same row as "Specified Times"
+    And I see "Closed" in the same row as "Specified Times"
 
     When I click on the "Hearings" link
     And I click on the "{{displaydate}}" link
     And I click on the "Transcripts" link
-    And I see "Requested" in the same row as "Specified Times"
+    And I see "Closed" in the same row as "Specified Times"
 
     When I click on the "Search" link
     And I set "Case ID" to "G{{seq}}002"
@@ -541,11 +584,11 @@ Feature: Admin portal transcripts
     And I click on the "Transcript requests" link
     Then I see "Manual" in the same row as "G{{seq}}004"
 
-    #Case 1: Awaiting authorisation -> Requested
+    #Case 1: Awaiting authorisation -> Requested then Requested -> Closed
 
     #Case 2: Awaiting authorisation -> Closed
 
-    #Case 3: Approved -> Closed (Currently disputed) along with Requested -> Closed which is not listed here
+    #Case 3: Approved -> Closed
 
     #Case 4: With transcriber -> Approved
 
