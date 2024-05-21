@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -77,6 +78,24 @@ public class NavigationShared {
 			log.info("Did not see Expected Text =>" + substitutedValue);
 
 		return found;
+	}
+	
+	public void elementWithTextExists(String text, String type) {
+		Assertions.assertNotEquals(0, countElementWithText(text, type));
+	}
+
+	public int countElementWithText(String text, String type) {
+		log.info("About to look for element type {} containing {}", type, text);
+		By by = By.xpath("//" + type + "[normalize-space(.)=\"" + text + "\"]");
+		List<WebElement> webELements = new WebDriverWait(driver, Duration.ofSeconds(5))
+			.pollingEvery(Duration.ofMillis(200))
+			.ignoring(NoSuchElementException.class)
+			.until(ExpectedConditions
+				.numberOfElementsToBeMoreThan(by, 0));
+		if (webELements.size() != 1) {
+			log.warn("Number of webELements with text {} was {}", text, webELements.size()); 
+		}
+		return webELements.size();
 	}
 
 	/**

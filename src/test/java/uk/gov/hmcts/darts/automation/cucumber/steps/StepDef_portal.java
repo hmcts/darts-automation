@@ -67,6 +67,11 @@ public class StepDef_portal extends StepDef_base {
     	portal.signOut();
     }
 
+    @When("^I click on the \"([^\"]*)\" sub-menu link$")
+    public void clickOnSubMenuLink(String link) {
+    	portal.clickOnSubMenuLink(link);
+    }
+
     @When("^I see phone number \"([^\"]*)\" on the page$")
     public void seePhoneNumberOnThePage(String arg1) throws Exception {
         NAV.textPresentOnPage("XXX-XXX-" + arg1.substring(arg1.length() - 5));
@@ -196,4 +201,100 @@ public class StepDef_portal extends StepDef_base {
     	savedRequestId = portal.returnRequestId();
     	testdata.setProperty("requestId", savedRequestId);
     }
+    
+    @Then("^I see the sub-menu link \"([^\"]*)\"$")
+    public void seeSubMenuLink(String link) {
+    	portal.subMenuLinkVisible(link);
+    }
+    
+    @Then("^Cookie \"([^\"]*)\" \"([^\"]*)\" value is \"([^\"]*)\"$")
+    public void cookieValueIs(String cookie, String name, String expectedValue) throws Exception {
+    	String actualValue = portal.getCookie(cookie, name);
+    	Assertions.assertTrue(actualValue.equals(expectedValue), "Expected " + expectedValue + " but is " + actualValue);
+    }
+
+// Verifies existence of links in datatable with link text as the column header & Y/N/Linked page heading
+	@Then("^I verify links with text:$")
+	public void verifyLinksWithText(List<List<String>> dataTable) throws Exception {
+		Assertions.assertTrue(dataTable.size() > 1);
+		int errorCount = 0;
+		String errorLinks = "";
+		for (int rowNum = 1; rowNum < dataTable.size(); rowNum++) {
+			for (int colNum = 0; colNum < dataTable.get(0).size(); colNum++) {
+				String linkText = dataTable.get(0).get(colNum);
+				String linkTest = (dataTable.get(rowNum).get(colNum) == null) ? "" : dataTable.get(rowNum).get(colNum);
+				boolean linkExists = NAV.linkText_visible(linkText);
+				if (linkTest.equalsIgnoreCase("N")) {
+					if (linkExists) {
+						log.error("Error in links for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
+						errorCount++;
+						errorLinks = errorLinks + (errorLinks.isBlank() ? "" : ", ") + linkText;
+					}
+				} else {
+					if (linkTest.isBlank()) {
+						log.info("Links for {} in row {} not checked, link exists={}", linkText, rowNum, linkExists);
+					} else {
+						if (linkExists) {
+							NAV.click_link_by_text(linkText);
+							int elements = NAV.countElementWithText(linkTest.equalsIgnoreCase("Y") ? linkText : linkTest, "h1");
+							if (elements != 1) {
+								log.error("Error in header for {} in row {} : {}", linkText, rowNum, linkTest);
+								errorCount++;
+							}
+						} else {
+							log.error("Error in links for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
+							errorCount++;
+							errorLinks = errorLinks + (errorLinks.isBlank() ? "" : ", ") + linkText;
+						}
+					}
+				}
+			}
+		}
+		Assertions.assertEquals(0, errorCount, "Errors found verifying links: " + errorLinks);
+	}
+
+// Verifies existence of sub-menu links in datatable with link text as the column header & Y/N/Linked page heading
+	@Then("^I verify sub-menu links for \"([^\"]*)\":$")
+	public void verifySubMenuLinks(String link, List<List<String>> dataTable) throws Exception {
+		NAV.click_link_by_text(link);
+		Assertions.assertTrue(dataTable.size() > 1);
+		int errorCount = 0;
+		String errorLinks = "";
+		for (int rowNum = 1; rowNum < dataTable.size(); rowNum++) {
+			for (int colNum = 0; colNum < dataTable.get(0).size(); colNum++) {
+				String linkText = dataTable.get(0).get(colNum);
+				String linkTest = (dataTable.get(rowNum).get(colNum) == null) ? "" : dataTable.get(rowNum).get(colNum);
+				boolean linkExists = portal.subMenuLinkVisible(linkText);
+				if (linkTest.equalsIgnoreCase("N")) {
+					if (linkExists) {
+						log.error("Error in links for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
+						errorCount++;
+						errorLinks = errorLinks + (errorLinks.isBlank() ? "" : ", ") + linkText;
+					}
+				} else {
+					if (linkTest.isBlank()) {
+						log.info("Links for {} in row {} not checked, link exists={}", linkText, rowNum, linkExists);
+					} else {
+						if (linkExists) {
+							portal.clickOnSubMenuLink(linkText);
+//							if (!linkTest.equalsIgnoreCase("X")) {
+								int elements = portal.countSubMenuHeaders(linkTest.equalsIgnoreCase("Y") ? linkText : linkTest);
+//								if (elements != 1) {
+								if ((linkTest.equalsIgnoreCase("X") && elements != 0) || (!linkTest.equalsIgnoreCase("X") && elements != 1)) {
+									log.error("Error in header for {} in row {} : {}", linkText, rowNum, linkTest);
+									errorCount++;
+									errorLinks = errorLinks + (errorLinks.isBlank() ? "" : ", ") + linkText + "(" + linkTest + ")";
+//								}
+							}
+						} else {
+							log.error("Error in links for {} in row {}: {}, link exists={}", linkText, rowNum, linkTest, linkExists);
+							errorCount++;
+							errorLinks = errorLinks + (errorLinks.isBlank() ? "" : ", ") + linkText;
+						}
+					}
+				}
+			}
+		}
+		Assertions.assertEquals(0, errorCount, "Errors found verifying links: " + errorLinks);
+	}
 }

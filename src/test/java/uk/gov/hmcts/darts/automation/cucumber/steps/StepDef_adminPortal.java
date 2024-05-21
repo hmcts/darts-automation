@@ -35,9 +35,4 @@ public class StepDef_adminPortal extends StepDef_base {
         WAIT = new WaitUtils(webDriver);
     }
 
-    @When("^I click on the sub-menu link \"([^\"]*)\"$")
-    public void clickOnSubMenuLink(String link) {
-    	adminPortal.clickOnSubMenuLink(link);
-    }
-
 }
