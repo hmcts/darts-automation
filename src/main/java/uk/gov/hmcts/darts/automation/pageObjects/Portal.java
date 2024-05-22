@@ -12,8 +12,10 @@ import com.jayway.jsonpath.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -56,16 +58,27 @@ public class Portal {
         NAV.waitForPageLoad();
         webDriver.findElement(By.xpath("//span[contains(@id, 'transcription-count') and contains(text(),'" + count + "')]"));
     }
+    
+    public void allowCookies(boolean allow) {
+    	try {
+            NAV.press_buttonByName(allow ? "Accept" : "Reject" + " additional cookies");
+            NAV.press_buttonByName("Hide cookie message");
+    	} catch (Exception e) {
+    		
+    	}
+    }
 
     public void logonToDartsPortal(String type) throws Exception {
     	log.info("About to navigate to admin portal & login as user type " + type);
     	NAV.navigateToUrl(ReadProperties.main("portal_url"));
+    	allowCookies(false);
     	logonAsUser(type);
     }
 
     public void logonToAdminPortal(String type) throws Exception {
     	log.info("About to navigate to DARTS portal & login as user type " + type);
     	NAV.navigateToUrl(ReadProperties.main("portal_url") + "/admin");
+    	allowCookies(false);
     	logonAsUser(type);
     }
 
@@ -435,4 +448,52 @@ public class Portal {
     			+ "/strong")).getText();
     	return requestId;
     }
+
+    public void clickOnSubMenuLink(String linkText) {
+        String substitutedValue = Substitutions.substituteValue(linkText);
+        webDriver.findElement(By.xpath("//app-tabs//a[@class='moj-sub-navigation__link'][contains(text(),'" + substitutedValue + "')]")).click();
+        NAV.waitForPageLoad();
+    }
+
+	public boolean subMenuLinkVisible(String linkText) {
+		log.info("Going to check whether sub-menu link text =>" + linkText + "<= is present on the page");
+		boolean isVisible = false;
+		WebElement link;
+		try {
+			link = webDriver.findElement(By.xpath("//app-tabs//a[@class='moj-sub-navigation__link'][contains(text(),'" + Substitutions.substituteValue(linkText) + "')]"));
+			isVisible = link.isDisplayed();
+		} catch (Exception e) {
+			isVisible = false;
+		}
+		return isVisible;
+	}
+
+	public int countSubMenuHeaders(String text) {
+		log.info("About to look for sub-Menu header containing {}", text);
+		By by = By.xpath("//h2[normalize-space(.)=\"" + text + "\"]"
+				+ " | //h1[normalize-space(.)=\"" + text + "\"]");
+		try {
+			List<WebElement> webELements = new WebDriverWait(webDriver, Duration.ofSeconds(5))
+				.pollingEvery(Duration.ofMillis(200))
+				.ignoring(NoSuchElementException.class)
+				.until(ExpectedConditions
+					.numberOfElementsToBeMoreThan(by, 0));
+			if (webELements.size() != 1) {
+				log.warn("Number of subMenu headers with text {} was {}", text, webELements.size()); 
+			}
+			return webELements.size();
+		} catch (Exception | AssertionError e) {
+			return 0;
+		}
+	}
+	
+	public String getCookie(String cookie, String name) throws Exception {
+		String cookieValue = webDriver.manage().getCookieNamed(cookie).getValue();
+		if (cookieValue == null || cookieValue.isBlank()) {
+			return "";
+		}
+		return java.net.URLDecoder.decode(cookieValue, "UTF-8")
+				.split(",")[0]
+				.split("\"" + name + "\":")[1];
+	}
 }

@@ -50,6 +50,11 @@ public class StepDef_navigation extends StepDef_base {
 		}
 	}
 	
+	@Then("^I see header \"([^\"]*)\"$")
+	public void headerExists(String text) {
+		NAV.elementWithTextExists(text, "h1");
+	}
+	
 	@When("^I press the \"([^\"]*)\" button on my browser$")
 	public void forward_back_button(String arg1) throws Exception {
 	    NAV.press_navigationButton(arg1);
