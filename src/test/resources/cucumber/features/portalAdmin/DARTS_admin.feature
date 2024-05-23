@@ -200,7 +200,7 @@ Feature: Admin
       | Test      | Test999@hmcts.net | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test |
 
   @DMP-2931 @regression
-  Scenario: Remove user role, single and multiple, cancel link
+  Scenario: Remove user role, single and multiple, test cancel link
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Courthouses" link
     And I set "Courthouse name" to "Harrow"
