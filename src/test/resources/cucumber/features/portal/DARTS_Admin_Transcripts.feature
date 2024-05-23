@@ -1,6 +1,6 @@
 Feature: Admin portal transcripts
 
-  @DMP-1265 @DMP-2525
+  @DMP-1265 @DMP-2525 @DMP-2538
   Scenario: Admin change transcription status data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors               | defenders               |
@@ -11,6 +11,7 @@ Feature: Admin portal transcripts
       | Harrow Crown Court | {{seq}}-44 | G{{seq}}005 | DefG {{seq}}-44 | JudgeC {{seq}}-44 | testprosecutorfourtyfour  | testdefenderfourtyfour  |
       | Harrow Crown Court | {{seq}}-45 | G{{seq}}006 | DefG {{seq}}-45 | JudgeC {{seq}}-45 | testprosecutorfourtyfive  | testdefenderfourtyfive  |
 
+    Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 1100 |          | {{seq}}1040 | Harrow Crown Court | {{seq}}-40 | G{{seq}}001  | {{seq}}ABC-40 | {{timestamp-10:30:00}} |                             |                     |
@@ -26,16 +27,17 @@ Feature: Admin portal transcripts
       | {{seq}}001 | 1100 |          | {{seq}}1050 | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{seq}}ABC-45 | {{timestamp-13:00:00}} |                             |                     |
       | {{seq}}001 | 1200 |          | {{seq}}1051 | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{seq}}DEF-45 | {{timestamp-13:01:00}} |                             |                     |
 
+    Given I authenticate from the CPP source system
     When I load an audio file
-      | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
-      | Harrow Crown Court | {{seq}}-40 | G{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2   |
-      | Harrow Crown Court | {{seq}}-41 | G{{seq}}002  | {{date+0/}} | 11:00:00  | 11:01:00 | sample1.mp2   |
-      | Harrow Crown Court | {{seq}}-42 | G{{seq}}003  | {{date+0/}} | 11:30:00  | 11:31:00 | sample1.mp2   |
-      | Harrow Crown Court | {{seq}}-43 | G{{seq}}004  | {{date+0/}} | 12:00:00  | 12:01:00 | sample1.mp2   |
-      | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2   |
-      | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2   |
+      | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
+      | Harrow Crown Court | {{seq}}-40 | G{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-41 | G{{seq}}002  | {{date+0/}} | 11:00:00  | 11:01:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-42 | G{{seq}}003  | {{date+0/}} | 11:30:00  | 11:31:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-43 | G{{seq}}004  | {{date+0/}} | 12:00:00  | 12:01:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2 |
 
-  @DMP-1265 @DMP-2525
+  @DMP-1265 @DMP-2525 @DMP-2538
   Scenario: Change manual transcription status
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -302,6 +304,7 @@ Feature: Admin portal transcripts
     And I press the "Search" button
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
+    #DMP-2525-AC1 and AC2 Transcript request details and stages
     Then I see "Current status" on the page
     And I see "Awaiting Authorisation" in the same row as "Status"
     And I see "Assigned to" on the page
@@ -323,6 +326,7 @@ Feature: Admin portal transcripts
     And I see "JudgeG {{seq}}-40" in the same row as "Judge(s)"
     And I see "DefG {{seq}}-40" in the same row as "Defendant(s)"
 
+    #DMP-2525-AC3 and DMP-1265 Change status link and process
     When I click on the "Change status" link
     And I select "Requested" from the "Select status" dropdown
     And I see "You have 256 characters remaining" on the page
@@ -333,6 +337,7 @@ Feature: Admin portal transcripts
     And I see "Requested" in the same row as "Status"
     And I do not see "Associated groups" on the page
 
+    #DMP-2538 Transcript request history
     When I click on the "History" link
     Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for awaiting authorisation to requested scenario" on the page
