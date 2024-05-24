@@ -13,7 +13,7 @@ Feature: Admin portal
     Then I press the "Create user" button
 
 
-  @DMO-2340
+  @DMP-2340
   Scenario: Admin portal data creation - User 2 - Deactivated user
   #Login admin portal
     Given I am logged on to DARTS as an ADMIN user
