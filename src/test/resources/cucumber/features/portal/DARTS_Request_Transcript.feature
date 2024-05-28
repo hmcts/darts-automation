@@ -12,6 +12,7 @@ Feature: Request Transcript
       | Harrow Crown Court | {{seq}}-13 | C{{seq}}006 | DefC {{seq}}-13 | JudgeC {{seq}}-13 | testprosecutorthirteen | testdefenderthirteen |
       | Harrow Crown Court | {{seq}}-14 | C{{seq}}007 | DefC {{seq}}-14 | JudgeC {{seq}}-14 | testprosecutorfourteen | testdefenderfourteen |
 
+    Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 1100  |          | {{seq}}1008 | Harrow Crown Court | {{seq}}-8  | C{{seq}}001  | {{seq}}ABC-8  | {{timestamp-10:00:00}} |                             |                     |
@@ -30,13 +31,13 @@ Feature: Request Transcript
       | {{seq}}001 | 1200  |          | {{seq}}1021 | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{seq}}DEF-14 | {{timestamp-13:01:00}} |                             |                     |
 
     When I load an audio file
-      | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
-      | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1   |
-      | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{date+0/}} | 11:00:00  | 11:01:00 | sample1   |
-      | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{date+0/}} | 11:30:00  | 11:31:00 | sample1   |
-      | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{date+0/}} | 12:00:00  | 12:01:00 | sample1   |
-      | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1   |
-      | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1   |
+      | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
+      | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{date+0/}} | 11:00:00  | 11:01:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{date+0/}} | 11:30:00  | 11:31:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{date+0/}} | 12:00:00  | 12:01:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2 |
+      | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2 |
 
   @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-2740 @regression
   Scenario: Request Transcription, Specified Times with Event Checkboxes
@@ -111,7 +112,7 @@ Feature: Request Transcript
     And I see "JudgeC {{seq}}-9" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-9" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
-    And I see "Specified Times" in the same row as "Request Type"
+    And I see "Specified Times" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
@@ -333,7 +334,7 @@ Feature: Request Transcript
     And I see "JudgeC {{seq}}-10" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-10" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
-    And I see "Court Log" in the same row as "Request Type"
+    And I see "Court Log" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio selected via manually entering time." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
@@ -484,7 +485,7 @@ Feature: Request Transcript
     And I see "JudgeC {{seq}}-11" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-11" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
-    And I see "Court Log" in the same row as "Request Type"
+    And I see "Court Log" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
@@ -833,7 +834,7 @@ Feature: Request Transcript
     And I see "JudgeC {{seq}}-12" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-12" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
-    And I see "Court Log" in the same row as "Request Type"
+    And I see "Court Log" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio, this will test negative path." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
