@@ -169,6 +169,9 @@ public class Database extends Postgres {
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", "12"), "12");
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", "null"), "null");
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", null), "null");
+		Assertions.assertEquals(db.delimitedValue("darts.event", "event_ts", "2024-12-12 10:00:00+00"), "'2024-12-12 10:00:00+00'");
+		Assertions.assertEquals(db.delimitedValue("darts.event", "event_ts", "null"), "null");
+		Assertions.assertEquals(db.delimitedValue("darts.event", "event_ts", null), "null");
 // following tests rely on data existing in tables
 //		Assertions.assertEquals(db.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
 //		Assertions.assertEquals(db.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
@@ -200,9 +203,9 @@ public class Database extends Postgres {
 				"mer_id", "23645",
 				"request_status"));
 
-		System.out.println(db.returnSingleValue("darts.transformed_media",
-				"mer_id", "23645",
-				"trm_id"));
+//		System.out.println(db.returnSingleValue("darts.transformed_media",
+//				"mer_id", "23645",
+//				"trm_id"));
 	}
 
 

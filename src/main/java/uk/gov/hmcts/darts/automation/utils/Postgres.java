@@ -258,6 +258,7 @@ public class Postgres {
 			case "character": 
 			case "string": 
 			case "date": 
+			case "timestamp": 
 					delimiter = "'";
 					break;
 			default : delimiter = "";
