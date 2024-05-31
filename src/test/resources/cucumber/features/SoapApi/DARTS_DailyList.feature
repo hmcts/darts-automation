@@ -4,7 +4,7 @@ Feature: Cases EndPoint using SOAP
 # n.b. for CPP, case number is held in the URN field
 #
 	
-@Daily_List @SOAP_API @DMP-2968 @regression
+@Daily_List @SOAP_API @DMP-2968 @regression @test
 Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 		First is replaced
 		Second is ignored when processed
@@ -13,29 +13,52 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
   Given I authenticate from the <source> source system
 # First daily list for today
   When I add a daily list
-  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber   | startDate   | startTime | endDate   | timeStamp   | defendant   |
-  | <messageId>1  | <type> | <subType> | <documentName>1 | <courthouse> | <courtroom> | <caseNumber> | <startDate> | 16:00     | <endDate> | <timeStamp> | <defendant> |
-  Then I see table darts.daily_list column job_status is "NEW" where unique_id = "<documentName>1" and message_id = "<messageId>1"
-# Overwrite first daily list for today
+  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant   | judge               | prosecution         | defence          |
+  | <messageId>1  | <type> | <subType> | <documentName>1 | <courthouse> | <courtroom> | <caseNumber>1 | <startDate> | 16:00     | <endDate> | <timeStamp> | <defendant> | judge name {{seq}}0 | prosecutor {{seq}}0 | defence {{seq}}0 |
+  Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>1" and unique_id = "<documentName>1"
+# Overwrite first daily list for today (will be ignored)
   When I add a daily list
-  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber   | startDate   | startTime | endDate   | timeStamp   | defendant   |
-  | <messageId>1  | <type> | <subType> | <documentName>2 | <courthouse> | <courtroom> | <caseNumber> | <startDate> | 17:00     | <endDate> | <timeStamp> | <defendant> |
-  Then I see table darts.daily_list column job_status is "NEW" where unique_id = "<documentName>2" and message_id = "<messageId>1"
-# Second daily list for today
+  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant   | judge               | prosecution         | defence          |
+  | <messageId>1  | <type> | <subType> | <documentName>2 | <courthouse> | <courtroom> | <caseNumber>1 | <startDate> | 17:00     | <endDate> | <timeStamp> | <defendant> | judge name {{seq}}1 | prosecutor {{seq}}1 | defence {{seq}}1 |
+  Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>1" and unique_id = "<documentName>2"
+# Second daily list for today (will be processed)
   When I add a daily list
-  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber   | startDate   | startTime | endDate   | timeStamp   | defendant   |
-  | <messageId>2  | <type> | <subType> | <documentName>1 | <courthouse> | <courtroom> | <caseNumber> | <startDate> | 18:00     | <endDate> | <timeStamp> | <defendant> |
-  Then I see table darts.daily_list column job_status is "NEW" where unique_id = "<documentName>1" and message_id = "<messageId>2"
+  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant   | judge               | prosecution         | defence          |
+  | <messageId>2  | <type> | <subType> | <documentName>1 | <courthouse> | <courtroom> | <caseNumber>1 | <startDate> | 18:00     | <endDate> | <timeStamp> | <defendant> | judge name {{seq}}2 | prosecutor {{seq}}2 | defence {{seq}}2 |
+  Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>2" and unique_id = "<documentName>1"
 # Daily list for tomorrow
   When I add a daily list
-  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber   | startDate  | startTime | endDate   | timeStamp   | defendant   |
-  | <messageId>3  | <type> | <subType> | <documentName>3 | <courthouse> | <courtroom> | <caseNumber> | {{date+1}} | 10:00     | {{date+1}} | <timeStamp> | <defendant> |
-  Then I see table darts.daily_list column job_status is "NEW" where unique_id = "<documentName>3" and message_id = "<messageId>3"
+  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp   | defendant   | judge               | prosecution         | defence          |
+  | <messageId>9  | <type> | <subType> | <documentName>9 | <courthouse> | <courtroom> | <caseNumber>9 | {{date+1}} | 10:00     | {{date+1}} | <timeStamp> | <defendant> | judge name {{seq}}9 | prosecutor {{seq}}9 | defence {{seq}}9 |
+  Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>9" and unique_id = "<documentName>9"
   When I process the daily list for courthouse <courthouse>
-  Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "<documentName>1" and message_id = "<messageId>2"
-   And I see table darts.daily_list column job_status is "IGNORED" where unique_id = "<documentName>2" and message_id = "<messageId>1"
-   And I see table darts.daily_list column job_status is "NEW" where unique_id = "<documentName>3" and message_id = "<messageId>3"
-   And I see table CASE_HEARING column case_closed is "f" where case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
+  Then I see table darts.daily_list column job_status is "PROCESSED" where message_id = "<messageId>2" and unique_id = "<documentName>1"
+   And I see table darts.daily_list column job_status is "IGNORED" where message_id = "<messageId>1" and unique_id = "<documentName>2"
+   And I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>9" and unique_id = "<documentName>9"
+   And I select column cas.cas_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and case_number = "<caseNumber>1"
+   And I select column hea_id from table CASE_HEARING where cas.cas_id = "{{cas.cas_id}}" and hearing_date = "{{date-yyyymmdd-0}}"
+   And I see table CASE_HEARING column case_closed is "f" where cas.cas_id = "{{cas.cas_id}}"
+   And I see table CASE_HEARING_JUDGE column judge_name is "judge name {{seq}}2" where hea_id = "{{hea_id}}"
+   And I see table CASE_JUDGE column judge_name is "judge name {{seq}}2" where cas_id = "{{cas.cas_id}}"
+   And I see table darts.prosecutor column prosecutor_name is "prosecutor {{seq}}2" where cas_id = "{{cas.cas_id}}"
+   And I see table darts.defence column defence_name is "defence {{seq}}2" where cas_id = "{{cas.cas_id}}"
+   And I see table darts.defendant column defendant_name is "<defendant>" where cas_id = "{{cas.cas_id}}"
+   And I select column jud_id from table CASE_JUDGE where cas_id = "{{cas.cas_id}}"
+# Daily list for second case today (will be processed)
+  When I add a daily list
+  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant               | judge               | prosecution         | defence          |
+  | <messageId>3  | <type> | <subType> | <documentName>3 | <courthouse> | 2           | <caseNumber>3 | <startDate> | 10:00     | <endDate> | <timeStamp> | <caseNumber>3 defendant | judge name {{seq}}2 | prosecutor {{seq}}2 | defence {{seq}}2 |
+  Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>3" and unique_id = "<documentName>3"
+  When I process the daily list for courthouse <courthouse>
+  Then I see table darts.daily_list column job_status is "PROCESSED" where message_id = "<messageId>3" and unique_id = "<documentName>3"
+   And I select column cas.cas_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "2" and case_number = "<caseNumber>3"
+   And I select column hea_id from table CASE_HEARING where cas.cas_id = "{{cas.cas_id}}" and hearing_date = "{{date-yyyymmdd-0}}"
+   And I see table CASE_HEARING column case_closed is "f" where cas.cas_id = "{{cas.cas_id}}"
+   And I see table CASE_HEARING_JUDGE column judge_name is "judge name {{seq}}2" where hea_id = "{{hea_id}}" and jud_id = "{{jud_id}}"
+   And I see table CASE_JUDGE column judge_name is "judge name {{seq}}2" where cas_id = "{{cas.cas_id}}" and jud_id = "{{jud_id}}"
+   And I see table darts.prosecutor column prosecutor_name is "prosecutor {{seq}}2" where cas_id = "{{cas.cas_id}}"
+   And I see table darts.defence column defence_name is "defence {{seq}}2" where cas_id = "{{cas.cas_id}}"
+   And I see table darts.defendant column defendant_name is "<caseNumber>3 defendant" where cas_id = "{{cas.cas_id}}"
 Examples:
   | source | messageId                      | type  | subType | documentName             | courthouse         | courtroom | caseNumber  | startDate    | startTime | endDate    | timeStamp     | defendant             |
   | XHIBIT | 58b211f4-426d-81be-00{{seq}}00 | DL    | DL      | DL {{date+0/}} {{seq}}00 | Harrow Crown Court | 1         | T{{seq}}101 | {{date+0}}   | 10:00:00  | {{date+0}} | {{timestamp}} | T{{seq}}101 defendant |
@@ -226,9 +249,9 @@ Scenario: Daily List malformed fails
 	"""
 	Then the API status code is 400
 	
-@Daily_List @SOAP_API @DMP-2968 @regression
+@Daily_List @SOAP_API @DMP-2968 @regression @testDL
 Scenario: Daily List successful
-  Given I authenticate from the XHIBIT source system
+  Given I authenticate from the CPP source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
    			<messageId>58b211f4-426d-81be-000{{seq}}001</messageId>
@@ -269,9 +292,9 @@ Scenario: Daily List successful
                     <cs:SittingPriority>T</cs:SittingPriority>
                     <cs:Judiciary>
                         <cs:Judge>
-                            <apd:CitizenNameForename>NONE</apd:CitizenNameForename>
-                            <apd:CitizenNameSurname>NONE</apd:CitizenNameSurname>
-                            <apd:CitizenNameRequestedName>NONE</apd:CitizenNameRequestedName>
+                            <apd:CitizenNameForename>ignored</apd:CitizenNameForename>
+                            <apd:CitizenNameSurname>ignored</apd:CitizenNameSurname>
+                            <apd:CitizenNameRequestedName>judge name{{seq}}</apd:CitizenNameRequestedName>
                         </cs:Judge>
                     </cs:Judiciary>
                     <cs:Hearings>
@@ -282,29 +305,113 @@ Scenario: Daily List successful
                                 <cs:HearingDate>{{yyyymmdd}}</cs:HearingDate>
                             </cs:HearingDetails>
                             <cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
-                            <cs:CaseNumber>T{{seq}}010</cs:CaseNumber>
+                            <cs:CaseNumber>T{{seq}}110</cs:CaseNumber>
                             <cs:Prosecution ProsecutingAuthority="Other Prosecutor">
-                                <cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+                                <cs:ProsecutingReference>Prosecution ref</cs:ProsecutingReference>
                                 <cs:ProsecutingOrganisation>
                                     <cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
                                 </cs:ProsecutingOrganisation>
+                <cs:Advocate>
+                  <cs:PersonalDetails>
+                    <cs:Name>
+                      <apd:CitizenNameTitle>ignored</apd:CitizenNameTitle>
+                      <apd:CitizenNameForename>PROSECUTOR</apd:CitizenNameForename>
+                      <apd:CitizenNameSurname>SURNAME {{seq}}</apd:CitizenNameSurname>
+                      <apd:CitizenNameSuffix>ignored</apd:CitizenNameSuffix>
+                      <apd:CitizenNameRequestedName>ignored</apd:CitizenNameRequestedName>
+                    </cs:Name>
+                    <cs:MaskedName>String</cs:MaskedName>
+                    <cs:IsMasked>yes</cs:IsMasked>
+                    <cs:DateOfBirth>
+                      <apd:BirthDate>1967-08-13</apd:BirthDate>
+                      <apd:VerifiedBy>not verified</apd:VerifiedBy>
+                    </cs:DateOfBirth>
+                    <cs:Age>0</cs:Age>
+                    <cs:Sex>unknown</cs:Sex>
+                    <cs:Address>
+                      <apd:Line>1 Address</apd:Line>
+                      <apd:Line>2 Address</apd:Line>
+                      <apd:PostCode>A0 0AA</apd:PostCode>
+                    </cs:Address>
+                  </cs:PersonalDetails>
+                  <cs:ContactDetails>
+                    <apd:Email EmailPreferred="yes" EmailUsage="work">
+                      <apd:EmailAddress/>
+                    </apd:Email>
+                    <apd:Telephone TelPreferred="yes" TelMobile="yes" TelUse="work">
+                      <apd:TelNationalNumber> </apd:TelNationalNumber>
+                      <apd:TelExtensionNumber>0</apd:TelExtensionNumber>
+                      <apd:TelCountryCode>0</apd:TelCountryCode>
+                    </apd:Telephone>
+                    <apd:Fax FaxPreferred="yes" FaxMobile="yes" FaxUse="work">
+                      <apd:FaxNationalNumber> </apd:FaxNationalNumber>
+                      <apd:FaxExtensionNumber>0</apd:FaxExtensionNumber>
+                      <apd:FaxCountryCode>0</apd:FaxCountryCode>
+                    </apd:Fax>
+                  </cs:ContactDetails>
+                  <cs:StartDate>1967-08-13</cs:StartDate>
+                  <cs:EndDate>1967-08-13</cs:EndDate>
+                </cs:Advocate>
                             </cs:Prosecution>
                             <cs:Defendants>
                                 <cs:Defendant>
                                     <cs:PersonalDetails>
                                         <cs:Name>
                                             <apd:CitizenNameForename>Casper</apd:CitizenNameForename>
-                                            <apd:CitizenNameSurname>Daugherty</apd:CitizenNameSurname>
-                                            <apd:CitizenNameRequestedName>Casper Daugherty</apd:CitizenNameRequestedName>
+                                            <apd:CitizenNameSurname>Daugherty{{seq}}</apd:CitizenNameSurname>
+                                            <apd:CitizenNameRequestedName>John Snow</apd:CitizenNameRequestedName>
                                         </cs:Name>
                                         <cs:IsMasked>no</cs:IsMasked>
                                     </cs:PersonalDetails>
-                                    <cs:URN>50MD1811194</cs:URN>
+                                    <cs:URN>T{{seq}}110</cs:URN>
                                     <cs:Charges>
                                         <cs:Charge IndictmentCountNumber="0" CJSoffenceCode="SA00002">
                                             <cs:OffenceStatement>Sex offences - abuse position of trust - engage in sexual activity</cs:OffenceStatement>
                                         </cs:Charge>
                                     </cs:Charges>
+                  <cs:Counsel>
+                    <cs:Advocate>
+                      <cs:PersonalDetails>
+                        <cs:Name>
+                          <apd:CitizenNameTitle>Ms</apd:CitizenNameTitle>
+                          <apd:CitizenNameForename>solicitor</apd:CitizenNameForename>
+                          <apd:CitizenNameSurname>surname {{seq}}</apd:CitizenNameSurname>
+                          <apd:CitizenNameSuffix></apd:CitizenNameSuffix>
+                          <apd:CitizenNameRequestedName></apd:CitizenNameRequestedName>
+                        </cs:Name>
+                        <cs:MaskedName>String</cs:MaskedName>
+                        <cs:IsMasked>yes</cs:IsMasked>
+                        <cs:DateOfBirth>
+                          <apd:BirthDate>1967-08-13</apd:BirthDate>
+                          <apd:VerifiedBy>not verified</apd:VerifiedBy>
+                        </cs:DateOfBirth>
+                        <cs:Age>0</cs:Age>
+                        <cs:Sex>unknown</cs:Sex>
+                        <cs:Address>
+                          <apd:Line></apd:Line>
+                          <apd:Line></apd:Line>
+                          <apd:PostCode>A0 0AA</apd:PostCode>
+                        </cs:Address>
+                      </cs:PersonalDetails>
+                      <cs:ContactDetails>
+                        <apd:Email EmailPreferred="yes" EmailUsage="work">
+                          <apd:EmailAddress/>
+                        </apd:Email>
+                        <apd:Telephone TelPreferred="yes" TelMobile="yes" TelUse="work">
+                          <apd:TelNationalNumber> </apd:TelNationalNumber>
+                          <apd:TelExtensionNumber>0</apd:TelExtensionNumber>
+                          <apd:TelCountryCode>0</apd:TelCountryCode>
+                        </apd:Telephone>
+                        <apd:Fax FaxPreferred="yes" FaxMobile="yes" FaxUse="work">
+                          <apd:FaxNationalNumber> </apd:FaxNationalNumber>
+                          <apd:FaxExtensionNumber>0</apd:FaxExtensionNumber>
+                          <apd:FaxCountryCode>0</apd:FaxCountryCode>
+                        </apd:Fax>
+                      </cs:ContactDetails>
+                      <cs:StartDate>1967-08-13</cs:StartDate>
+                      <cs:EndDate>1967-08-13</cs:EndDate>
+                    </cs:Advocate>
+                  </cs:Counsel>
                                 </cs:Defendant>
                             </cs:Defendants>
                         </cs:Hearing>
@@ -320,5 +427,5 @@ Scenario: Daily List successful
    And I see table darts.daily_list column job_status is "NEW" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f4-426d-81be-000{{seq}}001"
   When I process the daily list for courthouse "York"
   Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f4-426d-81be-000{{seq}}001"
-   And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}010" and courthouse_name = "York" and courtroom_name = "1"
+   And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}110" and courthouse_name = "York" and courtroom_name = "1"
   

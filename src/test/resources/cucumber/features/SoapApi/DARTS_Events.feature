@@ -2,7 +2,7 @@ Feature: Test operation of post events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
 
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @test1
 Scenario Outline: Create a case
   When I create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
@@ -12,10 +12,10 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:06:40}} | {{seq}}0001 | {{seq}}1001 | 20901  |         | text {{seq}} |               |               | 
 
 
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @test1
 Scenario Outline: Create standard events
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
@@ -270,7 +270,7 @@ Examples:
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a LOG event
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
@@ -290,7 +290,7 @@ Examples:
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a SetReportingRestriction event
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
@@ -320,7 +320,7 @@ Examples:
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a SetInterpreterUsed event
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
@@ -342,7 +342,7 @@ Examples:
 
 Scenario Outline: Create a TranscriptionRequest event
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
@@ -359,10 +359,10 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text {{seq}} |               |               | Sentence Transcription Required |       |
 
   
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @test
 Scenario Outline: Create a Sentencing event
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
@@ -495,7 +495,7 @@ Examples:
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a DarStart event
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
@@ -520,7 +520,7 @@ Examples:
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a DarStop event
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
@@ -544,7 +544,7 @@ Examples:
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a StopAndClose event
   Given I authenticate from the CPP source system
-  Given I select column cas.cas_id from table CASE_HEARING where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
