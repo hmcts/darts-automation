@@ -699,13 +699,13 @@ Feature: Request Transcript
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}006" on the page
 
-    When I click on the "Your transcripts" link
-    And I click on "View" in the same row as "C{{seq}}007"
+    When I click on "View" in the same row as "C{{seq}}007"
     Then I see "Approve transcript request" on the page
     And I see "Requesting second transcript Specified Times for one minute of audio, attach transcript directly." in the same row as "Instructions"
 
     When I select the "Yes" radio button
     And I press the "Submit" button
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}007" on the page
 
