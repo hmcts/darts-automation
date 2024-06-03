@@ -2,21 +2,22 @@ Feature: Case Search
 
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @DMP-2769 @regression @demo
 Scenario: Case Search data creation
-	Given I create a case
-      | courthouse         | courtroom   | case_number | defendants      | judges           | prosecutors         | defenders         |
-      | Harrow Crown Court | A{{seq}}-1  | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
-      | Harrow Crown Court | A{{seq}}-11 | A{{seq}}002 | Def A{{seq}}-11 | Judge {{seq}}-11 | testprosecutortwo   | testdefendertwo   |
-      | Harrow Crown Court | A{{seq}}-2  | A{{seq}}003 | Def A{{seq}}-2  | Judge {{seq}}-11 | testprosecutorthree | testdefenderthree |
-      | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004 | Def A{{seq}}-22 | Judge {{seq}}-2  | testprosecutorfour  | testdefenderfour  |
-      | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005 | Def A{{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive  | testdefenderfive  |
+  Given I create a case
+    | courthouse         | courtroom   | case_number | defendants      | judges           | prosecutors         | defenders         |
+    | Harrow Crown Court | A{{seq}}-1  | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
+    | Harrow Crown Court | A{{seq}}-11 | A{{seq}}002 | Def A{{seq}}-11 | Judge {{seq}}-11 | testprosecutortwo   | testdefendertwo   |
+    | Harrow Crown Court | A{{seq}}-2  | A{{seq}}003 | Def A{{seq}}-2  | Judge {{seq}}-11 | testprosecutorthree | testdefenderthree |
+    | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004 | Def A{{seq}}-22 | Judge {{seq}}-2  | testprosecutorfour  | testdefenderfour  |
+    | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005 | Def A{{seq}}-11 | Judge {{seq}}-2  | testprosecutorfive  | testdefenderfive  |
 
-	Given I create an event
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom   | case_numbers | event_text     | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-1  | A{{seq}}001  | A{{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}002  | A{{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}003  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004  | A{{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 21200 | 11008    | {{seq}}1001 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
+  Given I authenticate from the CPP source system
+  Given I create an event
+    | message_id | type  | sub_type | event_id    | courthouse         | courtroom   | case_numbers | event_text     | date_time              | case_retention_fixed_policy | case_total_sentence |
+    | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-1  | A{{seq}}001  | A{{seq}}ABC-1  | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}002  | A{{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}003  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}001 | 1100  |          | {{seq}}1001 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004  | A{{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}001 | 21200 | 11008    | {{seq}}1001 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
 
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression @demo
 Scenario: Simple and Advanced Case Search
@@ -402,17 +403,22 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
 
 @DMP-772 @regression @demo
   Scenario: Search Results Pagination
-    Given I am logged on to DARTS as an APPROVER user
-    When I click on the "Search" link
-    Then I see "Search for a case" on the page
-    Then I set "Case ID" to "001"
-    Then I press the "Search" button
-    Then I see "Next" on the page
-    Then I click on the pagination link "2"
-    Then I see "Next" on the page
-    Then I see "Previous" on the page
-    Then I click on the pagination link "Previous"
-    Then I click on the pagination link "Next"
+  Given I am logged on to DARTS as an APPROVER user
+  When I click on the "Search" link
+  And I see "Search for a case" on the page
+  And I click on the "Advanced search" link
+  And I set "Courthouse" to "Harrow Crown Court"
+  And I select the "Date range" radio button
+  And I set "Enter date from" to "{{date-7/}}"
+  And I set "Enter date to" to "{{date+0/}}"
+  And I set "Defendant's name" to "defend"
+  And I press the "Search" button
+  And I see "Next" on the page
+  And I click on the pagination link "2"
+  And I see "Next" on the page
+  And I see "Previous" on the page
+  And I click on the pagination link "Previous"
+  And I click on the pagination link "Next"
 
 @DMP-2769 @regression
   Scenario: Advanced Search Restrictions
