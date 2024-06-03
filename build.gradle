@@ -1,7 +1,7 @@
 plugins {
   // Apply the java-library plugin for API and implementation separation.
   id 'java-library'
-  id 'org.owasp.dependencycheck' version '9.1.0'
+  id 'org.owasp.dependencycheck' version '9.2.0'
   id 'org.sonarqube' version '5.0.0.4638'
   id 'jacoco'
 }
@@ -156,7 +156,7 @@ dependencies {
   api 'org.apache.commons:commons-math3:3.6.1'
 
   // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-  implementation 'com.google.guava:guava:33.2.0-jre'
+  implementation 'com.google.guava:guava:33.2.1-jre'
 }
 
 wrapper {
