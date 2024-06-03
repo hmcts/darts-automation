@@ -47,6 +47,14 @@ public class XmlString {
 					log.info("no separator found in string {}", string);
 		return string.split(" ");
 	}
+
+	public static String split(String string, int index) {
+		String[] split = split(string);
+		if (split.length > index) {
+			return split[index];
+		}
+		return "";
+	}
 	
 	public XmlString useLineEnd(boolean lf) {
 		lineEnd = lf ? LINE_END : "";

@@ -178,8 +178,12 @@ public class StepDef_soapApi extends StepDef_base {
 					getValue(map, "startTime"),
 					getValue(map, "endDate"),
 					getValue(map, "timeStamp", DateUtils.timestamp()),
-					getValue(map, "defendant"),
-					getValue(map, "urn", getValue(map, "caseNumber")));
+					getValue(map, "defendant", "Franz KAFKA"),
+					getValue(map, "urn", getValue(map, "caseNumber")),
+					getValue(map, "judge", "Judge Name"),
+					getValue(map, "prosecution", "Prosecutor Name"),
+					getValue(map, "defence", "Defence Name")
+					);
 			ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
