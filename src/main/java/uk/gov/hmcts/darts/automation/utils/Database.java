@@ -94,19 +94,26 @@ public class Database extends Postgres {
 				+ "using (hea_id)\r\n"
 				+ "left join darts.media med\r\n"
 				+ "using (med_id)\r\n";
-	
-	final String hearingMediaRequestJoin = "darts.courthouse cth\r\n"
-			+ "inner join darts.courtroom ctr\r\n"
-			+ "using(cth_id)\r\n"
-			+ "inner join darts.hearing hea\r\n"
-			+ "using (ctr_id)\r\n"
-			+ "inner join darts.court_case cas\r\n"
-			+ "using (cth_id)\r\n"
-			+ "left join darts.media_request\r\n"
-			+ "using (hea_id)\r\n";
+		
+		final String hearingMediaRequestJoin = "darts.courthouse cth\r\n"
+				+ "inner join darts.courtroom ctr\r\n"
+				+ "using(cth_id)\r\n"
+				+ "inner join darts.hearing hea\r\n"
+				+ "using (ctr_id)\r\n"
+				+ "inner join darts.court_case cas\r\n"
+				+ "using (cth_id)\r\n"
+				+ "left join darts.media_request\r\n"
+				+ "using (hea_id)\r\n";
+		
+		final String caseManagementRetentionJoin = "darts.case_management_retention cmr\r\n"
+				+ "join darts.retention_policy_type rpt\r\n"
+				+ "using(rpt_id)\r\n";
+		
+		final String caseRetentionJoin = "darts.case_retention car\r\n"
+				+ "join darts.retention_policy_type rpt\r\n"
+				+ "using(rpt_id)\r\n";
 
 	public Database(){
-//		pg = new Postgres();
 		super();
 	}
 	
@@ -128,6 +135,10 @@ public class Database extends Postgres {
 			return caseAudioJoin;
 		case "HEARING_MEDIA_REQUEST":
 			return hearingMediaRequestJoin;
+		case "CASE_RETENTION":
+			return caseRetentionJoin;
+		case "CASE_MANAGEMENT_RETENTION":
+			return caseManagementRetentionJoin;
 		default:
 			return input;
 		}

@@ -4,7 +4,7 @@ Feature: Cases EndPoint using SOAP
 # n.b. for CPP, case number is held in the URN field
 #
 	
-@Daily_List @SOAP_API @DMP-2968 @regression @test
+@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
 Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 		First is replaced
 		Second is ignored when processed
@@ -23,8 +23,8 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
   Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>1" and unique_id = "<documentName>2"
 # Second daily list for today (will be processed)
   When I add a daily list
-  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant   | judge               | prosecution         | defence          |
-  | <messageId>2  | <type> | <subType> | <documentName>1 | <courthouse> | <courtroom> | <caseNumber>1 | <startDate> | 18:00     | <endDate> | <timeStamp> | <defendant> | judge name {{seq}}2 | prosecutor {{seq}}2 | defence {{seq}}2 |
+  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant   | judge              | prosecution        | defence         |
+  | <messageId>2  | <type> | <subType> | <documentName>1 | <courthouse> | <courtroom> | <caseNumber>1 | <startDate> | 18:00     | <endDate> | <timeStamp> | <defendant> | judge name {{seq}} | prosecutor {{seq}} | defence {{seq}} |
   Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>2" and unique_id = "<documentName>1"
 # Daily list for tomorrow
   When I add a daily list
@@ -38,26 +38,26 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
    And I select column cas.cas_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and case_number = "<caseNumber>1"
    And I select column hea_id from table CASE_HEARING where cas.cas_id = "{{cas.cas_id}}" and hearing_date = "{{date-yyyymmdd-0}}"
    And I see table CASE_HEARING column case_closed is "f" where cas.cas_id = "{{cas.cas_id}}"
-   And I see table CASE_HEARING_JUDGE column judge_name is "judge name {{seq}}2" where hea_id = "{{hea_id}}"
-   And I see table CASE_JUDGE column judge_name is "judge name {{seq}}2" where cas_id = "{{cas.cas_id}}"
-   And I see table darts.prosecutor column prosecutor_name is "prosecutor {{seq}}2" where cas_id = "{{cas.cas_id}}"
-   And I see table darts.defence column defence_name is "defence {{seq}}2" where cas_id = "{{cas.cas_id}}"
+   And I see table CASE_HEARING_JUDGE column judge_name is "judge name {{seq}}" where hea_id = "{{hea_id}}"
+   And I see table CASE_JUDGE column judge_name is "judge name {{seq}}" where cas_id = "{{cas.cas_id}}"
+   And I see table darts.prosecutor column prosecutor_name is "prosecutor {{seq}}" where cas_id = "{{cas.cas_id}}"
+   And I see table darts.defence column defence_name is "defence {{seq}}" where cas_id = "{{cas.cas_id}}"
    And I see table darts.defendant column defendant_name is "<defendant>" where cas_id = "{{cas.cas_id}}"
    And I select column jud_id from table CASE_JUDGE where cas_id = "{{cas.cas_id}}"
 # Daily list for second case today (will be processed)
   When I add a daily list
-  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant               | judge               | prosecution         | defence          |
-  | <messageId>3  | <type> | <subType> | <documentName>3 | <courthouse> | 2           | <caseNumber>3 | <startDate> | 10:00     | <endDate> | <timeStamp> | <caseNumber>3 defendant | judge name {{seq}}2 | prosecutor {{seq}}2 | defence {{seq}}2 |
+  | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant               | judge              | prosecution        | defence        |
+  | <messageId>3  | <type> | <subType> | <documentName>3 | <courthouse> | 2           | <caseNumber>3 | <startDate> | 10:00     | <endDate> | <timeStamp> | <caseNumber>3 defendant | judge name {{seq}} | prosecutor {{seq}} | defence {{seq}} |
   Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>3" and unique_id = "<documentName>3"
   When I process the daily list for courthouse <courthouse>
   Then I see table darts.daily_list column job_status is "PROCESSED" where message_id = "<messageId>3" and unique_id = "<documentName>3"
    And I select column cas.cas_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "2" and case_number = "<caseNumber>3"
    And I select column hea_id from table CASE_HEARING where cas.cas_id = "{{cas.cas_id}}" and hearing_date = "{{date-yyyymmdd-0}}"
    And I see table CASE_HEARING column case_closed is "f" where cas.cas_id = "{{cas.cas_id}}"
-   And I see table CASE_HEARING_JUDGE column judge_name is "judge name {{seq}}2" where hea_id = "{{hea_id}}" and jud_id = "{{jud_id}}"
-   And I see table CASE_JUDGE column judge_name is "judge name {{seq}}2" where cas_id = "{{cas.cas_id}}" and jud_id = "{{jud_id}}"
-   And I see table darts.prosecutor column prosecutor_name is "prosecutor {{seq}}2" where cas_id = "{{cas.cas_id}}"
-   And I see table darts.defence column defence_name is "defence {{seq}}2" where cas_id = "{{cas.cas_id}}"
+   And I see table CASE_HEARING_JUDGE column judge_name is "judge name {{seq}}" where hea_id = "{{hea_id}}" and jud_id = "{{jud_id}}"
+   And I see table CASE_JUDGE column judge_name is "judge name {{seq}}" where cas_id = "{{cas.cas_id}}" and jud_id = "{{jud_id}}"
+   And I see table darts.prosecutor column prosecutor_name is "prosecutor {{seq}}" where cas_id = "{{cas.cas_id}}"
+   And I see table darts.defence column defence_name is "defence {{seq}}" where cas_id = "{{cas.cas_id}}"
    And I see table darts.defendant column defendant_name is "<caseNumber>3 defendant" where cas_id = "{{cas.cas_id}}"
 Examples:
   | source | messageId                      | type  | subType | documentName             | courthouse         | courtroom | caseNumber  | startDate    | startTime | endDate    | timeStamp     | defendant             |
@@ -65,7 +65,7 @@ Examples:
   | CPP    | 58b211f4-426d-81be-00{{seq}}01 | CPPDL | DL      | DL {{date+0/}} {{seq}}01 | Harrow Crown Court | 1         | T{{seq}}111 | {{date+0}}   | 10:00:00  | {{date+0}} | {{timestamp}} | T{{seq}}111 defendant |
 
 	
-@Daily_List @SOAP_API @DMP-2968 @regression
+@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
 Scenario: Daily List VIQ User fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -157,7 +157,7 @@ Scenario: Daily List VIQ User fails
 	"""
 	Then the API status code is 500
 	
-@Daily_List @SOAP_API @DMP-2968 @regression
+@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
 Scenario: Daily List malformed fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -249,7 +249,7 @@ Scenario: Daily List malformed fails
 	"""
 	Then the API status code is 400
 	
-@Daily_List @SOAP_API @DMP-2968 @regression @testDL
+@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
 Scenario: Daily List successful
   Given I authenticate from the CPP source system
 	When I call POST SOAP API using soap action addDocument and body:
