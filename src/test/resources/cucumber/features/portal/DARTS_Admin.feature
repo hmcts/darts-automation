@@ -432,7 +432,7 @@ Feature: Admin portal
       Then I see "No search results" on the page
       And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
 
-  @DMP-2317 @DM
+  @DMP-2317
   Scenario: Create a new group (Translation or Transcriber)
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -484,168 +484,8 @@ Feature: Admin portal
     And I see "Event mapping" on the page
     And I see "Automated tasks" on the page
 
-  @DMP-2471
-  Scenario: Create a new retention policy
-    When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "System configuration" link
-    And I click on the "Create policy" link
-    And I see "Create new policy" on the page
-    And I set "Display name" to "DMP-2471-AC1"
-    And I set "Name" to "AC1-2471"
-    And I set "Description" to ""
-    And I set "Fixed policy key" to "99"
-    And I set "Years" to "05"
-    And I set "Months" to "04"
-    And I set "Days" to "02"
-    And I see "Policy start" on the page
-    And I see "Start date" on the page
-    And I set "Start date" to "01/05/2024"
-    And I set "Hour" to "00"
-    And I set "Minutes" to "59"
-    And I click on the "Create" link
-    Then I see "Retention policy created" on the page
-    And I see "Retention policies" on the page
-    And I see "Active" on the page
-    And I see "Inactive" on the page
-    #Cancel Policy
-    When I click on the "Create policy" link
-    Then I see "Create new policy" on the page
-    And I set "Display name" to "PMTest11"
-    And I set "Name" to "PMTest11"
-    And I set "Description" to ""
-    And I set "Fixed policy key" to "TestPM11"
-    And I set "Years" to "05"
-    And I set "Months" to "05"
-    And I set "Days" to "05"
-    And I set "Start date" to "05/05/2025"
-    And I set "Hour" to "05"
-    And I set "Minutes" to "05"
-    And I click on the "Cancel" link
-    Then I see "Retention policies" on the page
-    And I see "Active" on the page
-    And I see "Inactive" on the page
-   #Error
-    When I click on the "Create policy" link
-    Then I see "Create new policy" on the page
-    And I set "Display name" to ""
-    And I set "Name" to ""
-    And I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A"
-    And I set "Fixed policy key" to ""
-    And I set "Years" to ""
-    And I set "Months" to ""
-    And I set "Days" to ""
-    And I set "Start date" to ""
-    And I set "Hour" to ""
-    And I set "Minutes" to ""
-    And I click on the "Create" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a display name" on the page
-    And I see "Enter a name" on the page
-    And I see "Enter a description shorter than 256 characters" on the page
-    And I see "Enter a fixed policy key" on the page
-    And I see "Enter a duration of at least 1 day" on the page
-    And I see "Enter a policy start date" on the page
-    And I see "Enter a start time" on the page
-    # All fields are already exist
-    And I click on the "Cancel" link
-    Then I see "Retention policies" on the page
-    When I click on the "Create policy" link
-    Then I see "Create new policy" on the page
-    And I set "Display name" to "PMTest"
-    And I set "Name" to "PMTest1"
-    And I set "Description" to ""
-    And I set "Fixed policy key" to "TestPM"
-    And I set "Years" to "00"
-    And I set "Months" to "01"
-    And I set "Days" to "02"
-    And I set "Start date" to "01/01/2025"
-    And I set "Hour" to "01"
-    And I set "Minutes" to "00"
-    And I click on the "Create" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a unique display name" on the page
-    And I see "Enter a unique name" on the page
-    And I see "The fixed policy key entered already exists in the database. Fixed policy keys must be unique" on the page
-
-  @DMP-2475
-  Scenario: Edit retention policy
-    When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "System configuration" link
-    And I click on "Edit Policy" in the same row as "DMP-2471-AC1"
-    And I set "Display name" to "DMP-2475-AC1"
-    And I set "Name" to "AC1-2475"
-    And I set "Description" to "Editing DMP-2471"
-    And I set "Fixed policy key" to "90"
-    And I set "Years" to "02"
-    And I set "Months" to "12"
-    And I set "Days" to "31"
-    And I see "Policy start" on the page
-    And I see "Start date" on the page
-    And I set "Start date" to "29/04/2024"
-    And I set "Hour" to "10"
-    And I set "Minutes" to "30"
-    And I click on the "Save" link
-    Then I see "Retention policy updated" on the page
-  #Cancel policy
-    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
-    And I click on the "Cancel" link
-    Then I see "Retention policies" on the page
-  #AC3
-    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
-    And I see "Retention policy" on the page
-    And I clear the "Display name" field
-    And I set "Display name" to ""
-    And I clear the "Name" field
-    And I set "Name" to ""
-    And I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A"
-    And I clear the "Fixed policy key" field
-    And I set "Fixed policy key" to ""
-    And I clear the "Years" field
-    And I set "Years" to ""
-    And I clear the "Months" field
-    And I set "Months" to ""
-    And I clear the "Days" field
-    And I set "Days" to ""
-    And I clear the "Start date" field
-    And I set "Start date" to ""
-    And I clear the "Hour" field
-    And I set "Hour" to ""
-    And I clear the "Minutes" field
-    And I set "Minutes" to ""
-    And I click on the "Save" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a display name" on the page
-    And I see "Enter a name" on the page
-    And I see "Enter a description shorter than 256 characters" on the page
-    And I see "Enter a fixed policy key" on the page
-    And I see "Enter a duration of at least 1 day" on the page
-    And I see "Enter a policy start date" on the page
-    And I see "Enter a start time" on the page
-  #fields are already exist
-    And I click on the "Cancel" link
-    Then I see "Retention policies" on the page
-    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
-    And I set "Display name" to "Custodial"
-    And I set "Name" to "DMP-2532 AC3"
-    And I set "Description" to ""
-    And I clear the "Fixed policy key" field
-    And I set "Fixed policy key" to ""
-    And I set "Years" to "00"
-    And I set "Months" to "12"
-    And I set "Days" to "31"
-    And I set "Start date" to "01/01/2024"
-    And I set "Hour" to "11"
-    And I set "Minutes" to "30"
-    And I click on the "Save" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a unique display name" on the page
-    And I see "Enter a unique name" on the page
-    And I see "Enter a fixed policy key" on the page
-    And I see "Enter a policy start date in the future" on the page
-    And I see "Enter a policy start time in the future" on the page
-
-  @DMP-2474
-    Scenario: Create new retention policy version
+    @DMP-2959
+    Scenario: Add error messaging to Search Transcripts screen
       When I am logged on to the admin portal as an ADMIN user
       Then I click on the "System configuration" link
       Then I click on "Create new version" in the same row as "DMP-2474-4 retention policy type."
@@ -686,8 +526,52 @@ Feature: Admin portal
      And I set "Start date" to "{{date+0/}}"
      And I click on the "Create" link
      Then I see "Retention policy version created" on the page
+ 
+      Then I click on the "Transcripts" navigation link
+      And I click on the "Advanced search" link
+      Then I set "Hearing date" to "19/05/2024"
+      And I set "Courthouse" to "Test"
+      Then I see "You have selected a date in the future. Hearing date must be in the past" on the page
+      Then I click on the "Specific date" link
+      Then I set "Enter a date" to "19/05/2024"
+      And I set "Courthouse" to "Placeholder"
+      Then I see "You have selected a date in the future. Requested date must be in the past" on the page
+      Then I click on the "Date range" link
+      Then I set "Date from" to "19/05/2024"
+      And I set "Date to" to "19/05/2024"
+      And I set "Courthouse" to "Test"
+      Then I see "You have selected a date in the future. Requested start date must be in the past" on the page
+      And I see "You have selected a date in the future. Requested end date must be in the past" on the page
+      Then I set "Hearing date" to "ddd"
+      And I set "Courthouse" to "Placeholder"
+      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+      Then I click on the "Specific date" link
+      Then I set "Enter a date" to "ddd"
+      And I set "Hearing date" to ""
+      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+      Then I click on the "Date range" link
+      Then I set "Date from" to "ddd"
+      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+      Then I set "Date to" to "ddd"
+      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+      Then I set "Hearing date" to "30/02/2024"
+      And I set "Courthouse" to "Test"
+      Then I see "Enter a real date" on the page
+      Then I click on the "Specific date" link
+      Then I set "Enter a date" to "30/02/2024"
+      And I set "Hearing date" to ""
+      Then I see "Enter a real date" on the page
+      Then I click on the "Date range" link
+      Then I set "Date from" to "30/02/2024"
+      Then I see "Enter a real date" on the page
+      Then I set "Date to" to "30/02/2024"
+      Then I see "Enter a real date" on the page
+      Then I set "Date from" to "30/03/2029"
+      And I set "Date to" to "30/01/2029"
+      Then I see "The start date must be before the end date" on the page
+      And I see "The end date must be after the start date" on the page
 
-    @DMP-2746
+@DMP-2746
     Scenario: Add event mapping
       When I am logged on to the admin portal as an ADMIN user
       And I click on the "System configuration" link

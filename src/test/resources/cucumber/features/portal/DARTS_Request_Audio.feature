@@ -11,6 +11,7 @@ Scenario: Request Audio data creation
     | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008 | Def B{{seq}}-8 | Judge B{{seq}}-8 | testprosecutoreight | testdefendereight |
     | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009 | Def B{{seq}}-9 | Judge B{{seq}}-9 | testprosecutornine  | testdefendernine  |
 
+  Given I authenticate from the CPP source system
   Given I create an event
     | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
     | {{seq}}006 | 1100 |          | {{seq}}1006 | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006  | B{{seq}}ABC-6 | {{timestamp-10:00:00}} |                             |                     |
@@ -18,14 +19,12 @@ Scenario: Request Audio data creation
     | {{seq}}008 | 1100 |          | {{seq}}1008 | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | B{{seq}}ABC-8 | {{timestamp-10:00:00}} |                             |                     |
     | {{seq}}009 | 1100 |          | {{seq}}1009 | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | B{{seq}}ABC-9 | {{timestamp-10:00:00}} |                             |                     |
 
-  #When I authenticate from the darmidtier source system
-
   When I load an audio file
-    | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
-    | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
-    | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
-    | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
-    | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1   |
+    | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
+    | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
+    | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
+    | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
+    | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
 
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @regression
 Scenario: Request Audio with Request Type Playback Only
