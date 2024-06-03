@@ -686,3 +686,85 @@ Feature: Admin portal
      And I set "Start date" to "{{date+0/}}"
      And I click on the "Create" link
      Then I see "Retention policy version created" on the page
+
+    @DMP-2746
+    Scenario: Add event mapping
+      When I am logged on to the admin portal as an ADMIN user
+      And I click on the "System configuration" link
+      Then I click on the "Event mappings" navigation link
+      And I click on the "Add event mapping" link
+      Then I set "Type" to "DMP-2746-Automation-Type"
+      And I set "Event name" to "DMP-2746-Automation-Event-Name"
+      And I see "Map to event handler" on the page
+      And I select "DarStartHandler" from the dropdown
+      And I click on the "Tick if this event mapping has reporting restrictions" link
+      And I click on the "Add mapping" link
+      Then I see "Event mapping addded " on the page
+      #Cancel
+      And I click on the "Add event mapping" link
+      Then I set "Type" to "DMP-2746-Automation-Type-1"
+      And I set "Event name" to "DMP-2746-Automation-Event-Name-1"
+      And I see "Map to event handler" on the page
+      And I select "DarStartHandler" from the dropdown
+      And I click on the "Tick if this event mapping has reporting restrictions" link
+      And I click on the "Cancel" link
+      Then I see "System configuration" on the page
+      And I see "Event mappings" on the page
+      #Error handling
+      And I click on the "Add event mapping" link
+      And I set "Type" to "" and click away
+      Then I see "Enter the event type" on the page
+      And I set "Event name" to "" and click away
+      Then I see "Enter the event name" on the page
+      And I see "Map to event handler" on the page
+      And I click on the "Tick if this event mapping has reporting restrictions" link
+      And I click on the "Add mapping" link
+      Then I see "Select an event handler to map to" on the page
+      And I click on the "Cancel" link
+      When I click on the "Add event mapping" link
+      And I set "Type" to "999" and click away
+      And I set "Subtype (optional)" to "999" and click away
+      Then I see "The combination of event type and subtype should be unique" on the page
+
+      @DMP-754
+      Scenario: View event mapping
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "System configuration" link
+      And I click on the "Event mappings" navigation link
+      Then I see "Event mappings" on the page
+      And I see "Add event mapping" on the page
+      And I see "Filter by type, subtype, or name" on the page
+      And I see "Filter by event handler" on the page
+      Then I select "StopAndCloseHandler" from the dropdown
+      And I see "Active only" on the page
+      And I see "Active and inactive" on the page
+      And I see "With restrictions" on the page
+      And I see "Without restrictions" on the page
+      Then I verify the HTML table contains the following values
+        | Type | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
+        | 3000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
+        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
+        | 30300| *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
+      And  I select the "Active and inactive" radio button
+      And I click on the "With restrictions" link
+      Then I verify the HTML table contains the following values
+        | Type     | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
+        | 3000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
+        | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*   | *IGNORE*     | *IGNORE* | *SKIP* |
+        And I click on the "With restrictions" link
+      And I click on the "Without restrictions" link
+      Then I verify the HTML table contains the following values
+        | Type     | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
+        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE* | *SKIP* |
+      And I select "All" from the dropdown
+      And I click on the "Without restrictions" link
+      Then I see "Next" on the page
+      Then I click on the pagination link "Next"
+      Then I click on the pagination link "3"
+      Then I see "Next" on the page
+      Then I see "Previous" on the page
+      Then I click on the pagination link "Previous"
+      Then I click on the pagination link "1"
+      And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      And I select "StopAndCloseHandler" from the dropdown
+      Then I see "There are no matching results." on the page
