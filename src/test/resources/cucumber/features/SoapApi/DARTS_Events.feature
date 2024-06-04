@@ -3,7 +3,7 @@ Feature: Test operation of post events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
 
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @test1 @test
 Scenario Outline: Create a case
   Given I create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
@@ -13,7 +13,7 @@ Examples:
   | Harrow Crown Court | T{{seq}}002  | 
 
 
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @test1
 Scenario Outline: Create standard events
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -558,7 +558,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text {{seq}} |               |               | Hearing ended     | ex StopAndCloseHandler |
 
   
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @test
 Scenario Outline: Create a StopAndClose event
 													Only 1 stop & close event per case seems to work
 													Creates a courtroom & hearing for each case
