@@ -558,7 +558,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text {{seq}} |               |               | Hearing ended     | ex StopAndCloseHandler |
 
   
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @test1
 Scenario Outline: Create a StopAndClose event
 													Only 1 stop & close event per case seems to work
 													Creates a courtroom & hearing for each case
@@ -579,10 +579,22 @@ Scenario Outline: Create a StopAndClose event
    And I see table EVENT column case_closed_ts is "not null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
+   And I select column eve_id from table EVENT where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table CASE_MANAGEMENT_RETENTION column total_sentence is "<totalSentence>" where eve_id = "{{eve_id}}" 
+   And I see table CASE_MANAGEMENT_RETENTION column fixed_policy_key is "<caseRetention>" where eve_id = "{{eve_id}}" 
+   And I select column cmr_id from table CASE_MANAGEMENT_RETENTION where eve_id = "{{eve_id}}"
+   And I see table CASE_RETENTION column total_sentence is "<totalSentence>" where cmr_id = "{{cmr_id}}" 
+   And I see table CASE_RETENTION column fixed_policy_key is "<caseRetention>" where cmr_id = "{{cmr_id}}" 
 Examples:
   | courthouse         | courtroom     | caseNumbers  | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text         | notes             |
-  | Harrow Crown Court | Room {{seq}}A | T{{seq}}002A | {{timestamp-11:23:00}} | {{seq}}247 | {{seq}}1247 | 3000  |         | text {{seq}} | 4             | 4Y4M4D        | Archive Case |                   |
-  | Harrow Crown Court | Room {{seq}}B | T{{seq}}002B | {{timestamp-12:07:00}} | {{seq}}375 | {{seq}}1375 | 30300 |         | text {{seq}} | 3             | 3Y3M3D        | Case closed  |                   |
+  | Harrow Crown Court | Room {{seq}}A | T{{seq}}002A | {{timestamp-11:23:00}} | {{seq}}601 | {{seq}}1601 | 3000  |         | text {{seq}} | 1             | 1Y1M1D        | Archive Case |                   |
+  | Harrow Crown Court | Room {{seq}}B | T{{seq}}002B | {{timestamp-11:23:00}} | {{seq}}602 | {{seq}}1602 | 3000  |         | text {{seq}} | 2             | 2Y2M2D        | Archive Case |                   |
+  | Harrow Crown Court | Room {{seq}}C | T{{seq}}002C | {{timestamp-11:23:00}} | {{seq}}603 | {{seq}}1603 | 3000  |         | text {{seq}} | 3             | 3Y3M3D        | Archive Case |                   |
+  | Harrow Crown Court | Room {{seq}}D | T{{seq}}002D | {{timestamp-11:23:00}} | {{seq}}604 | {{seq}}1604 | 3000  |         | text {{seq}} | 4             | 4Y4M4D        | Archive Case |                   |
+  | Harrow Crown Court | Room {{seq}}E | T{{seq}}002E | {{timestamp-12:07:00}} | {{seq}}611 | {{seq}}1611 | 30300 |         | text {{seq}} | 1             | 1Y1M1D        | Case closed  |                   |
+  | Harrow Crown Court | Room {{seq}}F | T{{seq}}002F | {{timestamp-12:07:00}} | {{seq}}612 | {{seq}}1612 | 30300 |         | text {{seq}} | 2             | 2Y2M2D        | Case closed  |                   |
+  | Harrow Crown Court | Room {{seq}}G | T{{seq}}002G | {{timestamp-12:07:00}} | {{seq}}613 | {{seq}}1613 | 30300 |         | text {{seq}} | 3             | 3Y3M3D        | Case closed  |                   |
+  | Harrow Crown Court | Room {{seq}}H | T{{seq}}002H | {{timestamp-12:07:00}} | {{seq}}614 | {{seq}}1614 | 30300 |         | text {{seq}} | 4             | 4Y4M4D        | Case closed  |                   |
   
   
 @EVENT_API @SOAP_EVENT @regression
@@ -613,7 +625,7 @@ Scenario Outline: Create case with an event
 
 Examples:
   | courthouse         | courtroom     | caseNumber  | dateTime               | msgId      | eventId     | type  | subType | eventText      | caseRetention | totalSentence | text                                                                                                                                   | notes |
-  | Harrow Crown Court | Room {{seq}}C | T{{seq}}002 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}C1 |               |               | Case called on  |       |
+  | Harrow Crown Court | Room {{seq}}Z | T{{seq}}002 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}C1 |               |               | Case called on  |       |
 
 
 
@@ -629,7 +641,7 @@ Scenario: Event for 2 cases from CPP
     <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
     <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
     <be:CaseNumbers>
-      <be:CaseNumber>T{{seq}}002C,T{{seq}}002D</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}002X,T{{seq}}002Y</be:CaseNumber>
     </be:CaseNumbers>
     <be:EventText>text {{seq}} CD1</be:EventText>
   </be:DartsEvent>]]>
@@ -650,8 +662,8 @@ Scenario: Event for 2 cases from XHIBIT
     <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
     <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
     <be:CaseNumbers>
-      <be:CaseNumber>T{{seq}}002C</be:CaseNumber>
-      <be:CaseNumber>T{{seq}}002D</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}002V</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}002W</be:CaseNumber>
     </be:CaseNumbers>
     <be:EventText>text {{seq}} CD2</be:EventText>
   </be:DartsEvent>]]>
@@ -672,7 +684,7 @@ Scenario: Verify that VIQ cannot create an event
     <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
     <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
     <be:CaseNumbers>
-      <be:CaseNumber>T{{seq}}002C</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}002U</be:CaseNumber>
     </be:CaseNumbers>
     <be:EventText>text {{seq}} CD2</be:EventText>
   </be:DartsEvent>]]>
@@ -680,7 +692,7 @@ Scenario: Verify that VIQ cannot create an event
   """
 	Then the API status code is 500
 
-@EVENT_API @SOAP_API @DMP-2960 @regression @test1
+@EVENT_API @SOAP_API @DMP-2960 @regression
 Scenario: Verify that a non-existant case is created
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -690,7 +702,7 @@ Scenario: Verify that a non-existant case is created
       <document>
   <![CDATA[<be:DartsEvent xmlns:be="urn:integration-cjsonline-gov-uk:pilot:entities" ID="{{seq}}14015" Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="12" MIN="04" S="10">
     <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
-    <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
+    <be:CourtRoom>Room {{seq}}U</be:CourtRoom>
     <be:CaseNumbers>
       <be:CaseNumber>NOTEXISTING</be:CaseNumber>
     </be:CaseNumbers>
@@ -700,7 +712,7 @@ Scenario: Verify that a non-existant case is created
   """
 	Then the API status code is 200
 
-@EVENT_API @SOAP_API @DMP-2960 @regression @test1
+@EVENT_API @SOAP_API @DMP-2960 @regression
 Scenario: Verify that an invalid courthouse fails
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -744,6 +756,6 @@ Scenario Outline: Verify that a hearing courtroom can be modified by an event
 
 Examples:
   | courthouse         | courtroom    | caseNumber   | dateTime               | msgId     | eventId    | type   | subType | eventText     | caseRetention | totalSentence | text                                                                                                                                   | notes |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}002E | {{timestamp-10:00:00}} | {{seq}}50 | {{seq}}150 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002T | {{timestamp-10:00:00}} | {{seq}}50 | {{seq}}150 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
 
 
