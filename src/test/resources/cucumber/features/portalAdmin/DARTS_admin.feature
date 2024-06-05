@@ -1,5 +1,21 @@
 Feature: Admin
 
+  @DMP-2323
+  Scenario: Admin change transcription status data creation
+    Given I create a case
+      | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors             | defenders             |
+      | Harrow Crown Court | {{seq}}-46 | H{{seq}}001 | DefH {{seq}}-46 | JudgeH {{seq}}-46 | testprosecutorfourtysix | testdefenderfourtysix |
+
+    Given I authenticate from the CPP source system
+    Given I create an event
+      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}1052 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}ABC-46 | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}1053 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}GHI-46 | {{timestamp-10:31:00}} |                             |                     |
+
+    When I load an audio file
+      | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
+      | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
+
   @DMP-2187-AC1,AC-2
   Scenario: Admin access and landing page
     When  I am logged on to the admin portal as an ADMIN user
@@ -273,3 +289,175 @@ Feature: Admin
     And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requestor"
     And I press the "Assign groups" button
     Then I see "Assigned 1 group" on the page
+
+  @DMP-2323 @regression
+  Scenario: Deactivate user and last user in group
+    Given I am logged on to the admin portal as an ADMIN user
+
+    #DMP-2323-AC1 Deactivate user
+
+    When I click on the "Users" link
+    And I set "Full name" to "Testuserone"
+    And I press the "Search" button
+    And I click on "View" in the same row as "Testuserone"
+    And I see "Active user" on the page
+    And I press the "Deactivate user" button
+    Then I see "Deactivating this user will remove their access to DARTS." on the page
+    And I see "Testuserone" on the page
+
+    When I press the "Deactivate user" button
+    Then I see "User record deactivated" on the page
+    And I see "Inactive" on the page
+
+    #DMP-2323-AC2 Deactivate last user in group
+
+    When I click on the "Users" link
+    And I set "Full name" to "Testusertwo"
+    And I press the "Search" button
+    And I click on "View" in the same row as "Testusertwo"
+    And I see "Active user" on the page
+    And I press the "Deactivate user" button
+    Then I see "Deactivating this user will remove their access to DARTS." on the page
+    And I see "This is the only active user in this group. Deactivating this user will result in no active users in this group." on the page
+    And I see "Testusertwo" on the page
+
+    When I press the "Deactivate user" button
+    Then I see "User record deactivated" on the page
+    And I see "Inactive" on the page
+
+    #Reactivate users and assign group for next run
+
+    When I press the "Activate user" button
+    Then I see "Reactivating this user will give them access to DARTS. They will not be able to see any data until they are added to at least one group." on the page
+    And I see "Testusertwo" on the page
+
+    When I press the "Reactivate user" button
+    Then I see "User record activated" on the page
+    And I see "Active user" on the page
+
+    When I click on the "Users" link
+    And I set "Full name" to "Testuserone"
+    And I select the "Inactive users" radio button
+    And I press the "Search" button
+    And I click on "View" in the same row as "Testuserone"
+    Then I see "Inactive" on the page
+
+    When I press the "Activate user" button
+    Then I see "Reactivating this user will give them access to DARTS. They will not be able to see any data until they are added to at least one group." on the page
+    And I see "Testuserone" on the page
+
+    When I press the "Reactivate user" button
+    Then I see "User record activated" on the page
+    And I see "Active user" on the page
+
+    When I click on the "Groups" sub-menu link
+    And I press the "Assign groups" button
+    And I set "Filter by group name" to "Testgroupone"
+    When I check the checkbox in the same row as "Testgroupone" "Transcriber"
+    And I press the "Assign groups" button
+    Then I see "Assigned 1 group" on the page
+
+    When I click on the "Users" link
+    And I set "Full name" to "Testusertwo"
+    And I press the "Search" button
+    And I click on "View" in the same row as "Testusertwo"
+    Then I see "Active user" on the page
+
+    When I click on the "Groups" sub-menu link
+    And I press the "Assign groups" button
+    And I set "Filter by group name" to "Testgroupone"
+    When I check the checkbox in the same row as "Testgroupone" "Transcriber"
+    And I press the "Assign groups" button
+    Then I see "Assigned 1 group" on the page
+
+  @DMP-2323
+  Scenario: Deactivate user with transcript
+
+    #Create transcript request and assign to user
+
+    Given I am logged on to DARTS as an REQUESTER user
+    And I click on the "Search" link
+    And I set "Case ID" to "H{{seq}}001"
+    And I press the "Search" button
+    And I click on "H{{seq}}001" in the same row as "Harrow Crown Court"
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    And I press the "Request a new transcript" button
+    Then I see "Audio list" on the page
+
+    When I select "Specified Times" from the "Request Type" dropdown
+    And I select "Overnight" from the "Urgency" dropdown
+    And I press the "Continue" button
+    Then I see "Events, audio and specific times requests" on the page
+
+    When I set the time fields below "Start time" to "10:30:00"
+    And I set the time fields below "End time" to "10:31:00"
+    And I press the "Continue" button
+    Then I see "Check and confirm your transcript request" on the page
+    And I see "H{{seq}}001" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "DefH {{seq}}-46" in the same row as "Defendant(s)"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Specified Times" in the same row as "Request type"
+    And I see "Overnight" in the same row as "Urgency"
+    And I see "Provide any further instructions or comments for the transcriber." on the page
+
+    When I set "Comments to the Transcriber (optional)" to "This transcript request is for user to be deactivated"
+    And I check the "I confirm I have received authorisation from the judge." checkbox
+    And I press the "Submit request" button
+    Then I see "Transcript request submitted" on the page
+
+    When I click on the "Return to hearing date" link
+    Then I see "Transcripts for this hearing" on the page
+    And I see "Specified Times" in the same row as "Awaiting Authorisation"
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an APPROVER user
+    And I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
+    And I click on "View" in the same row as "H{{seq}}001"
+    And I see "This transcript request is for user to be deactivated" in the same row as "Instructions"
+    And I select the "Yes" radio button
+    And I press the "Submit" button
+    And I click on the "Transcript requests to review" link
+    Then I see "Requests to approve or reject" on the page
+    And I do not see "H{{seq}}001" on the page
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    #And I am logged on to DARTS as TESTUSERTHREE user
+    And I click on the "Transcript requests" link
+    And I see "Manual" in the same row as "H{{seq}}001"
+    And I click on "View" in the same row as "H{{seq}}001"
+    And I select the "Assign to me" radio button
+    And I press the "Continue" button
+    Then I see "H{{seq}}001" on the page
+
+    When I click on the "Completed today" link
+    Then I do not see "H{{seq}}001" on the page
+
+    #DMP-2323-AC4 Deactivate user with transcript
+
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
+    And I set "Full name" to "Testuserthree"
+    And I press the "Search" button
+    And I click on "View" in the same row as "Testuserthree"
+    And I see "Active user" on the page
+    And I press the "Deactivate user" button
+    Then I see "Deactivating this user will remove their access to DARTS." on the page
+    And I see "This is the only active user in this group. Deactivating this user will result in no active users in this group." on the page
+    And I see "Testuserthree" on the page
+
+    When I press the "Deactivate user" button
+    Then I see "User record deactivated" on the page
+    And I see "Inactive" on the page
+
+    #Check transcript is unassigned after deactivation
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as a TRANSCRIBER user
+    And I click on the "Transcript requests" link
+    And I see "Manual" in the same row as "H{{seq}}001"
