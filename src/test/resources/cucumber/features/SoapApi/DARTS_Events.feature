@@ -9,8 +9,8 @@ Scenario Outline: Create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
     | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
 Examples:
-  | courthouse         | caseNumbers | dateTime               |
-  | Harrow Crown Court | T{{seq}}002 | {{timestamp-12:06:40}} | 
+  | courthouse         | caseNumbers  |
+  | Harrow Crown Court | T{{seq}}002  | 
 
 
 @EVENT_API @SOAP_EVENT @regression @test1
@@ -281,7 +281,7 @@ Examples:
 
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a LOG event
-  Given I authenticate from the CPP source system
+  Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
@@ -303,7 +303,7 @@ Examples:
         
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a SetReportingRestriction event
-  Given I authenticate from the CPP source system
+  Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
@@ -335,7 +335,7 @@ Examples:
 
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a SetInterpreterUsed event
-  Given I authenticate from the CPP source system
+  Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
@@ -358,7 +358,7 @@ Examples:
 
 @EVENT_API @SOAP_EVENT @regression @obsolete
 Scenario Outline: Create a TranscriptionRequest event
-  Given I authenticate from the CPP source system
+  Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
@@ -378,7 +378,7 @@ Examples:
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text {{seq}} |               |               | Sentence Transcription Required |       |
 
   
-@EVENT_API @SOAP_EVENT
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a Sentencing event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -507,7 +507,7 @@ Examples:
   
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a DarStart event
-  Given I authenticate from the CPP source system
+  Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
@@ -534,7 +534,7 @@ Examples:
   
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a DarStop event
-  Given I authenticate from the CPP source system
+  Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
@@ -589,7 +589,7 @@ Examples:
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a Null event
 # An event row is not created
-  Given I authenticate from the CPP source system
+  Given I authenticate from the XHIBIT source system
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -597,5 +597,153 @@ Scenario Outline: Create a Null event
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text    | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}002 | {{timestamp-12:08:00}} | {{seq}}376 | {{seq}}1376 | 40790 |         | text {{seq}} |               |               | Results |       |
+
+@EVENT_API @SOAP_EVENT @regression @test1
+Scenario Outline: Create case with an event
+  Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "<caseNumber>C" and courthouse_name = "<courthouse>"
+  Given I authenticate from the CPP source system
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id | courthouse   | courtroom   | case_numbers  | event_text     | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>1     | <type> | <subType> | <eventId>1        | <courthouse> | <courtroom> | <caseNumber>C | text {{seq}}C1 | <dateTime> | <caseRetention>             | <totalSentence>     |
+    | <msgId>1     | <type> | <subType> | <eventId>1        | <courthouse> | <courtroom> | <caseNumber>C | text {{seq}}C1 | <dateTime> | <caseRetention>             | <totalSentence>     |
+#    | <msgId>2     | <type> | <subType> | <eventId>2        | <courthouse> | <courtroom> | <caseNumber>D | text {{seq}}D1 | <dateTime> | <caseRetention>             | <totalSentence>     |
+#    | <msgId>3     | <type> | <subType> | <eventId>3        | <courthouse> | <courtroom> | <caseNumber>C,<caseNumber>D | text {{seq}}CD | <dateTime> | <caseRetention>             | <totalSentence>     |
+  Then I see table COURTCASE column COUNT(cas_id) is "1" where cas.case_number = "<caseNumber>C" and courthouse_name = "<courthouse>"
+   And I see table EVENT column COUNT(eve_id) is "2" where cas.case_number = "<caseNumber>C" and courthouse_name = "<courthouse>"
+
+Examples:
+  | courthouse         | courtroom     | caseNumber  | dateTime               | msgId      | eventId     | type  | subType | eventText      | caseRetention | totalSentence | text                                                                                                                                   | notes |
+  | Harrow Crown Court | Room {{seq}}C | T{{seq}}002 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}C1 |               |               | Case called on  |       |
+
+
+
+@EVENT_API @SOAP_API @DMP-2835 @regression @TODO
+Scenario: Event for 2 cases from CPP
+  Given I authenticate from the CPP source system
+	When I call POST SOAP API using soap action addDocument and body:
+	"""
+      <messageId>{{seq}}4014</messageId>
+      <type>10100</type>
+      <document>
+  <![CDATA[<be:DartsEvent xmlns:be="urn:integration-cjsonline-gov-uk:pilot:entities" ID="{{seq}}14014" Y="{{date-yyyy}}" M="{{date-mm}}" D="{{date-dd}}" H="12" MIN="04" S="10">
+    <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
+    <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
+    <be:CaseNumbers>
+      <be:CaseNumber>T{{seq}}002C,T{{seq}}002D</be:CaseNumber>
+    </be:CaseNumbers>
+    <be:EventText>text {{seq}} CD1</be:EventText>
+  </be:DartsEvent>]]>
+</document>
+  """
+	Then the API status code is 200
+#TODO Database verifications here
+
+@EVENT_API @SOAP_API @DMP-2960 @regression @TODO
+Scenario: Event for 2 cases from XHIBIT
+  Given I authenticate from the XHIBIT source system
+	When I call POST SOAP API using soap action addDocument and body:
+	"""
+      <messageId>{{seq}}4015</messageId>
+      <type>10100</type>
+      <document>
+  <![CDATA[<be:DartsEvent xmlns:be="urn:integration-cjsonline-gov-uk:pilot:entities" ID="{{seq}}14015" Y="{{date-yyyy}}" M="{{date-mm}}" D="{{date-dd}}" H="12" MIN="04" S="10">
+    <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
+    <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
+    <be:CaseNumbers>
+      <be:CaseNumber>T{{seq}}002C</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}002D</be:CaseNumber>
+    </be:CaseNumbers>
+    <be:EventText>text {{seq}} CD2</be:EventText>
+  </be:DartsEvent>]]>
+</document>
+  """
+	Then the API status code is 200
+#TODO Database verifications here
+
+@EVENT_API @SOAP_API @DMP-2960 @regression
+Scenario: Verify that a CPP user cannot create an event
+  Given I authenticate from the VIQ source system
+	When I call POST SOAP API using soap action addDocument and body:
+	"""
+      <messageId>{{seq}}4015</messageId>
+      <type>10100</type>
+      <document>
+  <![CDATA[<be:DartsEvent xmlns:be="urn:integration-cjsonline-gov-uk:pilot:entities" ID="{{seq}}14015" Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="12" MIN="04" S="10">
+    <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
+    <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
+    <be:CaseNumbers>
+      <be:CaseNumber>T{{seq}}002C</be:CaseNumber>
+    </be:CaseNumbers>
+    <be:EventText>text {{seq}} CD2</be:EventText>
+  </be:DartsEvent>]]>
+</document>
+  """
+	Then the API status code is 500
+
+@EVENT_API @SOAP_API @DMP-2960 @regression @test1
+Scenario: Verify that a non-existant case is created
+  Given I authenticate from the XHIBIT source system
+	When I call POST SOAP API using soap action addDocument and body:
+	"""
+      <messageId>{{seq}}4015</messageId>
+      <type>10100</type>
+      <document>
+  <![CDATA[<be:DartsEvent xmlns:be="urn:integration-cjsonline-gov-uk:pilot:entities" ID="{{seq}}14015" Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="12" MIN="04" S="10">
+    <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
+    <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
+    <be:CaseNumbers>
+      <be:CaseNumber>NOTEXISTING</be:CaseNumber>
+    </be:CaseNumbers>
+    <be:EventText>text {{seq}} CD2</be:EventText>
+  </be:DartsEvent>]]>
+</document>
+  """
+	Then the API status code is 200
+
+@EVENT_API @SOAP_API @DMP-2960 @regression @test1
+Scenario: Verify that an invalid courthouse fails
+  Given I authenticate from the XHIBIT source system
+	When I call POST SOAP API using soap action addDocument and body:
+	"""
+      <messageId>{{seq}}4015</messageId>
+      <type>10100</type>
+      <document>
+  <![CDATA[<be:DartsEvent xmlns:be="urn:integration-cjsonline-gov-uk:pilot:entities" ID="{{seq}}14015" Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="12" MIN="04" S="10">
+    <be:CourtHouse>Non Existant Court House</be:CourtHouse>
+    <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
+    <be:CaseNumbers>
+      <be:CaseNumber>T{{seq}}002C</be:CaseNumber>
+    </be:CaseNumbers>
+    <be:EventText>text {{seq}} CD2</be:EventText>
+  </be:DartsEvent>]]>
+</document>
+  """
+	Then the API status code is 404
+
+
+@EVENT_API @SOAP_EVENT @regression
+Scenario Outline: Verify that a hearing courtroom can be modified by an event
+																									where a case is added via daily lists (so a hearing record exists)
+																									if the first event added is for a different courtroom
+																									 then the existing hearing should be updated with the new courtroom
+  Given I authenticate from the XHIBIT source system
+  When I add a daily list
+  | messageId                        | type | subType | documentName              | courthouse   | courtroom    | caseNumber   | startDate  | startTime | endDate    | timeStamp     |
+  | 58b211f4-426d-81be-00{{seq}}901  | DL   | DL      | DL {{date+0/}} {{seq}}901 | <courthouse> | <courtroom>E | <caseNumber> | {{date+0}} | 16:00     | {{date+0}} | {{timestamp}} |
+   And I process the daily list for courthouse <courthouse>
+  Then I see table CASE_HEARING column hearing_is_actual is "f" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>E"
+
+   And I create an event
+    | message_id  | type   | sub_type  | event_id   | courthouse   | courtroom    | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>2    | <type> | <subType> | <eventId>2 | <courthouse> | <courtroom>F | <caseNumber> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
+  Then I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>F"
+   And I see table CASE_HEARING column courtroom_name is "<courtroom>F" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>F"
+# Following line fails due to DMP-3252 adding a new hearing rather than updating the existing hearing to teh new courtroom
+# possibly verify that the hearing row is the same key if that is appropriate in the solution
+   And I see table CASE_HEARING column COUNT(courtroom_name) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>E"
+
+Examples:
+  | courthouse         | courtroom    | caseNumber   | dateTime               | msgId     | eventId    | type   | subType | eventText     | caseRetention | totalSentence | text                                                                                                                                   | notes |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}002E | {{timestamp-10:00:00}} | {{seq}}50 | {{seq}}150 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
 
 
