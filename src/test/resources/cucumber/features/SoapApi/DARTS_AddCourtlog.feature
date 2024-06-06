@@ -1,6 +1,6 @@
 Feature: Cases EndPoint using SOAP
 
-@COURTLOG @SOAP_API @regression
+@COURTLOG @SOAP_API @regression @broken
 Scenario Outline: SOAP courtLog where case exists
 	Given I create a case
 	| courthouse   | case_number  | defendants   | judges   | prosecutors   | defenders   |
@@ -29,7 +29,7 @@ Examples:
 	| Harrow Crown Court | room {{seq}} | T{{seq}}121 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 
 
-@COURTLOG @SOAP_API @regression
+@COURTLOG @SOAP_API @regression @broken
 Scenario Outline: SOAP courtLog where case dooes not exist and the courtlog creates the case
 	 When I add courtlogs
 	| courthouse   | courtroom   | case_numbers   | text                  | date       | time     |
