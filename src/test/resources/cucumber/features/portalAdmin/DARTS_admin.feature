@@ -16,20 +16,23 @@ Feature: Admin
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
       | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
 
-  @DMP-2187-AC1,AC-2
+  @DMP-2187 @regression
   Scenario: Admin access and landing page
-    When  I am logged on to the admin portal as an ADMIN user
-    Then  I see "Users" on the page
-    And   I see links with text:
-      | Users | Groups | Organisations | Courthouses | Events | Node registry | Transformed media | Transcript requests |
-      | Y     | Y      | Y             | Y           | Y      | Y             | Y                 | Y                   |
-    And   I see link with text "HMCTS"
-    And   I see link with text "DARTS"
-    And   I see link with text "Sign out"
+    When I am logged on to the admin portal as an ADMIN user
+    #DMP-2187-AC1 and AC2
+    Then I see "Search" on the page
+    And I see links with text:
+      | Search | Users | Groups | Courthouses | Transformed media | Transcripts | File deletion | System configuration |
+      | Y      | Y     | Y      | Y           | Y                 | Y           | Y             | Y                    |
+    And I see link with text "HMCTS"
+    And I see link with text "DARTS"
+    And I see link with text "Sign out"
 
-  @DMP-2187-AC3
+  @DMP-2187 @regression
   Scenario Outline: No ADMIN permissions
-    When  I am logged on to the admin portal as a <role> user
+
+    #DMP-2187-AC3
+    When I am logged on to the admin portal as a <role> user
     Then I see "Page not found" on the page
 
     Examples:
@@ -44,17 +47,18 @@ Feature: Admin
 			| LANGUAGESHOP      |
 			| REQUESTERAPPROVER |
 
-  @DMP-634
+  @DMP-634 @regression
   Scenario: Search for Users in Portal Primary page
     When I am logged on to the admin portal as an ADMIN user
-    And I see "Users" on the page
+    And I do not see "Search for user" on the page
+    When I click on the "Users" link
     Then I see "Full name" on the page
     And I see "Email" on the page
     And I see "Active users" on the page
     And I see "Inactive users" on the page
     And I see "All" on the page
 
-  @DMP-725
+  @DMP-725 @regression
   Scenario: Search page for Courthouses
     When I am logged on to the admin portal as an ADMIN user
     And I click on the "Courthouses" link
@@ -65,15 +69,14 @@ Feature: Admin
 
   @DMP-2178 @DMP-630-AC1-AC2
   Scenario Outline: New user account - Check user details
-    When I am logged on to the admin portal as an ADMIN user
-    Then I see "Users" on the page
-    And I see the "Create new user" button
+
+    #TODO: This needs fresh data each time or it will fail due to details not being unique
+
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    And I see "Full name" on the page
-    And I see "Email" on the page
-    And I see "Description (optional)" on the page
     Then I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
@@ -104,17 +107,13 @@ Feature: Admin
       | Full name  | Email                 | Description |
       | Joe Bloggs | darts.test4@hmcts.net | Test        |
 
-  @DMP-630-AC3-1
+  @DMP-630-AC3-1 @regression
   Scenario Outline: Create a new user account with existing email address
-    When I am logged on to the admin portal as an ADMIN user
-    Then I see "Users" on the page
-    And I see the "Create new user" button
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    And I see "Full name" on the page
-    And I see "Email" on the page
-    And I see "Description (optional)" on the page
     Then I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
@@ -127,16 +126,13 @@ Feature: Admin
       | Full name    | Email                 | Description |
       | global_judge | darts.judge@hmcts.net |             |
 
-  @DMP-630-AC3-2
+  @DMP-630-AC3-2 @regression
   Scenario Outline: Create a new user account with invalid email format
-    When I am logged on to the admin portal as an ADMIN user
-    Then I see "Users" on the page
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    And I see "Full name" on the page
-    And I see "Email" on the page
-    And I see "Description (optional)" on the page
     Then I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
@@ -149,16 +145,13 @@ Feature: Admin
       | Full name    | Email       | Description |
       | global_judge | darts.judge |             |
 
-  @DMP-630-AC3-3
+  @DMP-630-AC3-3 @regression
   Scenario Outline: Create a new user account without full name
-    When I am logged on to the admin portal as an ADMIN user
-    Then I see "Users" on the page
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    And I see "Full name" on the page
-    And I see "Email" on the page
-    And I see "Description (optional)" on the page
     Then I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
@@ -171,16 +164,13 @@ Feature: Admin
       | Full name | Email                | Description |
       |           | darts.judge@hmct.net |             |
 
-  @DMP-630-AC3-4
+  @DMP-630-AC3-4 @regression
   Scenario Outline: Create a new user account without Email address
-    When I am logged on to the admin portal as an ADMIN user
-    Then I see "Users" on the page
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    And I see "Full name" on the page
-    And I see "Email" on the page
-    And I see "Description (optional)" on the page
     Then I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
@@ -193,15 +183,12 @@ Feature: Admin
       | Full name | Email | Description |
       | Test      |       |             |
 
-  @DMP-630-AC3-5
+  @DMP-630-AC3-5 @regression
   Scenario Outline: Create a new user account with more than 256 characters
-    When I am logged on to the admin portal as an ADMIN user
-    Then I see "Users" on the page
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
     And I press the "Create new user" button
     And I see "Enter user details" on the page
-    And I see "Full name" on the page
-    And I see "Email" on the page
-    And I see "Description (optional)" on the page
     Then I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
@@ -461,3 +448,33 @@ Feature: Admin
     And I am logged on to DARTS as a TRANSCRIBER user
     And I click on the "Transcript requests" link
     And I see "Manual" in the same row as "H{{seq}}001"
+
+  @DMP-2678 @regression
+  Scenario: Transformed media search
+
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Transformed media" link
+    And I press the "Search" button
+    Then I see "results" on the page
+
+    #DMP-2678-AC1 View search results
+
+    When I click on the "Advanced search" link
+    And I set "Courthouse" to "Harrow Crown Court"
+    And I set "Hearing date" to "15/02/2024"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Media ID | Case ID  | Courthouse         | Hearing date | Owner       | Requested by | Date requested | Last accessed | File type | Size  | Filename                   |
+      | 518      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | MP3       | 0.2MB | B9160006_15_Feb_2024_1.mp3 |
+      | 519      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | ZIP       | 0.9MB | B9160006_15_Feb_2024_1.zip |
+      | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requester   | Requester    | 15 Feb 2024    |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
+    And I see "Showing 1-3 of 3 results" on the page
+
+    #DMP-2678-AC2 Single search result takes user directly to file details screen
+
+    When I set "Request ID" to "17165"
+    And I press the "Search" button
+    Then I do not see "Showing" on the page
+    And I see "Request details" on the page
+    And I see "Requester" in the same row as "Requested by"
+    And I see "17165" in the same row as "Request ID"
