@@ -571,84 +571,128 @@ Feature: Admin portal
       Then I see "The start date must be before the end date" on the page
       And I see "The end date must be after the start date" on the page
 
-@DMP-2746
+@DMP-2746 @regression
     Scenario: Add event mapping
-      When I am logged on to the admin portal as an ADMIN user
-      And I click on the "System configuration" link
-      Then I click on the "Event mappings" navigation link
-      And I click on the "Add event mapping" link
-      Then I set "Type" to "DMP-2746-Automation-Type"
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "System configuration" link
+      And I click on the "Event mappings" navigation link
+      And I press the "Add event mapping" button
+      And I set "Type" to "DMP-2746-Automation-Type"
       And I set "Event name" to "DMP-2746-Automation-Event-Name"
       And I see "Map to event handler" on the page
       And I select "DarStartHandler" from the dropdown
-      And I click on the "Tick if this event mapping has reporting restrictions" link
-      And I click on the "Add mapping" link
-      Then I see "Event mapping addded " on the page
+      And I check the "Tick if this event mapping has reporting restrictions" checkbox
+      And I press the "Add mapping" button
+      Then I see "Event mapping added" on the page
+
       #Cancel
-      And I click on the "Add event mapping" link
-      Then I set "Type" to "DMP-2746-Automation-Type-1"
+
+      When I press the "Add event mapping" button
+      And I set "Type" to "DMP-2746-Automation-Type-1"
       And I set "Event name" to "DMP-2746-Automation-Event-Name-1"
       And I see "Map to event handler" on the page
       And I select "DarStartHandler" from the dropdown
       And I click on the "Tick if this event mapping has reporting restrictions" link
       And I click on the "Cancel" link
-      Then I see "System configuration" on the page
+      Then I see "Filter by type, subtype, or name" on the page
       And I see "Event mappings" on the page
-      #Error handling
-      And I click on the "Add event mapping" link
-      And I set "Type" to "" and click away
-      Then I see "Enter the event type" on the page
-      And I set "Event name" to "" and click away
-      Then I see "Enter the event name" on the page
-      And I see "Map to event handler" on the page
-      And I click on the "Tick if this event mapping has reporting restrictions" link
-      And I click on the "Add mapping" link
-      Then I see "Select an event handler to map to" on the page
-      And I click on the "Cancel" link
-      When I click on the "Add event mapping" link
-      And I set "Type" to "999" and click away
-      And I set "Subtype (optional)" to "999" and click away
-      Then I see "The combination of event type and subtype should be unique" on the page
 
-      @DMP-754
+      #Error handling
+
+      When I press the "Add event mapping" button
+      And I set "Type" to "" and click away
+      Then I see an error message "Enter the event type"
+
+      When I set "Event name" to "" and click away
+      Then I see an error message "Enter the event name"
+
+      When I click on the "Tick if this event mapping has reporting restrictions" link
+      And I press the "Add mapping" button
+      Then I see an error message "Select an event handler to map to"
+
+      #Delete created event mapping for next run
+
+      When I click on the "Cancel" link
+      When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      And I click on "Change" in the same row as "DMP-2746-Automation-Type"
+      And I click on the "Delete event mapping" link
+      Then I see "Are you sure want to delete this event mapping?" on the page
+      And I see "DMP-2746-Automation-Type" in the same row as "DMP-2746-Automation-Event-Name"
+
+      When I press the "Yes - delete" button
+      Then I see "Event mapping deleted" on the page
+
+      When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      Then I see "There are no matching results." on the page
+
+      @DMP-754 @regression
       Scenario: View event mapping
-      When I am logged on to the admin portal as an ADMIN user
-      Then I click on the "System configuration" link
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "System configuration" link
       And I click on the "Event mappings" navigation link
-      Then I see "Event mappings" on the page
+      And I see "Event mappings" on the page
       And I see "Add event mapping" on the page
       And I see "Filter by type, subtype, or name" on the page
       And I see "Filter by event handler" on the page
-      Then I select "StopAndCloseHandler" from the dropdown
-      And I see "Active only" on the page
+      And I select "StopAndCloseHandler" from the dropdown
+      Then I see "Active only" on the page
       And I see "Active and inactive" on the page
       And I see "With restrictions" on the page
       And I see "Without restrictions" on the page
-      Then I verify the HTML table contains the following values
+      And I verify the HTML table contains the following values
         | Type | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
         | 3000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
         | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
         | 30300| *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
-      And  I select the "Active and inactive" radio button
+
+      When  I select the "Active and inactive" radio button
       And I click on the "With restrictions" link
       Then I verify the HTML table contains the following values
-        | Type     | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
-        | 3000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
-        | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*   | *IGNORE*     | *IGNORE* | *SKIP* |
-        And I click on the "With restrictions" link
+        | Type  | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+        | 3000  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+        | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+
+      When I click on the "With restrictions" link
       And I click on the "Without restrictions" link
       Then I verify the HTML table contains the following values
-        | Type     | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
-        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE* | *SKIP* |
-      And I select "All" from the dropdown
+        | Type | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+
+      When I select "All" from the dropdown
       And I click on the "Without restrictions" link
-      Then I see "Next" on the page
-      Then I click on the pagination link "Next"
-      Then I click on the pagination link "3"
-      Then I see "Next" on the page
-      Then I see "Previous" on the page
-      Then I click on the pagination link "Previous"
-      Then I click on the pagination link "1"
-      And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      And I see "Next" on the page
+      And I click on the pagination link "Next"
+      And I click on the pagination link "3"
+      And I see "Next" on the page
+      And I see "Previous" on the page
+      And I click on the pagination link "Previous"
+      And I click on the pagination link "1"
+      And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type2"
       And I select "StopAndCloseHandler" from the dropdown
       Then I see "There are no matching results." on the page
+
+  @DMP-3028 @regression
+  Scenario: Testing attempt to add identical event mapping
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "System configuration" link
+    And I click on the "Event mappings" navigation link
+    And I press the "Add event mapping" button
+    And I click on the "Cancel" link
+    Then I see "Filter by type, subtype, or name" on the page
+
+    #DMP-3028-AC1 Type and subtype already in use (using already existing from DMP-2746 testing)
+
+    When I press the "Add event mapping" button
+    And I set "Type" to "DMP-2746_Type"
+    And I set "Subtype (optional)" to "DMP-2746_Subtype"
+    And I set "Event name" to "DMP3028TEST"
+    And I select "StandardEventHandler" from the dropdown
+    And I press the "Add mapping" button
+    Then I see "Type and subtype already in use" on the page
+    And I see "The combination of type and subtype you entered are already in use." on the page
+    And I see "Choose a different combination or make changes to the existing mapping." on the page
+
+    #DMP-3028-AC2 Go back link
+
+    When I click on the "Go back" link
+    Then I see "Tick if this event mapping has reporting restrictions" on the page
