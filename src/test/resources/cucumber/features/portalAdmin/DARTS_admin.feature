@@ -18,10 +18,10 @@ Feature: Admin
 
   @DMP-2187 @regression
   Scenario: Admin access and landing page
-    When I am logged on to the admin portal as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
     #DMP-2187-AC1 and AC2
-    Then I see "Search" on the page
-    And I see links with text:
+    When I see "Search" on the page
+    Then I see links with text:
       | Search | Users | Groups | Courthouses | Transformed media | Transcripts | File deletion | System configuration |
       | Y      | Y     | Y      | Y           | Y                 | Y           | Y             | Y                    |
     And I see link with text "HMCTS"
@@ -32,7 +32,7 @@ Feature: Admin
   Scenario Outline: No ADMIN permissions
 
     #DMP-2187-AC3
-    When I am logged on to the admin portal as a <role> user
+    Given I am logged on to the admin portal as a <role> user
     Then I see "Page not found" on the page
 
     Examples:
@@ -49,9 +49,9 @@ Feature: Admin
 
   @DMP-634 @regression
   Scenario: Search for Users in Portal Primary page
-    When I am logged on to the admin portal as an ADMIN user
-    And I do not see "Search for user" on the page
-    When I click on the "Users" link
+    Given I am logged on to the admin portal as an ADMIN user
+    When I do not see "Search for user" on the page
+    And I click on the "Users" link
     Then I see "Full name" on the page
     And I see "Email" on the page
     And I see "Active users" on the page
@@ -60,8 +60,8 @@ Feature: Admin
 
   @DMP-725 @regression
   Scenario: Search page for Courthouses
-    When I am logged on to the admin portal as an ADMIN user
-    And I click on the "Courthouses" link
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Courthouses" link
     Then I see "Search for courthouse" on the page
     And I see "Courthouse name" on the page
     And I see "Display name" on the page
@@ -77,7 +77,7 @@ Feature: Admin
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    Then I set "Full name" to "<Full name>"
+    And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
@@ -87,21 +87,22 @@ Feature: Admin
     And I see "Full name" in the same row as "<Full name>"
     And I see "Email" in the same row as "<Email>"
     And I see "Description (optional)" in the same row as "<Description>"
+
     #AC2 Change User Details
-    Then I click on the "Change" link
-    Then I set "Full name" to "Test User Change"
+    When I click on the "Change" link
+    And I set "Full name" to "Test User Change"
     And I set "Email" to "testchange@test.com"
     And I set "Description (optional)" to "Test Change"
     And I press the "Continue" button
     #AC3 Cancel User Creation
-    Then I click on the "Cancel" link
+    And I click on the "Cancel" link
     And I press the "Create new user" button
     #AC4 Create a User
-    Then I set "Full name" to "<Full name>"
+    And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
-    And I press the "Create user" button
+    Then I press the "Create user" button
 
     Examples:
       | Full name  | Email                 | Description |
@@ -114,13 +115,13 @@ Feature: Admin
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    Then I set "Full name" to "<Full name>"
+    And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
     Then I see "There is a problem" on the page
     And I see an error message "Enter a unique email address"
-    Then I see "email" on the page
+    And I see "email" on the page
     And I see an error message "Enter a unique email address"
     Examples:
       | Full name    | Email                 | Description |
@@ -133,13 +134,13 @@ Feature: Admin
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    Then I set "Full name" to "<Full name>"
+    And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
     Then I see "There is a problem" on the page
     And I see an error message "Enter an email address in the correct format, like name@example.com"
-    Then I see "email" on the page
+    And I see "email" on the page
     And I see an error message "Enter an email address in the correct format, like name@example.com"
     Examples:
       | Full name    | Email       | Description |
@@ -152,13 +153,13 @@ Feature: Admin
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    Then I set "Full name" to "<Full name>"
+    And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
     Then I see "There is a problem" on the page
     And I see an error message "Enter a full name"
-    Then I see "Full name" on the page
+    And I see "Full name" on the page
     And I see an error message "Enter a full name"
     Examples:
       | Full name | Email                | Description |
@@ -171,13 +172,13 @@ Feature: Admin
     And I press the "Create new user" button
     And I see "Create user" on the page
     And I see "Enter user details" on the page
-    Then I set "Full name" to "<Full name>"
+    And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
     Then I see "There is a problem" on the page
     And I see an error message "Enter an email address"
-    Then I see "email" on the page
+    And I see "email" on the page
     And I see an error message "Enter an email address"
     Examples:
       | Full name | Email | Description |
@@ -189,11 +190,11 @@ Feature: Admin
     When I click on the "Users" link
     And I press the "Create new user" button
     And I see "Enter user details" on the page
-    Then I set "Full name" to "<Full name>"
+    And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
-    Then I see "Description (optional)" on the page
+    And I see "Description (optional)" on the page
     And I see "Enter a description shorter than 256 characters" on the page
     And I press the "Continue" button
     Then I see "There is a problem" on the page
@@ -277,7 +278,7 @@ Feature: Admin
     And I press the "Assign groups" button
     Then I see "Assigned 1 group" on the page
 
-  @DMP-2323 @regression
+  @DMP-2323 @DMP-2340 @regression
   Scenario: Deactivate user and last user in group
     Given I am logged on to the admin portal as an ADMIN user
 
@@ -313,10 +314,13 @@ Feature: Admin
     And I see "Inactive" on the page
 
     #Reactivate users and assign group for next run
+    #DMP-2340-AC1 and AC2 Activate user button and reactivate user confirmation
 
     When I press the "Activate user" button
     Then I see "Reactivating this user will give them access to DARTS. They will not be able to see any data until they are added to at least one group." on the page
     And I see "Testusertwo" on the page
+
+    #DMP-2340-AC3 User reactivated
 
     When I press the "Reactivate user" button
     Then I see "User record activated" on the page
