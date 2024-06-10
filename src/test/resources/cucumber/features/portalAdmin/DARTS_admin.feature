@@ -278,7 +278,7 @@ Feature: Admin
     And I press the "Assign groups" button
     Then I see "Assigned 1 group" on the page
 
-  @DMP-2323 @regression
+  @DMP-2323 @DMP-2340 @regression
   Scenario: Deactivate user and last user in group
     Given I am logged on to the admin portal as an ADMIN user
 
@@ -314,10 +314,13 @@ Feature: Admin
     And I see "Inactive" on the page
 
     #Reactivate users and assign group for next run
+    #DMP-2340-AC1 and AC2 Activate user button and reactivate user confirmation
 
     When I press the "Activate user" button
     Then I see "Reactivating this user will give them access to DARTS. They will not be able to see any data until they are added to at least one group." on the page
     And I see "Testusertwo" on the page
+
+    #DMP-2340-AC3 User reactivated
 
     When I press the "Reactivate user" button
     Then I see "User record activated" on the page
