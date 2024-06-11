@@ -152,9 +152,9 @@ Scenario: Admin User
 		| Transcripts | Audio files |
 		| Y           | Y           |
 	 And I verify sub-menu links for "Transcripts":
-		| Completed transcripts | Transcript requests |
-		| X                     | Y                   |
-	 And I verify sub-menu links for "System configuration":
+		 | Completed transcripts |
+		 | Y                     |
+	And I verify sub-menu links for "System configuration":
 		| Event mappings | Automated tasks | Retention policies |
 		| Y              | Y               | Y                  |
 	When I click on the "Retention policies" sub-menu link
