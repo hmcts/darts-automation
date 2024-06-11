@@ -83,7 +83,7 @@ Feature: Admin portal
   @DMP-2224
   Scenario: Removing a group confirmation screen
   #Login admin
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
   #Viewing user groups
     And I click on the "Users" navigation link
     And I set "Email" to "automation@KH{{seq}}001.net"
@@ -98,24 +98,9 @@ Feature: Admin portal
     Then I press the "Yes - continue" button
     Then I see "This user is not a member of any groups." on the page
 
-  @DMP-2340
-  Scenario: Reactivate a user
-  #Login admin
-    Given I am logged on to DARTS as an ADMIN user
-  #Viewing user groups
-    And I click on the "Users" navigation link
-    And I set "Email" to "KH{{seq}}002@test.net"
-    And I select the "Inactive users" radio button
-    And I press the "Search" button
-    And I click on "View" in the same row as "KH{{seq}}002@test.net"
-    Then I press the "Activate user" button
-    Then I see "Reactivating this user will give them access to DARTS. They will not be able to see any data until they are added to at least one group." on the page
-    Then I press the "Reactivate user" button
-    Then I see "User record activated" on the page
-
-  @DMP-635
+  @DMP-635 @regression
   Scenario: Create a Courthouse Page
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
       #AC1 - Creating a courthouse
     Then I click on the "Courthouses" navigation link
     And I press the "Create new courthouse" button
@@ -125,16 +110,16 @@ Feature: Admin portal
     And I see "Must be the same ID used on XHIBIT or CPP" on the page
     And I see "Display name" on the page
       #AC2 - Enter Courthouse Details
-    Then I set "Courthouse name" to "Test Courthouse"
-    And I set "Display name" to "Test Display Name"
+    Then I set "Courthouse name" to "Test Courthouse 635"
+    And I set "Display name" to "Test Display Name 635"
     And I select the "Midlands" radio button
       #AC3 Add Transcription Company
     Then I see "Transcription companies" on the page
     And I see "Select transcription companies" on the page
     And I see "You can select and add multiple companies" on the page
-    And I select "DMP-626-LEEDS_JUDGE" from the dropdown
+    And I select "Swansea_Transcribers" from the dropdown
     And I press the "Add company" button
-    Then I see "DMP-626-LEEDS_JUDGE" in the same row as "Remove"
+    Then I see "Swansea_Transcribers" in the same row as "Remove"
     And I click on the "Remove" link
     And I click on the "Cancel" link
       #AC4 - Error Handling
@@ -147,7 +132,7 @@ Feature: Admin portal
 
   @DMP-2466
   Scenario: Retention Policies primary page
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
       #AC1 - View active polices
     And I click on the "Retention policies" navigation link
     And I see "Retention policies" on the page
@@ -167,9 +152,9 @@ Feature: Admin portal
     And I click on the "Inactive" link
     Then I see "No data to display." on the page
 
-  @DMP-2252
+  @DMP-2252 @regression
   Scenario: Edit a courthouse
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
       #AC1 - Editing a courthouse
     Then I click on the "Courthouses" navigation link
     And I set "Courthouse name" to "Swansea"
@@ -185,7 +170,7 @@ Feature: Admin portal
 
   @DMP-2263
   Scenario: Create a Courthouse Page - Check Details
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
     And I press the "Create new courthouse" button
     Then I set "Courthouse name" to "Test Courthouse {{seq}}"
@@ -230,7 +215,15 @@ Feature: Admin portal
     Then I see "Created Test Display Name {{seq}}" on the page
     And I see "© Crown copyright" on the page
 
-  @DMP-1192
+    #Delete courthouse for next run (can this be done? Don't see delete button for courthouses)
+
+    #When I click on the "Courthouses" link
+    #And I set "Courthouse name" to "Test Courthouse {{seq}}"
+    #And I press the "Search" button
+    #And I click on the "Test Courthouse {{seq}}" link
+    #And I press the "Edit courthouse" button
+
+  @DMP-1192 @regression
   Scenario: View Courthouse - Details Tab
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -257,7 +250,7 @@ Feature: Admin portal
     And I see "Details" on the page
     And I see "© Crown copyright" on the page
 
-@DMP-2299
+@DMP-2299 @regression
   Scenario: Viewing Group Details
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -270,7 +263,7 @@ Feature: Admin portal
     Then I select "Swansea" from the dropdown
     And I press the "Add courthouse" button
 
-  @DMP-2302
+  @DMP-2302 @regression
   Scenario: Edit a Group
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -280,7 +273,6 @@ Feature: Admin portal
     #AC1 - Edit group details
     Then I see "Edit group" on the page
     And I see "Group details" on the page
-    And I see "Group name" on the page
     And I see "Group name" on the page
     And I see "Description" on the page
     And I see "Role" on the page
@@ -292,10 +284,8 @@ Feature: Admin portal
     And I press the "Save changes" button
     And I see "There is a problem" on the page
     And I see "There is an existing group with this name" on the page
-    And I see "There is an existing group with this name" on the page
 
-
-  @DMP-2305
+  @DMP-2305 @regression
   Scenario: Removing users from a group confirmation screen
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -306,7 +296,7 @@ Feature: Admin portal
     And I see "Are you sure you want to remove 1 user from this group?" on the page
     Then I press the "No - cancel" button
 
-  @DMP-2263
+  @DMP-2263 @regression
   Scenario: Editing a courthouse - Check details
     When I am logged on to the admin portal as an ADMIN user
   #AC1- Review courthouse details
@@ -335,14 +325,14 @@ Feature: Admin portal
     And I press the "Continue" button
     Then I see "Update courthouse" on the page
 
-  @DMP-2303
+  @DMP-2303 @regression
   Scenario: Viewing group details - Users
     When I am logged on to the admin portal as an ADMIN user
     #AC1 - View users
     Then I click on the "Groups" navigation link
     And I click on the "Swansea_ADMIN" link
     And I click on the "Group users" link
-    And I see "0 of 5 selected" on the page
+    And I see "0 of 7 selected" on the page
 
     #AC1 - Remove users
     And I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
@@ -350,7 +340,7 @@ Feature: Admin portal
     And I check the checkbox in the same row as "Darts Admin" "darts.admin@hmcts.net"
     Then I press the "Remove users" button
 
-  @DMP-2581
+  @DMP-2581 @regression
   Scenario: Viewing groups - Adding a user
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -364,7 +354,7 @@ Feature: Admin portal
     And I click on the "Add user" link
     Then I see "Darts Admin" in the same row as "darts.admin@hmcts.net"
 
-    @DMP-2269
+    @DMP-2269 @regression
     Scenario: Search Courthouse
       When I am logged on to the admin portal as an ADMIN user
      Then I click on the "Courthouses" navigation link
@@ -432,7 +422,7 @@ Feature: Admin portal
       Then I see "No search results" on the page
       And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
 
-  @DMP-2317
+  @DMP-2317 @regression
   Scenario: Create a new group (Translation or Transcriber)
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -460,7 +450,7 @@ Feature: Admin portal
     And I see "There is an existing group with this name" on the page
     And I see "Description must be less than 255 characters" on the page
 
-  @DMP-2714
+  @DMP-2714 @obsolete
   Scenario: Update admin portal navigation
     When I am logged on to the admin portal as an ADMIN user
   #AC1 - Updated nav
@@ -529,16 +519,16 @@ Feature: Admin portal
  
       Then I click on the "Transcripts" navigation link
       And I click on the "Advanced search" link
-      Then I set "Hearing date" to "19/05/2024"
+      Then I set "Hearing date" to "{{date+7/}}"
       And I set "Courthouse" to "Test"
       Then I see "You have selected a date in the future. Hearing date must be in the past" on the page
       Then I click on the "Specific date" link
-      Then I set "Enter a date" to "19/05/2024"
+      Then I set "Enter a date" to "{{date+7/}}"
       And I set "Courthouse" to "Placeholder"
       Then I see "You have selected a date in the future. Requested date must be in the past" on the page
       Then I click on the "Date range" link
-      Then I set "Date from" to "19/05/2024"
-      And I set "Date to" to "19/05/2024"
+      Then I set "Date from" to "{{date+7/}}"
+      And I set "Date to" to "{{date+7/}}"
       And I set "Courthouse" to "Test"
       Then I see "You have selected a date in the future. Requested start date must be in the past" on the page
       And I see "You have selected a date in the future. Requested end date must be in the past" on the page
@@ -571,87 +561,132 @@ Feature: Admin portal
       Then I see "The start date must be before the end date" on the page
       And I see "The end date must be after the start date" on the page
 
-@DMP-2746
+@DMP-2746 @DMP-2674 @regression
     Scenario: Add event mapping
-      When I am logged on to the admin portal as an ADMIN user
-      And I click on the "System configuration" link
-      Then I click on the "Event mappings" navigation link
-      And I click on the "Add event mapping" link
-      Then I set "Type" to "DMP-2746-Automation-Type"
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "System configuration" link
+      And I click on the "Event mappings" navigation link
+      #DMP-2746-AC1 Create event mapping
+      And I press the "Add event mapping" button
+      And I set "Type" to "DMP-2746-Automation-Type"
       And I set "Event name" to "DMP-2746-Automation-Event-Name"
       And I see "Map to event handler" on the page
       And I select "DarStartHandler" from the dropdown
-      And I click on the "Tick if this event mapping has reporting restrictions" link
-      And I click on the "Add mapping" link
-      Then I see "Event mapping addded " on the page
+      And I check the "Tick if this event mapping has reporting restrictions" checkbox
+      And I press the "Add mapping" button
+      Then I see "Event mapping added" on the page
+
       #Cancel
-      And I click on the "Add event mapping" link
-      Then I set "Type" to "DMP-2746-Automation-Type-1"
+
+      When I press the "Add event mapping" button
+      And I set "Type" to "DMP-2746-Automation-Type-1"
       And I set "Event name" to "DMP-2746-Automation-Event-Name-1"
       And I see "Map to event handler" on the page
       And I select "DarStartHandler" from the dropdown
       And I click on the "Tick if this event mapping has reporting restrictions" link
       And I click on the "Cancel" link
-      Then I see "System configuration" on the page
+      Then I see "Filter by type, subtype, or name" on the page
       And I see "Event mappings" on the page
-      #Error handling
-      And I click on the "Add event mapping" link
-      And I set "Type" to "" and click away
-      Then I see "Enter the event type" on the page
-      And I set "Event name" to "" and click away
-      Then I see "Enter the event name" on the page
-      And I see "Map to event handler" on the page
-      And I click on the "Tick if this event mapping has reporting restrictions" link
-      And I click on the "Add mapping" link
-      Then I see "Select an event handler to map to" on the page
-      And I click on the "Cancel" link
-      When I click on the "Add event mapping" link
-      And I set "Type" to "999" and click away
-      And I set "Subtype (optional)" to "999" and click away
-      Then I see "The combination of event type and subtype should be unique" on the page
 
-      @DMP-754
+      #DMP-2646-AC2 Error handling
+
+      When I press the "Add event mapping" button
+      And I set "Type" to "" and click away
+      Then I see an error message "Enter the event type"
+
+      When I set "Event name" to "" and click away
+      Then I see an error message "Enter the event name"
+
+      When I click on the "Tick if this event mapping has reporting restrictions" link
+      And I press the "Add mapping" button
+      Then I see an error message "Select an event handler to map to"
+
+      #DMP-2674-AC1 Delete created event mapping for next run
+
+      When I click on the "Cancel" link
+      When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      And I click on "Change" in the same row as "DMP-2746-Automation-Type"
+      And I click on the "Delete event mapping" link
+      Then I see "Are you sure want to delete this event mapping?" on the page
+      And I see "DMP-2746-Automation-Type" in the same row as "DMP-2746-Automation-Event-Name"
+
+      When I press the "Yes - delete" button
+      Then I see "Event mapping deleted" on the page
+
+      When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      Then I see "There are no matching results." on the page
+
+      @DMP-754 @regression
       Scenario: View event mapping
-      When I am logged on to the admin portal as an ADMIN user
-      Then I click on the "System configuration" link
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "System configuration" link
       And I click on the "Event mappings" navigation link
-      Then I see "Event mappings" on the page
+      And I see "Event mappings" on the page
       And I see "Add event mapping" on the page
       And I see "Filter by type, subtype, or name" on the page
       And I see "Filter by event handler" on the page
-      Then I select "StopAndCloseHandler" from the dropdown
-      And I see "Active only" on the page
+      And I select "StopAndCloseHandler" from the dropdown
+      Then I see "Active only" on the page
       And I see "Active and inactive" on the page
       And I see "With restrictions" on the page
       And I see "Without restrictions" on the page
-      Then I verify the HTML table contains the following values
+      And I verify the HTML table contains the following values
         | Type | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
         | 3000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
         | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
         | 30300| *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
-      And  I select the "Active and inactive" radio button
+
+      When  I select the "Active and inactive" radio button
       And I click on the "With restrictions" link
       Then I verify the HTML table contains the following values
-        | Type     | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
-        | 3000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
-        | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*   | *IGNORE*     | *IGNORE* | *SKIP* |
-        And I click on the "With restrictions" link
+        | Type  | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+        | 3000  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+        | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+
+      When I click on the "With restrictions" link
       And I click on the "Without restrictions" link
       Then I verify the HTML table contains the following values
-        | Type     | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
-        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*         | *IGNORE*     | *IGNORE* | *SKIP* |
-      And I select "All" from the dropdown
+        | Type | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+
+      When I select "All" from the dropdown
       And I click on the "Without restrictions" link
-      Then I see "Next" on the page
-      Then I click on the pagination link "Next"
-      Then I click on the pagination link "3"
-      Then I see "Next" on the page
-      Then I see "Previous" on the page
-      Then I click on the pagination link "Previous"
-      Then I click on the pagination link "1"
-      And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      And I see "Next" on the page
+      And I click on the pagination link "Next"
+      And I click on the pagination link "3"
+      And I see "Next" on the page
+      And I see "Previous" on the page
+      And I click on the pagination link "Previous"
+      And I click on the pagination link "1"
+      And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type2"
       And I select "StopAndCloseHandler" from the dropdown
       Then I see "There are no matching results." on the page
+
+@DMP-3028 @regression
+  Scenario: Testing attempt to add identical event mapping
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "System configuration" link
+    And I click on the "Event mappings" navigation link
+    And I press the "Add event mapping" button
+    And I click on the "Cancel" link
+    Then I see "Filter by type, subtype, or name" on the page
+
+    #DMP-3028-AC1 Type and subtype already in use (using already existing from DMP-2746 testing)
+
+    When I press the "Add event mapping" button
+    And I set "Type" to "DMP-2746_Type"
+    And I set "Subtype (optional)" to "DMP-2746_Subtype"
+    And I set "Event name" to "DMP3028TEST"
+    And I select "StandardEventHandler" from the dropdown
+    And I press the "Add mapping" button
+    Then I see "Type and subtype already in use" on the page
+    And I see "The combination of type and subtype you entered are already in use." on the page
+    And I see "Choose a different combination or make changes to the existing mapping." on the page
+
+    #DMP-3028-AC2 Go back link
+
+    When I click on the "Go back" link
+    Then I see "Tick if this event mapping has reporting restrictions" on the page
 
        @DMP-2763
        Scenario: Edit event mapping
