@@ -406,7 +406,7 @@ public class DateUtils {
 	
 	public static String displayDate(String string) {
 		LocalDate date = LocalDate.parse(dateAsYyyyMmDd(string));
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 		return date.format(formatter);
 	}
 	
@@ -657,6 +657,7 @@ public class DateUtils {
 		System.out.println(substituteDateValue("timestamp-12:34:45"));
 		System.out.println(datePart("", "dd"));
 		System.out.println(substituteDateValue("date+0/"));
+		System.out.println(displayDate(substituteDateValue("date+7 years")));
 	}
 	
 	@Test
