@@ -112,6 +112,32 @@ public class Database extends Postgres {
 		final String caseRetentionJoin = "darts.case_retention car\r\n"
 				+ "join darts.retention_policy_type rpt\r\n"
 				+ "using(rpt_id)\r\n";
+		
+		final String transcriptionJoin = "darts.transcription\r\n"
+				+ "left join darts.transcription_status\r\n"
+				+ "using (trs_id)\r\n"
+				+ "left join darts.transcription_urgency\r\n"
+				+ "using (tru_id)\r\n"
+				+ "left join darts.transcription_type\r\n"
+				+ "using (trt_id)\r\n";
+		
+		final String caseTranscriptionJoin = "darts.court_case cas\r\n"
+				+ "left join darts.hearing hea\r\n"
+				+ "using(cas_id)"
+				+ "inner join darts.courtroom ctr\r\n"
+				+ "using(ctr_id)\r\n"
+				+ "left join darts.courthouse cth\r\n"
+				+ "on ctr.cth_id = cth.cth_id\r\n"
+				+ "left join darts.hearing_transcription_ae\r\n"
+				+ "using(hea_id)\r\n"
+				+ "left join darts.transcription tra\r\n"
+				+ "using(tra_id)\r\n"
+				+ "left join darts.transcription_status trs\r\n"
+				+ "using (trs_id)\r\n"
+				+ "left join darts.transcription_urgency tru\r\n"
+				+ "using (tru_id)\r\n"
+				+ "left join darts.transcription_type trt\r\n"
+				+ "using (trt_id)\r\n";
 
 	public Database(){
 		super();
@@ -139,6 +165,10 @@ public class Database extends Postgres {
 			return caseRetentionJoin;
 		case "CASE_MANAGEMENT_RETENTION":
 			return caseManagementRetentionJoin;
+		case "TRANSCRIPTION":
+			return transcriptionJoin;
+		case "CASE_TRANSCRIPTION":
+			return caseTranscriptionJoin;
 		default:
 			return input;
 		}
