@@ -64,7 +64,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@Given("I authenticate from (the) {word} source system") 
 	public void authenticateAsSource(String source) {
-		soapApi.authenticateAsSource(source);
+		soapApi.overrideSource(source);
 	}
 	
 // sample cucumber:
@@ -92,7 +92,7 @@ public class StepDef_soapApi extends StepDef_base {
 // sample cucumber:
 // When I create an event
 // |message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|
-	@When("^I create an event$")
+	@When("I create (an )event(s)")
 	public void createEventXml(List<Map<String,String>> dataTable) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
 		for (Map<String, String> map : dataTable) {
@@ -178,8 +178,12 @@ public class StepDef_soapApi extends StepDef_base {
 					getValue(map, "startTime"),
 					getValue(map, "endDate"),
 					getValue(map, "timeStamp", DateUtils.timestamp()),
-					getValue(map, "defendant"),
-					getValue(map, "urn", getValue(map, "caseNumber")));
+					getValue(map, "defendant", "Franz KAFKA"),
+					getValue(map, "urn", getValue(map, "caseNumber")),
+					getValue(map, "judge", "Judge Name"),
+					getValue(map, "prosecution", "Prosecutor Name"),
+					getValue(map, "defence", "Defence Name")
+					);
 			ApiResponse apiResponse = soapApi.postSoap("", "addDocument", xml);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
@@ -192,6 +196,7 @@ public class StepDef_soapApi extends StepDef_base {
 	// |courthouse|courtroom|case_numbers|date|startTime|endTime|audioFile|channel|
 		@When("^I load an audio file$")
 		public void loadAudioFile(List<Map<String,String>> dataTable) {
+			soapApi.setDefaultSource(SOURCE_VIQ);
 			for (Map<String, String> map : dataTable) {
 				String date = getValue(map, "date");
 				String audioFile = getValue(map, "audioFile");
@@ -204,7 +209,6 @@ public class StepDef_soapApi extends StepDef_base {
 						audioFile,
 						getValue(map, "channel", "1"));
 //				audioFile = ReadProperties.main("audioFileLocation") + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
-				soapApi.setDefaultSource(SOURCE_VIQ);
 				ApiResponse apiResponse = soapApi.postSoapWithAudio("", "addAudio", xml, audioFile);
 				testdata.statusCode = apiResponse.statusCode;
 				testdata.responseString = apiResponse.responseString;

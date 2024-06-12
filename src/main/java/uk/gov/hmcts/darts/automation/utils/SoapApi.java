@@ -57,16 +57,19 @@ public class SoapApi {
 	String soapPassword = "";
 	String tokenPassword = "";
 	String defaultSource = "XHIBIT";
+	String previousDefault = "";
 	String suppliedSource = "";
+	String authenticatedSource = "";
 	boolean useToken;
+	boolean canRevertToDefault = true;
 
 
 	public SoapApi() {
 		this("XHIBIT");
 	}
 	
-	public SoapApi(String defaultSource) {
-		this.defaultSource = defaultSource;
+	public SoapApi(String source) {
+		this.defaultSource = source;
 	}
 
     public RequestSpecification requestLogLevel(LogDetail loggingLevel){
@@ -83,11 +86,23 @@ public class SoapApi {
     	if (!this.defaultSource.equalsIgnoreCase(source)) {
     		this.defaultSource = source;
     		authorizationToken = "";
+    		if (canRevertToDefault) {
+    			this.suppliedSource = "";
+    		}
     	}
+    }
+    
+    public void overrideSource(String source) {
+    	if (!this.suppliedSource.equalsIgnoreCase(source)) {
+    		this.suppliedSource = source;
+    		authorizationToken = "";
+    	}
+    	canRevertToDefault = false;
     }
 
 // it is possible that all but XHIBIT, CPP & VIQ are invalid
     public void authenticate(String source) {
+    	log.info("About to authenticate from {} source", source);
     	useToken = false;
         switch (source.toUpperCase()) {
         case "EXTERNAL":
@@ -149,23 +164,19 @@ public class SoapApi {
     	this.soapPassword = soapPassword;
 //    	authenticate(username, tokenPassword);
     	if (useToken) {
-    	  registerUser(username, soapPassword);
+    		registerUser(username, soapPassword);
     	} else {
     		authorizationToken = "No token";
       }
     }
     
     public void authenticate() {
-    	boolean alreadyAuthenticated = !(authorizationToken == null || authorizationToken.isBlank());
-    	log.info(alreadyAuthenticated ? "already Authenticated" : "Not already Authenticated");
-    	if (!alreadyAuthenticated) {
-    		externalAuthenticate();
-    	} else {
-// always authenticate with default for this call unless explicitly authenticated
-    		if (suppliedSource.isBlank()) {
-    			externalAuthenticate();
-    		}
+    	String source = suppliedSource.isBlank() ? defaultSource : suppliedSource;
+    	if (!source.equalsIgnoreCase(authenticatedSource)) {
+    		authenticate(source);
+    		authenticatedSource = source;
     	}
+    	canRevertToDefault = true;
     }
 	
     public void registerUser(String username, String password) {

@@ -43,10 +43,4 @@ public class AdminPortal {
         DB = new Database();
     	jsonApi = new JsonApi();
     }
-
-    public void clickOnSubMenuLink(String linkText) {
-        String substitutedValue = Substitutions.substituteValue(linkText);
-        webDriver.findElement(By.xpath("//app-tabs//a[@class='moj-sub-navigation__link'][contains(text(),'" + substitutedValue + "')]")).click();
-        NAV.waitForPageLoad();
-    }
 }

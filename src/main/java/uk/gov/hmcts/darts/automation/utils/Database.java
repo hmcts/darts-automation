@@ -59,32 +59,87 @@ public class Database extends Postgres {
 			+ "inner join darts.hearing hea\r\n"
 			+ "using (ctr_id)\r\n"
 			+ "inner join darts.court_case cas\r\n"
-			+ "using (cth_id)\r\n";
+			+ "using (cas_id)\r\n";
 
-  final String caseAudioJoin = "darts.courthouse cth\r\n"
+	final String caseHearingJudgeJoin = "darts.courthouse cth\r\n"
 			+ "inner join darts.courtroom ctr\r\n"
 			+ "using(cth_id)\r\n"
 			+ "inner join darts.hearing hea\r\n"
 			+ "using (ctr_id)\r\n"
 			+ "inner join darts.court_case cas\r\n"
-			+ "using (cth_id)\r\n"
-			+ "inner join darts.hearing_media_ae hm\r\n"
+			+ "using (cas_id)\r\n"
+			+ "left join darts.hearing_judge_ae\r\n"
 			+ "using (hea_id)\r\n"
-			+ "left join darts.media med\r\n"
-			+ "using (med_id)\r\n";
+			+ "inner join darts.judge\r\n"
+			+ "using (jud_id)\r\n";
 	
-	final String hearingMediaRequestJoin = "darts.courthouse cth\r\n"
+	final String caseJudgeJoin = "darts.courthouse cth\r\n"
 			+ "inner join darts.courtroom ctr\r\n"
 			+ "using(cth_id)\r\n"
-			+ "inner join darts.hearing hea\r\n"
-			+ "using (ctr_id)\r\n"
 			+ "inner join darts.court_case cas\r\n"
 			+ "using (cth_id)\r\n"
-			+ "left join darts.media_request\r\n"
-			+ "using (hea_id)\r\n";
+			+ "left join darts.case_judge_ae\r\n"
+			+ "using (cas_id)\r\n"
+			+ "inner join darts.judge\r\n"
+			+ "using (jud_id)\r\n";
+
+	  final String caseAudioJoin = "darts.courthouse cth\r\n"
+				+ "inner join darts.courtroom ctr\r\n"
+				+ "using(cth_id)\r\n"
+				+ "inner join darts.hearing hea\r\n"
+				+ "using (ctr_id)\r\n"
+				+ "inner join darts.court_case cas\r\n"
+				+ "using (cth_id)\r\n"
+				+ "inner join darts.hearing_media_ae hm\r\n"
+				+ "using (hea_id)\r\n"
+				+ "left join darts.media med\r\n"
+				+ "using (med_id)\r\n";
+		
+		final String hearingMediaRequestJoin = "darts.courthouse cth\r\n"
+				+ "inner join darts.courtroom ctr\r\n"
+				+ "using(cth_id)\r\n"
+				+ "inner join darts.hearing hea\r\n"
+				+ "using (ctr_id)\r\n"
+				+ "inner join darts.court_case cas\r\n"
+				+ "using (cth_id)\r\n"
+				+ "left join darts.media_request\r\n"
+				+ "using (hea_id)\r\n";
+		
+		final String caseManagementRetentionJoin = "darts.case_management_retention cmr\r\n"
+				+ "join darts.retention_policy_type rpt\r\n"
+				+ "using(rpt_id)\r\n";
+		
+		final String caseRetentionJoin = "darts.case_retention car\r\n"
+				+ "join darts.retention_policy_type rpt\r\n"
+				+ "using(rpt_id)\r\n";
+		
+		final String transcriptionJoin = "darts.transcription\r\n"
+				+ "left join darts.transcription_status\r\n"
+				+ "using (trs_id)\r\n"
+				+ "left join darts.transcription_urgency\r\n"
+				+ "using (tru_id)\r\n"
+				+ "left join darts.transcription_type\r\n"
+				+ "using (trt_id)\r\n";
+		
+		final String caseTranscriptionJoin = "darts.court_case cas\r\n"
+				+ "left join darts.hearing hea\r\n"
+				+ "using(cas_id)"
+				+ "inner join darts.courtroom ctr\r\n"
+				+ "using(ctr_id)\r\n"
+				+ "left join darts.courthouse cth\r\n"
+				+ "on ctr.cth_id = cth.cth_id\r\n"
+				+ "left join darts.hearing_transcription_ae\r\n"
+				+ "using(hea_id)\r\n"
+				+ "left join darts.transcription tra\r\n"
+				+ "using(tra_id)\r\n"
+				+ "left join darts.transcription_status trs\r\n"
+				+ "using (trs_id)\r\n"
+				+ "left join darts.transcription_urgency tru\r\n"
+				+ "using (tru_id)\r\n"
+				+ "left join darts.transcription_type trt\r\n"
+				+ "using (trt_id)\r\n";
 
 	public Database(){
-//		pg = new Postgres();
 		super();
 	}
 	
@@ -98,10 +153,22 @@ public class Database extends Postgres {
 			return courtroomJoin;
 		case "CASE_HEARING":
 			return caseHearingJoin;
+		case "CASE_HEARING_JUDGE":
+			return caseHearingJudgeJoin;
+		case "CASE_JUDGE":
+			return caseJudgeJoin;
 		case "CASE_AUDIO":
 			return caseAudioJoin;
 		case "HEARING_MEDIA_REQUEST":
 			return hearingMediaRequestJoin;
+		case "CASE_RETENTION":
+			return caseRetentionJoin;
+		case "CASE_MANAGEMENT_RETENTION":
+			return caseManagementRetentionJoin;
+		case "TRANSCRIPTION":
+			return transcriptionJoin;
+		case "CASE_TRANSCRIPTION":
+			return caseTranscriptionJoin;
 		default:
 			return input;
 		}
@@ -169,6 +236,9 @@ public class Database extends Postgres {
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", "12"), "12");
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", "null"), "null");
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "cth_id", null), "null");
+		Assertions.assertEquals(db.delimitedValue("darts.event", "event_ts", "2024-12-12 10:00:00+00"), "'2024-12-12 10:00:00+00'");
+		Assertions.assertEquals(db.delimitedValue("darts.event", "event_ts", "null"), "null");
+		Assertions.assertEquals(db.delimitedValue("darts.event", "event_ts", null), "null");
 // following tests rely on data existing in tables
 //		Assertions.assertEquals(db.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
 //		Assertions.assertEquals(db.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
@@ -199,10 +269,15 @@ public class Database extends Postgres {
 		System.out.println(db.returnSingleValue("darts.media_request",
 				"mer_id", "23645",
 				"request_status"));
+		
+		System.out.println(db.returnSingleValue("CASE_HEARING_JUDGE", 
+				"cas.cas_id", "95302",
+				"judge_name"
+				));
 
-		System.out.println(db.returnSingleValue("darts.transformed_media",
-				"mer_id", "23645",
-				"trm_id"));
+//		System.out.println(db.returnSingleValue("darts.transformed_media",
+//				"mer_id", "23645",
+//				"trm_id"));
 	}
 
 

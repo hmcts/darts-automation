@@ -78,6 +78,13 @@ public class StepDef_db extends StepDef_base {
 		testdata.setProperty(col, returnVal);
 	}
 	
+	@When("^I select column ([^\"]*) from table ([^\"]*) where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
+	public void selectTableValue(String col, String table, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3, String keyCol4, String keyVal4) throws Exception {
+		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2  + " " + keyCol3 + " " + keyVal3  + " " + keyCol4 + " " + keyVal4 + " " + col);
+		String returnVal = DB.returnSingleValue(table, keyCol1, Substitutions.substituteValue(keyVal1), keyCol2, Substitutions.substituteValue(keyVal2), keyCol3, Substitutions.substituteValue(keyVal3), keyCol4, Substitutions.substituteValue(keyVal4), col);
+		testdata.setProperty(col, returnVal);
+	}
+	
 	void compareValue(String expected, String actual) {
 		if (!expected.equalsIgnoreCase("NOT NULL") || actual.equalsIgnoreCase("NULL")) {
 			Assertions.assertEquals(Substitutions.substituteValue(expected), actual);
@@ -103,6 +110,13 @@ public class StepDef_db extends StepDef_base {
 	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3) throws Exception {
 		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2  + " " + keyCol3 + " " + keyVal3 + " " + col + " " + expectedVal);
 		String returnVal = DB.returnSingleValue(table, keyCol1, Substitutions.substituteValue(keyVal1), keyCol2, Substitutions.substituteValue(keyVal2), keyCol3, Substitutions.substituteValue(keyVal3), col);
+		compareValue(expectedVal, returnVal);
+	}
+	
+	@Then("^I see table ([^\"]*) column ([^\"]*) is \"([^\"]*)\" where ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\" and ([^\"]*) = \"([^\"]*)\"$")
+	public void verifyTableValue(String table, String col, String expectedVal, String keyCol1, String keyVal1, String keyCol2, String keyVal2, String keyCol3, String keyVal3, String keyCol4, String keyVal4) throws Exception {
+		log.info("about to return field" + " " + table + " " + keyCol1 + " " + keyVal1  + " " + keyCol2 + " " + keyVal2  + " " + keyCol3 + " " + keyVal3  + " " + keyCol4 + " " + keyVal4 + " " + col + " " + expectedVal);
+		String returnVal = DB.returnSingleValue(table, keyCol1, Substitutions.substituteValue(keyVal1), keyCol2, Substitutions.substituteValue(keyVal2), keyCol3, Substitutions.substituteValue(keyVal3), keyCol4, Substitutions.substituteValue(keyVal4), col);
 		compareValue(expectedVal, returnVal);
 	}
 	

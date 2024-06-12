@@ -13,7 +13,7 @@ Feature: Admin portal
     Then I press the "Create user" button
 
 
-  @DMO-2340
+  @DMP-2340
   Scenario: Admin portal data creation - User 2 - Deactivated user
   #Login admin portal
     Given I am logged on to DARTS as an ADMIN user
@@ -83,7 +83,7 @@ Feature: Admin portal
   @DMP-2224
   Scenario: Removing a group confirmation screen
   #Login admin
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
   #Viewing user groups
     And I click on the "Users" navigation link
     And I set "Email" to "automation@KH{{seq}}001.net"
@@ -98,24 +98,9 @@ Feature: Admin portal
     Then I press the "Yes - continue" button
     Then I see "This user is not a member of any groups." on the page
 
-  @DMP-2340
-  Scenario: Reactivate a user
-  #Login admin
-    Given I am logged on to DARTS as an ADMIN user
-  #Viewing user groups
-    And I click on the "Users" navigation link
-    And I set "Email" to "KH{{seq}}002@test.net"
-    And I select the "Inactive users" radio button
-    And I press the "Search" button
-    And I click on "View" in the same row as "KH{{seq}}002@test.net"
-    Then I press the "Activate user" button
-    Then I see "Reactivating this user will give them access to DARTS. They will not be able to see any data until they are added to at least one group." on the page
-    Then I press the "Reactivate user" button
-    Then I see "User record activated" on the page
-
-  @DMP-635
+  @DMP-635 @regression
   Scenario: Create a Courthouse Page
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
       #AC1 - Creating a courthouse
     Then I click on the "Courthouses" navigation link
     And I press the "Create new courthouse" button
@@ -125,16 +110,16 @@ Feature: Admin portal
     And I see "Must be the same ID used on XHIBIT or CPP" on the page
     And I see "Display name" on the page
       #AC2 - Enter Courthouse Details
-    Then I set "Courthouse name" to "Test Courthouse"
-    And I set "Display name" to "Test Display Name"
+    Then I set "Courthouse name" to "Test Courthouse 635"
+    And I set "Display name" to "Test Display Name 635"
     And I select the "Midlands" radio button
       #AC3 Add Transcription Company
     Then I see "Transcription companies" on the page
     And I see "Select transcription companies" on the page
     And I see "You can select and add multiple companies" on the page
-    And I select "DMP-626-LEEDS_JUDGE" from the dropdown
+    And I select "Swansea_Transcribers" from the dropdown
     And I press the "Add company" button
-    Then I see "DMP-626-LEEDS_JUDGE" in the same row as "Remove"
+    Then I see "Swansea_Transcribers" in the same row as "Remove"
     And I click on the "Remove" link
     And I click on the "Cancel" link
       #AC4 - Error Handling
@@ -147,7 +132,7 @@ Feature: Admin portal
 
   @DMP-2466
   Scenario: Retention Policies primary page
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
       #AC1 - View active polices
     And I click on the "Retention policies" navigation link
     And I see "Retention policies" on the page
@@ -167,9 +152,9 @@ Feature: Admin portal
     And I click on the "Inactive" link
     Then I see "No data to display." on the page
 
-  @DMP-2252
+  @DMP-2252 @regression
   Scenario: Edit a courthouse
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
       #AC1 - Editing a courthouse
     Then I click on the "Courthouses" navigation link
     And I set "Courthouse name" to "Swansea"
@@ -185,7 +170,7 @@ Feature: Admin portal
 
   @DMP-2263
   Scenario: Create a Courthouse Page - Check Details
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
     And I press the "Create new courthouse" button
     Then I set "Courthouse name" to "Test Courthouse {{seq}}"
@@ -230,7 +215,15 @@ Feature: Admin portal
     Then I see "Created Test Display Name {{seq}}" on the page
     And I see "© Crown copyright" on the page
 
-  @DMP-1192
+    #Delete courthouse for next run (can this be done? Don't see delete button for courthouses)
+
+    #When I click on the "Courthouses" link
+    #And I set "Courthouse name" to "Test Courthouse {{seq}}"
+    #And I press the "Search" button
+    #And I click on the "Test Courthouse {{seq}}" link
+    #And I press the "Edit courthouse" button
+
+  @DMP-1192 @regression
   Scenario: View Courthouse - Details Tab
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -257,7 +250,7 @@ Feature: Admin portal
     And I see "Details" on the page
     And I see "© Crown copyright" on the page
 
-@DMP-2299
+@DMP-2299 @regression
   Scenario: Viewing Group Details
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -270,7 +263,7 @@ Feature: Admin portal
     Then I select "Swansea" from the dropdown
     And I press the "Add courthouse" button
 
-  @DMP-2302
+  @DMP-2302 @regression
   Scenario: Edit a Group
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -280,7 +273,6 @@ Feature: Admin portal
     #AC1 - Edit group details
     Then I see "Edit group" on the page
     And I see "Group details" on the page
-    And I see "Group name" on the page
     And I see "Group name" on the page
     And I see "Description" on the page
     And I see "Role" on the page
@@ -292,10 +284,8 @@ Feature: Admin portal
     And I press the "Save changes" button
     And I see "There is a problem" on the page
     And I see "There is an existing group with this name" on the page
-    And I see "There is an existing group with this name" on the page
 
-
-  @DMP-2305
+  @DMP-2305 @regression
   Scenario: Removing users from a group confirmation screen
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -306,7 +296,7 @@ Feature: Admin portal
     And I see "Are you sure you want to remove 1 user from this group?" on the page
     Then I press the "No - cancel" button
 
-  @DMP-2263
+  @DMP-2263 @regression
   Scenario: Editing a courthouse - Check details
     When I am logged on to the admin portal as an ADMIN user
   #AC1- Review courthouse details
@@ -335,14 +325,14 @@ Feature: Admin portal
     And I press the "Continue" button
     Then I see "Update courthouse" on the page
 
-  @DMP-2303
+  @DMP-2303 @regression
   Scenario: Viewing group details - Users
     When I am logged on to the admin portal as an ADMIN user
     #AC1 - View users
     Then I click on the "Groups" navigation link
     And I click on the "Swansea_ADMIN" link
     And I click on the "Group users" link
-    And I see "0 of 5 selected" on the page
+    And I see "0 of 7 selected" on the page
 
     #AC1 - Remove users
     And I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
@@ -350,7 +340,7 @@ Feature: Admin portal
     And I check the checkbox in the same row as "Darts Admin" "darts.admin@hmcts.net"
     Then I press the "Remove users" button
 
-  @DMP-2581
+  @DMP-2581 @regression
   Scenario: Viewing groups - Adding a user
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -364,7 +354,7 @@ Feature: Admin portal
     And I click on the "Add user" link
     Then I see "Darts Admin" in the same row as "darts.admin@hmcts.net"
 
-    @DMP-2269
+    @DMP-2269 @regression
     Scenario: Search Courthouse
       When I am logged on to the admin portal as an ADMIN user
      Then I click on the "Courthouses" navigation link
@@ -432,7 +422,7 @@ Feature: Admin portal
       Then I see "No search results" on the page
       And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
 
-  @DMP-2317 @DM
+  @DMP-2317 @regression
   Scenario: Create a new group (Translation or Transcriber)
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -460,7 +450,7 @@ Feature: Admin portal
     And I see "There is an existing group with this name" on the page
     And I see "Description must be less than 255 characters" on the page
 
-  @DMP-2714
+  @DMP-2714 @obsolete
   Scenario: Update admin portal navigation
     When I am logged on to the admin portal as an ADMIN user
   #AC1 - Updated nav
@@ -484,168 +474,8 @@ Feature: Admin portal
     And I see "Event mapping" on the page
     And I see "Automated tasks" on the page
 
-  @DMP-2471
-  Scenario: Create a new retention policy
-    When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "System configuration" link
-    And I click on the "Create policy" link
-    And I see "Create new policy" on the page
-    And I set "Display name" to "DMP-2471-AC1"
-    And I set "Name" to "AC1-2471"
-    And I set "Description" to ""
-    And I set "Fixed policy key" to "99"
-    And I set "Years" to "05"
-    And I set "Months" to "04"
-    And I set "Days" to "02"
-    And I see "Policy start" on the page
-    And I see "Start date" on the page
-    And I set "Start date" to "01/05/2024"
-    And I set "Hour" to "00"
-    And I set "Minutes" to "59"
-    And I click on the "Create" link
-    Then I see "Retention policy created" on the page
-    And I see "Retention policies" on the page
-    And I see "Active" on the page
-    And I see "Inactive" on the page
-    #Cancel Policy
-    When I click on the "Create policy" link
-    Then I see "Create new policy" on the page
-    And I set "Display name" to "PMTest11"
-    And I set "Name" to "PMTest11"
-    And I set "Description" to ""
-    And I set "Fixed policy key" to "TestPM11"
-    And I set "Years" to "05"
-    And I set "Months" to "05"
-    And I set "Days" to "05"
-    And I set "Start date" to "05/05/2025"
-    And I set "Hour" to "05"
-    And I set "Minutes" to "05"
-    And I click on the "Cancel" link
-    Then I see "Retention policies" on the page
-    And I see "Active" on the page
-    And I see "Inactive" on the page
-   #Error
-    When I click on the "Create policy" link
-    Then I see "Create new policy" on the page
-    And I set "Display name" to ""
-    And I set "Name" to ""
-    And I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A"
-    And I set "Fixed policy key" to ""
-    And I set "Years" to ""
-    And I set "Months" to ""
-    And I set "Days" to ""
-    And I set "Start date" to ""
-    And I set "Hour" to ""
-    And I set "Minutes" to ""
-    And I click on the "Create" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a display name" on the page
-    And I see "Enter a name" on the page
-    And I see "Enter a description shorter than 256 characters" on the page
-    And I see "Enter a fixed policy key" on the page
-    And I see "Enter a duration of at least 1 day" on the page
-    And I see "Enter a policy start date" on the page
-    And I see "Enter a start time" on the page
-    # All fields are already exist
-    And I click on the "Cancel" link
-    Then I see "Retention policies" on the page
-    When I click on the "Create policy" link
-    Then I see "Create new policy" on the page
-    And I set "Display name" to "PMTest"
-    And I set "Name" to "PMTest1"
-    And I set "Description" to ""
-    And I set "Fixed policy key" to "TestPM"
-    And I set "Years" to "00"
-    And I set "Months" to "01"
-    And I set "Days" to "02"
-    And I set "Start date" to "01/01/2025"
-    And I set "Hour" to "01"
-    And I set "Minutes" to "00"
-    And I click on the "Create" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a unique display name" on the page
-    And I see "Enter a unique name" on the page
-    And I see "The fixed policy key entered already exists in the database. Fixed policy keys must be unique" on the page
-
-  @DMP-2475
-  Scenario: Edit retention policy
-    When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "System configuration" link
-    And I click on "Edit Policy" in the same row as "DMP-2471-AC1"
-    And I set "Display name" to "DMP-2475-AC1"
-    And I set "Name" to "AC1-2475"
-    And I set "Description" to "Editing DMP-2471"
-    And I set "Fixed policy key" to "90"
-    And I set "Years" to "02"
-    And I set "Months" to "12"
-    And I set "Days" to "31"
-    And I see "Policy start" on the page
-    And I see "Start date" on the page
-    And I set "Start date" to "29/04/2024"
-    And I set "Hour" to "10"
-    And I set "Minutes" to "30"
-    And I click on the "Save" link
-    Then I see "Retention policy updated" on the page
-  #Cancel policy
-    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
-    And I click on the "Cancel" link
-    Then I see "Retention policies" on the page
-  #AC3
-    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
-    And I see "Retention policy" on the page
-    And I clear the "Display name" field
-    And I set "Display name" to ""
-    And I clear the "Name" field
-    And I set "Name" to ""
-    And I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A"
-    And I clear the "Fixed policy key" field
-    And I set "Fixed policy key" to ""
-    And I clear the "Years" field
-    And I set "Years" to ""
-    And I clear the "Months" field
-    And I set "Months" to ""
-    And I clear the "Days" field
-    And I set "Days" to ""
-    And I clear the "Start date" field
-    And I set "Start date" to ""
-    And I clear the "Hour" field
-    And I set "Hour" to ""
-    And I clear the "Minutes" field
-    And I set "Minutes" to ""
-    And I click on the "Save" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a display name" on the page
-    And I see "Enter a name" on the page
-    And I see "Enter a description shorter than 256 characters" on the page
-    And I see "Enter a fixed policy key" on the page
-    And I see "Enter a duration of at least 1 day" on the page
-    And I see "Enter a policy start date" on the page
-    And I see "Enter a start time" on the page
-  #fields are already exist
-    And I click on the "Cancel" link
-    Then I see "Retention policies" on the page
-    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
-    And I set "Display name" to "Custodial"
-    And I set "Name" to "DMP-2532 AC3"
-    And I set "Description" to ""
-    And I clear the "Fixed policy key" field
-    And I set "Fixed policy key" to ""
-    And I set "Years" to "00"
-    And I set "Months" to "12"
-    And I set "Days" to "31"
-    And I set "Start date" to "01/01/2024"
-    And I set "Hour" to "11"
-    And I set "Minutes" to "30"
-    And I click on the "Save" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a unique display name" on the page
-    And I see "Enter a unique name" on the page
-    And I see "Enter a fixed policy key" on the page
-    And I see "Enter a policy start date in the future" on the page
-    And I see "Enter a policy start time in the future" on the page
-
-  @DMP-2474
-    Scenario: Create new retention policy version
+    @DMP-2959
+    Scenario: Add error messaging to Search Transcripts screen
       When I am logged on to the admin portal as an ADMIN user
       Then I click on the "System configuration" link
       Then I click on "Create new version" in the same row as "DMP-2474-4 retention policy type."
@@ -734,3 +564,175 @@ Feature: Admin portal
       And I click on the "System configuration" link
       And I click on the "Automated tasks" link
       And I see "Active" in the same row as "ProcessDailyList" "1"
+ 
+      Then I click on the "Transcripts" navigation link
+      And I click on the "Advanced search" link
+      Then I set "Hearing date" to "{{date+7/}}"
+      And I set "Courthouse" to "Test"
+      Then I see "You have selected a date in the future. Hearing date must be in the past" on the page
+      Then I click on the "Specific date" link
+      Then I set "Enter a date" to "{{date+7/}}"
+      And I set "Courthouse" to "Placeholder"
+      Then I see "You have selected a date in the future. Requested date must be in the past" on the page
+      Then I click on the "Date range" link
+      Then I set "Date from" to "{{date+7/}}"
+      And I set "Date to" to "{{date+7/}}"
+      And I set "Courthouse" to "Test"
+      Then I see "You have selected a date in the future. Requested start date must be in the past" on the page
+      And I see "You have selected a date in the future. Requested end date must be in the past" on the page
+      Then I set "Hearing date" to "ddd"
+      And I set "Courthouse" to "Placeholder"
+      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+      Then I click on the "Specific date" link
+      Then I set "Enter a date" to "ddd"
+      And I set "Hearing date" to ""
+      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+      Then I click on the "Date range" link
+      Then I set "Date from" to "ddd"
+      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+      Then I set "Date to" to "ddd"
+      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+      Then I set "Hearing date" to "30/02/2024"
+      And I set "Courthouse" to "Test"
+      Then I see "Enter a real date" on the page
+      Then I click on the "Specific date" link
+      Then I set "Enter a date" to "30/02/2024"
+      And I set "Hearing date" to ""
+      Then I see "Enter a real date" on the page
+      Then I click on the "Date range" link
+      Then I set "Date from" to "30/02/2024"
+      Then I see "Enter a real date" on the page
+      Then I set "Date to" to "30/02/2024"
+      Then I see "Enter a real date" on the page
+      Then I set "Date from" to "30/03/2029"
+      And I set "Date to" to "30/01/2029"
+      Then I see "The start date must be before the end date" on the page
+      And I see "The end date must be after the start date" on the page
+
+@DMP-2746 @DMP-2674 @regression
+    Scenario: Add event mapping
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "System configuration" link
+      And I click on the "Event mappings" navigation link
+      #DMP-2746-AC1 Create event mapping
+      And I press the "Add event mapping" button
+      And I set "Type" to "DMP-2746-Automation-Type"
+      And I set "Event name" to "DMP-2746-Automation-Event-Name"
+      And I see "Map to event handler" on the page
+      And I select "DarStartHandler" from the dropdown
+      And I check the "Tick if this event mapping has reporting restrictions" checkbox
+      And I press the "Add mapping" button
+      Then I see "Event mapping added" on the page
+
+      #Cancel
+
+      When I press the "Add event mapping" button
+      And I set "Type" to "DMP-2746-Automation-Type-1"
+      And I set "Event name" to "DMP-2746-Automation-Event-Name-1"
+      And I see "Map to event handler" on the page
+      And I select "DarStartHandler" from the dropdown
+      And I click on the "Tick if this event mapping has reporting restrictions" link
+      And I click on the "Cancel" link
+      Then I see "Filter by type, subtype, or name" on the page
+      And I see "Event mappings" on the page
+
+      #DMP-2646-AC2 Error handling
+
+      When I press the "Add event mapping" button
+      And I set "Type" to "" and click away
+      Then I see an error message "Enter the event type"
+
+      When I set "Event name" to "" and click away
+      Then I see an error message "Enter the event name"
+
+      When I click on the "Tick if this event mapping has reporting restrictions" link
+      And I press the "Add mapping" button
+      Then I see an error message "Select an event handler to map to"
+
+      #DMP-2674-AC1 Delete created event mapping for next run
+
+      When I click on the "Cancel" link
+      When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      And I click on "Change" in the same row as "DMP-2746-Automation-Type"
+      And I click on the "Delete event mapping" link
+      Then I see "Are you sure want to delete this event mapping?" on the page
+      And I see "DMP-2746-Automation-Type" in the same row as "DMP-2746-Automation-Event-Name"
+
+      When I press the "Yes - delete" button
+      Then I see "Event mapping deleted" on the page
+
+      When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+      Then I see "There are no matching results." on the page
+
+      @DMP-754 @regression
+      Scenario: View event mapping
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "System configuration" link
+      And I click on the "Event mappings" navigation link
+      And I see "Event mappings" on the page
+      And I see "Add event mapping" on the page
+      And I see "Filter by type, subtype, or name" on the page
+      And I see "Filter by event handler" on the page
+      And I select "StopAndCloseHandler" from the dropdown
+      Then I see "Active only" on the page
+      And I see "Active and inactive" on the page
+      And I see "With restrictions" on the page
+      And I see "Without restrictions" on the page
+      And I verify the HTML table contains the following values
+        | Type | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
+        | 3000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
+        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
+        | 30300| *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
+
+      When  I select the "Active and inactive" radio button
+      And I click on the "With restrictions" link
+      Then I verify the HTML table contains the following values
+        | Type  | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+        | 3000  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+        | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+
+      When I click on the "With restrictions" link
+      And I click on the "Without restrictions" link
+      Then I verify the HTML table contains the following values
+        | Type | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+
+      When I select "All" from the dropdown
+      And I click on the "Without restrictions" link
+      And I see "Next" on the page
+      And I click on the pagination link "Next"
+      And I click on the pagination link "3"
+      And I see "Next" on the page
+      And I see "Previous" on the page
+      And I click on the pagination link "Previous"
+      And I click on the pagination link "1"
+      And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type2"
+      And I select "StopAndCloseHandler" from the dropdown
+      Then I see "There are no matching results." on the page
+
+  @DMP-3028 @regression
+  Scenario: Testing attempt to add identical event mapping
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "System configuration" link
+    And I click on the "Event mappings" navigation link
+    And I press the "Add event mapping" button
+    And I click on the "Cancel" link
+    Then I see "Filter by type, subtype, or name" on the page
+
+    #DMP-3028-AC1 Type and subtype already in use (using already existing from DMP-2746 testing)
+
+    When I press the "Add event mapping" button
+    And I set "Type" to "DMP-2746_Type"
+    And I set "Subtype (optional)" to "DMP-2746_Subtype"
+    And I set "Event name" to "DMP3028TEST"
+    And I select "StandardEventHandler" from the dropdown
+    And I press the "Add mapping" button
+    Then I see "Type and subtype already in use" on the page
+    And I see "The combination of type and subtype you entered are already in use." on the page
+    And I see "Choose a different combination or make changes to the existing mapping." on the page
+
+    #DMP-3028-AC2 Go back link
+
+    When I click on the "Go back" link
+    Then I see "Tick if this event mapping has reporting restrictions" on the page
+

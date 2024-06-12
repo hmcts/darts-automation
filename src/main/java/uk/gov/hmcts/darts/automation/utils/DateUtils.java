@@ -3,12 +3,16 @@ package uk.gov.hmcts.darts.automation.utils;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.zone.ZoneRules;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -363,7 +367,11 @@ public class DateUtils {
 										if (subsString.startsWith("displaydate-")) {
 											substitutionString = displayDate(subsString.substring(12));
 										} else {
-											Assertions.fail("Invalid value to substitute =>" + subsString );
+											if (subsString.startsWith("utc-")) {
+												substitutionString = utcTimestamp(subsString.substring(4));
+											} else {
+												Assertions.fail("Invalid value to substitute =>" + subsString );
+											}
 										}
 									}
 								}
@@ -529,6 +537,38 @@ public class DateUtils {
 				}
 			}
 		}
+	}
+	
+/*
+ *  event & audio timestamps are stored in the database as UTC 
+ *          "as timezones can change so this helps prevent inconsistent results from tests at different execution times"
+ *          hopefully we won't change to BST all year or align with continental Europe in the future ...
+ * 
+ */
+	public static String utcTimestamp(String localTimestamp) {
+		String currentOffset;
+		
+//		try {
+//			currentOffset = "+" + zonedTimestamp().split("+")[1];
+//		} catch (Exception e) {
+//			currentOffset = "+00:00";
+//		}
+		
+		ZoneId zoneId = ZoneId.of("Europe/London");
+		ZoneRules zoneRules = zoneId.getRules();
+		ZonedDateTime now = ZonedDateTime.now(zoneId);
+		currentOffset = now.getOffset().toString();
+		boolean isDst = zoneRules.isDaylightSavings(now.toInstant());
+		
+		localTimestamp = localTimestamp.replace(" ", "T");
+		
+		if (!(localTimestamp.endsWith("Z") || localTimestamp.contains("+"))) {
+			localTimestamp = localTimestamp + currentOffset;
+		}
+		
+		Instant zonedTimestamp = Instant.parse(localTimestamp);
+		
+		return zonedTimestamp.toString();
 	}
 	
 	public static String returnNumericDateCcyymmdd(String date) {
@@ -760,6 +800,17 @@ public class DateUtils {
 		Assertions.assertEquals(substituteDateValue("date-yyyymmdd+7c"), substituteDateValue("date-yyyymmdd+7 c"));
 		Assertions.assertEquals(substituteDateValue("date-yyyymmdd+5w"), substituteDateValue("date-yyyymmdd+5 w"));
 		Assertions.assertEquals(substituteDateValue("date-yyyymmdd"), substituteDateValue("date-yyyymmdd+0"));
+	}
+	
+	@Test
+	public void test8() {
+		System.out.println("========================");
+		System.out.println("          8");
+		System.out.println("========================");
+		System.out.println(utcTimestamp("2024-06-10T10:43:25.720"));
+		System.out.println(substituteDateValue("utc-2024-06-10T10:43:25.720"));
+		System.out.println(utcTimestamp("2024-06-10 10:43:25.720"));
+		System.out.println(utcTimestamp(timestamp()));
 	}
 
 }

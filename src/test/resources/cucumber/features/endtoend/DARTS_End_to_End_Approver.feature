@@ -137,5 +137,5 @@ Feature: Approver
     Then I click on the "Transcript requests to review" link
     Then I do not see "<case_number>" on the page
     Examples:
-      | courthouse      | courtroom | case_number   | judges           | defendants            | prosecutors            | defenders            | HearingDate        | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  |
-      | {{courthouse1}} | {{seq}}   | S{{seq}}081-B | S{{seq}} judge-B | S{{seq}} defendants-B | S{{seq}} prosecutors-B | S{{seq}} defenders-B | {{displaydate}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 |               |               | {{timestamp}} | sample1.mp2 | 18:03:00  | 18:04:00 |
+      | courthouse      | courtroom  | case_number   | judges              | defendants               | prosecutors            | defenders            | HearingDate     | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  |
+      | {{courthouse1}} | {{seq}}-87 | S{{seq}}087-B | S{{seq}} judge-B087 | S{{seq}} defendants-B087 | S{{seq}} prosecutors-B | S{{seq}} defenders-B | {{displaydate}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 |               |               | {{timestamp}} | sample1.mp2 | 18:03:00  | 18:04:00 |
