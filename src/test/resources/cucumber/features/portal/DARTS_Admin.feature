@@ -662,7 +662,7 @@ Feature: Admin portal
       And I select "StopAndCloseHandler" from the dropdown
       Then I see "There are no matching results." on the page
 
-  @DMP-3028 @regression
+@DMP-3028 @regression
   Scenario: Testing attempt to add identical event mapping
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "System configuration" link
@@ -687,3 +687,96 @@ Feature: Admin portal
 
     When I click on the "Go back" link
     Then I see "Tick if this event mapping has reporting restrictions" on the page
+
+       @DMP-2763
+       Scenario: Edit event mapping
+         When I am logged on to the admin portal as an ADMIN user
+         And I click on the "System configuration" link
+         And I click on the "Event mappings" navigation link
+         #Error handling
+         And I set "Filter by type, subtype, or name" to "AC2-DMP-2764-Deletion-Test-2"
+         And I click on the "Change" link
+         Then I see "Event mapping" on the page
+         And I see "AC2-DMP-2764-Deletion-Test-2" on the page
+         And I see "AC2-DMP-2764-Deletion-Test-2" on the page
+         And I see "AC1-DMP-2763" on the page
+         And I clear the "Event name" field
+         And I see "Map to event handler" on the page
+         And I select "DarStopHandler" from the dropdown
+         Then I see "Enter the event name" on the page
+         And I click on the "Cancel" link
+         #Cancel
+         And I set "Filter by type, subtype, or name" to "AC2-DMP-2764-Deletion-Test-2"
+         And I click on the "Change" link
+         And I clear the "Event name" field
+         And I set "Event name" to "AC1-DMP-2763"
+         And I see "Map to event handler" on the page
+         And I see "DarStartHandler" on the page
+         And I see "Yes" on the page
+         And I see "07 Jun 2024" on the page
+         And I see "Save as new version" on the page
+         And I see "Cancel" on the page
+         And I click on the "Cancel" link
+         Then I see "System configuration" on the page
+         #Create new version
+         And I set "Filter by type, subtype, or name" to "AC2-DMP-2764-Deletion-Test-2"
+         And I click on the "Change" link
+         And I set "Event name" to "AC1-DMP-2763"
+         And I see "DarStartHandler" on the page
+         And I select "DarStopHandler" from the dropdown
+         And I see "Yes" on the page
+         And I see "07 Jun 2024" on the page
+         And I press the "Save as new version" button
+         Then I see "Saved new version of event mapping" on the page
+         And I see "System configuration" on the page
+
+        @DMP-2764
+        Scenario: Delete event mapping
+          When I am logged on to the admin portal as an ADMIN user
+          And I click on the "System configuration" link
+          Then I click on the "Event mappings" navigation link
+          And I click on the "Add event mapping" link
+          Then I set "Type" to "DMP-2764-Automation-Type-3"
+          And I set "Event name" to "DMP-2764-Automation-Event-Name"
+          And I see "Map to event handler" on the page
+          And I select "DarStartHandler" from the dropdown
+          And I click on the "Tick if this event mapping has reporting restrictions" link
+          And I click on the "Add mapping" link
+          Then I see "Event mapping addded " on the page
+          And I set "Filter by type, subtype, or name" to "DMP-2764-Automation-Type-3"
+          And I click on the "Change" link
+          Then I see "Event mapping" on the page
+          And I see "DMP-2764-Automation-Event-Name" on the page
+          And I see "DMP-2764-Automation-Type-3" on the page
+          And I see "DMP-2764-Automation-Event-Name" on the page
+          And I see "DarStartHandler" on the page
+          And I see "Yes" on the page
+          And I see "06 Jun 2024" on the page
+          And I see "Delete event mapping" on the page
+          And I click on the "Delete event mapping" link
+          Then I see "Are you sure want to delete this event mapping?" on the page
+          And I click on the "No - cancel" link
+          Then I see "Delete event mapping" on the page
+          And I click on the "Delete event mapping" link
+          Then I see "Are you sure want to delete this event mapping?" on the page
+          And I press the "Yes - delete" button
+          Then I see "Event mapping deleted" on the page
+          And I see "System configuration" on the page
+          #AC2
+          And I set "Filter by type, subtype, or name" to "Offences put to defendant"
+          And I click on the "Change" link
+          And I see "Offences put to defendant" on the page
+          And I see "1000" on the page
+          And I see "1001" on the page
+          And I see "Offences put to defendant" on the page
+          And I see "StandardEventHandler" on the page
+          And I see "No" on the page
+          And I see "02 Nov 2023" on the page
+          And I see "Delete event mapping" on the page
+          And I click on the "Delete event mapping" link
+          Then I see "You cannot delete this event mapping" on the page
+          And I see "This event mapping has been used and can no longer be deleted." on the page
+          And I see "You can make changes and create a new version, or you can select the event handler 'No mapping'." on the page
+          And I see "Go back" on the page
+          And I click on the "Go back" link
+          Then I see "Offences put to defendant" on the page
