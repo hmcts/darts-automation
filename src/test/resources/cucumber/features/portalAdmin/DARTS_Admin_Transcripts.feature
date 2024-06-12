@@ -1,6 +1,6 @@
 Feature: Admin portal transcripts
 
-  @DMP-1265 @DMP-2525 @DMP-2538
+  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression
   Scenario: Admin change transcription status data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors               | defenders               |
@@ -36,7 +36,7 @@ Feature: Admin portal transcripts
       | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2   |
       | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2   |
 
-  @DMP-1265 @DMP-2525 @DMP-2538
+  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression
   Scenario: Change manual transcription status
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -267,6 +267,36 @@ Feature: Admin portal transcripts
     Then I see "Requests to approve or reject" on the page
     And I do not see "G{{seq}}005" on the page
 
+    #DMP-3133-AC1 Check status is "With Transcriber" instead of "Approved"
+
+    When I click on the "Search" link
+    And I set "Case ID" to "G{{seq}}003"
+    And I press the "Search" button
+    And I click on the "G{{seq}}003" link
+    And I click on the "All Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
+    When I click on the "Hearings" link
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
+    #Checking Requester as well
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I set "Case ID" to "G{{seq}}003"
+    And I press the "Search" button
+    And I click on the "G{{seq}}003" link
+    And I click on the "All Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
+    When I click on the "Hearings" link
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
     #Assign to transcriber for cases 4 and 5
 
     When I Sign out
@@ -291,6 +321,20 @@ Feature: Admin portal transcripts
 
     When I click on the "Completed today" link
     Then I do not see "G{{seq}}005" on the page
+
+    #DMP-3133-AC2 Check status is still "With Transcriber"
+
+    When I click on the "Search" link
+    And I set "Case ID" to "G{{seq}}005"
+    And I press the "Search" button
+    And I click on the "G{{seq}}005" link
+    And I click on the "All Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
+    When I click on the "Hearings" link
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
 
     #Case 1: Awaiting authorisation -> Requested
 
@@ -385,6 +429,7 @@ Feature: Admin portal transcripts
     And I press the "Search" button
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
+    #DMP-3133-AC1 Check status is "Approved" and not "With Transcriber"
     Then I see "Approved" in the same row as "Status"
     And I see "Associated groups" on the page
     And I see "Start time 11:30:00 - End time 11:31:00" in the same row as "Audio for transcript"
@@ -454,6 +499,7 @@ Feature: Admin portal transcripts
     And I press the "Search" button
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
+    #DMP-3133-AC2 Check status is still "With Transcriber"
     Then I see "With Transcriber" in the same row as "Status"
     And I see "Associated groups" on the page
     And I see "Start time 12:30:00 - End time 12:31:00" in the same row as "Audio for transcript"
