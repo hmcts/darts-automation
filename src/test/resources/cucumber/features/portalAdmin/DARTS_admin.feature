@@ -482,3 +482,58 @@ Feature: Admin
     And I see "Request details" on the page
     And I see "Requester" in the same row as "Requested by"
     And I see "17165" in the same row as "Request ID"
+
+  @DMP-2695 @DMP-2679
+  Scenario: Transformed media-Change owner
+    When I am logged on to the admin portal as an ADMIN user
+    And I click on the "Transformed media" link
+    And I see "Transformed media" on the page
+    And I set "Request ID" to "8545"
+    And I press the "Search" button
+    Then I see "Request details" on the page
+    And I see "Owner" in the same row as "Mehta Purvi (mehta.purvi@hmcts.net)"
+    And I click on the "Change" link
+    Then I see "Change owner" on the page
+    And I set "Search for a user" to ""
+    And I press the "Save change" button
+    Then I see "Select a user" on the page
+    And I click on the "Cancel" link
+    And I see "Owner" in the same row as "Mehta Purvi (mehta.purvi@hmcts.net)"
+    And I click on the "Change" link
+    Then I see "Change owner" on the page
+    And I set "Search for a user" to "Testuserone (testuserone@hmcts.net)" and click away
+    And I press the "Save change" button
+    Then I see "Changed media request owner to Testuserone " on the page
+    And I see "Owner" in the same row as "Testuserone (testuserone@hmcts.net)"
+    And I click on the "Change" link
+    Then I see "Change owner" on the page
+    And I set "Search for a user" to "Mehta Purvi (mehta.purvi@hmcts.net)" and click away
+    And I press the "Save change" button
+
+# @DMP-2679 Transformed media detail page
+    Then I see "Transformed media" on the page
+    And I see "101" on the page
+    And I see "Request details" on the page
+    And I see "Owner" in the same row as "Mehta Purvi (mehta.purvi@hmcts.net)"
+    And I see "Requested by" in the same row as "Requester"
+    And I see "Request ID" in the same row as "8545"
+    And I see "Date requested" in the same row as "20 December 2023"
+    And I see "Hearing date" in the same row as "07 December 2023"
+    And I see "Courtroom" in the same row as "Rayners room"
+    And I see "Audio requested" in the same row as "Start time 14:00 - End time 14:01"
+
+    Then I see "Case details" on the page
+    And I see "Case ID" in the same row as "T20230001"
+    And I see "Courthouse" in the same row as "Harrow Crown Court"
+    And I see "Judge(s)" in the same row as "test judge"
+    And I see "Defendant(s)" in the same row as "fred"
+
+    Then I see "Media details" on the page
+    And I see "Filename" in the same row as "T20230001_07_Dec_2023_1"
+    And I see "File type" in the same row as ""
+    And I see "File size" in the same row as "MB"
+
+    Then I see "Associated audio" on the page
+    Then I verify the HTML table contains the following values
+      |Audio ID|Case ID|Hearing date|Courthouse         |Start time|End time|Courtroom    |Channel number|
+      |3833    |10458  |07 Dec 2023 |Harrow Crown Court |14:00     |14:01   |Rayners room |1             |
