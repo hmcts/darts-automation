@@ -600,7 +600,8 @@ Feature: Request Transcript
     Then I see "file-sample_1MB.doc" on the page
     And I see "Start time 11:30:00 - End time 11:31:00" in the same row as "Audio for transcript"
 
-    #Delete single transcript
+    #DMP-1053-AC1 and AC2 Delete single transcript and cancel link
+    #DMP-2123 Delete single transcript warning screen
 
     When I click on the "Your transcripts" link
     When I check the checkbox in the same row as "C{{seq}}004" "Court Log"
@@ -754,7 +755,8 @@ Feature: Request Transcript
     Then I see "C{{seq}}006" in the same row as "Complete"
     And I see "C{{seq}}007" in the same row as "Complete"
 
-    #Delete both transcripts
+    #DMP-1054-AC1 and AC2 Delete multiple transcripts and cancel link
+    #DMP-2124 Delete multiple transcripts warning screen
 
     When I check the checkbox in the same row as "C{{seq}}006" "Court Log"
     And I check the checkbox in the same row as "C{{seq}}007" "Specified Times"
