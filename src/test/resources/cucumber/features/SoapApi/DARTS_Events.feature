@@ -1,9 +1,9 @@
-@DMP-3060 @boken
+@DMP-3060 @broken
 Feature: Test operation of SOAP events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
 
-@EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a case
   Given I create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
@@ -13,7 +13,7 @@ Examples:
   | Harrow Crown Court | T{{seq}}201  | 
 
 
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
 Scenario Outline: Create standard events
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
