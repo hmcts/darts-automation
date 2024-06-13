@@ -3,7 +3,7 @@ Feature: Test operation of SOAP events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
 
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
 Scenario Outline: Create a case
   Given I create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
@@ -756,7 +756,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}208 | {{timestamp-10:00:00}} | {{seq}}450 | {{seq}}1450 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
 
 
-  @EVENT_API @SOAP_EVENT @regression @DMP-1941
+  @EVENT_API @SOAP_EVENT @regression @DMP-1941 @DMP-1928
   Scenario Outline: Create Poll Check events
   These tests will help populate the relevant section of the DARTS Dynatrace Dashboard each time they are executed
   NB: The usual 'Then' step is missing as the 'When' step includes the assertion of the API response code
@@ -765,5 +765,6 @@ Examples:
       | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
       | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
     Examples:
-      | source | courthouse         | courtroom    | caseNumbers     | dateTime               | msgId        | eventId       | type   | subType | eventText      | caseRetention | totalSentence |
-      | CPP    | Harrow Crown Court | Room {{seq}} | T{{seq}}2070501 | {{timestamp-10:01:01}} | {{seq}}20705 | -{{seq}}20705 | 20705  |         | CPP Daily Test |               |               |
+      | source | courthouse         | courtroom    | caseNumbers     | dateTime               | msgId        | eventId       | type   | subType | eventText         | caseRetention | totalSentence |
+      | CPP    | Harrow Crown Court | Room {{seq}} | T{{seq}}2070501 | {{timestamp-10:01:01}} | {{seq}}20705 | -{{seq}}20705 | 20705  |         | CPP Daily Test    |               |               |
+      | XHIBIT | Harrow Crown Court | Room {{seq}} | T{{seq}}2070501 | {{timestamp-10:02:02}} | {{seq}}20705 | {{seq}}20705  | 20705  |         | Xhibit Daily Test |               |               |
