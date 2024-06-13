@@ -1,9 +1,9 @@
-@DMP-3060
-Feature: Test operation of post events
+@DMP-3060 @boken
+Feature: Test operation of SOAP events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
 
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
 Scenario Outline: Create a case
   Given I create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
@@ -272,11 +272,6 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:16:00}} | {{seq}}229 | {{seq}}1229 | 302004 |         | text {{seq}} |               |               | Case not reserved                                                                                                                      |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:16:20}} | {{seq}}230 | {{seq}}1230 | 407131 |         | text {{seq}} |               |               | Case to be listed                                                                                                                      |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:16:40}} | {{seq}}231 | {{seq}}1231 | 407132 |         | text {{seq}} |               |               | Case to be listed                                                                                                                      |       |
-@broken
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                                                                                                                                   | notes |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937 | 10624   | text {{seq}} |               |               | [Sentence remarks filmed]                                                                                                              |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625   | text {{seq}} |               |               | [Sentence remarks not filmed]                                                                                                          |       |
 
 
 @EVENT_API @SOAP_EVENT @regression
@@ -378,7 +373,7 @@ Examples:
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text {{seq}} |               |               | Sentence Transcription Required |       |
 
   
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @SENTENCING_EVENT @regression
 Scenario Outline: Create a Sentencing event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -397,7 +392,7 @@ Scenario Outline: Create a Sentencing event
    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type    | subType | eventText                  | caseRetention | totalSentence | text                                                                                           | notes |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010    |         | text {{seq}}               |               |               | Sentence Transcription Required |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010    |         | [Defendant: DEFENDANT ONE] |  4            |  26Y0M0D      | Sentence Transcription Required |       |
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:25:20}} | {{seq}}252 | {{seq}}1252 | 40730   | 10808   | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       | Case Level Criminal Appeal Result                                                              |       |
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:25:40}} | {{seq}}253 | {{seq}}1253 | 40731   | 10808   | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       | Offence Level Criminal Appeal Result                                                           |       |
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:26:00}} | {{seq}}254 | {{seq}}1254 | 40732   | 10808   | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       | Offence Level Criminal Appeal Result with alt offence                                          |       |
@@ -558,7 +553,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text {{seq}} |               |               | Hearing ended     | ex StopAndCloseHandler |
 
   
-@EVENT_API @SOAP_EVENT @regression @test1
+@EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create a StopAndClose event
 													Only 1 stop & close event per case seems to work
 													Creates a courtroom & hearing for each case
@@ -694,7 +689,8 @@ Scenario: Verify that VIQ cannot create an event
 
 @EVENT_API @SOAP_API @DMP-2960 @regression
 Scenario: Verify that a non-existant case is created
-  Given I authenticate from the XHIBIT source system
+  Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "T{{seq}}207" and courthouse_name = "Harrow Crown Court"
+    And I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
       <messageId>{{seq}}4015</messageId>
@@ -711,6 +707,7 @@ Scenario: Verify that a non-existant case is created
 </document>
   """
 	Then the API status code is 200
+   And I see table EVENT column count(eve_id) is "1" where cas.case_number = "T{{seq}}207" and courthouse_name = "Harrow Crown Court"
 
 @EVENT_API @SOAP_API @DMP-2960 @regression
 Scenario: Verify that an invalid courthouse fails
@@ -752,7 +749,7 @@ Scenario Outline: Verify that a hearing courtroom can be modified by an event
    And I see table CASE_HEARING column courtroom_name is "<courtroom>F" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>F"
 # Following line fails due to DMP-3252 adding a new hearing rather than updating the existing hearing to teh new courtroom
 # possibly verify that the hearing row is the same key if that is appropriate in the solution
-   And I see table CASE_HEARING column COUNT(courtroom_name) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>E"
+   And I see table CASE_HEARING column COUNT(courtroom_name) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
 
 Examples:
   | courthouse         | courtroom    | caseNumber  | dateTime               | msgId      | eventId     | type   | subType | eventText     | caseRetention | totalSentence | text                                                                                                                                   | notes |
