@@ -47,7 +47,7 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 # Daily list for second case today (will be processed)
   When I add a daily list
   | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant               | judge              | prosecution        | defence        |
-  | <messageId>3  | <type> | <subType> | <documentName>3 | <courthouse> | 2           | <caseNumber>3 | <startDate> | 10:00     | <endDate> | <timeStamp> | <caseNumber>3 defendant | judge name {{seq}} | prosecutor {{seq}} | defence {{seq}} |
+  | <messageId>3  | <type> | <subType> | <documentName>3 | <courthouse> | 2           | <caseNumber>3 | <startDate> | 13:00     | <endDate> | <timeStamp> | <caseNumber>3 defendant | judge name {{seq}} | prosecutor {{seq}} | defence {{seq}} |
   Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>3" and unique_id = "<documentName>3"
   When I process the daily list for courthouse <courthouse>
   Then I see table darts.daily_list column job_status is "PROCESSED" where message_id = "<messageId>3" and unique_id = "<documentName>3"
@@ -428,4 +428,187 @@ Scenario: Daily List successful
   When I process the daily list for courthouse "York"
   Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f4-426d-81be-000{{seq}}001"
    And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}110" and courthouse_name = "York" and courtroom_name = "1"
+  
+
+	
+@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+Scenario: Daily List successful with TimeMarkingNote 3:00 PM
+  Given I authenticate from the CPP source system
+	When I call POST SOAP API using soap action addDocument and body:
+	"""
+   			<messageId>58b211f4-426d-81be-000{{seq}}002</messageId>
+    			<type>DL</type>
+    			<subType>DL</subType>
+    			<document>
+<![CDATA[<cs:DailyList xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice" xmlns:p2="http://www.govtalk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails">
+    <cs:DocumentID>
+        <cs:DocumentName>DailyList_467_{{numdate+0}}000002.xml</cs:DocumentName>
+        <cs:UniqueID>CSDDL170974{{seq}}002</cs:UniqueID>
+        <cs:DocumentType>DL</cs:DocumentType>
+        <cs:TimeStamp>{{timestamp}}</cs:TimeStamp>
+    </cs:DocumentID>
+    <cs:ListHeader>
+        <cs:ListCategory>Criminal</cs:ListCategory>
+        <cs:StartDate>{{yyyymmdd}}</cs:StartDate>
+        <cs:EndDate>{{yyyymmdd}}</cs:EndDate>
+        <cs:Version>NOT VERSIONED</cs:Version>
+        <cs:PublishedTime>{{timestamp}}</cs:PublishedTime>
+    </cs:ListHeader>
+    <cs:CrownCourt>
+        <cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+        <cs:CourtHouseCode CourtHouseShortName="YORK">467</cs:CourtHouseCode>
+        <cs:CourtHouseName>YORK</cs:CourtHouseName>
+    </cs:CrownCourt>
+    <cs:CourtLists>
+        <cs:CourtList>
+            <cs:CourtHouse>
+                <cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+                <cs:CourtHouseCode>467</cs:CourtHouseCode>
+                <cs:CourtHouseName>YORK</cs:CourtHouseName>
+            </cs:CourtHouse>
+            <cs:Sittings>
+                <cs:Sitting>
+                    <cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+                    <cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+                    <cs:SittingAt>13:30:00</cs:SittingAt>
+                    <cs:SittingPriority>T</cs:SittingPriority>
+                    <cs:Judiciary>
+                        <cs:Judge>
+                            <apd:CitizenNameForename>ignored</apd:CitizenNameForename>
+                            <apd:CitizenNameSurname>ignored</apd:CitizenNameSurname>
+                            <apd:CitizenNameRequestedName>judge name{{seq}}</apd:CitizenNameRequestedName>
+                        </cs:Judge>
+                    </cs:Judiciary>
+                    <cs:Hearings>
+                        <cs:Hearing>
+                            <cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+                            <cs:HearingDetails HearingType="PLE">
+                                <cs:HearingDescription>For Plea</cs:HearingDescription>
+                                <cs:HearingDate>{{yyyymmdd}}</cs:HearingDate>
+                            </cs:HearingDetails>
+                            <cs:TimeMarkingNote>3:00 PM</cs:TimeMarkingNote>
+                            <cs:CaseNumber>T{{seq}}120</cs:CaseNumber>
+                            <cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+                                <cs:ProsecutingReference>Prosecution ref</cs:ProsecutingReference>
+                                <cs:ProsecutingOrganisation>
+                                    <cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+                                </cs:ProsecutingOrganisation>
+                <cs:Advocate>
+                  <cs:PersonalDetails>
+                    <cs:Name>
+                      <apd:CitizenNameTitle>ignored</apd:CitizenNameTitle>
+                      <apd:CitizenNameForename>PROSECUTOR</apd:CitizenNameForename>
+                      <apd:CitizenNameSurname>SURNAME {{seq}}</apd:CitizenNameSurname>
+                      <apd:CitizenNameSuffix>ignored</apd:CitizenNameSuffix>
+                      <apd:CitizenNameRequestedName>ignored</apd:CitizenNameRequestedName>
+                    </cs:Name>
+                    <cs:MaskedName>String</cs:MaskedName>
+                    <cs:IsMasked>yes</cs:IsMasked>
+                    <cs:DateOfBirth>
+                      <apd:BirthDate>1967-08-13</apd:BirthDate>
+                      <apd:VerifiedBy>not verified</apd:VerifiedBy>
+                    </cs:DateOfBirth>
+                    <cs:Age>0</cs:Age>
+                    <cs:Sex>unknown</cs:Sex>
+                    <cs:Address>
+                      <apd:Line>1 Address</apd:Line>
+                      <apd:Line>2 Address</apd:Line>
+                      <apd:PostCode>A0 0AA</apd:PostCode>
+                    </cs:Address>
+                  </cs:PersonalDetails>
+                  <cs:ContactDetails>
+                    <apd:Email EmailPreferred="yes" EmailUsage="work">
+                      <apd:EmailAddress/>
+                    </apd:Email>
+                    <apd:Telephone TelPreferred="yes" TelMobile="yes" TelUse="work">
+                      <apd:TelNationalNumber> </apd:TelNationalNumber>
+                      <apd:TelExtensionNumber>0</apd:TelExtensionNumber>
+                      <apd:TelCountryCode>0</apd:TelCountryCode>
+                    </apd:Telephone>
+                    <apd:Fax FaxPreferred="yes" FaxMobile="yes" FaxUse="work">
+                      <apd:FaxNationalNumber> </apd:FaxNationalNumber>
+                      <apd:FaxExtensionNumber>0</apd:FaxExtensionNumber>
+                      <apd:FaxCountryCode>0</apd:FaxCountryCode>
+                    </apd:Fax>
+                  </cs:ContactDetails>
+                  <cs:StartDate>1967-08-13</cs:StartDate>
+                  <cs:EndDate>1967-08-13</cs:EndDate>
+                </cs:Advocate>
+                            </cs:Prosecution>
+                            <cs:Defendants>
+                                <cs:Defendant>
+                                    <cs:PersonalDetails>
+                                        <cs:Name>
+                                            <apd:CitizenNameForename>Casper</apd:CitizenNameForename>
+                                            <apd:CitizenNameSurname>Daugherty{{seq}}</apd:CitizenNameSurname>
+                                            <apd:CitizenNameRequestedName>John Snow</apd:CitizenNameRequestedName>
+                                        </cs:Name>
+                                        <cs:IsMasked>no</cs:IsMasked>
+                                    </cs:PersonalDetails>
+                                    <cs:URN>T{{seq}}110</cs:URN>
+                                    <cs:Charges>
+                                        <cs:Charge IndictmentCountNumber="0" CJSoffenceCode="SA00002">
+                                            <cs:OffenceStatement>Sex offences - abuse position of trust - engage in sexual activity</cs:OffenceStatement>
+                                        </cs:Charge>
+                                    </cs:Charges>
+                  <cs:Counsel>
+                    <cs:Advocate>
+                      <cs:PersonalDetails>
+                        <cs:Name>
+                          <apd:CitizenNameTitle>Ms</apd:CitizenNameTitle>
+                          <apd:CitizenNameForename>solicitor</apd:CitizenNameForename>
+                          <apd:CitizenNameSurname>surname {{seq}}</apd:CitizenNameSurname>
+                          <apd:CitizenNameSuffix></apd:CitizenNameSuffix>
+                          <apd:CitizenNameRequestedName></apd:CitizenNameRequestedName>
+                        </cs:Name>
+                        <cs:MaskedName>String</cs:MaskedName>
+                        <cs:IsMasked>yes</cs:IsMasked>
+                        <cs:DateOfBirth>
+                          <apd:BirthDate>1967-08-13</apd:BirthDate>
+                          <apd:VerifiedBy>not verified</apd:VerifiedBy>
+                        </cs:DateOfBirth>
+                        <cs:Age>0</cs:Age>
+                        <cs:Sex>unknown</cs:Sex>
+                        <cs:Address>
+                          <apd:Line></apd:Line>
+                          <apd:Line></apd:Line>
+                          <apd:PostCode>A0 0AA</apd:PostCode>
+                        </cs:Address>
+                      </cs:PersonalDetails>
+                      <cs:ContactDetails>
+                        <apd:Email EmailPreferred="yes" EmailUsage="work">
+                          <apd:EmailAddress/>
+                        </apd:Email>
+                        <apd:Telephone TelPreferred="yes" TelMobile="yes" TelUse="work">
+                          <apd:TelNationalNumber> </apd:TelNationalNumber>
+                          <apd:TelExtensionNumber>0</apd:TelExtensionNumber>
+                          <apd:TelCountryCode>0</apd:TelCountryCode>
+                        </apd:Telephone>
+                        <apd:Fax FaxPreferred="yes" FaxMobile="yes" FaxUse="work">
+                          <apd:FaxNationalNumber> </apd:FaxNationalNumber>
+                          <apd:FaxExtensionNumber>0</apd:FaxExtensionNumber>
+                          <apd:FaxCountryCode>0</apd:FaxCountryCode>
+                        </apd:Fax>
+                      </cs:ContactDetails>
+                      <cs:StartDate>1967-08-13</cs:StartDate>
+                      <cs:EndDate>1967-08-13</cs:EndDate>
+                    </cs:Advocate>
+                  </cs:Counsel>
+                                </cs:Defendant>
+                            </cs:Defendants>
+                        </cs:Hearing>
+                    </cs:Hearings>
+                </cs:Sitting>
+            </cs:Sittings>
+        </cs:CourtList>
+    </cs:CourtLists>
+</cs:DailyList>]]>
+</document>
+	"""
+	Then the API status code is 200
+   And I see table darts.daily_list column job_status is "NEW" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f4-426d-81be-000{{seq}}002"
+  When I process the daily list for courthouse "York"
+  Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f4-426d-81be-000{{seq}}002"
+   And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}120" and courthouse_name = "York" and courtroom_name = "1"
+  
   
