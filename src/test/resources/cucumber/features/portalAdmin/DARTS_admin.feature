@@ -510,7 +510,7 @@ Feature: Admin
     And I set "Search for a user" to "Mehta Purvi (mehta.purvi@hmcts.net)" and click away
     And I press the "Save change" button
 
-# @DMP-2679 Transformed media detail page
+    #DMP-2679 Transformed media detail page
     Then I see "Transformed media" on the page
     And I see "101" on the page
     And I see "Request details" on the page
