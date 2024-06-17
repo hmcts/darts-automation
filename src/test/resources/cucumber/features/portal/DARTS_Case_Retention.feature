@@ -1,6 +1,6 @@
 Feature: Case Retention
 
-  @DMP-1369 @DMP-1406 @DMP-1413 @DMP-1899 @regression @PJ
+  @DMP-1369 @DMP-1406 @DMP-1413 @DMP-1899 @regression
   Scenario: Case retention data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants     | judges           | prosecutors               | defenders               |
@@ -8,6 +8,8 @@ Feature: Case Retention
       | Harrow Crown Court | {{seq}}-31 | R{{seq}}GH1 | Def {{seq}}-31 | Judge {{seq}}-31 | testprosecutor {{seq}}-31 | testdefender {{seq}}-31 |
       | Harrow Crown Court | {{seq}}-32 | R{{seq}}IJ1 | Def {{seq}}-32 | Judge {{seq}}-32 | testprosecutor {{seq}}-32 | testdefender {{seq}}-32 |
       | Harrow Crown Court | {{seq}}-33 | R{{seq}}KL1 | Def {{seq}}-33 | Judge {{seq}}-33 | testprosecutor {{seq}}-33 | testdefender {{seq}}-33 |
+
+    Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              |
       | {{seq}}001 | 1100 |          | {{seq}}1169 | Harrow Crown Court | {{seq}}-30 | R{{seq}}EF1  | {{seq}}ABC-30 | {{timestamp-10:02:00}} |
@@ -38,6 +40,7 @@ Feature: Case Retention
     And I see "No history to show" on the page
 
   # Close the case
+    Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers  | event_text        | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}005 | 30300 |          | {{seq}}1177 | Harrow Crown Court | {{seq}}-28 | <case_number> | Close case{{seq}} | {{timestamp-11:00:00}} | <caseRetention>             | <totalSentence>     |
@@ -185,11 +188,14 @@ Feature: Case Retention
   @DMP-1413 @regression
   Scenario: Change Retention Date by increasing it with specific date
     Given I create a case
-      | courthouse         | courtroom  | case_number  | defendants     | judges           | prosecutors               | defenders              |
+      | courthouse         | courtroom  | case_number  | defendants     | judges           | prosecutors               | defenders               |
       | Harrow Crown Court | {{seq}}-11 | R{{seq}}AB11 | Def {{seq}}-11 | Judge {{seq}}-11 | testprosecutor {{seq}}-11 | testdefender {{seq}}-11 |
+
+    Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text   | date_time              |
+      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              |
       | {{seq}}011 | 1100 |          | {{seq}}1169 | Harrow Crown Court | {{seq}}-11 | R{{seq}}AB11 | {{seq}}ABC-11 | {{timestamp-10:02:00}} |
+
     Given I am logged on to DARTS as an JUDGE user
     When I click on the "Search" link
     And I set "Case ID" to "R{{seq}}AB11"
@@ -203,6 +209,7 @@ Feature: Case Retention
     And I see "No history to show" on the page
 
   #Close case
+    Given I authenticate from the CPP source system
     When I create an event
       | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 30300 |          | {{seq}}1168 | Harrow Crown Court | {{seq}}-29 | R{{seq}}AB11 | {{seq}}ABC-29 | {{timestamp-10:00:00}} | 3                           | 3Y3M3D              |
@@ -314,4 +321,3 @@ Feature: Case Retention
       | *NO-CHECK*             | *NO-CHECK*     | global_judge | Manual           | This is my reason for increasing the retention date | COMPLETE |
       | *NO-CHECK*             | *NO-CHECK*     | global_judge | Manual           | Reason for reducing retention date by one year      | COMPLETE |
       | *NO-CHECK*             | *NO-CHECK*     | global_judge | Permanent        | Reason for retaining this case permanently          | COMPLETE |
-

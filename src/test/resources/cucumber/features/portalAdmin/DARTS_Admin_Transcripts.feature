@@ -57,8 +57,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "10:30:00"
-    And I set the time fields below "End time" to "10:31:00"
+    When I set the time fields below "Start time" to "09:30:00"
+    And I set the time fields below "End time" to "09:31:00"
     #When I check the checkbox in the same row as "10:30:00" "Hearing started"
     #And I check the checkbox in the same row as "10:31:00" "Hearing ended"
     And I press the "Continue" button
@@ -96,8 +96,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "11:00:00"
-    And I set the time fields below "End time" to "11:01:00"
+    When I set the time fields below "Start time" to "10:00:00"
+    And I set the time fields below "End time" to "10:01:00"
     #When I check the checkbox in the same row as "11:00:00" "Hearing started"
     #And I check the checkbox in the same row as "11:01:00" "Hearing ended"
     And I press the "Continue" button
@@ -135,8 +135,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "11:30:00"
-    And I set the time fields below "End time" to "11:31:00"
+    When I set the time fields below "Start time" to "10:30:00"
+    And I set the time fields below "End time" to "10:31:00"
     #When I check the checkbox in the same row as "11:30:00" "Hearing started"
     #And I check the checkbox in the same row as "11:31:00" "Hearing ended"
     And I press the "Continue" button
@@ -174,8 +174,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "12:00:00"
-    And I set the time fields below "End time" to "12:01:00"
+    When I set the time fields below "Start time" to "11:00:00"
+    And I set the time fields below "End time" to "11:01:00"
     #When I check the checkbox in the same row as "12:00:00" "Hearing started"
     #And I check the checkbox in the same row as "12:01:00" "Hearing ended"
     And I press the "Continue" button
@@ -213,8 +213,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "12:30:00"
-    And I set the time fields below "End time" to "12:31:00"
+    When I set the time fields below "Start time" to "11:30:00"
+    And I set the time fields below "End time" to "11:31:00"
     #When I check the checkbox in the same row as "12:30:00" "Hearing started"
     #And I check the checkbox in the same row as "12:31:00" "Hearing ended"
     And I press the "Continue" button
