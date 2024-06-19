@@ -1,6 +1,6 @@
 Feature: Annotation
 
-  @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9 @DMP-2246 @DMP-2639-AC1
+  @DMP-1614 @DMP-1616 @DMP-1612 @DMP-1508 @DMP-1508-AC7-AC8 @DMP-1508-AC8-Approver @DMP-1623 @DMP-1552-AC1-AC4-AC7 @DMP-1552-AC9 @DMP-2246 @DMP-2639-AC1 @regression
   Scenario: Annotation data creation
     Given I create a case
       | courthouse         | case_number | defendants     | judges           | prosecutors            | defenders            |
@@ -16,6 +16,7 @@ Feature: Annotation
       | Harrow Crown Court | K{{seq}}011 | Def {{seq}}-38 | Judge {{seq}}-38 | testprosecutorfifteen  | testdefenderfifteen  |
       | Harrow Crown Court | K{{seq}}012 | Def {{seq}}-39 | Judge {{seq}}-39 | testprosecutorsixteen  | testdefendersixteen  |
 
+    Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text | date_time              | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-29 | K{{seq}}002  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
@@ -30,11 +31,10 @@ Feature: Annotation
       | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-38 | K{{seq}}011  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
       | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-39 | K{{seq}}012  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
 
-  @DMP-1614
+  @DMP-1614 @regression
   Scenario: Annotation template
 
     Given I am logged on to DARTS as an JUDGE user
-
     When I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "K{{seq}}002"
@@ -44,12 +44,11 @@ Feature: Annotation
     And I click on the "Annotations" link
     And I press the "Download annotation template" button
 
-  @DMP-1616
+  @DMP-1616 @regression
   Scenario: Add annotation screen
 
     Given I am logged on to DARTS as an JUDGE user
-
-  #Upload Annotation
+    #Upload Annotation
     When I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "K{{seq}}003"
@@ -60,18 +59,17 @@ Feature: Annotation
     And I press the "Upload annotation" button
     Then I upload the file "file-sample_1MB.doc" at "Upload annotation file"
 
-  #Cancel Upload
+    #Cancel Upload
     Then I click on the "Cancel" link
 
-  #  Upload Comment
-  #  And I set "Comments" to "AC3"
-  #  Then I see "You have 197 characters remaining" on the page
+    #Upload Comment
+    #And I set "Comments" to "AC3"
+    #Then I see "You have 197 characters remaining" on the page
 
-  @DMP-1612
+  @DMP-1612 @regression
   Scenario: Delete annotation screen
 
     Given I am logged on to DARTS as an JUDGE user
-
     #Upload Annotation
     When I click on the "Search" link
     And I see "Search for a case" on the page
@@ -96,11 +94,10 @@ Feature: Annotation
     And I see "Are you sure you want to delete this item?" on the page
     Then I press the "Yes - delete" button
 
-  @DMP-1508
+  @DMP-1508 @regression
   Scenario: Add All Annotations to Case File screen
 
     Given I am logged on to DARTS as an JUDGE user
-
     #Upload Annotation
     When I click on the "Search" link
     And I see "Search for a case" on the page
@@ -125,11 +122,10 @@ Feature: Annotation
     And I click on the "{{displaydate}}" link
     Then I see "Upload annotation" on the page
 
-  @DMP-1508-AC7-AC8
+  @DMP-1508-AC7-AC8 @regression
   Scenario:  1508 No annotations for a case (or visible for a particular judge user)
 
     Given I am logged on to DARTS as an JUDGE user
-
     When I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "K{{seq}}006"
@@ -138,8 +134,7 @@ Feature: Annotation
     And I click on the "All annotations" link
     Then I see "There are no annotations for this case. Annotations added to hearings will be listed here." on the page
 
-  @DMP-1508-AC8-Approver
-
+  @DMP-1508-AC8-Approver @regression
   Scenario: All other users cannot see annotations
 
     Given I am logged on to DARTS as an Approver user
@@ -150,11 +145,10 @@ Feature: Annotation
     And I click on the "K{{seq}}007" link
     Then I do not see "All annotations" on the page
 
-  @DMP-1623
+  @DMP-1623 @regression
   Scenario: Add annotation confirmation screen
 
     Given I am logged on to DARTS as an JUDGE user
-
     #Upload Annotation
     When I click on the "Search" link
     And I see "Search for a case" on the page
@@ -168,12 +162,11 @@ Feature: Annotation
     And I press the "Upload" button
     Then I see "You have added an annotation" on the page
 
-  @DMP-1552-AC1-AC4-AC7
+  @DMP-1552-AC1-AC4-AC7 @regression
   Scenario: Add Annotations to Hearing details screen
 
     Given I am logged on to DARTS as an JUDGE user
-
-      #Upload Annotation
+    #Upload Annotation
     When I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "K{{seq}}009"
@@ -186,22 +179,21 @@ Feature: Annotation
     And I press the "Upload" button
     And I press the "back" button on my browser
 
-      # AC1 Check Annotation tab for judge/admin
+    #AC1 Check Annotation tab for judge/admin
     Then I see "Annotations" on the page
 
-      # AC4 Judge to view documents uploaded by themselves
+    #AC4 Judge to view documents uploaded by themselves
     And I click on the "Annotations" link
     Then I see "Word Document" on the page
 
-      # AC7 Judge/Admin can download individual document
+    #AC7 Judge/Admin can download individual document
     Then I click on the "Download" link
 
-  @DMP-1552-AC9
+  @DMP-1552-AC9 @regression
   Scenario:  No annotations for a case (or visible for a particular judge user)
 
     Given I am logged on to DARTS as an JUDGE user
-
-      #No annotations for a case (or visible for a particular judge user
+    #No annotations for a case (or visible for a particular judge user
     When I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "K{{seq}}010"
@@ -211,10 +203,10 @@ Feature: Annotation
     And I click on the "Annotations" link
     Then I see "There are no annotations for this hearing." on the page
 
-  @DMP-2246
+  @DMP-2246 @regression
   Scenario: Download Annotation Document
-    Given I am logged on to DARTS as an JUDGE user
 
+    Given I am logged on to DARTS as an JUDGE user
     When I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "K{{seq}}011"
@@ -229,11 +221,10 @@ Feature: Annotation
     And I click on the "Annotations" link
     Then I click on the "Download" link
 
-  @DMP-2456
+  @DMP-2456 @regression
   Scenario: Delete annotation from case screen
 
     Given I am logged on to DARTS as an JUDGE user
-
     #Upload Annotation
     When I click on the "Search" link
     And I see "Search for a case" on the page
@@ -259,8 +250,9 @@ Feature: Annotation
     And I see "Are you sure you want to delete this item?" on the page
     Then I press the "Yes - delete" button
 
-  @DMP-2639
+  @DMP-2639 @regression
   Scenario: Fetch annotations for super admin
+
     Given I am logged on to DARTS as a ADMIN user
     When I click on the "Search" link
     And I see "Search for a case" on the page
