@@ -6,10 +6,10 @@ Feature: Admin portal transcripts
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors               | defenders               |
       | Harrow Crown Court | {{seq}}-40 | G{{seq}}001 | DefG {{seq}}-40 | JudgeG {{seq}}-40 | testprosecutorfourty      | testdefenderfourty      |
       | Harrow Crown Court | {{seq}}-41 | G{{seq}}002 | DefG {{seq}}-41 | JudgeG {{seq}}-41 | testprosecutorfourtyone   | testdefenderfourtyone   |
-      | Harrow Crown Court | {{seq}}-42 | G{{seq}}003 | DefG {{seq}}-42 | JudgeC {{seq}}-42 | testprosecutorfourtytwo   | testdefenderfourtytwo   |
-      | Harrow Crown Court | {{seq}}-43 | G{{seq}}004 | DefG {{seq}}-43 | JudgeC {{seq}}-43 | testprosecutorfourtythree | testdefenderfourtythree |
-      | Harrow Crown Court | {{seq}}-44 | G{{seq}}005 | DefG {{seq}}-44 | JudgeC {{seq}}-44 | testprosecutorfourtyfour  | testdefenderfourtyfour  |
-      | Harrow Crown Court | {{seq}}-45 | G{{seq}}006 | DefG {{seq}}-45 | JudgeC {{seq}}-45 | testprosecutorfourtyfive  | testdefenderfourtyfive  |
+      | Harrow Crown Court | {{seq}}-42 | G{{seq}}003 | DefG {{seq}}-42 | JudgeG {{seq}}-42 | testprosecutorfourtytwo   | testdefenderfourtytwo   |
+      | Harrow Crown Court | {{seq}}-43 | G{{seq}}004 | DefG {{seq}}-43 | JudgeG {{seq}}-43 | testprosecutorfourtythree | testdefenderfourtythree |
+      | Harrow Crown Court | {{seq}}-44 | G{{seq}}005 | DefG {{seq}}-44 | JudgeG {{seq}}-44 | testprosecutorfourtyfour  | testdefenderfourtyfour  |
+      | Harrow Crown Court | {{seq}}-45 | G{{seq}}006 | DefG {{seq}}-45 | JudgeG {{seq}}-45 | testprosecutorfourtyfive  | testdefenderfourtyfive  |
 
     Given I authenticate from the CPP source system
     Given I create an event
@@ -607,12 +607,12 @@ Feature: Admin portal transcripts
     And I press the "Search" button
     And I click on "G{{seq}}004" in the same row as "Harrow Crown Court"
     And I click on the "All Transcripts" link
-    And I see "Approved" in the same row as "Specified Times"
+    And I see "With Transcriber" in the same row as "Specified Times"
 
     When I click on the "Hearings" link
     And I click on the "{{displaydate}}" link
     And I click on the "Transcripts" link
-    And I see "Approved" in the same row as "Specified Times"
+    And I see "With Transcriber" in the same row as "Specified Times"
 
     When I click on the "Search" link
     And I set "Case ID" to "G{{seq}}005"
