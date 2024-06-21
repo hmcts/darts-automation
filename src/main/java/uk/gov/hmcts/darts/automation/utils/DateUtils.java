@@ -370,7 +370,11 @@ public class DateUtils {
 											if (subsString.startsWith("utc-")) {
 												substitutionString = utcTimestamp(subsString.substring(4));
 											} else {
-												Assertions.fail("Invalid value to substitute =>" + subsString );
+												if (subsString.startsWith("retention-")) {
+													substitutionString = retention(subsString.substring(10));
+												} else {
+													Assertions.fail("Invalid value to substitute =>" + subsString );
+												}
 											}
 										}
 									}
@@ -569,6 +573,71 @@ public class DateUtils {
 		Instant zonedTimestamp = Instant.parse(localTimestamp);
 		
 		return zonedTimestamp.toString();
+	}
+	
+/*
+ *  return current date + retention supplied in Y%M%D% format 
+ *          return date is in timestamp format with zero time
+ * 
+ */
+	public static String retention(String offset) {
+		String offsetU = offset.toUpperCase();
+		Date dateToday = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dateToday);
+		try {
+			String[] splitY = offsetU.split("Y");
+			String years = "0";
+			String months = "0";
+			String days = "0";
+			String afterY;
+			if (splitY.length == 1) {
+				if (offsetU.endsWith("M") || offsetU.endsWith("D")) {
+					years = "0";
+					afterY = splitY[0];
+				} else {
+					years = splitY[0];
+					afterY = "";
+				}
+			} else {
+				years = splitY[0];
+				afterY = splitY[1];
+			}
+			cal.add(Calendar.YEAR, Integer.parseInt(years));
+			
+			
+			String[] splitM = afterY.split("M");
+			String afterM;
+			if (splitM.length == 1) {
+				if (afterY.endsWith("D")) {
+					months = "0";
+					afterM = splitM[0];
+				} else {
+					months = splitM[0];
+					afterM = "";
+				}
+			} else {
+				months = splitM[0];
+				afterM = splitM[1];
+			}
+			cal.add(Calendar.MONTH, Integer.parseInt(months));
+			
+			String[] splitD = afterM.split("D");
+			if (splitD[0].equals("")) {
+				days = "0";
+			} else {
+				days = splitD[0];
+			}
+			cal.add(Calendar.DAY_OF_MONTH, Integer.parseInt(days));
+		} catch ( Exception e) {
+			log.fatal("Error calculating offset date for {}: cal", offset, cal);
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String retentionString = dateFormat.format((Date)cal.getTime());
+		
+		String currentOffset = ZonedDateTime.now(ZoneId.of("Europe/London")).getOffset().toString();
+		
+		return retentionString + " " + currentOffset.substring(1) + ":00" + currentOffset.substring(0, 3);
 	}
 	
 	public static String returnNumericDateCcyymmdd(String date) {
@@ -811,6 +880,14 @@ public class DateUtils {
 		System.out.println(substituteDateValue("utc-2024-06-10T10:43:25.720"));
 		System.out.println(utcTimestamp("2024-06-10 10:43:25.720"));
 		System.out.println(utcTimestamp(timestamp()));
+	}
+	
+	@Test
+	public void test9() {
+		System.out.println("========================");
+		System.out.println("          9");
+		System.out.println("========================");
+		System.out.println(Substitutions.substituteValue("{{retention-3Y4M5D}}"));
 	}
 
 }

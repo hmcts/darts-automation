@@ -62,7 +62,7 @@ public class Substitutions {
 					subsString.startsWith("dd-") || subsString.startsWith("mm-") ||
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd") ||
 					subsString.startsWith("timestamp-") || subsString.startsWith("displaydate-") ||
-					subsString.startsWith("utc-")) {
+					subsString.startsWith("utc-") || subsString.startsWith("retention-")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
 				if (subsString.equalsIgnoreCase("seq")) {
