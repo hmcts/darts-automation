@@ -95,8 +95,8 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse      | courtroom   | case_number   | judges            | defendants            | prosecutors         | defenders         | HearingDate     | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile | startTime | endTime  | filename            |
-      | {{courthouse1}} | C{{seq}}-84 | S{{seq}}084-B | S{{seq}} judge-84 | S{{seq}} defendant-84 | S{{seq}} prosecutor | S{{seq}} defender | {{displaydate}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | sample1   | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
+      | courthouse      | courtroom   | case_number   | judges            | defendants            | prosecutors         | defenders         | HearingDate     | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            |
+      | {{courthouse1}} | C{{seq}}-84 | S{{seq}}084-B | S{{seq}} judge-84 | S{{seq}} defendant-84 | S{{seq}} prosecutor | S{{seq}} defender | {{displaydate}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | sample1.mp2 | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
 
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback

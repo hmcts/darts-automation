@@ -1,11 +1,11 @@
 Feature: Restricted Page Access
-@DMP-1486 @regression @demo
+@DMP-1486 @DMP-3035 @regression @demo
   Scenario: Error for Restricted Page Access
     Given I am logged on to DARTS as an REQUESTER user
     And I navigate to the url "/work"
     Then I see "You do not have permission to access this page" on the page
-    And I see "If you believe you should have permission, contact Crown IT Support" on the page
-    And I click on the "contact Crown IT Support" link
+    And I see "If you believe you should have permission, contact DTS-IT Service Desk." on the page
+    And I click on the "contact DTS-IT Service Desk." link
 
   @DMP-1479 @regression @demo
   Scenario: Error - 404 - Page not found
