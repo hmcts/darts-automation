@@ -12,7 +12,8 @@ Feature: Transcriber
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
-    # Requester requests the Transcript
+
+    #Requester requests the Transcript
     Given I am logged on to DARTS as a REQUESTER user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
@@ -37,7 +38,9 @@ Feature: Transcriber
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
-    # Approver approves the Transcript
+
+    #Approver approves the Transcript
+
     Then I see "Sign in to the DARTS Portal" on the page
     When I am logged on to DARTS as an APPROVER user
     Then I see "Search for a case" on the page
@@ -95,8 +98,8 @@ Feature: Transcriber
     Then I see "Transcript request complete" on the page
 
     Examples:
-      | courthouse      | courtroom   | case_number   | judges            | defendants            | prosecutors         | defenders         | HearingDate     | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile | startTime | endTime  | filename            |
-      | {{courthouse1}} | C{{seq}}-84 | S{{seq}}084-B | S{{seq}} judge-84 | S{{seq}} defendant-84 | S{{seq}} prosecutor | S{{seq}} defender | {{displaydate}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | sample1   | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
+      | courthouse      | courtroom   | case_number   | judges            | defendants            | prosecutors         | defenders         | HearingDate     | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            |
+      | {{courthouse1}} | C{{seq}}-84 | S{{seq}}084-B | S{{seq}} judge-84 | S{{seq}} defendant-84 | S{{seq}} prosecutor | S{{seq}} defender | {{displaydate}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}1031 |               |               | {{timestamp}} | sample1.mp2 | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
 
   @end2end @end2end4 @DMP-2055
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback

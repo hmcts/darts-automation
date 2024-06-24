@@ -12,6 +12,7 @@ Feature: Approver
       | courthouse   | courtroom   | case_numbers  | date        | startTime | endTime  | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | 10:01:00  | 10:02:00 | <audioFile> |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | 10:03:00  | 10:04:00 | <audioFile> |
+
     #Requester requests the transcript
     Given I am logged on to DARTS as an REQUESTER user
     Then I set "Case ID" to "<case_number>"
@@ -34,11 +35,14 @@ Feature: Approver
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
-    # Approver approves the request
+
+    #Approver approves the request
+
     Then I see "Sign in to the DARTS Portal" on the page
     When I am logged on to DARTS as an APPROVER user
     Then I see "Search for a case" on the page
     Then I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     Then I click on "View" in the same row as "<case_number>"
     And I see "Do you approve this request?" on the page
@@ -61,6 +65,7 @@ Feature: Approver
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
+
     Given I am logged on to DARTS as an REQUESTER user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
@@ -87,6 +92,7 @@ Feature: Approver
     When I am logged on to DARTS as an APPROVER user
     Then I see "Search for a case" on the page
     Then I click on the "Your transcripts" link
+    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     Then I click on "View" in the same row as "<case_number>"
     And I see "Do you approve this request?" on the page

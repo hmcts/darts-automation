@@ -411,7 +411,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
   And I select the "Date range" radio button
   And I set "Enter date from" to "{{date-7/}}"
   And I set "Enter date to" to "{{date+0/}}"
-  And I set "Defendant's name" to "defend"
+  And I set "Judge's name" to "judge name"
   And I press the "Search" button
   And I see "Next" on the page
   And I click on the pagination link "2"
