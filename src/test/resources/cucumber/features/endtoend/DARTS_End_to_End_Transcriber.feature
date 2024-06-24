@@ -12,7 +12,8 @@ Feature: Transcriber
     When I load an audio file
       | courthouse   | courtroom   | case_numbers  | date        | startTime   | endTime   | audioFile   |
       | <courthouse> | <courtroom> | <case_number> | {{date+0/}} | <startTime> | <endTime> | <audioFile> |
-    # Requester requests the Transcript
+
+    #Requester requests the Transcript
     Given I am logged on to DARTS as a REQUESTER user
     Then I set "Case ID" to "<case_number>"
     Then I press the "Search" button
@@ -37,7 +38,9 @@ Feature: Transcriber
     And I press the "Submit request" button
     And I see "Transcript request submitted" on the page
     Then I Sign out
-    # Approver approves the Transcript
+
+    #Approver approves the Transcript
+
     Then I see "Sign in to the DARTS Portal" on the page
     When I am logged on to DARTS as an APPROVER user
     Then I see "Search for a case" on the page
