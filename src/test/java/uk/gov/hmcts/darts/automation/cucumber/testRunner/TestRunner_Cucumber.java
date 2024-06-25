@@ -24,7 +24,7 @@ import static io.cucumber.junit.platform.engine.Constants.EXECUTION_DRY_RUN_PROP
 
 @Suite
 @IncludeEngines("cucumber")
-//@IncludeTags(value = "end2end | smoketest | regression")
+@IncludeTags(value = "DM")
 @ExcludeTags(value = "broken | obsolete | TODO")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "html:test-results/html/results.html, junit:test-results/functionalTest/cucumber.xml")
