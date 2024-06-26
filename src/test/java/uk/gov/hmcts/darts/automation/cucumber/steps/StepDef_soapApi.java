@@ -70,6 +70,7 @@ public class StepDef_soapApi extends StepDef_base {
 // sample cucumber:
 // When I add a case
 // |courthouse|courtroom|case_number|defendants|judges|prosecutors|defenders|
+//    courtroom is ignored
 	@When("^I create a case$")
 	public void createAddCaseXml(List<Map<String,String>> dataTable) {
 		soapApi.setDefaultSource(SOURCE_VIQ);
@@ -83,6 +84,25 @@ public class StepDef_soapApi extends StepDef_base {
 					getValue(map, "prosecutors"),
 					getValue(map, "defenders"));
 			ApiResponse apiResponse = soapApi.postSoap("", "addCase", xml, true);
+			testdata.statusCode = apiResponse.statusCode;
+			testdata.responseString = apiResponse.responseString;
+			Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+		}
+	}
+	
+// sample cucumber:
+// When I add a case
+// |courthouse|courtroom|case_number|defendants|judges|prosecutors|defenders|
+//	    courtroom is ignored
+	@When("^I call SOAP getCases$")
+	public void createGetCasesXml(List<Map<String,String>> dataTable) {
+		soapApi.setDefaultSource(SOURCE_VIQ);
+		for (Map<String, String> map : dataTable) {
+			String xml = XmlUtils.buildGetCasesXml(
+					getValue(map, "courthouse"),
+					getValue(map, "courtroom"),
+					getValue(map, "date"));
+			ApiResponse apiResponse = soapApi.postSoap("", xml);
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
 			Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
@@ -117,25 +137,47 @@ public class StepDef_soapApi extends StepDef_base {
 		}
 	}
 	
-// sample cucumber:
-// When I add courtlogs
-// |courthouse|courtroom|case_numbers|text|dateTime|
-	@When("^I add courtlogs$")
-	public void addLogsXml(List<Map<String,String>> dataTable) {
-		soapApi.setDefaultSource(SOURCE_VIQ);
-		for (Map<String, String> map : dataTable) {
-			String xml = XmlUtils.buildAddLogXml(
-					getValue(map, "courthouse"),
-					getValue(map, "courtroom"),
-					getValue(map, "case_numbers"),
-					getValue(map, "text"),
-					DateUtils.makeTimestamp(getValue(map, "dateTime"), getValue(map, "date"), getValue(map, "time")));
-			ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
-			testdata.statusCode = apiResponse.statusCode;
-			testdata.responseString = apiResponse.responseString;
-			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
+	// sample cucumber:
+	// When I register a node
+	//  | courthouse | courtroom | hostname | ip_address | mac_address | type |
+	// 	  (type is optional)
+		@When("I register (a )node(s)")
+		public void registerNodeXml(List<Map<String,String>> dataTable) {
+			soapApi.setDefaultSource(SOURCE_VIQ);
+			for (Map<String, String> map : dataTable) {
+				String xml = XmlUtils.buildRegisterNodeXml(
+						getValue(map, "courthouse"),
+						getValue(map, "courtroom"),
+						getValue(map, "hostname"),
+						getValue(map, "ip_address"),
+						getValue(map, "mac_address"),
+						getValue(map, "type", "DAR"));
+				ApiResponse apiResponse = soapApi.postSoap("", "registerNode", xml, false);
+				testdata.statusCode = apiResponse.statusCode;
+				testdata.responseString = apiResponse.responseString;
+				Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+			}
 		}
-	}
+		
+		// sample cucumber:
+		// When I add courtlogs
+		// |courthouse|courtroom|case_numbers|text|dateTime|
+			@When("^I add courtlogs$")
+			public void addLogsXml(List<Map<String,String>> dataTable) {
+				soapApi.setDefaultSource(SOURCE_VIQ);
+				for (Map<String, String> map : dataTable) {
+					String xml = XmlUtils.buildAddLogXml(
+							getValue(map, "courthouse"),
+							getValue(map, "courtroom"),
+							getValue(map, "case_numbers"),
+							getValue(map, "text"),
+							DateUtils.makeTimestamp(getValue(map, "dateTime"), getValue(map, "date"), getValue(map, "time")));
+					ApiResponse apiResponse = soapApi.postSoap("", "addLogEntry", xml, true);
+					testdata.statusCode = apiResponse.statusCode;
+					testdata.responseString = apiResponse.responseString;
+					Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
+				}
+			}
 
 	// sample cucumber:
 	// When I get courtlogs
@@ -282,7 +324,13 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@Then("^the SOAP response contains:$")
 	public void verifyApiResponse(String docString) {
-		Assertions.assertTrue(testdata.responseString.replaceAll(">\\R|\\s<", "><").contains(Substitutions.substituteValue(docString).replaceAll(">\\R|\\s<", "><")), "Response contents not matched:\r" + testdata.responseString);
+		String regex1 = "((\\\\n|\\s|\\n)*)<";
+		String regex2 = ">";
+//		log.info("1:"+testdata.responseString);
+//		log.info("2:"+Substitutions.substituteValue(docString));
+//		log.info("3:"+testdata.responseString.replaceAll(regex1, regex2));
+//		log.info("4:"+Substitutions.substituteValue(docString.replaceAll(regex1, regex2)));
+		Assertions.assertTrue(testdata.responseString.replaceAll(regex1, regex2).contains(Substitutions.substituteValue(docString.replaceAll(regex1, regex2))), "Response contents not matched:\r" + testdata.responseString);
 	}
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body file {string}")

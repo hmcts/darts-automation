@@ -37,7 +37,7 @@ public class SoapApi {
 	private static Logger log = LogManager.getLogger("SoapApi");
     static Response response;
 	String authorizationToken;
-	static String baseUri = ReadProperties.main("soapApiUri");
+	String baseUri = ReadProperties.main("soapApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
 	static final String ACCEPT_XML_STRING = "application/xml, text/xml, text/plain, */*";
@@ -103,6 +103,7 @@ public class SoapApi {
 // it is possible that all but XHIBIT, CPP & VIQ are invalid
     public void authenticate(String source) {
     	log.info("About to authenticate from {} source", source);
+    	baseUri = ReadProperties.main("soapApiUri");
     	useToken = false;
         switch (source.toUpperCase()) {
         case "EXTERNAL":
@@ -129,6 +130,7 @@ public class SoapApi {
         	break;
         case "VIQ":
         	externalAuthenticate(ReadProperties.viqExternalUserName, ReadProperties.viqInternalPassword, ReadProperties.viqExternalPassword);
+        	baseUri = ReadProperties.main("dartsProxyUri");
         	break;
         case "":
         	log.warn("Authentication - no role provided - using default");
