@@ -1,4 +1,4 @@
-Feature: Cases EndPoint using SOAP
+Feature: Add Daily List using SOAP
 
 #
 # n.b. for CPP, case number is held in the URN field

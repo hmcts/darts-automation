@@ -96,6 +96,19 @@ public class XmlUtils {
 		return xmlString.xmlValue();
     }
     
+    public static String buildGetCasesXml(String courthouse,
+    		String courtroom,
+    		String date) {
+    	XmlString xmlString = new XmlString()
+    			.addTag("com:getCases")
+    			.addAttribute("xmlns:com", "http://com.synapps.mojdarts.service.com")
+				.addTag("courthouse", courthouse)
+				.addTag("courtroom", courtroom)
+				.addTag("date", date)
+				.addEndTag();
+		return xmlString.xmlValue();
+    }
+    
     public static String buildAddLogXml(String courthouse,
     		String courtroom,
     		String caseNumbers,
@@ -137,6 +150,26 @@ public class XmlUtils {
 				.addAttribute("xmlns", "")
     			.addValue(DateUtils.makeNumericDateTime(endTime))
     			.addEndTag();
+		return xmlString.xmlValue();
+    }
+    
+    public static String buildRegisterNodeXml(String courthouse,
+    		String courtroom,
+    		String hostname,
+    		String ipAddress,
+    		String macAddress,
+    		String nodeType) {
+    	XmlString xmlString = new XmlString()
+    			.addStartCdata()
+    			.addTag("node")
+    			.addAttribute("type", nodeType)
+				.addTag("courthouse", courthouse)
+    			.addTag("courtroom", courtroom)
+    			.addTag("hostname", hostname)
+    			.addTag("ip_address", ipAddress)
+    			.addTag("mac_address", macAddress)
+    			.addEndTag()
+    			.addEndCdata();
 		return xmlString.xmlValue();
     }
     

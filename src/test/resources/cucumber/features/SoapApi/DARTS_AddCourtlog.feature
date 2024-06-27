@@ -55,7 +55,7 @@ Examples:
 	| Harrow Crown Court | room {{seq}} | T{{seq}}122 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 
 @COURTLOG @SOAP_API @regression
-Scenario: addLiogEntry successful baseline
+Scenario: addLogEntry successful baseline
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addLogEntry and body:
 	"""
@@ -74,7 +74,7 @@ Scenario: addLiogEntry successful baseline
 	
 
 @COURTLOG @SOAP_API @regression
-Scenario: addLiogEntry with invalid court fails
+Scenario: addLogEntry with invalid court fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addLogEntry and body:
 	"""
@@ -92,7 +92,7 @@ Scenario: addLiogEntry with invalid court fails
 	Then the API status code is 404
 
 @COURTLOG @SOAP_API @regression
-Scenario: addLiogEntry with authenticating from XHIBIT fails
+Scenario: addLogEntry with authenticating from XHIBIT fails
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addLogEntry and body:
 	"""

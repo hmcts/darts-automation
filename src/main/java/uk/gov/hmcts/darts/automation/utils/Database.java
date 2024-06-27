@@ -70,17 +70,15 @@ public class Database extends Postgres {
 			+ "using (cas_id)\r\n"
 			+ "left join darts.hearing_judge_ae\r\n"
 			+ "using (hea_id)\r\n"
-			+ "inner join darts.judge\r\n"
+			+ "inner join darts.judge jud\r\n"
 			+ "using (jud_id)\r\n";
 	
 	final String caseJudgeJoin = "darts.courthouse cth\r\n"
-			+ "inner join darts.courtroom ctr\r\n"
-			+ "using(cth_id)\r\n"
 			+ "inner join darts.court_case cas\r\n"
 			+ "using (cth_id)\r\n"
 			+ "left join darts.case_judge_ae\r\n"
 			+ "using (cas_id)\r\n"
-			+ "inner join darts.judge\r\n"
+			+ "inner join darts.judge jud\r\n"
 			+ "using (jud_id)\r\n";
 
 	  final String caseAudioJoin = "darts.courthouse cth\r\n"
@@ -138,6 +136,12 @@ public class Database extends Postgres {
 				+ "using (tru_id)\r\n"
 				+ "left join darts.transcription_type trt\r\n"
 				+ "using (trt_id)\r\n";
+		
+		final String nodeRegisterJoin = "darts.node_register\r\n"
+				+ "left join darts.courtroom\r\n"
+				+ "using(ctr_id)\r\n"
+				+ "left join darts.courthouse\r\n"
+				+ "using(cth_id)\r\n";
 
 	public Database(){
 		super();
@@ -169,6 +173,8 @@ public class Database extends Postgres {
 			return transcriptionJoin;
 		case "CASE_TRANSCRIPTION":
 			return caseTranscriptionJoin;
+		case "NODE_REGISTER":
+			return nodeRegisterJoin;
 		default:
 			return input;
 		}

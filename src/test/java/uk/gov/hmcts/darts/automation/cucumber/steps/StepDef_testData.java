@@ -14,6 +14,7 @@ import uk.gov.hmcts.darts.automation.utils.JsonUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonString;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
@@ -38,7 +39,7 @@ public class StepDef_testData extends StepDef_base {
 	
 	@Given("I use {word} {word}")
 	public void setValue(String arg1, String arg2) throws Exception {
-		testdata.setProperty(arg1, arg2);
+		testdata.setProperty(arg1, Substitutions.substituteValue(arg2));
 	}
 	
 	@Given("^courthouse \"([^\"]*)\" exists$")
