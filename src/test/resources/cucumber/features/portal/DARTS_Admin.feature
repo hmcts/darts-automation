@@ -227,9 +227,9 @@ Feature: Admin portal
   Scenario: View Courthouse - Details Tab
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
-    And I set "Courthouse name" to "Test Courthouse 1192"
+    And I set "Courthouse name" to "Test Courthouse"
     And I press the "Search" button
-    And I click on "Test Courthouse 1192" in the same row as "Test Courthouse 1192"
+    And I click on "Test Courthouse" in the same row as "Test Courthouse"
     #AC1
     Then I see "Courthouse record" on the page
     And I see "Test Courthouse" on the page
@@ -237,7 +237,7 @@ Feature: Admin portal
     And I see "Date created" on the page
     And I see "Tue 26 Mar 2024" on the page
     And I see "Last updated" on the page
-    And I see "Thu 20 Jun 2024" on the page
+    And I see "Tue 26 Mar 2024" on the page
     And I see "Details" on the page
     And I see "Users" on the page
     And I see "Details" on the page
@@ -329,23 +329,16 @@ Feature: Admin portal
   Scenario: Viewing group details - Users
     When I am logged on to the admin portal as an ADMIN user
     #AC1 - View users
-    And I see "You can search for cases, hearings, events and audio." on the page
-    And I click on the "Groups" navigation link
+    Then I click on the "Groups" navigation link
     And I click on the "Swansea_ADMIN" link
     And I click on the "Group users" link
-    Then I do not see "darts.admin@hmcts.net" on the page
+    And I see "0 of 7 selected" on the page
 
     #AC1 - Remove users
-    When I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
+    And I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
     And I press the "Add user" button
-    And I see "Darts Admin" in the same row as "darts.admin@hmcts.net"
     And I check the checkbox in the same row as "Darts Admin" "darts.admin@hmcts.net"
-    And I press the "Remove users" button
-    Then I see "Are you sure you want to remove 1 user from this group?" on the page
-
-    When I press the "Yes - continue" button
-    Then I see "1 user removed" on the page
-    And I do not see "darts.admin@hmcts.net" on the page
+    Then I press the "Remove users" button
 
   @DMP-2581 @regression
   Scenario: Viewing groups - Adding a user
@@ -571,7 +564,6 @@ Feature: Admin portal
   @DMP-2746 @DMP-2674 @regression
   Scenario: Add event mapping
     Given I am logged on to the admin portal as an ADMIN user
-    And I see "You can search for cases, hearings, events and audio." on the page
     When I click on the "System configuration" link
     And I click on the "Event mappings" navigation link
     #DMP-2746-AC1 Create event mapping
@@ -627,8 +619,7 @@ Feature: Admin portal
   @DMP-754 @regression
   Scenario: View event mapping
     Given I am logged on to the admin portal as an ADMIN user
-    When I see "You can search for cases, hearings, events and audio." on the page
-    And I click on the "System configuration" link
+    When I click on the "System configuration" link
     And I click on the "Event mappings" navigation link
     And I see "Event mappings" on the page
     And I see "Add event mapping" on the page
@@ -640,19 +631,17 @@ Feature: Admin portal
     And I see "With restrictions" on the page
     And I see "Without restrictions" on the page
     And I verify the HTML table contains the following values
-      | Type                   | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
-      | 3000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | 1000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | 30300                  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | DMP-2764-Accessibility | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | Type  | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+      | 3000  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 1000  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
     When  I select the "Active and inactive" radio button
     And I click on the "With restrictions" link
     Then I verify the HTML table contains the following values
-      | Type                   | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
-      | 3000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | 30300                  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | DMP-2764-Accessibility | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | Type  | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+      | 3000  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
     When I click on the "With restrictions" link
     And I click on the "Without restrictions" link

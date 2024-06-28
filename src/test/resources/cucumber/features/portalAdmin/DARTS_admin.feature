@@ -537,3 +537,26 @@ Feature: Admin
     Then I verify the HTML table contains the following values
       |Audio ID|Case ID|Hearing date|Courthouse         |Start time|End time|Courtroom    |Channel number|
       |3833    |10458  |07 Dec 2023 |Harrow Crown Court |14:00     |14:01   |Rayners room |1             |
+
+  @DMP-1190
+  Scenario: Search for events, audio, hearings and cases
+    When I am logged on to the admin portal as an ADMIN user
+    And I click on the "Search" link
+    Then I see "Search" on the page
+    And I see "You can search for cases, hearings, events and audio." on the page
+    And I see "Filter by courthouse" on the page
+    And I see "Case ID" on the page
+    And I see "Courtroom" on the page
+    And I see "Hearing date" on the page
+    And I see "Specific date" on the page
+    Then I select the "Specific date" radio button
+    Then I see "Enter a date" on the page
+    And I see "Date range" on the page
+    Then I select the "Date range" radio button
+    Then I see "Date from" on the page
+    Then I see "Date to" on the page
+    And I see "Cases" on the page
+    And I see "Hearings" on the page
+    And I see "Events" on the page
+    And I see "Audio" on the page
+    And I see the "Search" button
