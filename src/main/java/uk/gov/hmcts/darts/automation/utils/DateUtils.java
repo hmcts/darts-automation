@@ -418,7 +418,7 @@ public class DateUtils {
 	
 	public static String displayDate(String string) {
 		LocalDate date = LocalDate.parse(dateAsYyyyMmDd(string));
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 		return date.format(formatter);
 	}
 	
@@ -743,7 +743,7 @@ public class DateUtils {
 		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("09-12-2023", "12:00:00"));
 		Assertions.assertEquals("2023-12-09T12:00:00.000Z", makeTimestamp("09/12/23", "12:00:00"));
 		Assertions.assertEquals(makeTimestamp("", "12:00:00"), makeTimestamp("12:00:00"));
-		Assertions.assertEquals("9 Dec 2023", displayDate("2023-12-09"));
+		Assertions.assertEquals("09 Dec 2023", displayDate("2023-12-09"));
 		Assertions.assertEquals("31 Dec 2023", displayDate("31-12-2023"));
 		Assertions.assertEquals("12", datePart("12-34-45", "dd"));
 		Assertions.assertEquals("12", datePart("12/34/2045", "dd"));

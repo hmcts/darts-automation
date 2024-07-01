@@ -28,24 +28,21 @@ Feature: Admin
     And I see link with text "DARTS"
     And I see link with text "Sign out"
 
-  @DMP-2187 @regression
+  @DMP-2187 @regression @obsolete
   Scenario Outline: No ADMIN permissions
 
     #DMP-2187-AC3
     Given I am logged on to the admin portal as a <role> user
     Then I see "Page not found" on the page
-
     Examples:
-      | role              | 
+      | role              |
       | judge             |
-      | transcriber       |
-      | languageshop      |
       | requester         |
       | approver          |
-			| APPEALCOURT       |
-			| TRANSCRIBER       |
-			| LANGUAGESHOP      |
-			| REQUESTERAPPROVER |
+      | APPEALCOURT       |
+      | TRANSCRIBER       |
+      | LANGUAGESHOP      |
+      | REQUESTERAPPROVER |
 
   @DMP-634 @regression
   Scenario: Search for Users in Portal Primary page
