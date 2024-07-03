@@ -52,13 +52,13 @@ public class StepDef_soapApi extends StepDef_base {
  */
 	@Then("^I find (\\S*) in the xml response at \"([^\"]*)\"$")
 	public void extractStringFromXmlResponse(String name, String path) {
-		String value = XmlUtils.extractXmlValue(testdata.responseString, path);
+		String value = XmlUtils.extractValue(testdata.responseString, path);
 		testdata.setProperty(name, value);
 	}
 
 	@Then("^I see \"([^\"]*)\" in the xml response is \"([^\"]*)\"$")
 	public void verifyStringInXmlResponse(String path, String expectedValue) {
-		String value = XmlUtils.extractXmlValue(testdata.responseString, path);
+		String value = XmlUtils.extractValue(testdata.responseString, path);
 		Assertions.assertEquals(expectedValue, value, "XML value not as expected");
 	}
 	
@@ -324,13 +324,7 @@ public class StepDef_soapApi extends StepDef_base {
 	
 	@Then("^the SOAP response contains:$")
 	public void verifyApiResponse(String docString) {
-		String regex1 = "((\\\\n|\\s|\\n)*)<";
-		String regex2 = ">";
-//		log.info("1:"+testdata.responseString);
-//		log.info("2:"+Substitutions.substituteValue(docString));
-//		log.info("3:"+testdata.responseString.replaceAll(regex1, regex2));
-//		log.info("4:"+Substitutions.substituteValue(docString.replaceAll(regex1, regex2)));
-		Assertions.assertTrue(testdata.responseString.replaceAll(regex1, regex2).contains(Substitutions.substituteValue(docString.replaceAll(regex1, regex2))), "Response contents not matched:\r" + testdata.responseString);
+		Assertions.assertTrue(XmlUtils.removeWhitespace(testdata.responseString).contains(Substitutions.substituteValue(XmlUtils.removeWhitespace(docString))), "Response contents not matched:\r" + testdata.responseString);
 	}
 	
 	@When("I call POST {word} SOAP API using soap action {word} and body file {string}")

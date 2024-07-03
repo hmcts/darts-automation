@@ -9,13 +9,14 @@ Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 
 			handler, event_name & event_text is as expected
 
 @EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
-Scenario Outline: Create a case
-  Given I create a case
-    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
-    | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
+Scenario Outline: Create a case for event tests
+  Given I add a daily list
+  | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
+  | 58b211f4-426d-81be-20{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    And I process the daily list for courthouse <courthouse>
 Examples:
-  | courthouse         | caseNumbers  |
-  | Harrow Crown Court | T{{seq}}201  | 
+  | courthouse         | courtroom    | caseNumbers  |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201  | 
 
 
 @EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
@@ -24,6 +25,7 @@ Scenario Outline: Create standard events
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -34,7 +36,6 @@ Scenario Outline: Create standard events
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type   | subType | eventText    | caseRetention | totalSentence | text                                                                                                                                   | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:00:00}} | {{seq}}001 | {{seq}}1001 | 1000   | 1001    | text {{seq}} |               |               | Offences put to defendant                                                                                                              |       |
@@ -285,6 +286,7 @@ Scenario Outline: Create a LOG event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -295,7 +297,6 @@ Scenario Outline: Create a LOG event
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | caseRetention | totalSentence | text        | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:17:00}} | {{seq}}232  | {{seq}}1232 | LOG    |         | log text     |               |               | LOG         |       |
@@ -307,6 +308,7 @@ Scenario Outline: Create a SetReportingRestriction event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -317,7 +319,6 @@ Scenario Outline: Create a SetReportingRestriction event
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                                                                         | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:18:00}} | {{seq}}233 | {{seq}}1233 | 2198  | 3933    | text {{seq}} |               |               | Judge directed on reporting restrictions                                     |       |
@@ -338,6 +339,7 @@ Scenario Outline: Create a SetInterpreterUsed event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -349,7 +351,6 @@ Scenario Outline: Create a SetInterpreterUsed event
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                        | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:22:00}} | {{seq}}244 | {{seq}}1244 | 2917  | 3979    | text {{seq}} |               |               | Interpreter sworn-in        |       |
@@ -362,6 +363,7 @@ Scenario Outline: Create a TranscriptionRequest event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -372,7 +374,6 @@ Scenario Outline: Create a TranscriptionRequest event
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                            | notes |
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text {{seq}} |               |               | Sentence Transcription Required |       |
@@ -384,6 +385,7 @@ Scenario Outline: Create a Sentencing event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -394,7 +396,6 @@ Scenario Outline: Create a Sentencing event
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type    | subType | eventText                  | caseRetention | totalSentence | text                                                                                           | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010    |         | [Defendant: DEFENDANT ONE] |  4            |  26Y0M0D      | Sentence Transcription Required |       |
@@ -511,6 +512,7 @@ Scenario Outline: Create a DarStart event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -520,7 +522,6 @@ Scenario Outline: Create a DarStart event
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text            | notes |
@@ -538,6 +539,7 @@ Scenario Outline: Create a DarStop event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -548,7 +550,6 @@ Scenario Outline: Create a DarStop event
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text              | notes                  |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-12:06:00}} | {{seq}}372 | {{seq}}1372 | 1200  |         | text {{seq}} |               |               | Hearing ended     |                        |
@@ -656,7 +657,7 @@ Scenario Outline: Create a StopAndClose event for non-custodial sentence
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
    And I select column eve_id from table EVENT where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-   And I see table CASE_MANAGEMENT_RETENTION column total_sentence is "null" where eve_id = "{{eve_id}}" 
+   And I see table CASE_MANAGEMENT_RETENTION column total_sentence is "" where eve_id = "{{eve_id}}" 
    And I see table CASE_MANAGEMENT_RETENTION column fixed_policy_key is "<caseRetention>" where eve_id = "{{eve_id}}" 
    And I select column cmr_id from table CASE_MANAGEMENT_RETENTION where eve_id = "{{eve_id}}"
    And I see table CASE_RETENTION column total_sentence is "null" where cmr_id = "{{cmr_id}}" 

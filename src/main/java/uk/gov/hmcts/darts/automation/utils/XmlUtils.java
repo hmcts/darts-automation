@@ -26,13 +26,29 @@ public class XmlUtils {
 		
 	}
 	
-	public static String extractXmlValue(String xml, String path) {
-		String returnValue = "";
-		XmlPath xmlPath = new XmlPath(xml);
-		returnValue = xmlPath.getString(path);
-		log.info("xml at {} is {}", path, returnValue);
-		return returnValue;
+	public static String extractValue(String xml, String tag) {
+		String result = "";
+		String[] split1 = xml.split("<" + tag + "[^>]*>", 2);
+		if (split1.length > 1) {
+			String[] split2 = split1[1].split("</" + tag + ">");
+			if (split2.length > 1) {
+				result = split2[0];
+			}
+		}
+		return result;
 	}
+	
+	public static String removeWhitespace(String xml) {
+		return xml.trim().replaceAll("((\s|\n)*)<", "<");
+	}
+	
+//	public static String extractXmlValue(String xml, String path) {
+//		String returnValue = "";
+//		XmlPath xmlPath = new XmlPath(xml);
+//		returnValue = xmlPath.getString(path);
+//		log.info("xml at {} is {}", path, returnValue);
+//		return returnValue;
+//	}
     
     public static String buildAddEventXml(String messageId,
     		String type,
@@ -622,17 +638,19 @@ public class XmlUtils {
 		Assertions.assertEquals("<messageId>string1</messageId>" + LINE_END
 				+ "<type>string2</type>" + LINE_END
 				+ "<subType>string3</subType>" + LINE_END
-				+ "<document ID=\"string4\" Y=\"2023\" M=\"11\" D=\"10\" H=\"12\" MIN=\"34\" S=\"45\">" + LINE_END
-				+ "  &lt;CourtHouse&gt;string5&lt;/CourtHouse&gt;" + LINE_END
-				+ "  &lt;CourtRoom&gt;string6&lt;/CourtRoom&gt;" + LINE_END
-				+ "  &lt;Case_numbers&gt;" + LINE_END
-				+ "    &lt;Case_number&gt;string7&lt;/Case_number&gt;" + LINE_END
-				+ "  &lt;/Case_numbers&gt;" + LINE_END
-				+ "  &lt;EventText&gt;string8&lt;/EventText&gt;" + LINE_END
-				+ "  &lt;RetentionPolicy&gt;" + LINE_END
-				+ "    &lt;CaseRetentionFixedPolicy&gt;string10&lt;/CaseRetentionFixedPolicy&gt;" + LINE_END
-				+ "    &lt;CaseTotalSentence&gt;string11&lt;/CaseTotalSentence&gt;" + LINE_END
-				+ "  &lt;/RetentionPolicy&gt;" + LINE_END
+				+ "<document>" + LINE_END
+				+ "  &lt;be:DartsEvent xmlns:be=\"urn:integration-cjsonline-gov-uk:pilot:entities\" ID=\"string4\" Y=\"2023\" M=\"11\" D=\"10\" H=\"12\" MIN=\"34\" S=\"45\"&gt;" + LINE_END
+				+ "    &lt;be:CourtHouse&gt;string5&lt;/be:CourtHouse&gt;" + LINE_END
+				+ "    &lt;be:CourtRoom&gt;string6&lt;/be:CourtRoom&gt;" + LINE_END
+				+ "    &lt;be:Case_numbers&gt;" + LINE_END
+				+ "      &lt;be:Case_number&gt;string7&lt;/be:Case_number&gt;" + LINE_END
+				+ "    &lt;/be:Case_numbers&gt;" + LINE_END
+				+ "    &lt;be:EventText&gt;string8&lt;/be:EventText&gt;" + LINE_END
+				+ "    &lt;be:RetentionPolicy&gt;" + LINE_END
+				+ "      &lt;be:CaseRetentionFixedPolicy&gt;string10&lt;/be:CaseRetentionFixedPolicy&gt;" + LINE_END
+				+ "      &lt;be:CaseTotalSentence&gt;string11&lt;/be:CaseTotalSentence&gt;" + LINE_END
+				+ "    &lt;/be:RetentionPolicy&gt;" + LINE_END
+				+ "  &lt;/be:DartsEvent&gt;" + LINE_END
 				+ "</document>", 
 				buildAddEventXml("string1", "string2", "string3", "string4", "string5", "string6", "string7", "string8", "2023-11-10T12:34:45Z", "string10", "string11"));
     }
