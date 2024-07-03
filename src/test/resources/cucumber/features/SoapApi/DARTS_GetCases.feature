@@ -1,3 +1,4 @@
+@regression
 Feature: GetCases using SOAP
 
 @SOAP_API @GET_CASES
@@ -58,7 +59,7 @@ Scenario: getCases authentication from XHIBIT fails
 	
 
 
-@SOAP_API @GET_CASES @test
+@SOAP_API @GET_CASES
 Scenario Outline: SOAP getCases verifying result
 	Given I use caseNumber <caseNumber>
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>1"
