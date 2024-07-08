@@ -145,7 +145,7 @@ dependencies {
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 	
 	// Rest assured
-	implementation 'io.rest-assured:rest-assured:5.4.0'
+	implementation 'io.rest-assured:rest-assured:5.5.0'
 	
 	implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
 	
