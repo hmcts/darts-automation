@@ -66,8 +66,8 @@ public class XmlString {
 * 
 */
 	public XmlString addTag(String tag, String attributes, String value) {
-		if (value != null && !value.isBlank()) {
-			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
+		if (value != null && !value.equalsIgnoreCase("MISSING")) {
+			if (value == null || value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
 			xmlString = xmlString + sep() + "<" + tag + " " + Substitutions.substituteValue(attributes) + ">" + Substitutions.substituteValue(value) + "</" + tag + ">"; 
@@ -76,8 +76,8 @@ public class XmlString {
 		return this;
 	}
 	public XmlString addTag(String tag, String value) {
-		if (value != null && !value.isBlank()) {
-			if (value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
+		if (value != null && !value.equalsIgnoreCase("MISSING")) {
+			if (value == null || value.equalsIgnoreCase("BLANK") || value.equalsIgnoreCase("EMPTY")) {
 				value = "";
 			}
 			xmlString = xmlString + sep() + "<" + tag + ">" + Substitutions.substituteValue(value) + "</" + tag + ">"; 
@@ -100,32 +100,32 @@ public class XmlString {
 	}
 	
 	public XmlString addTags(String tag, String values, String separator) {
-		if (!values.isBlank()) {
+//		if (!values.isBlank()) {
 			addTags(tag, values.split(separator));
-		}
+//		}
 		return this;
 	}
 	
 	public XmlString addTags(String tag, String values) {
-		if (!values.isBlank()) {
+//		if (!values.isBlank()) {
 			addTags(tag, split(values));
-		}
+//		}
 		return this;
 	}
 	
 	public XmlString addTagGroup(String parent, String tag, String[] values) {
-		if (values.length > 0) {
+//		if (values.length > 0) {
 			addTag(parent);
 			addTags(tag, values);
 			addEndTag();
-		}
+//		}
 		return this;
 	}
 	
 	public XmlString addTagGroup(String parent, String tag, String values, String separator) {
-		if (!values.isBlank()) {
+//		if (!values.isBlank()) {
 			addTagGroup(parent, tag, values.split(separator));
-		}
+//		}
 		return this;
 	}
 	

@@ -1,7 +1,6 @@
-@DMP-1048-RequestAudio
 Feature: Request Audio
 
-@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-2121 @regression
+@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-1048 @DMP-2121 @DMP-2562 @regression
 Scenario: Request Audio data creation
 
   Given I create a case
@@ -26,7 +25,7 @@ Scenario: Request Audio data creation
     | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
     | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
 
-@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @regression
+@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-1048 @regression
 Scenario: Request Audio with Request Type Playback Only
 
   Given I am logged on to DARTS as a transcriber user
@@ -79,7 +78,7 @@ Scenario: Request Audio with Request Type Playback Only
   And I see "We are preparing your audio." on the page
   And I see "When it is ready we will send an email to Transcriber and notify you in the DARTS application." on the page
 
-@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @regression
+@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-1048 @regression
 Scenario: Request Audio with Request Type Download
 
   Given I am logged on to DARTS as a transcriber user
@@ -284,7 +283,7 @@ Scenario: Request Audio by setting Start Time and End Time
   And I see "We are preparing your audio." on the page
   And I see "When it is ready we will send an email to Transcriber and notify you in the DARTS application." on the page
 
-@DMP-658
+@DMP-658 @regression
 Scenario Outline: Request Audio Events only available for hearing
   Given I am logged on to DARTS as an external user
   And I click on the "Search" link
@@ -292,10 +291,10 @@ Scenario Outline: Request Audio Events only available for hearing
   And I set "Case ID" to "Case1009"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
-    | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
-    | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
-    | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
+    | Case ID                                                  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
+    | CASE1009                                                 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
+    | !\nRestriction\nThere are restrictions against this case | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*     |
+    | CASE1009                                                 | TS0002     | ROOM_A    |          |              |
 
   #Case Details
 
@@ -308,7 +307,8 @@ Scenario Outline: Request Audio Events only available for hearing
   And I see "ROOM_A" on the page
 
   When I select the "Events only" radio button
-  And I check the checkbox in the same row as "13:07:33" "Interpreter sworn-in"
+  And I check the checkbox in the same row as "14:07:33" "Interpreter sworn-in"
+  And I set the time fields below "End Time" to "14:08:33"
   And I select the "Playback Only" radio button
   And I press the "Get Audio" button
 
@@ -339,8 +339,8 @@ Scenario Outline: Request Audio Events only available for hearing
   And I see "We are preparing your audio." on the page
   And I see "When it is ready we will send an email to" on the page
   Examples:
-    | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                                           |
-    | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 13:07:33  | 13:07:33 | Restriction: Judge directed on reporting restrictions |
+    | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                              |
+    | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 14:07:33  | 14:08:33 | There are restrictions against this case |
 
 @DMP-692
 Scenario Outline: Preview Audio Player Loading
@@ -350,10 +350,10 @@ Scenario Outline: Preview Audio Player Loading
   And I set "Case ID" to "Case1009"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
-    | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
-    | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
-    | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
+    | Case ID                                                  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
+    | CASE1009                                                 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
+    | !\nRestriction\nThere are restrictions against this case | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*     |
+    | CASE1009                                                 | TS0002     | ROOM_A    |          |              |
 
   #Case Details
 
@@ -366,7 +366,7 @@ Scenario Outline: Preview Audio Player Loading
   And I see "ROOM_A" on the page
 
   When I select the "Audio preview and events" radio button
-  And I press the "Preview Audio" button in the same row as "<StartTime>" "<EndTime>"
+  And I press the "Play preview" button in the same row as "<StartTime>" "<EndTime>"
   Then I see "<Text>" in the same row as "<StartTime>" "<EndTime>"
   Examples:
     | StartTime            | EndTime            | Text                                 |
@@ -380,10 +380,10 @@ Scenario: Hearing table sorted with time
   And I set "Case ID" to "Case1009"
   And I press the "Search" button
   Then I verify the HTML table contains the following values
-    | Case ID                                                               | Courthouse | Courtroom | Judge(s) | Defendant(s) |
-    | CASE1009                                                              | Swansea    | Multiple  | Mr Judge | Jow Bloggs    |
-    | !\nRestriction\nRestriction: Judge directed on reporting restrictions | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*      |
-    | CASE1009                                                              | Liverpool  | ROOM_A    |          |               |
+    | Case ID                                                  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
+    | CASE1009                                                 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
+    | !\nRestriction\nThere are restrictions against this case | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*     |
+    | CASE1009                                                 | TS0002     | ROOM_A    |          |              |
 
   #Case Details
 
@@ -391,17 +391,17 @@ Scenario: Hearing table sorted with time
 
   #Hearing Details
 
-  Then I click on "15 Aug 2023" in the same row as "ROOM_A"
+  And I click on "15 Aug 2023" in the same row as "ROOM_A"
   And I see "Swansea" on the page
   And I see "ROOM_A" on the page
-
   Then I verify the HTML table contains the following values
     | *NO-CHECK* | Time                 | Event                | Text                    |
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
     | *NO-CHECK* | Start time: 10:00:00 | Preview Audio        | End time: 11:14:05      |
-  Then I click on "Time" in the table header
+
+  When I click on "Time" in the table header
   Then I verify the HTML table contains the following values
     | *NO-CHECK* | Time                 | Event                | Text                    |
     | *NO-CHECK* | Start time: 10:00:00 | Preview Audio        | End time: 11:14:05      |
@@ -410,20 +410,21 @@ Scenario: Hearing table sorted with time
     | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
 
 @DMP-2121
-  Scenario: Update preview button on hearing screen
-    Given I am logged on to DARTS as a requester user
-    When I click on the "Search" link
-    And I set "Case ID" to "B{{seq}}006"
-    And I press the "Search" button
-    And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-    And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-    And I see "{{seq}}ABC-6" on the page
+Scenario: Update preview button on hearing screen
 
-    Then I click on the "Play preview" link
+  Given I am logged on to DARTS as a requester user
+  When I click on the "Search" link
+  And I set "Case ID" to "B{{seq}}006"
+  And I press the "Search" button
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
+  And I see "{{seq}}ABC-6" on the page
+  Then I see "Play preview" on the page
 
   @DMP-2300
-    #NOTE:DMP-2300 NEEDS TO RUN STRAIGHT AFTER THE DATA CREATION TO GET THE PREVIEW MESSAGE
   Scenario: Audio is not available to preview message.
+
+  #NOTE: DMP-2300 NEEDS TO RUN STRAIGHT AFTER THE DATA CREATION TO GET THE PREVIEW MESSAGE
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
   And I set "Case ID" to "B{{seq}}006"
@@ -435,7 +436,7 @@ Scenario: Hearing table sorted with time
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
   Then I see "This audio is not currently available in DARTS, please try again later." on the page
 
-  @DMP-2562
+  @DMP-2562 @regression
   Scenario: Request download audio for Super Admin
     When I am logged on to DARTS as an Admin user
     And I click on the "Search" link
@@ -444,7 +445,7 @@ Scenario: Hearing table sorted with time
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
-      | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6  | Judge B{{seq}}-6 | Def B{{seq}}-6 |
+      | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | Judge B{{seq}}-6 | Def B{{seq}}-6 |
 
     When I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
@@ -462,11 +463,11 @@ Scenario: Hearing table sorted with time
     And I see "{{displaydate}}" on the page
     And I see "10:01:00" on the page
     And I see "10:02:00" on the page
+
     When I press the "Confirm" button
     Then I see "Your order is complete" on the page
     And I see "B{{seq}}006" on the page
     And I see "Harrow Crown Court" on the page
-    And I see "testdefendersix" on the page
     And I see "{{displaydate}}" on the page
     And I see "10:01:00" on the page
     And I see "10:02:00" on the page
@@ -474,16 +475,16 @@ Scenario: Hearing table sorted with time
     And I see "When it is ready we will send an email to Darts Admin and notify you in the DARTS application." on the page
     And I see "Return to hearing date" on the page
     And I see "Back to search results" on the page
-    And I click on the "Back to search results" link
+    Then I click on the "Back to search results" link
 
     When I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
-    Then I see "Events and audio recordings" on the page
+    And I see "Events and audio recordings" on the page
     And I set the time fields of "Start Time" to "10:01:00"
     And I set the time fields of "End Time" to "10:02:00"
     And I select the "Download" radio button
     And I press the "Get Audio" button
-    Then I see "Confirm your Order" on the page
+    And I see "Confirm your Order" on the page
     And I see "Case details" on the page
     And I see "B{{seq}}006" on the page
     And I see "Harrow Crown Court" on the page
@@ -492,4 +493,5 @@ Scenario: Hearing table sorted with time
     And I see "{{displaydate}}" on the page
     And I see "10:01:00" on the page
     And I see "10:02:00" on the page
-    When I press the "Confirm" button
+    And I press the "Confirm" button
+    Then I see "Your order is complete" on the page

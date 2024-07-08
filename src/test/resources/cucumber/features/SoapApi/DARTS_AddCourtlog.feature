@@ -1,6 +1,6 @@
 Feature: Cases EndPoint using SOAP
 
-@COURTLOG @SOAP_API @regression @broken
+@COURTLOG @SOAP_API @regression
 Scenario Outline: SOAP courtLog where case exists
 	Given I create a case
 	| courthouse   | case_number  | defendants   | judges   | prosecutors   | defenders   |
@@ -29,7 +29,7 @@ Examples:
 	| Harrow Crown Court | room {{seq}} | T{{seq}}121 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 
 
-@COURTLOG @SOAP_API @regression @broken
+@COURTLOG @SOAP_API @regression
 Scenario Outline: SOAP courtLog where case dooes not exist and the courtlog creates the case
 	 When I add courtlogs
 	| courthouse   | courtroom   | case_numbers   | text                  | date       | time     |
@@ -55,7 +55,7 @@ Examples:
 	| Harrow Crown Court | room {{seq}} | T{{seq}}122 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 
 @COURTLOG @SOAP_API @regression
-Scenario: addLiogEntry successful baseline
+Scenario: addLogEntry successful baseline
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addLogEntry and body:
 	"""
@@ -74,7 +74,7 @@ Scenario: addLiogEntry successful baseline
 	
 
 @COURTLOG @SOAP_API @regression
-Scenario: addLiogEntry with invalid court fails
+Scenario: addLogEntry with invalid court fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addLogEntry and body:
 	"""
@@ -90,3 +90,22 @@ Scenario: addLiogEntry with invalid court fails
 </document>
 	"""
 	Then the API status code is 404
+
+@COURTLOG @SOAP_API @regression
+Scenario: addLogEntry with authenticating from XHIBIT fails
+  Given I authenticate from the XHIBIT source system
+	When I call POST SOAP API using soap action addLogEntry and body:
+	"""
+<document xmlns="">
+<![CDATA[<log_entry Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="11" MIN="00" S="03">
+  <courthouse>Harrow Crown Court</courthouse>
+  <courtroom>room 9335</courtroom>
+  <case_numbers>
+    <case_number>T0000000</case_number>
+  </case_numbers>
+  <text>Log Entry {{seq}} text</text>
+</log_entry>]]>
+</document>
+	"""
+	Then the API status code is 500
+	

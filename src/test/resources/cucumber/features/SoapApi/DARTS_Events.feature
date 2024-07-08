@@ -1,24 +1,31 @@
 @DMP-3060
-Feature: Test operation of post events
+Feature: Test operation of SOAP events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
+			
+			All event types can be added to the same case (though only 1 stopAndClose)
+			interpreter_used field is true where appropriate
+			hearing_is_actual field on the hearing is set to true
+			handler, event_name & event_text is as expected
 
-@EVENT_API @SOAP_EVENT @regression
-Scenario Outline: Create a case
-  Given I create a case
-    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
-    | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
+@EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
+Scenario Outline: Create a case for event tests
+  Given I add a daily list
+  | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
+  | 58b211f4-426d-81be-20{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    And I process the daily list for courthouse <courthouse>
 Examples:
-  | courthouse         | caseNumbers  |
-  | Harrow Crown Court | T{{seq}}201  | 
+  | courthouse         | courtroom    | caseNumbers  |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201  | 
 
 
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
 Scenario Outline: Create standard events
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -29,7 +36,6 @@ Scenario Outline: Create standard events
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type   | subType | eventText    | caseRetention | totalSentence | text                                                                                                                                   | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:00:00}} | {{seq}}001 | {{seq}}1001 | 1000   | 1001    | text {{seq}} |               |               | Offences put to defendant                                                                                                              |       |
@@ -79,7 +85,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:14:40}} | {{seq}}045 | {{seq}}1045 | 2198   | 3921    | text {{seq}} |               |               | Prosecution application: Adjourn                                                                                                       |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:15:00}} | {{seq}}046 | {{seq}}1046 | 2198   | 3931    | text {{seq}} |               |               | Prosecution application: Break fixture                                                                                                 |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:15:20}} | {{seq}}047 | {{seq}}1047 | 2198   | 3932    | text {{seq}} |               |               | Defence application: Break fixture                                                                                                     |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:25:00}} | {{seq}}251 | {{seq}}1251 | 2198   | 3934    | text {{seq}} | 4             | 26Y0M0D       | Judge passed sentence                                                                          |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:25:00}} | {{seq}}251 | {{seq}}1251 | 2198   | 3934    | text {{seq}} | 4             | 26Y0M0D       | Judge passed sentence                                                                                                                  |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:15:40}} | {{seq}}048 | {{seq}}1048 | 2198   | 3935    | text {{seq}} |               |               | Judge directed Prosecution to obtain a report                                                                                          |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:16:00}} | {{seq}}049 | {{seq}}1049 | 2198   | 3936    | text {{seq}} |               |               | Judge directed Defence to obtain a medical report                                                                                      |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:16:20}} | {{seq}}050 | {{seq}}1050 | 2198   | 3937    | text {{seq}} |               |               | Judge directed Defence to obtain a psychiatric report                                                                                  |       |
@@ -138,14 +144,14 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:34:00}} | {{seq}}103 | {{seq}}1103 | 20198  | 13927   | text {{seq}} |               |               | Defendant ill or otherwise unfit to proceed                                                                                            |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:34:20}} | {{seq}}104 | {{seq}}1104 | 20198  | 13928   | text {{seq}} |               |               | Defendant not produced by PECS                                                                                                         |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:34:40}} | {{seq}}105 | {{seq}}1105 | 20198  | 13929   | text {{seq}} |               |               | Defendant absent - unable to proceed as defendant not notified of place and time of hearing                                            |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:35:00}} | {{seq}}106 | {{seq}}1106 | 20198  | 13930   | text {{seq}} |               |               | Defence increased time estimate - insufficient time for trial to start                                                              |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:35:00}} | {{seq}}106 | {{seq}}1106 | 20198  | 13930   | text {{seq}} |               |               | Defence increased time estimate - insufficient time for trial to start                                                                 |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:35:20}} | {{seq}}107 | {{seq}}1107 | 20198  | 13931   | text {{seq}} |               |               | Defence advocate engaged in other trial                                                                                                |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:35:40}} | {{seq}}108 | {{seq}}1108 | 20198  | 13932   | text {{seq}} |               |               | Defence advocate failed to attend                                                                                                      |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:36:00}} | {{seq}}109 | {{seq}}1109 | 20198  | 13933   | text {{seq}} |               |               | Defence dismissed advocate                                                                                                             |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:36:20}} | {{seq}}110 | {{seq}}1110 | 20198  | 13934   | text {{seq}} |               |               | Another case over-ran                                                                                                                  |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:36:40}} | {{seq}}111 | {{seq}}1111 | 20198  | 13935   | text {{seq}} |               |               | Judge / magistrate availability                                                                                                        |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:37:00}} | {{seq}}112 | {{seq}}1112 | 20198  | 13936   | text {{seq}} |               |               | Case not reached / insufficient cases drop out / floater not reached                                                                   |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:37:20}} | {{seq}}113 | {{seq}}1113 | 20198  | 13937   | text {{seq}} |               |               | Equipment / accommodation                                                                                                       |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:37:20}} | {{seq}}113 | {{seq}}1113 | 20198  | 13937   | text {{seq}} |               |               | Equipment / accommodation                                                                                                              |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:37:40}} | {{seq}}114 | {{seq}}1114 | 20198  | 13938   | text {{seq}} |               |               | No interpreter available                                                                                                               |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:38:00}} | {{seq}}115 | {{seq}}1115 | 20198  | 13939   | text {{seq}} |               |               | Insufficient jurors available                                                                                                          |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:38:20}} | {{seq}}116 | {{seq}}1116 | 20198  | 13940   | text {{seq}} |               |               | Outstanding committals in a magistrates court                                                                                          |       |
@@ -192,11 +198,11 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:52:00}} | {{seq}}157 | {{seq}}1157 | 20935  | 10630   | text {{seq}} |               |               | Witness Read                                                                                                                           |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:52:20}} | {{seq}}158 | {{seq}}1158 | 20935  | 10631   | text {{seq}} |               |               | Defendant Read                                                                                                                         |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:52:40}} | {{seq}}159 | {{seq}}1159 | 20935  | 10632   | text {{seq}} |               |               | Interpreter Read                                                                                                                       |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:53:00}} | {{seq}}160 | {{seq}}1160 | 20935  | 10633   | text {{seq}} |               |               | Appellant Read                                                                                                                          |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:53:00}} | {{seq}}160 | {{seq}}1160 | 20935  | 10633   | text {{seq}} |               |               | Appellant Read                                                                                                                         |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:53:20}} | {{seq}}161 | {{seq}}1161 | 20936  | 10630   | text {{seq}} |               |               | Witness Read                                                                                                                           |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:53:40}} | {{seq}}162 | {{seq}}1162 | 20936  | 10631   | text {{seq}} |               |               | Defendant Read                                                                                                                         |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:54:00}} | {{seq}}163 | {{seq}}1163 | 20936  | 10632   | text {{seq}} |               |               | Interpreter Read                                                                                                                       |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:54:20}} | {{seq}}164 | {{seq}}1164 | 20936  | 10633   | text {{seq}} |               |               | Appellant Read                                                                                                                          |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:54:20}} | {{seq}}164 | {{seq}}1164 | 20936  | 10633   | text {{seq}} |               |               | Appellant Read                                                                                                                         |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937  | 10624   | text {{seq}} |               |               | <Sentence remarks filmed>                                                                                                              | new   |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937  | 10625   | text {{seq}} |               |               | <Sentence remarks not filmed>                                                                                                          | new   |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:55:20}} | {{seq}}167 | {{seq}}1167 | 21200  | 10311   | text {{seq}} |               |               | Bail Conditions Ceased - sentence deferred                                                                                             |       |
@@ -272,11 +278,6 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:16:00}} | {{seq}}229 | {{seq}}1229 | 302004 |         | text {{seq}} |               |               | Case not reserved                                                                                                                      |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:16:20}} | {{seq}}230 | {{seq}}1230 | 407131 |         | text {{seq}} |               |               | Case to be listed                                                                                                                      |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:16:40}} | {{seq}}231 | {{seq}}1231 | 407132 |         | text {{seq}} |               |               | Case to be listed                                                                                                                      |       |
-@broken
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                                                                                                                                   | notes |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:54:40}} | {{seq}}165 | {{seq}}1165 | 20937 | 10624   | text {{seq}} |               |               | [Sentence remarks filmed]                                                                                                              |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-10:55:00}} | {{seq}}166 | {{seq}}1166 | 20937 | 10625   | text {{seq}} |               |               | [Sentence remarks not filmed]                                                                                                          |       |
 
 
 @EVENT_API @SOAP_EVENT @regression
@@ -285,6 +286,7 @@ Scenario Outline: Create a LOG event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -295,7 +297,6 @@ Scenario Outline: Create a LOG event
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId       | eventId     | type   | subType | eventText    | caseRetention | totalSentence | text        | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:17:00}} | {{seq}}232  | {{seq}}1232 | LOG    |         | log text     |               |               | LOG         |       |
@@ -307,6 +308,7 @@ Scenario Outline: Create a SetReportingRestriction event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -317,7 +319,6 @@ Scenario Outline: Create a SetReportingRestriction event
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                                                                         | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:18:00}} | {{seq}}233 | {{seq}}1233 | 2198  | 3933    | text {{seq}} |               |               | Judge directed on reporting restrictions                                     |       |
@@ -338,6 +339,7 @@ Scenario Outline: Create a SetInterpreterUsed event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
@@ -349,7 +351,6 @@ Scenario Outline: Create a SetInterpreterUsed event
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                        | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:22:00}} | {{seq}}244 | {{seq}}1244 | 2917  | 3979    | text {{seq}} |               |               | Interpreter sworn-in        |       |
@@ -362,6 +363,7 @@ Scenario Outline: Create a TranscriptionRequest event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -372,18 +374,18 @@ Scenario Outline: Create a TranscriptionRequest event
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                            | notes |
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text {{seq}} |               |               | Sentence Transcription Required |       |
 
   
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @SENTENCING_EVENT @regression
 Scenario Outline: Create a Sentencing event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -394,10 +396,9 @@ Scenario Outline: Create a Sentencing event
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type    | subType | eventText                  | caseRetention | totalSentence | text                                                                                           | notes |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010    |         | text {{seq}}               |               |               | Sentence Transcription Required |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010    |         | [Defendant: DEFENDANT ONE] |  4            |  26Y0M0D      | Sentence Transcription Required |       |
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:25:20}} | {{seq}}252 | {{seq}}1252 | 40730   | 10808   | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       | Case Level Criminal Appeal Result                                                              |       |
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:25:40}} | {{seq}}253 | {{seq}}1253 | 40731   | 10808   | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       | Offence Level Criminal Appeal Result                                                           |       |
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:26:00}} | {{seq}}254 | {{seq}}1254 | 40732   | 10808   | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       | Offence Level Criminal Appeal Result with alt offence                                          |       |
@@ -511,6 +512,7 @@ Scenario Outline: Create a DarStart event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -520,7 +522,6 @@ Scenario Outline: Create a DarStart event
    And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text            | notes |
@@ -538,6 +539,7 @@ Scenario Outline: Create a DarStop event
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
     And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
+    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -548,7 +550,6 @@ Scenario Outline: Create a DarStop event
    And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
    And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-   And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text              | notes                  |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-12:06:00}} | {{seq}}372 | {{seq}}1372 | 1200  |         | text {{seq}} |               |               | Hearing ended     |                        |
@@ -558,10 +559,11 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}1249 | 30600 |         | text {{seq}} |               |               | Hearing ended     | ex StopAndCloseHandler |
 
   
-@EVENT_API @SOAP_EVENT @regression @test1
-Scenario Outline: Create a StopAndClose event
-													Only 1 stop & close event per case seems to work
-													Creates a courtroom & hearing for each case
+@EVENT_API @SOAP_EVENT @regression
+Scenario Outline: Create a StopAndClose event for custodial sentence - not life
+															retention is 7 years or length of sentence
+													Only 1 stop & close event per case works due to retentions
+													Test creates a courtroom & hearing for each case
   Given I create a case
     | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
     | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
@@ -584,17 +586,89 @@ Scenario Outline: Create a StopAndClose event
    And I see table CASE_MANAGEMENT_RETENTION column fixed_policy_key is "<caseRetention>" where eve_id = "{{eve_id}}" 
    And I select column cmr_id from table CASE_MANAGEMENT_RETENTION where eve_id = "{{eve_id}}"
    And I see table CASE_RETENTION column total_sentence is "<totalSentence>" where cmr_id = "{{cmr_id}}" 
-   And I see table CASE_RETENTION column fixed_policy_key is "<caseRetention>" where cmr_id = "{{cmr_id}}" 
+   And I see table CASE_RETENTION column fixed_policy_key is "<caseRetention>" where cmr_id = "{{cmr_id}}"
+   And I see table CASE_RETENTION column retain_until_ts is "{{retention-<actualRetention>}}" where cmr_id = "{{cmr_id}}" 
+
 Examples:
-  | courthouse         | courtroom     | caseNumbers  | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text         | notes             |
-#  | Harrow Crown Court | Room {{seq}}A | T{{seq}}201A | {{timestamp-11:23:00}} | {{seq}}601 | {{seq}}1601 | 3000  |         | text {{seq}} | 1             | 1Y1M1D        | Archive Case |                   |
-#  | Harrow Crown Court | Room {{seq}}B | T{{seq}}201B | {{timestamp-11:23:00}} | {{seq}}602 | {{seq}}1602 | 3000  |         | text {{seq}} | 2             | 2Y2M2D        | Archive Case |                   |
-  | Harrow Crown Court | Room {{seq}}C | T{{seq}}201C | {{timestamp-11:23:00}} | {{seq}}603 | {{seq}}1603 | 3000  |         | text {{seq}} | 3             | 3Y3M3D        | Archive Case |                   |
-#  | Harrow Crown Court | Room {{seq}}D | T{{seq}}201D | {{timestamp-11:23:00}} | {{seq}}604 | {{seq}}1604 | 3000  |         | text {{seq}} | 4             | 4Y4M4D        | Archive Case |                   |
-#  | Harrow Crown Court | Room {{seq}}E | T{{seq}}201E | {{timestamp-12:07:00}} | {{seq}}611 | {{seq}}1611 | 30300 |         | text {{seq}} | 1             | 1Y1M1D        | Case closed  |                   |
-#  | Harrow Crown Court | Room {{seq}}F | T{{seq}}201F | {{timestamp-12:07:00}} | {{seq}}612 | {{seq}}1612 | 30300 |         | text {{seq}} | 2             | 2Y2M2D        | Case closed  |                   |
-  | Harrow Crown Court | Room {{seq}}G | T{{seq}}201G | {{timestamp-12:07:00}} | {{seq}}613 | {{seq}}1613 | 30300 |         | text {{seq}} | 3             | 3Y3M3D        | Case closed  |                   |
-#  | Harrow Crown Court | Room {{seq}}H | T{{seq}}201H | {{timestamp-12:07:00}} | {{seq}}614 | {{seq}}1614 | 30300 |         | text {{seq}} | 4             | 4Y4M4D        | Case closed  |                   |
+  | courthouse         | courtroom     | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text         | actualRetention   |
+  | Harrow Crown Court | Rm {{seq}}A13 | T{{seq}}213 | {{timestamp-11:23:00}} | {{seq}}613 | {{seq}}1613 | 3000  |         | text {{seq}} | 3             | 3Y3M3D        | Archive Case | 7Y0M0D            |
+  | Harrow Crown Court | Rm {{seq}}A14 | T{{seq}}214 | {{timestamp-11:23:00}} | {{seq}}614 | {{seq}}1614 | 3000  |         | text {{seq}} | 3             | 7Y3M7D        | Archive Case | 7Y3M7D            |
+  | Harrow Crown Court | Rm {{seq}}A23 | T{{seq}}223 | {{timestamp-12:07:00}} | {{seq}}623 | {{seq}}1623 | 30300 |         | text {{seq}} | 3             | 3Y3M3D        | Case closed  | 7Y0M0D            |
+  | Harrow Crown Court | Rm {{seq}}A24 | T{{seq}}224 | {{timestamp-12:07:00}} | {{seq}}624 | {{seq}}1624 | 30300 |         | text {{seq}} | 3             | 7Y3M7D        | Case closed  | 7Y3M7D            |
+  
+  
+@EVENT_API @SOAP_EVENT @regression
+Scenario Outline: Create a StopAndClose event for LIFE sentence
+													Difference from other sentencing event is 
+															table CASE_RETENTION column total_sentence is not set
+															retention is 99 years
+													Only 1 stop & close event per case works due to retentions
+													Test creates a courtroom & hearing for each case
+  Given I create a case
+    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
+    | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
+    And I authenticate from the XHIBIT source system
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+    And I see table darts.court_case column interpreter_used is "f" where cas_id = "{{cas.cas_id}}"
+    And I see table darts.court_case column case_closed_ts is "null" where cas_id = "{{cas.cas_id}}"
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column event_name is "<text>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column handler is "StopAndCloseHandler" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column case_closed_ts is "not null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
+   And I select column eve_id from table EVENT where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table CASE_MANAGEMENT_RETENTION column total_sentence is "<totalSentence>" where eve_id = "{{eve_id}}" 
+   And I see table CASE_MANAGEMENT_RETENTION column fixed_policy_key is "<caseRetention>" where eve_id = "{{eve_id}}" 
+   And I select column cmr_id from table CASE_MANAGEMENT_RETENTION where eve_id = "{{eve_id}}"
+#   And I see table CASE_RETENTION column total_sentence is "<totalSentence>" where cmr_id = "{{cmr_id}}" 
+   And I see table CASE_RETENTION column fixed_policy_key is "<caseRetention>" where cmr_id = "{{cmr_id}}"
+   And I see table CASE_RETENTION column retain_until_ts is "{{retention-<actualRetention>}}" where cmr_id = "{{cmr_id}}" 
+
+Examples:
+  | courthouse         | courtroom     | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text         | actualRetention   |
+  | Harrow Crown Court | Rm {{seq}}A15 | T{{seq}}215 | {{timestamp-11:23:00}} | {{seq}}615 | {{seq}}1615 | 3000  |         | text {{seq}} | 4             | 4Y4M4D        | Archive Case | 99Y0M0D           |
+  | Harrow Crown Court | Rm {{seq}}A25 | T{{seq}}225 | {{timestamp-12:07:00}} | {{seq}}625 | {{seq}}1625 | 30300 |         | text {{seq}} | 4             | 4Y4M4D        | Case closed  | 99Y0M0D           |
+  
+  
+@EVENT_API @SOAP_EVENT @regression
+Scenario Outline: Create a StopAndClose event for non-custodial sentence
+													Only 1 stop & close event per case works due to retentions
+													Test creates a courtroom & hearing for each case
+  Given I create a case
+    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
+    | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
+    And I authenticate from the XHIBIT source system
+  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
+    And I see table darts.court_case column interpreter_used is "f" where cas_id = "{{cas.cas_id}}"
+    And I see table darts.court_case column case_closed_ts is "null" where cas_id = "{{cas.cas_id}}"
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
+  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column event_name is "<text>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column handler is "StopAndCloseHandler" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column case_closed_ts is "not null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
+   And I select column eve_id from table EVENT where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
+   And I see table CASE_MANAGEMENT_RETENTION column total_sentence is "" where eve_id = "{{eve_id}}" 
+   And I see table CASE_MANAGEMENT_RETENTION column fixed_policy_key is "<caseRetention>" where eve_id = "{{eve_id}}" 
+   And I select column cmr_id from table CASE_MANAGEMENT_RETENTION where eve_id = "{{eve_id}}"
+   And I see table CASE_RETENTION column total_sentence is "null" where cmr_id = "{{cmr_id}}" 
+   And I see table CASE_RETENTION column fixed_policy_key is "<caseRetention>" where cmr_id = "{{cmr_id}}" 
+   And I see table CASE_RETENTION column retain_until_ts is "{{retention-<actualRetention>}}" where cmr_id = "{{cmr_id}}" 
+Examples:
+  | courthouse         | courtroom     | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text         | actualRetention   |
+  | Harrow Crown Court | Rm {{seq}}A11 | T{{seq}}211 | {{timestamp-11:23:00}} | {{seq}}611 | {{seq}}1611 | 3000  |         | text {{seq}} | 1             |               | Archive Case | 1Y0M0D            |
+  | Harrow Crown Court | Rm {{seq}}A12 | T{{seq}}212 | {{timestamp-11:23:00}} | {{seq}}612 | {{seq}}1612 | 3000  |         | text {{seq}} | 2             |               | Archive Case | 7Y0M0D            |
+  | Harrow Crown Court | Rm {{seq}}A21 | T{{seq}}221 | {{timestamp-12:07:00}} | {{seq}}621 | {{seq}}1621 | 30300 |         | text {{seq}} | 1             |               | Case closed  | 1Y0M0D            |
+  | Harrow Crown Court | Rm {{seq}}A22 | T{{seq}}222 | {{timestamp-12:07:00}} | {{seq}}622 | {{seq}}1622 | 30300 |         | text {{seq}} | 2             |               | Case closed  | 7Y0M0D            |
   
   
 @EVENT_API @SOAP_EVENT @regression
@@ -608,16 +682,16 @@ Scenario Outline: Create a Null event
    And I see table EVENT column COUNT(eve_id) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
 Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text    | notes |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}202 | {{timestamp-12:08:00}} | {{seq}}376 | {{seq}}1376 | 40790 |         | text {{seq}} |               |               | Results |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-12:08:00}} | {{seq}}376 | {{seq}}1376 | 40790 |         | text {{seq}} |               |               | Results |       |
 
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create case with an event
-  Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "<caseNumber>Z" and courthouse_name = "<courthouse>"
+  Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>"
   Given I authenticate from the CPP source system
   When  I create an event
     | message_id  | type   | sub_type  | event_id | courthouse   | courtroom   | case_numbers  | event_text     | date_time  | case_retention_fixed_policy | case_total_sentence |
-    | <msgId>1     | <type> | <subType> | <eventId>1        | <courthouse> | <courtroom> | <caseNumber>C | text {{seq}}C1 | <dateTime> | <caseRetention>             | <totalSentence>     |
-    | <msgId>1     | <type> | <subType> | <eventId>1        | <courthouse> | <courtroom> | <caseNumber>C | text {{seq}}C1 | <dateTime> | <caseRetention>             | <totalSentence>     |
+    | <msgId>1     | <type> | <subType> | <eventId>1        | <courthouse> | <courtroom> | <caseNumber> | text {{seq}}C1 | <dateTime> | <caseRetention>             | <totalSentence>     |
+    | <msgId>2     | <type> | <subType> | <eventId>2        | <courthouse> | <courtroom> | <caseNumber> | text {{seq}}C2 | <dateTime> | <caseRetention>             | <totalSentence>     |
 #    | <msgId>2     | <type> | <subType> | <eventId>2        | <courthouse> | <courtroom> | <caseNumber>D | text {{seq}}D1 | <dateTime> | <caseRetention>             | <totalSentence>     |
 #    | <msgId>3     | <type> | <subType> | <eventId>3        | <courthouse> | <courtroom> | <caseNumber>C,<caseNumber>D | text {{seq}}CD | <dateTime> | <caseRetention>             | <totalSentence>     |
   Then I see table COURTCASE column COUNT(cas_id) is "1" where cas.case_number = "<caseNumber>C" and courthouse_name = "<courthouse>"
@@ -625,12 +699,13 @@ Scenario Outline: Create case with an event
 
 Examples:
   | courthouse         | courtroom     | caseNumber  | dateTime               | msgId      | eventId     | type  | subType | eventText      | caseRetention | totalSentence | text                                                                                                                                   | notes |
-  | Harrow Crown Court | Room {{seq}}Z | T{{seq}}203 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}C1 |               |               | Case called on  |       |
+  | Harrow Crown Court | Room {{seq}}Z | T{{seq}}210 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}C1 |               |               | Case called on  |       |
 
 
 
 @EVENT_API @SOAP_API @DMP-2835 @regression @TODO
 Scenario: Event for 2 cases from CPP
+						messages for 2 cases differ between CPP & XHIBIT
   Given I authenticate from the CPP source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
@@ -641,7 +716,7 @@ Scenario: Event for 2 cases from CPP
     <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
     <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
     <be:CaseNumbers>
-      <be:CaseNumber>T{{seq}}204X,T{{seq}}204Y</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}251,T{{seq}}252</be:CaseNumber>
     </be:CaseNumbers>
     <be:EventText>text {{seq}} CD1</be:EventText>
   </be:DartsEvent>]]>
@@ -652,6 +727,7 @@ Scenario: Event for 2 cases from CPP
 
 @EVENT_API @SOAP_API @DMP-2960 @regression @TODO
 Scenario: Event for 2 cases from XHIBIT
+						messages for 2 cases differ between CPP & XHIBIT
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
@@ -662,8 +738,8 @@ Scenario: Event for 2 cases from XHIBIT
     <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
     <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
     <be:CaseNumbers>
-      <be:CaseNumber>T{{seq}}205V</be:CaseNumber>
-      <be:CaseNumber>T{{seq}}205W</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}253</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}254</be:CaseNumber>
     </be:CaseNumbers>
     <be:EventText>text {{seq}} CD2</be:EventText>
   </be:DartsEvent>]]>
@@ -684,7 +760,7 @@ Scenario: Verify that VIQ cannot create an event
     <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
     <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
     <be:CaseNumbers>
-      <be:CaseNumber>T{{seq}}206U</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}255</be:CaseNumber>
     </be:CaseNumbers>
     <be:EventText>text {{seq}} CD2</be:EventText>
   </be:DartsEvent>]]>
@@ -693,8 +769,9 @@ Scenario: Verify that VIQ cannot create an event
 	Then the API status code is 500
 
 @EVENT_API @SOAP_API @DMP-2960 @regression
-Scenario: Verify that a non-existant case is created
-  Given I authenticate from the XHIBIT source system
+Scenario: Verify that a case is created by an event if the case does not already exist
+  Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "T{{seq}}256" and courthouse_name = "Harrow Crown Court"
+    And I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
       <messageId>{{seq}}4015</messageId>
@@ -704,16 +781,17 @@ Scenario: Verify that a non-existant case is created
     <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
     <be:CourtRoom>Room {{seq}}U</be:CourtRoom>
     <be:CaseNumbers>
-      <be:CaseNumber>T{{seq}}207</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}256</be:CaseNumber>
     </be:CaseNumbers>
     <be:EventText>text {{seq}} CD2</be:EventText>
   </be:DartsEvent>]]>
 </document>
   """
 	Then the API status code is 200
+   And I see table EVENT column count(eve_id) is "1" where cas.case_number = "T{{seq}}256" and courthouse_name = "Harrow Crown Court"
 
 @EVENT_API @SOAP_API @DMP-2960 @regression
-Scenario: Verify that an invalid courthouse fails
+Scenario: Verify that event creation for an invalid courthouse fails
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
@@ -724,7 +802,7 @@ Scenario: Verify that an invalid courthouse fails
     <be:CourtHouse>Non Existant Court House</be:CourtHouse>
     <be:CourtRoom>Room {{seq}}C</be:CourtRoom>
     <be:CaseNumbers>
-      <be:CaseNumber>T{{seq}}206C</be:CaseNumber>
+      <be:CaseNumber>T{{seq}}257</be:CaseNumber>
     </be:CaseNumbers>
     <be:EventText>text {{seq}} CD2</be:EventText>
   </be:DartsEvent>]]>
@@ -738,24 +816,35 @@ Scenario Outline: Verify that a hearing courtroom can be modified by an event
 																									where a case is added via daily lists (so a hearing record exists)
 																									if the first event added is for a different courtroom
 																									 then the existing hearing should be updated with the new courtroom
+																									 ** n.b. Portal will be changed to ignore hearings where 'hearing_is_actual' is false
   Given I authenticate from the XHIBIT source system
   When I add a daily list
   | messageId                        | type | subType | documentName              | courthouse   | courtroom    | caseNumber   | startDate  | startTime | endDate    | timeStamp     |
-  | 58b211f4-426d-81be-00{{seq}}901  | DL   | DL      | DL {{date+0/}} {{seq}}901 | <courthouse> | <courtroom>E | <caseNumber> | {{date+0}} | 16:00     | {{date+0}} | {{timestamp}} |
+  | 58b211f4-426d-81be-00{{seq}}901  | DL   | DL      | DL {{date+0/}} {{seq}}901 | <courthouse> | <courtroom1> | <caseNumber> | {{date+0}} | 16:00     | {{date+0}} | {{timestamp}} |
    And I process the daily list for courthouse <courthouse>
-  Then I see table CASE_HEARING column hearing_is_actual is "f" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>E"
+  Then I see table CASE_HEARING column hearing_is_actual is "f" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom1>"
 
    And I create an event
-    | message_id  | type   | sub_type  | event_id   | courthouse   | courtroom    | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
-    | <msgId>2    | <type> | <subType> | <eventId>2 | <courthouse> | <courtroom>F | <caseNumber> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
-  Then I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>F"
-   And I see table CASE_HEARING column courtroom_name is "<courtroom>F" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>F"
-# Following line fails due to DMP-3252 adding a new hearing rather than updating the existing hearing to teh new courtroom
-# possibly verify that the hearing row is the same key if that is appropriate in the solution
-   And I see table CASE_HEARING column COUNT(courtroom_name) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>E"
+    | message_id  | type   | sub_type  | event_id   | courthouse   | courtroom    | case_numbers | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>2    | <type> | <subType> | <eventId>2 | <courthouse> | <courtroom2> | <caseNumber> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
+  Then I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom2>"
+   And I see table CASE_HEARING column hearing_is_actual is "f" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom1>"
+   And I see table EVENT column COUNT(eve_id) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom1>"
 
 Examples:
-  | courthouse         | courtroom    | caseNumber  | dateTime               | msgId      | eventId     | type   | subType | eventText     | caseRetention | totalSentence | text                                                                                                                                   | notes |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}208 | {{timestamp-10:00:00}} | {{seq}}450 | {{seq}}1450 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
+  | courthouse         | courtroom1    | courtroom2    | caseNumber  | dateTime               | msgId      | eventId     | type   | subType | eventText     | caseRetention | totalSentence | text                                                                                                                                   | notes |
+  | Harrow Crown Court | Room {{seq}}A | Room {{seq}}B | T{{seq}}258 | {{timestamp-10:00:00}} | {{seq}}450 | {{seq}}1450 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
 
 
+@EVENT_API @SOAP_EVENT @regression @DMP-1941 @DMP-1928
+Scenario Outline: Create Poll Check events
+These tests will help populate the relevant section of the DARTS Dynatrace Dashboard each time they are executed
+NB: The usual 'Then' step is missing as the 'When' step includes the assertion of the API response code
+  Given I authenticate from the <source> source system
+  When  I create an event
+    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
+  Examples:
+    | source | courthouse         | courtroom    | caseNumbers     | dateTime               | msgId        | eventId       | type   | subType | eventText         | caseRetention | totalSentence |
+    | CPP    | Harrow Crown Court | Room {{seq}} | T{{seq}}2070501 | {{timestamp-10:00:00}} | {{seq}}20705 | -{{seq}}20705 | 20705  |         | CPP Daily Test    |               |               |
+    | XHIBIT | Harrow Crown Court | Room {{seq}} | T{{seq}}2070501 | {{timestamp-10:01:01}} | {{seq}}20705 | {{seq}}20705  | 20705  |         | Xhibit Daily Test |               |               |

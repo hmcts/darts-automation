@@ -1,6 +1,6 @@
 Feature: Request Audio for transcribers
 
-  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1255 @DMP-1326 @DMP-1331 @DMP-1351
+  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1255 @DMP-1326 @DMP-1331 @DMP-1351 @regression
   Scenario: Request Transcription only data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors             | defenders             |
@@ -16,7 +16,7 @@ Feature: Request Audio for transcribers
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
       | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
 
-  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @DMP-1351
+  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @DMP-1351 @regression
   Scenario: Transcriber behaviour, including audio request handling
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -200,60 +200,62 @@ Feature: Request Audio for transcribers
 
     #Continues from line 548 in other script
 
-  @DMP-1198 @DMP-1255 @DMP-1351
+  @DMP-1198 @DMP-1255 @DMP-1351 @regression
   Scenario: Transcriber - Sortable Columns
+
     Given I am logged on to DARTS as an TRANSCRIBER user
 
     #DMP-1198-AC3 Sortable columns for Transcript Requests
 
     When I click on the "Transcript requests" link
-    When I click on "Case ID" in the table header
-    Then "Case ID" has sort "descending" icon
-    When I click on "Court" in the table header
-    Then "Court" has sort "descending" icon
-    When I click on "Hearing date" in the table header
-    Then "Hearing date" has sort "descending" icon
-    When I click on "Type" in the table header
-    Then "Type" has sort "descending" icon
-    When I click on "Requested on" in the table header
-    Then "Requested on" has sort "descending" icon
-    When I click on "Method" in the table header
-    Then "Method" has sort "descending" icon
-    When I click on "Urgency" in the table header
-    Then "Urgency" has sort "descending" icon
-    When I click on "Urgency" in the table header
+    And I click on "Case ID" in the table header
+    And "Case ID" has sort "descending" icon
+    And I click on "Courthouse" in the table header
+    And "Courthouse" has sort "descending" icon
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Type" in the table header
+    And "Type" has sort "descending" icon
+    And I click on "Requested on" in the table header
+    And "Requested on" has sort "descending" icon
+    And I click on "Method" in the table header
+    And "Method" has sort "descending" icon
+    And I click on "Urgency" in the table header
+    And "Urgency" has sort "descending" icon
+    And I click on "Urgency" in the table header
     Then "Urgency" has sort "ascending" icon
 
     #DMP-1351-AC2 Sortable columns for Completed today
 
     When I click on the "Your work" link
     And I click on the "Completed today" link
-    When I click on "Case ID" in the table header
-    Then "Case ID" has sort "descending" icon
-    When I click on "Courthouse" in the table header
-    Then "Courthouse" has sort "descending" icon
-    When I click on "Hearing date" in the table header
-    Then "Hearing date" has sort "descending" icon
-    When I click on "Type" in the table header
-    Then "Type" has sort "descending" icon
-    When I click on "Requested on" in the table header
-    Then "Requested on" has sort "descending" icon
-    When I click on "Urgency" in the table header
+    And I click on "Case ID" in the table header
+    And "Case ID" has sort "descending" icon
+    And I click on "Courthouse" in the table header
+    And "Courthouse" has sort "descending" icon
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Type" in the table header
+    And "Type" has sort "descending" icon
+    And I click on "Requested on" in the table header
+    And "Requested on" has sort "descending" icon
+    And I click on "Urgency" in the table header
     Then "Urgency" has sort "descending" icon
 
     #DMP-1255-AC2 Sortable columns for To do
 
-    When I click on "Case ID" in the table header
-    Then "Case ID" has sort "descending" icon
-    When I click on "Courthouse" in the table header
-    Then "Courthouse" has sort "descending" icon
-    When I click on "Hearing date" in the table header
-    Then "Hearing date" has sort "descending" icon
-    When I click on "Type" in the table header
-    Then "Type" has sort "descending" icon
-    When I click on "Requested on" in the table header
-    Then "Requested on" has sort "descending" icon
-    When I click on "Urgency" in the table header
+    When I click on the "To do" link
+    And I click on "Case ID" in the table header
+    And "Case ID" has sort "descending" icon
+    And I click on "Courthouse" in the table header
+    And "Courthouse" has sort "descending" icon
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Type" in the table header
+    And "Type" has sort "descending" icon
+    And I click on "Requested on" in the table header
+    And "Requested on" has sort "descending" icon
+    And I click on "Urgency" in the table header
     Then "Urgency" has sort "descending" icon
 
   @DMP-1255-AC1 @later

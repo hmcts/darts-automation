@@ -146,8 +146,8 @@ Scenario: Admin User
 	When  I am logged on to the admin portal as an ADMIN user
 	Then  I see "Users" on the page
 	 And  I verify links with text:
-		| Users | Groups | Organisations | Courthouses | Events | Transformed media | Transcripts | File deletion | System configuration | Search | Node registry | Transcript requests | Retention policies | Your audio | Events |
-		| Y     | Y      | N             | Y           |        | Y                 | Y           | Y             | Y                    | Y      | N             |  N                  | N                  | N          | N      |
+		 | Users | Groups | Organisations | Courthouses | Transformed media | Transcripts | File deletion | System configuration | Search | Node registry | Transcript requests | Retention policies | Your audio |
+		 | Y     | Y      | N             | Y           | Y                 | Y           | Y             | Y                    | Y      | N             | N                   | N                  | N          |
 	 And I verify sub-menu links for "File deletion":
 		| Transcripts | Audio files |
 		| Y           | Y           |

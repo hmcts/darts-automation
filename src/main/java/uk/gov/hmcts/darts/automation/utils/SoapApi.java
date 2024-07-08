@@ -37,7 +37,7 @@ public class SoapApi {
 	private static Logger log = LogManager.getLogger("SoapApi");
     static Response response;
 	String authorizationToken;
-	static String baseUri = ReadProperties.main("soapApiUri");
+	String baseUri = ReadProperties.main("soapApiUri");
 	
 	static final String ACCEPT_JSON_STRING = "application/json, text/plain, */*";
 	static final String ACCEPT_XML_STRING = "application/xml, text/xml, text/plain, */*";
@@ -53,6 +53,10 @@ public class SoapApi {
 	static final String SOAP_ACTION = "SOAPAction";
 	static final String CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
 	static final String CONTENT_ID = "Content-ID";
+
+	static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+	static final String SOAP_HEADER = "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">";
+	
 	String username = "";
 	String soapPassword = "";
 	String tokenPassword = "";
@@ -103,6 +107,7 @@ public class SoapApi {
 // it is possible that all but XHIBIT, CPP & VIQ are invalid
     public void authenticate(String source) {
     	log.info("About to authenticate from {} source", source);
+    	baseUri = ReadProperties.main("soapApiUri");
     	useToken = false;
         switch (source.toUpperCase()) {
         case "EXTERNAL":
@@ -129,6 +134,7 @@ public class SoapApi {
         	break;
         case "VIQ":
         	externalAuthenticate(ReadProperties.viqExternalUserName, ReadProperties.viqInternalPassword, ReadProperties.viqExternalPassword);
+        	baseUri = ReadProperties.main("dartsProxyUri");
         	break;
         case "":
         	log.warn("Authentication - no role provided - using default");
@@ -284,7 +290,7 @@ public class SoapApi {
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
 					.assertThat().statusCode(200)
 					.extract().response();
-		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
+		return new ApiResponse(XmlUtils.extractValue(response.asString(), "code"), response.asString());
     }
 
     /*
@@ -318,7 +324,7 @@ public class SoapApi {
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
 					.assertThat().statusCode(200)
 					.extract().response();
-		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
+		return new ApiResponse(XmlUtils.extractValue(response.asString(), "code"), response.asString());
 	}
 
 
@@ -351,7 +357,7 @@ public class SoapApi {
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
 					.assertThat().statusCode(200)
 					.extract().response();
-		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
+		return new ApiResponse(XmlUtils.extractValue(response.asString(), "code"), response.asString());
 	}
 
 	public ApiResponse postSoapWithAudio(String endpoint, String soapAction, String body, String audioFileName) {
@@ -391,19 +397,7 @@ public class SoapApi {
 					.spec(responseLogLevel(ReadProperties.responseLogLevel))
 					.assertThat().statusCode(200)
 					.extract().response();
-		return new ApiResponse(extractValue(response.asString(), "code"), response.asString());
-	}
-	
-	String extractValue(String xml, String tag) {
-		String result = "";
-		String[] split1 = xml.split("<" + tag + "[^>]*>", 2);
-		if (split1.length > 1) {
-			String[] split2 = split1[1].split("</" + tag + ">");
-			if (split2.length > 1) {
-				result = split2[0];
-			}
-		}
-		return result;
+		return new ApiResponse(XmlUtils.extractValue(response.asString(), "code"), response.asString());
 	}
 	
 	String addSoapAuthHeader() {
@@ -430,8 +424,8 @@ public class SoapApi {
 	}
 
 	String addSoapHeader(String soapBody) {
-		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+		return XML_HEADER
+				+ SOAP_HEADER
 				+ addSoapAuthHeader()
 				+ "    <soap:Body>"
 				+ soapBody
@@ -440,10 +434,10 @@ public class SoapApi {
 	}
 
 	String addSoapHeader(String soapAction, String soapBody) {
-		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+		return XML_HEADER
+				+ SOAP_HEADER
 				+ addSoapAuthHeader()
-				+ "    <soap:Body>"
+				+ "    <soap:Body xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">"
 				+ "        <ns5:" + soapAction + " xmlns:ns2=\"http://properties.core.datamodel.fs.documentum.emc.com/\""
 						+ " xmlns:ns3=\"http://content.core.datamodel.fs.documentum.emc.com/\""
 						+ " xmlns:ns4=\"http://core.datamodel.fs.documentum.emc.com/\""
@@ -455,14 +449,14 @@ public class SoapApi {
 				+ "</soap:Envelope>";
 	}
 
-	String addSoapHeader(String soapAction, String soapBody, boolean htmlEncoded) {
-		return "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-				+ "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+	String addSoapHeader(String soapAction, String soapBody, boolean encodeXml) {
+		return XML_HEADER
+				+ SOAP_HEADER
 				+ addSoapAuthHeader()
-				+ "    <soap:Body>"
+				+ "    <soap:Body xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">"
 				+ "        <" + soapAction + " xmlns=\"http://com.synapps.mojdarts.service.com\">"
 				+ "            <document xmlns=\"\">"
-				+ ((htmlEncoded) ? encodeEntities(soapBody) : soapBody)
+				+ ((encodeXml) ? encodeEntities(soapBody) : soapBody)
 				+ "            </document>"
 				+ "        </" + soapAction + ">"
 				+ "    </soap:Body>"

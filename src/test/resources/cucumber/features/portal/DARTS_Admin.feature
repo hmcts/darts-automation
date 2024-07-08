@@ -227,9 +227,9 @@ Feature: Admin portal
   Scenario: View Courthouse - Details Tab
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
-    And I set "Courthouse name" to "Test Courthouse"
+    And I set "Courthouse name" to "Test Courthouse 1192"
     And I press the "Search" button
-    And I click on "Test Courthouse" in the same row as "Test Courthouse"
+    And I click on "Test Courthouse 1192" in the same row as "Test Courthouse 1192"
     #AC1
     Then I see "Courthouse record" on the page
     And I see "Test Courthouse" on the page
@@ -237,7 +237,7 @@ Feature: Admin portal
     And I see "Date created" on the page
     And I see "Tue 26 Mar 2024" on the page
     And I see "Last updated" on the page
-    And I see "Tue 26 Mar 2024" on the page
+    And I see "Thu 20 Jun 2024" on the page
     And I see "Details" on the page
     And I see "Users" on the page
     And I see "Details" on the page
@@ -250,7 +250,7 @@ Feature: Admin portal
     And I see "Details" on the page
     And I see "© Crown copyright" on the page
 
-@DMP-2299 @regression
+  @DMP-2299 @regression
   Scenario: Viewing Group Details
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -329,16 +329,23 @@ Feature: Admin portal
   Scenario: Viewing group details - Users
     When I am logged on to the admin portal as an ADMIN user
     #AC1 - View users
-    Then I click on the "Groups" navigation link
+    And I see "You can search for cases, hearings, events and audio." on the page
+    And I click on the "Groups" navigation link
     And I click on the "Swansea_ADMIN" link
     And I click on the "Group users" link
-    And I see "0 of 7 selected" on the page
+    Then I do not see "darts.admin@hmcts.net" on the page
 
     #AC1 - Remove users
-    And I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
+    When I set "Search for a user" to "Darts Admin (darts.admin@hmcts.net)"
     And I press the "Add user" button
+    And I see "Darts Admin" in the same row as "darts.admin@hmcts.net"
     And I check the checkbox in the same row as "Darts Admin" "darts.admin@hmcts.net"
-    Then I press the "Remove users" button
+    And I press the "Remove users" button
+    Then I see "Are you sure you want to remove 1 user from this group?" on the page
+
+    When I press the "Yes - continue" button
+    Then I see "1 user removed" on the page
+    And I do not see "darts.admin@hmcts.net" on the page
 
   @DMP-2581 @regression
   Scenario: Viewing groups - Adding a user
@@ -354,73 +361,73 @@ Feature: Admin portal
     And I click on the "Add user" link
     Then I see "Darts Admin" in the same row as "darts.admin@hmcts.net"
 
-    @DMP-2269 @regression
-    Scenario: Search Courthouse
-      When I am logged on to the admin portal as an ADMIN user
-     Then I click on the "Courthouses" navigation link
-      And I set "Courthouse name" to "Bristol"
-      Then I press the "Search" button
-      And I see "3 result" on the page
-      And I verify the HTML table contains the following values
-      | Courthouse name       | Display name          | Region|
-      | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
-      | Bristol               | Bristol               |       |
-      | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
-      Then I click on "Courthouse name" in the table header
-      And I verify the HTML table contains the following values
-        | Courthouse name       | Display name          | Region|
-        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
-        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
-        | Bristol               | Bristol               |       |
+  @DMP-2269 @regression
+  Scenario: Search Courthouse
+    When I am logged on to the admin portal as an ADMIN user
+    Then I click on the "Courthouses" navigation link
+    And I set "Courthouse name" to "Bristol"
+    Then I press the "Search" button
+    And I see "3 result" on the page
+    And I verify the HTML table contains the following values
+      | Courthouse name      | Display name         | Region |
+      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
+      | Bristol              | Bristol              |        |
+      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
+    Then I click on "Courthouse name" in the table header
+    And I verify the HTML table contains the following values
+      | Courthouse name      | Display name         | Region |
+      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
+      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
+      | Bristol              | Bristol              |        |
 
-     When I click on the "Clear search" link
-      Then I set "Display name" to "Bristol"
-      Then I press the "Search" button
-      And I see "3 result" on the page
-      And I verify the HTML table contains the following values
-        | Courthouse name       | Display name          | Region|
-        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
-        | Bristol               | Bristol               |       |
-        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
-      Then I click on "Display name" in the table header
-      And I verify the HTML table contains the following values
-        | Courthouse name       | Display name          | Region|
-        | DMP-2163-Bristol-AAB  | DMP-2163-Bristol-AAB  |       |
-        | DMP-2163-Bristol-AAA  | DMP-2163-Bristol-AAA  |       |
-        | Bristol               | Bristol               |       |
+    When I click on the "Clear search" link
+    Then I set "Display name" to "Bristol"
+    Then I press the "Search" button
+    And I see "3 result" on the page
+    And I verify the HTML table contains the following values
+      | Courthouse name      | Display name         | Region |
+      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
+      | Bristol              | Bristol              |        |
+      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
+    Then I click on "Display name" in the table header
+    And I verify the HTML table contains the following values
+      | Courthouse name      | Display name         | Region |
+      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
+      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
+      | Bristol              | Bristol              |        |
 
-      When I click on the "Clear search" link
-      Then I set "Region" to "South East"
-      Then I press the "Search" button
-      And I see "2 result" on the page
-      And I verify the HTML table contains the following values
-        | Courthouse name            | Display name                | Region      |
-        | Guildford Court            | GF Court                    | South East  |
-        | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East  |
-      Then I click on "Region" in the table header
-      And I verify the HTML table contains the following values
-        | Courthouse name       | Display name          | Region|
-        | Guildford Court            | GF Court                    | South East  |
-        | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East  |
-      When I click on the "Clear search" link
+    When I click on the "Clear search" link
+    Then I set "Region" to "South East"
+    Then I press the "Search" button
+    And I see "2 result" on the page
+    And I verify the HTML table contains the following values
+      | Courthouse name            | Display name                | Region     |
+      | Guildford Court            | GF Court                    | South East |
+      | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East |
+    Then I click on "Region" in the table header
+    And I verify the HTML table contains the following values
+      | Courthouse name            | Display name                | Region     |
+      | Guildford Court            | GF Court                    | South East |
+      | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East |
+    When I click on the "Clear search" link
 
-      #AC2 Search Courthouse-No results
-     When I set "Courthouse name" to "111"
-      And I press the "Search" button
-      Then I see "No search results" on the page
-      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
-      And I click on the "Clear search" link
+    #AC2 Search Courthouse-No results
+    When I set "Courthouse name" to "111"
+    And I press the "Search" button
+    Then I see "No search results" on the page
+    And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+    And I click on the "Clear search" link
 
-      When I set "Display name" to "111"
-      And I press the "Search" button
-      Then I see "No search results" on the page
-      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
-      And I click on the "Clear search" link
+    When I set "Display name" to "111"
+    And I press the "Search" button
+    Then I see "No search results" on the page
+    And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+    And I click on the "Clear search" link
 
-      When I set "Region" to "111"
-      And I press the "Search" button
-      Then I see "No search results" on the page
-      And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
+    When I set "Region" to "111"
+    And I press the "Search" button
+    Then I see "No search results" on the page
+    And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
 
   @DMP-2317 @regression
   Scenario: Create a new group (Translation or Transcriber)
@@ -565,150 +572,154 @@ Feature: Admin portal
       And I click on the "Automated tasks" link
       And I see "Active" in the same row as "ProcessDailyList" "1"
  
-      Then I click on the "Transcripts" navigation link
-      And I click on the "Advanced search" link
-      Then I set "Hearing date" to "{{date+7/}}"
-      And I set "Courthouse" to "Test"
-      Then I see "You have selected a date in the future. Hearing date must be in the past" on the page
-      Then I click on the "Specific date" link
-      Then I set "Enter a date" to "{{date+7/}}"
-      And I set "Courthouse" to "Placeholder"
-      Then I see "You have selected a date in the future. Requested date must be in the past" on the page
-      Then I click on the "Date range" link
-      Then I set "Date from" to "{{date+7/}}"
-      And I set "Date to" to "{{date+7/}}"
-      And I set "Courthouse" to "Test"
-      Then I see "You have selected a date in the future. Requested start date must be in the past" on the page
-      And I see "You have selected a date in the future. Requested end date must be in the past" on the page
-      Then I set "Hearing date" to "ddd"
-      And I set "Courthouse" to "Placeholder"
-      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
-      Then I click on the "Specific date" link
-      Then I set "Enter a date" to "ddd"
-      And I set "Hearing date" to ""
-      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
-      Then I click on the "Date range" link
-      Then I set "Date from" to "ddd"
-      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
-      Then I set "Date to" to "ddd"
-      Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
-      Then I set "Hearing date" to "30/02/2024"
-      And I set "Courthouse" to "Test"
-      Then I see "Enter a real date" on the page
-      Then I click on the "Specific date" link
-      Then I set "Enter a date" to "30/02/2024"
-      And I set "Hearing date" to ""
-      Then I see "Enter a real date" on the page
-      Then I click on the "Date range" link
-      Then I set "Date from" to "30/02/2024"
-      Then I see "Enter a real date" on the page
-      Then I set "Date to" to "30/02/2024"
-      Then I see "Enter a real date" on the page
-      Then I set "Date from" to "30/03/2029"
-      And I set "Date to" to "30/01/2029"
-      Then I see "The start date must be before the end date" on the page
-      And I see "The end date must be after the start date" on the page
+    Then I click on the "Transcripts" navigation link
+    And I click on the "Advanced search" link
+    Then I set "Hearing date" to "{{date+7/}}"
+    And I set "Courthouse" to "Test"
+    Then I see "You have selected a date in the future. Hearing date must be in the past" on the page
+    Then I click on the "Specific date" link
+    Then I set "Enter a date" to "{{date+7/}}"
+    And I set "Courthouse" to "Placeholder"
+    Then I see "You have selected a date in the future. Requested date must be in the past" on the page
+    Then I click on the "Date range" link
+    Then I set "Date from" to "{{date+7/}}"
+    And I set "Date to" to "{{date+7/}}"
+    And I set "Courthouse" to "Test"
+    Then I see "You have selected a date in the future. Requested start date must be in the past" on the page
+    And I see "You have selected a date in the future. Requested end date must be in the past" on the page
+    Then I set "Hearing date" to "ddd"
+    And I set "Courthouse" to "Placeholder"
+    Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+    Then I click on the "Specific date" link
+    Then I set "Enter a date" to "ddd"
+    And I set "Hearing date" to ""
+    Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+    Then I click on the "Date range" link
+    Then I set "Date from" to "ddd"
+    Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+    Then I set "Date to" to "ddd"
+    Then I see "You have not entered a recognised date in the correct format (for example 31/01/2023)" on the page
+    Then I set "Hearing date" to "30/02/2024"
+    And I set "Courthouse" to "Test"
+    Then I see "Enter a real date" on the page
+    Then I click on the "Specific date" link
+    Then I set "Enter a date" to "30/02/2024"
+    And I set "Hearing date" to ""
+    Then I see "Enter a real date" on the page
+    Then I click on the "Date range" link
+    Then I set "Date from" to "30/02/2024"
+    Then I see "Enter a real date" on the page
+    Then I set "Date to" to "30/02/2024"
+    Then I see "Enter a real date" on the page
+    Then I set "Date from" to "30/03/2029"
+    And I set "Date to" to "30/01/2029"
+    Then I see "The start date must be before the end date" on the page
+    And I see "The end date must be after the start date" on the page
 
-@DMP-2746 @DMP-2674 @regression
-    Scenario: Add event mapping
-      Given I am logged on to the admin portal as an ADMIN user
-      When I click on the "System configuration" link
-      And I click on the "Event mappings" navigation link
-      #DMP-2746-AC1 Create event mapping
-      And I press the "Add event mapping" button
-      And I set "Type" to "DMP-2746-Automation-Type"
-      And I set "Event name" to "DMP-2746-Automation-Event-Name"
-      And I see "Map to event handler" on the page
-      And I select "DarStartHandler" from the dropdown
-      And I check the "Tick if this event mapping has reporting restrictions" checkbox
-      And I press the "Add mapping" button
-      Then I see "Event mapping added" on the page
+  @DMP-2746 @DMP-2674 @regression
+  Scenario: Add event mapping
+    Given I am logged on to the admin portal as an ADMIN user
+    And I see "You can search for cases, hearings, events and audio." on the page
+    When I click on the "System configuration" link
+    And I click on the "Event mappings" navigation link
+    #DMP-2746-AC1 Create event mapping
+    And I press the "Add event mapping" button
+    And I set "Type" to "DMP-2746-Automation-Type"
+    And I set "Event name" to "DMP-2746-Automation-Event-Name"
+    And I see "Map to event handler" on the page
+    And I select "DarStartHandler" from the dropdown
+    And I check the "Tick if this event mapping has reporting restrictions" checkbox
+    And I press the "Add mapping" button
+    Then I see "Event mapping added" on the page
 
-      #Cancel
+    #Cancel
 
-      When I press the "Add event mapping" button
-      And I set "Type" to "DMP-2746-Automation-Type-1"
-      And I set "Event name" to "DMP-2746-Automation-Event-Name-1"
-      And I see "Map to event handler" on the page
-      And I select "DarStartHandler" from the dropdown
-      And I click on the "Tick if this event mapping has reporting restrictions" link
-      And I click on the "Cancel" link
-      Then I see "Filter by type, subtype, or name" on the page
-      And I see "Event mappings" on the page
+    When I press the "Add event mapping" button
+    And I set "Type" to "DMP-2746-Automation-Type-1"
+    And I set "Event name" to "DMP-2746-Automation-Event-Name-1"
+    And I see "Map to event handler" on the page
+    And I select "DarStartHandler" from the dropdown
+    And I click on the "Tick if this event mapping has reporting restrictions" link
+    And I click on the "Cancel" link
+    Then I see "Filter by type, subtype, or name" on the page
+    And I see "Event mappings" on the page
 
-      #DMP-2646-AC2 Error handling
+    #DMP-2646-AC2 Error handling
 
-      When I press the "Add event mapping" button
-      And I set "Type" to "" and click away
-      Then I see an error message "Enter the event type"
+    When I press the "Add event mapping" button
+    And I set "Type" to "" and click away
+    Then I see an error message "Enter the event type"
 
-      When I set "Event name" to "" and click away
-      Then I see an error message "Enter the event name"
+    When I set "Event name" to "" and click away
+    Then I see an error message "Enter the event name"
 
-      When I click on the "Tick if this event mapping has reporting restrictions" link
-      And I press the "Add mapping" button
-      Then I see an error message "Select an event handler to map to"
+    When I click on the "Tick if this event mapping has reporting restrictions" link
+    And I press the "Add mapping" button
+    Then I see an error message "Select an event handler to map to"
 
-      #DMP-2674-AC1 Delete created event mapping for next run
+    #DMP-2674-AC1 Delete created event mapping for next run
 
-      When I click on the "Cancel" link
-      When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
-      And I click on "Change" in the same row as "DMP-2746-Automation-Type"
-      And I click on the "Delete event mapping" link
-      Then I see "Are you sure want to delete this event mapping?" on the page
-      And I see "DMP-2746-Automation-Type" in the same row as "DMP-2746-Automation-Event-Name"
+    When I click on the "Cancel" link
+    When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+    And I click on "Change" in the same row as "DMP-2746-Automation-Type"
+    And I click on the "Delete event mapping" link
+    Then I see "Are you sure want to delete this event mapping?" on the page
+    And I see "DMP-2746-Automation-Type" in the same row as "DMP-2746-Automation-Event-Name"
 
-      When I press the "Yes - delete" button
-      Then I see "Event mapping deleted" on the page
+    When I press the "Yes - delete" button
+    Then I see "Event mapping deleted" on the page
 
-      When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
-      Then I see "There are no matching results." on the page
+    When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+    Then I see "There are no matching results." on the page
 
-      @DMP-754 @regression
-      Scenario: View event mapping
-      Given I am logged on to the admin portal as an ADMIN user
-      When I click on the "System configuration" link
-      And I click on the "Event mappings" navigation link
-      And I see "Event mappings" on the page
-      And I see "Add event mapping" on the page
-      And I see "Filter by type, subtype, or name" on the page
-      And I see "Filter by event handler" on the page
-      And I select "StopAndCloseHandler" from the dropdown
-      Then I see "Active only" on the page
-      And I see "Active and inactive" on the page
-      And I see "With restrictions" on the page
-      And I see "Without restrictions" on the page
-      And I verify the HTML table contains the following values
-        | Type | Subtype  | Event name | Event handler | Restrictions| Date created | Status   | *SKIP* |
-        | 3000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
-        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
-        | 30300| *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*    | *IGNORE*     | *IGNORE* | *SKIP* |
+  @DMP-754 @regression
+  Scenario: View event mapping
+    Given I am logged on to the admin portal as an ADMIN user
+    When I see "You can search for cases, hearings, events and audio." on the page
+    And I click on the "System configuration" link
+    And I click on the "Event mappings" navigation link
+    And I see "Event mappings" on the page
+    And I see "Add event mapping" on the page
+    And I see "Filter by type, subtype, or name" on the page
+    And I see "Filter by event handler" on the page
+    And I select "StopAndCloseHandler" from the dropdown
+    Then I see "Active only" on the page
+    And I see "Active and inactive" on the page
+    And I see "With restrictions" on the page
+    And I see "Without restrictions" on the page
+    And I verify the HTML table contains the following values
+      | Type                   | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+      | 3000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 1000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 30300                  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | DMP-2764-Accessibility | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
-      When  I select the "Active and inactive" radio button
-      And I click on the "With restrictions" link
-      Then I verify the HTML table contains the following values
-        | Type  | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
-        | 3000  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-        | 30300 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+    When  I select the "Active and inactive" radio button
+    And I click on the "With restrictions" link
+    Then I verify the HTML table contains the following values
+      | Type                   | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+      | 3000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 30300                  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | DMP-2764-Accessibility | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
-      When I click on the "With restrictions" link
-      And I click on the "Without restrictions" link
-      Then I verify the HTML table contains the following values
-        | Type | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
-        | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+    When I click on the "With restrictions" link
+    And I click on the "Without restrictions" link
+    Then I verify the HTML table contains the following values
+      | Type | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+      | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
-      When I select "All" from the dropdown
-      And I click on the "Without restrictions" link
-      And I see "Next" on the page
-      And I click on the pagination link "Next"
-      And I click on the pagination link "3"
-      And I see "Next" on the page
-      And I see "Previous" on the page
-      And I click on the pagination link "Previous"
-      And I click on the pagination link "1"
-      And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type2"
-      And I select "StopAndCloseHandler" from the dropdown
-      Then I see "There are no matching results." on the page
+    When I select "All" from the dropdown
+    And I click on the "Without restrictions" link
+    And I see "Next" on the page
+    And I click on the pagination link "Next"
+    And I click on the pagination link "3"
+    And I see "Next" on the page
+    And I see "Previous" on the page
+    And I click on the pagination link "Previous"
+    And I click on the pagination link "1"
+    And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type2"
+    And I select "StopAndCloseHandler" from the dropdown
+    Then I see "There are no matching results." on the page
 
   @DMP-3028 @regression
   Scenario: Testing attempt to add identical event mapping

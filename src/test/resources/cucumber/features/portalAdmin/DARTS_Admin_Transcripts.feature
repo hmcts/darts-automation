@@ -1,15 +1,15 @@
 Feature: Admin portal transcripts
 
-  @DMP-1265 @DMP-2525 @DMP-2538
+  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression
   Scenario: Admin change transcription status data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors               | defenders               |
       | Harrow Crown Court | {{seq}}-40 | G{{seq}}001 | DefG {{seq}}-40 | JudgeG {{seq}}-40 | testprosecutorfourty      | testdefenderfourty      |
       | Harrow Crown Court | {{seq}}-41 | G{{seq}}002 | DefG {{seq}}-41 | JudgeG {{seq}}-41 | testprosecutorfourtyone   | testdefenderfourtyone   |
-      | Harrow Crown Court | {{seq}}-42 | G{{seq}}003 | DefG {{seq}}-42 | JudgeC {{seq}}-42 | testprosecutorfourtytwo   | testdefenderfourtytwo   |
-      | Harrow Crown Court | {{seq}}-43 | G{{seq}}004 | DefG {{seq}}-43 | JudgeC {{seq}}-43 | testprosecutorfourtythree | testdefenderfourtythree |
-      | Harrow Crown Court | {{seq}}-44 | G{{seq}}005 | DefG {{seq}}-44 | JudgeC {{seq}}-44 | testprosecutorfourtyfour  | testdefenderfourtyfour  |
-      | Harrow Crown Court | {{seq}}-45 | G{{seq}}006 | DefG {{seq}}-45 | JudgeC {{seq}}-45 | testprosecutorfourtyfive  | testdefenderfourtyfive  |
+      | Harrow Crown Court | {{seq}}-42 | G{{seq}}003 | DefG {{seq}}-42 | JudgeG {{seq}}-42 | testprosecutorfourtytwo   | testdefenderfourtytwo   |
+      | Harrow Crown Court | {{seq}}-43 | G{{seq}}004 | DefG {{seq}}-43 | JudgeG {{seq}}-43 | testprosecutorfourtythree | testdefenderfourtythree |
+      | Harrow Crown Court | {{seq}}-44 | G{{seq}}005 | DefG {{seq}}-44 | JudgeG {{seq}}-44 | testprosecutorfourtyfour  | testdefenderfourtyfour  |
+      | Harrow Crown Court | {{seq}}-45 | G{{seq}}006 | DefG {{seq}}-45 | JudgeG {{seq}}-45 | testprosecutorfourtyfive  | testdefenderfourtyfive  |
 
     Given I authenticate from the CPP source system
     Given I create an event
@@ -36,7 +36,7 @@ Feature: Admin portal transcripts
       | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2   |
       | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2   |
 
-  @DMP-1265 @DMP-2525 @DMP-2538
+  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression
   Scenario: Change manual transcription status
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -57,8 +57,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "10:30:00"
-    And I set the time fields below "End time" to "10:31:00"
+    When I set the time fields below "Start time" to "09:30:00"
+    And I set the time fields below "End time" to "09:31:00"
     #When I check the checkbox in the same row as "10:30:00" "Hearing started"
     #And I check the checkbox in the same row as "10:31:00" "Hearing ended"
     And I press the "Continue" button
@@ -96,8 +96,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "11:00:00"
-    And I set the time fields below "End time" to "11:01:00"
+    When I set the time fields below "Start time" to "10:00:00"
+    And I set the time fields below "End time" to "10:01:00"
     #When I check the checkbox in the same row as "11:00:00" "Hearing started"
     #And I check the checkbox in the same row as "11:01:00" "Hearing ended"
     And I press the "Continue" button
@@ -135,8 +135,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "11:30:00"
-    And I set the time fields below "End time" to "11:31:00"
+    When I set the time fields below "Start time" to "10:30:00"
+    And I set the time fields below "End time" to "10:31:00"
     #When I check the checkbox in the same row as "11:30:00" "Hearing started"
     #And I check the checkbox in the same row as "11:31:00" "Hearing ended"
     And I press the "Continue" button
@@ -174,8 +174,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "12:00:00"
-    And I set the time fields below "End time" to "12:01:00"
+    When I set the time fields below "Start time" to "11:00:00"
+    And I set the time fields below "End time" to "11:01:00"
     #When I check the checkbox in the same row as "12:00:00" "Hearing started"
     #And I check the checkbox in the same row as "12:01:00" "Hearing ended"
     And I press the "Continue" button
@@ -213,8 +213,8 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "12:30:00"
-    And I set the time fields below "End time" to "12:31:00"
+    When I set the time fields below "Start time" to "11:30:00"
+    And I set the time fields below "End time" to "11:31:00"
     #When I check the checkbox in the same row as "12:30:00" "Hearing started"
     #And I check the checkbox in the same row as "12:31:00" "Hearing ended"
     And I press the "Continue" button
@@ -267,6 +267,36 @@ Feature: Admin portal transcripts
     Then I see "Requests to approve or reject" on the page
     And I do not see "G{{seq}}005" on the page
 
+    #DMP-3133-AC1 Check status is "With Transcriber" instead of "Approved"
+
+    When I click on the "Search" link
+    And I set "Case ID" to "G{{seq}}003"
+    And I press the "Search" button
+    And I click on the "G{{seq}}003" link
+    And I click on the "All Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
+    When I click on the "Hearings" link
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
+    #Checking Requester as well
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an REQUESTER user
+    And I set "Case ID" to "G{{seq}}003"
+    And I press the "Search" button
+    And I click on the "G{{seq}}003" link
+    And I click on the "All Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
+    When I click on the "Hearings" link
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
     #Assign to transcriber for cases 4 and 5
 
     When I Sign out
@@ -291,6 +321,20 @@ Feature: Admin portal transcripts
 
     When I click on the "Completed today" link
     Then I do not see "G{{seq}}005" on the page
+
+    #DMP-3133-AC2 Check status is still "With Transcriber"
+
+    When I click on the "Search" link
+    And I set "Case ID" to "G{{seq}}005"
+    And I press the "Search" button
+    And I click on the "G{{seq}}005" link
+    And I click on the "All Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
+
+    When I click on the "Hearings" link
+    And I click on the "{{displaydate}}" link
+    And I click on the "Transcripts" link
+    Then I see "With Transcriber" in the same row as "Specified Times"
 
     #Case 1: Awaiting authorisation -> Requested
 
@@ -385,6 +429,7 @@ Feature: Admin portal transcripts
     And I press the "Search" button
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
+    #DMP-3133-AC1 Check status is "Approved" and not "With Transcriber"
     Then I see "Approved" in the same row as "Status"
     And I see "Associated groups" on the page
     And I see "Start time 11:30:00 - End time 11:31:00" in the same row as "Audio for transcript"
@@ -454,6 +499,7 @@ Feature: Admin portal transcripts
     And I press the "Search" button
     #TODO: This requires a way for auto to know the request ID
     #And I click on the "Request ID" link
+    #DMP-3133-AC2 Check status is still "With Transcriber"
     Then I see "With Transcriber" in the same row as "Status"
     And I see "Associated groups" on the page
     And I see "Start time 12:30:00 - End time 12:31:00" in the same row as "Audio for transcript"
@@ -561,12 +607,12 @@ Feature: Admin portal transcripts
     And I press the "Search" button
     And I click on "G{{seq}}004" in the same row as "Harrow Crown Court"
     And I click on the "All Transcripts" link
-    And I see "Approved" in the same row as "Specified Times"
+    And I see "With Transcriber" in the same row as "Specified Times"
 
     When I click on the "Hearings" link
     And I click on the "{{displaydate}}" link
     And I click on the "Transcripts" link
-    And I see "Approved" in the same row as "Specified Times"
+    And I see "With Transcriber" in the same row as "Specified Times"
 
     When I click on the "Search" link
     And I set "Case ID" to "G{{seq}}005"
