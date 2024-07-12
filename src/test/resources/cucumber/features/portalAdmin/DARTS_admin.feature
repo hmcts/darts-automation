@@ -594,7 +594,7 @@ Feature: Admin
         | 7037       | DMP-3338-Case-002 | DMP-3338-BATH-AAB | 01 Jul 2024  | Manual         | Yes       |
         | 7057       | DMP-3184-Case-008 | DMP-3184-BATH     | 13 Jun 2024  | Manual         | No        |
       And I clear the "Enter a date" field
-      #Search with Date range
+      # Search with Date range
       And I select the "Date range" radio button
       And I set "Date from" to "01/07/2024"
       And I set "Date to" to "08/07/2024"
