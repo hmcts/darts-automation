@@ -791,3 +791,106 @@ Feature: Admin portal
     And I see "Go back" on the page
     And I click on the "Go back" link
     Then I see "Offences put to defendant" on the page
+
+    @DMP-3234
+    Scenario: Add a link to "user portal" link to each admin portal screen
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Users" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Groups" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Courthouses" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Transformed media" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Transcripts" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "File deletion" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "System configuration" link
+      Then I click on the "User portal" link
+
+    @DMP-3235
+    Scenario: Add a link to "Admin portal" to each DARTS portal screen
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "User portal" link
+      Then I click on the "Admin portal" link
+      Then I click on the "User portal" link
+      Then I click on the "Your audio" link
+      Then I click on the "Admin portal" link
+      Then I click on the "User portal" link
+      Then I click on the "Your transcripts" link
+      Then I click on the "Admin portal" link
+
+
+    @DMP-3129
+    Scenario: Search Results - Cases
+      When I am logged on to the admin portal as an ADMIN user
+      #Filter by courthouse
+      Then I set "Filter by courthouse" to "Swansea"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Case ID
+      Then I set "Case ID" to "CASE1009"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Courtroom
+      Then I set "Courtroom" to "ROOM_A"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Hearing Date-Specific Date
+      Then I select the "Specific date" radio button
+      Then I set "Enter a date" to "03/07/2024"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Hearing Date-Date Range
+      Then I refresh the page
+      Then I select the "Date range" radio button
+      Then I set "Date from" to "02/07/2024"
+      Then I set "Date to" to "03/07/2024"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+
+
+
+  @DMP-2728
+  Scenario: Associated Audio files for deletion/hidden
+    When I am logged on to the admin portal as an ADMIN user
+    When I set "Case ID" to "CASE1009"
+    Then I press the "Search" button
+    Then I click on the "Audio" link
+    Then I click on "Audio ID" in the table header
+    Then I click on the "1313" link
+    Then I press the "Hide or delete" button
+    Then I select the "Other reason to hide only" radio button
+    Then I set "Enter ticket reference" to "Test"
+    Then I set "Comments" to "Test"
+    Then I press the "Hide or delete" button
+    Then I see "There are other audio files associated with the file you are hiding and/or deleting" on the page
+    Then I press the "Continue" button
+    Then I see "There is a problem" on the page
+    
+    
+
+    
+
+
+
+
