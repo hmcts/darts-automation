@@ -61,7 +61,8 @@ public class Substitutions {
 			if (subsString.startsWith("date") || subsString.startsWith("numdate") ||
 					subsString.startsWith("dd-") || subsString.startsWith("mm-") ||
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd") ||
-					subsString.startsWith("timestamp-") || subsString.startsWith("displaydate-") ||
+					subsString.startsWith("timestamp-") || subsString.startsWith("displaydate-") || 
+					subsString.startsWith("displaydate0-") ||
 					subsString.startsWith("utc-") || subsString.startsWith("retention-")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
@@ -74,13 +75,17 @@ public class Substitutions {
 						if (subsString.equalsIgnoreCase("displaydate")) {
 							substitutionString = DateUtils.todayDisplay();
 						} else {
-							if (subsString.startsWith("mac-address-")) {
-								substitutionString = macAddress(subsTag.substring(12));
+							if (subsString.equalsIgnoreCase("displaydate0")) {
+								substitutionString = DateUtils.todayDisplay0();
 							} else {
-								if (subsString.startsWith("ip-address-")) {
-									substitutionString = ipAddress(subsTag.substring(11));
+								if (subsString.startsWith("mac-address-")) {
+									substitutionString = macAddress(subsTag.substring(12));
 								} else {
-									substitutionString = TestData.getProperty(subsTag);
+									if (subsString.startsWith("ip-address-")) {
+										substitutionString = ipAddress(subsTag.substring(11));
+									} else {
+										substitutionString = TestData.getProperty(subsTag);
+									}
 								}
 							}
 						}
@@ -152,6 +157,8 @@ public class Substitutions {
 		System.out.println(substituteValue("{{displayDate-{{date+7 years}}}}"));
 		Assertions.assertEquals("12", substituteValue("{{dd-12/34/5678}}"));
 		Assertions.assertEquals("9 Dec 2023", substituteValue("{{displaydate-09-12-2023}}"));
+		System.out.println(substituteValue("{{displaydate-{{date+99years}}}}"));
+		System.out.println(substituteValue("{{displaydate0-{{date+99years}}}}"));
 	}
 	
 	@Test

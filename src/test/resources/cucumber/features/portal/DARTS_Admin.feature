@@ -747,3 +747,187 @@ Feature: Admin portal
     When I click on the "Go back" link
     Then I see "Tick if this event mapping has reporting restrictions" on the page
 
+  @DMP-2763
+  Scenario: Edit event mapping
+    When I am logged on to the admin portal as an ADMIN user
+    And I click on the "System configuration" link
+    And I click on the "Event mappings" navigation link
+    #Error handling
+    And I set "Filter by type, subtype, or name" to "AC2-DMP-2764-Deletion-Test-2"
+    And I click on the "Change" link
+    Then I see "Event mapping" on the page
+    And I see "AC2-DMP-2764-Deletion-Test-2" on the page
+    And I see "AC2-DMP-2764-Deletion-Test-2" on the page
+    And I see "AC1-DMP-2763" on the page
+    And I clear the "Event name" field
+    And I see "Map to event handler" on the page
+    And I select "DarStopHandler" from the dropdown
+    Then I see "Enter the event name" on the page
+    And I click on the "Cancel" link
+    #Cancel
+    And I set "Filter by type, subtype, or name" to "AC2-DMP-2764-Deletion-Test-2"
+    And I click on the "Change" link
+    And I clear the "Event name" field
+    And I set "Event name" to "AC1-DMP-2763"
+    And I see "Map to event handler" on the page
+    And I see "DarStartHandler" on the page
+    And I see "Yes" on the page
+    And I see "07 Jun 2024" on the page
+    And I see "Save as new version" on the page
+    And I see "Cancel" on the page
+    And I click on the "Cancel" link
+    Then I see "System configuration" on the page
+    #Create new version
+    And I set "Filter by type, subtype, or name" to "AC2-DMP-2764-Deletion-Test-2"
+    And I click on the "Change" link
+    And I set "Event name" to "AC1-DMP-2763"
+    And I see "DarStartHandler" on the page
+    And I select "DarStopHandler" from the dropdown
+    And I see "Yes" on the page
+    And I see "07 Jun 2024" on the page
+    And I press the "Save as new version" button
+    Then I see "Saved new version of event mapping" on the page
+    And I see "System configuration" on the page
+
+  @DMP-2764
+  Scenario: Delete event mapping
+    When I am logged on to the admin portal as an ADMIN user
+    And I click on the "System configuration" link
+    Then I click on the "Event mappings" navigation link
+    And I click on the "Add event mapping" link
+    Then I set "Type" to "DMP-2764-Automation-Type-3"
+    And I set "Event name" to "DMP-2764-Automation-Event-Name"
+    And I see "Map to event handler" on the page
+    And I select "DarStartHandler" from the dropdown
+    And I click on the "Tick if this event mapping has reporting restrictions" link
+    And I click on the "Add mapping" link
+    Then I see "Event mapping addded " on the page
+    And I set "Filter by type, subtype, or name" to "DMP-2764-Automation-Type-3"
+    And I click on the "Change" link
+    Then I see "Event mapping" on the page
+    And I see "DMP-2764-Automation-Event-Name" on the page
+    And I see "DMP-2764-Automation-Type-3" on the page
+    And I see "DMP-2764-Automation-Event-Name" on the page
+    And I see "DarStartHandler" on the page
+    And I see "Yes" on the page
+    And I see "06 Jun 2024" on the page
+    And I see "Delete event mapping" on the page
+    And I click on the "Delete event mapping" link
+    Then I see "Are you sure want to delete this event mapping?" on the page
+    And I click on the "No - cancel" link
+    Then I see "Delete event mapping" on the page
+    And I click on the "Delete event mapping" link
+    Then I see "Are you sure want to delete this event mapping?" on the page
+    And I press the "Yes - delete" button
+    Then I see "Event mapping deleted" on the page
+    And I see "System configuration" on the page
+    #AC2
+    And I set "Filter by type, subtype, or name" to "Offences put to defendant"
+    And I click on the "Change" link
+    And I see "Offences put to defendant" on the page
+    And I see "1000" on the page
+    And I see "1001" on the page
+    And I see "Offences put to defendant" on the page
+    And I see "StandardEventHandler" on the page
+    And I see "No" on the page
+    And I see "02 Nov 2023" on the page
+    And I see "Delete event mapping" on the page
+    And I click on the "Delete event mapping" link
+    Then I see "You cannot delete this event mapping" on the page
+    And I see "This event mapping has been used and can no longer be deleted." on the page
+    And I see "You can make changes and create a new version, or you can select the event handler 'No mapping'." on the page
+    And I see "Go back" on the page
+    And I click on the "Go back" link
+    Then I see "Offences put to defendant" on the page
+
+    @DMP-3234
+    Scenario: Add a link to "user portal" link to each admin portal screen
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Users" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Groups" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Courthouses" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Transformed media" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Transcripts" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "File deletion" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "System configuration" link
+      Then I click on the "User portal" link
+
+    @DMP-3235
+    Scenario: Add a link to "Admin portal" to each DARTS portal screen
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "User portal" link
+      Then I click on the "Admin portal" link
+      Then I click on the "User portal" link
+      Then I click on the "Your audio" link
+      Then I click on the "Admin portal" link
+      Then I click on the "User portal" link
+      Then I click on the "Your transcripts" link
+      Then I click on the "Admin portal" link
+
+    @DMP-3129
+    Scenario: Search Results - Cases
+      When I am logged on to the admin portal as an ADMIN user
+      #Filter by courthouse
+      Then I set "Filter by courthouse" to "Swansea"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Case ID
+      Then I set "Case ID" to "CASE1009"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Courtroom
+      Then I set "Courtroom" to "ROOM_A"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Hearing Date-Specific Date
+      Then I select the "Specific date" radio button
+      Then I set "Enter a date" to "03/07/2024"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Hearing Date-Date Range
+      Then I refresh the page
+      Then I select the "Date range" radio button
+      Then I set "Date from" to "02/07/2024"
+      Then I set "Date to" to "03/07/2024"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+
+  @DMP-2728
+  Scenario: Associated Audio files for deletion/hidden
+    When I am logged on to the admin portal as an ADMIN user
+    When I set "Case ID" to "CASE1009"
+    Then I press the "Search" button
+    Then I click on the "Audio" link
+    Then I click on "Audio ID" in the table header
+    Then I click on the "1313" link
+    Then I press the "Hide or delete" button
+    Then I select the "Other reason to hide only" radio button
+    Then I set "Enter ticket reference" to "Test"
+    Then I set "Comments" to "Test"
+    Then I press the "Hide or delete" button
+    Then I see "There are other audio files associated with the file you are hiding and/or deleting" on the page
+    Then I press the "Continue" button
+    Then I see "There is a problem" on the page

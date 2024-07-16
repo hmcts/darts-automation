@@ -104,11 +104,11 @@ Feature: Case Retention
     And I see "<case_number>" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
     And I see "Change case retention date" on the page
-    And I see "{{displaydate(date+99years)}} (Permanent)" in the same row as "Retain case until"
+    And I see "{{displaydate0{{date+99years}}}} (Permanent)" in the same row as "Retain case until"
     And I see "AC5 99 Years Permanent Retention" in the same row as "Reason for change"
     And I press the "Confirm retention date change" button
     Then I see "Case retention date changed." on the page
-    And I see "{{displaydate(date+99years)}}" in the same row as "Retain case until"
+    And I see "{{displaydate0{{date+99years}}}}" in the same row as "Retain case until"
 
     #DMP-2161-AC4 Valid specific date
     And I click on the "Change retention date" link
@@ -256,7 +256,7 @@ Feature: Case Retention
 
     When I press the "Confirm retention date change" button
     Then I see "Case retention date changed." on the page
-    And I see "{{displaydate}}" in the same row as "Date applied"
+    And I see "{{displaydate0}}" in the same row as "Date applied"
     Then I verify the HTML table "Retention audit history" contains the following values
       | Date retention changed | Retention date | Amended by   | Retention policy | Comments                                            | Status   |
       | *NO-CHECK*             | *NO-CHECK*     | *NO-CHECK*   | Custodial        |                                                     | COMPLETE |
@@ -291,7 +291,7 @@ Feature: Case Retention
     Then I see "Case retention date changed." on the page
     And I see "R{{seq}}AB11" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "{{displaydate}}" in the same row as "Date applied"
+    And I see "{{displaydate0}}" in the same row as "Date applied"
     Then I verify the HTML table "Retention audit history" contains the following values
       | Date retention changed | Retention date | Amended by   | Retention policy | Comments                                            | Status   |
       | *NO-CHECK*             | *NO-CHECK*     | *NO-CHECK*   | Custodial        |                                                     | COMPLETE |
@@ -313,7 +313,7 @@ Feature: Case Retention
 
     When I press the "Confirm retention date change" button
     Then I see "Case retention date changed." on the page
-    And I see "{{displaydate}}" in the same row as "Date applied"
+    And I see "{{displaydate0}}" in the same row as "Date applied"
     And I see "DARTS Permanent Policy" in the same row as "DARTS Retention policy applied"
     Then I verify the HTML table "Retention audit history" contains the following values
       | Date retention changed | Retention date | Amended by   | Retention policy | Comments                                            | Status   |
