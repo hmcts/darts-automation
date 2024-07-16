@@ -481,48 +481,96 @@ Feature: Admin portal
     And I see "Event mapping" on the page
     And I see "Automated tasks" on the page
 
-  @DMP-2959
-  Scenario: Add error messaging to Search Transcripts screen
-    When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "System configuration" link
-    Then I click on "Create new version" in the same row as "DMP-2474-4 retention policy type."
-    And I clear the "Display name" field
-    And I set "Display name" to "DMP-2471-Display name-1" and click away
-    Then I see "Enter a unique display name" on the page
+    @DMP-2959
+    Scenario: Add error messaging to Search Transcripts screen
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "System configuration" link
+      Then I click on "Create new version" in the same row as "DMP-2474-4 retention policy type."
+      And I clear the "Display name" field
+      And I set "Display name" to "DMP-2471-Display name-1" and click away
+      Then I see "Enter a unique display name" on the page
 
-    And  I clear the "Display name" field
-    When I set "Display name" to "" and click away
-    Then I see "Enter a display name" on the page
+      And  I clear the "Display name" field
+      When I set "Display name" to "" and click away
+      Then I see "Enter a display name" on the page
 
-    And I clear the "Name" field
-    When I set "Name" to "Test" and click away
-    Then I see "Enter a unique name" on the page
+      And I clear the "Name" field
+      When I set "Name" to "Test" and click away
+      Then I see "Enter a unique name" on the page
 
-    And I clear the "Name" field
-    When I set "Name" to "" and click away
-    Then I see "Enter a name" on the page
+      And I clear the "Name" field
+      When I set "Name" to "" and click away
+      Then I see "Enter a name" on the page
 
-    And I clear the "Description" field
-    When I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A" and click away
-    Then I see "Enter a description shorter than 256 characters" on the page
+      And I clear the "Description" field
+      When I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A" and click away
+      Then I see "Enter a description shorter than 256 characters" on the page
 
-    And I clear the "Description" field
-    When I set "Years" to "00" and click away
-    Then I see "Enter a duration of at least 1 day" on the page
-    And I set "Months" to "01"
-    When I set "Start date" to "{{date-10/}}"
-    And I set "Hour" to "14"
-    And I set "Minutes" to "20" and click away
+      And I clear the "Description" field
+      When I set "Years" to "00" and click away
+      Then I see "Enter a duration of at least 1 day" on the page
+      And I set "Months" to "01"
+      When I set "Start date" to "{{date-10/}}"
+      And I set "Hour" to "14"
+      And I set "Minutes" to "20" and click away
 
-    And I click on the "Create" link
-    Then I see "Enter a policy start date in the future" on the page
-    And I see "Enter a policy start time in the future" on the page
+      And I click on the "Create" link
+      Then I see "Enter a policy start date in the future" on the page
+      And I see "Enter a policy start time in the future" on the page
 
-    Then I set "Display name" to "DMP-2474-Automation-1"
-    And I set "Name" to "DMP-2474-Automation-1"
-    And I set "Start date" to "{{date+0/}}"
-    And I click on the "Create" link
-    Then I see "Retention policy version created" on the page
+     Then I set "Display name" to "DMP-2474-Automation-1"
+     And I set "Name" to "DMP-2474-Automation-1"
+     And I set "Start date" to "{{date+0/}}"
+     And I click on the "Create" link
+     Then I see "Retention policy version created" on the page
+
+    @DMP-2669 @DMP2668
+    Scenario: Automated tasks- primary & details page
+      #DMP-2668-AC1-AC2
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Automated tasks" on the page
+      And I see "ID" on the page
+      And I see "Name" on the page
+      And I see "Description" on the page
+      And I see "Cron expression" on the page
+      And I see "Status" on the page
+      And I see "Run task" on the page
+      And I press the "Run task" button in the same row as "ApplyRetention" "11"
+      And I see "Task start request sent" on the page
+      #DMP2669 AC1  View Automated tasks
+      Then I click on the "1" link
+      And I see "Automated task" on the page
+      And I see "ProcessDailyList" on the page
+      And I see "ID" on the page
+      And I see "Name" on the page
+      And I see "Description" on the page
+      And I see "Cron expression" on the page
+      And I see "Cron editable" on the page
+      And I see "Date created" on the page
+      And I see "Created by" on the page
+      And I see "Date modified" on the page
+      And I see "Modified by" on the page
+      And I see "Run task" on the page
+      And I see "Make inactive" on the page
+      And I see "Active" on the page
+      #AC2 Run task
+      Then I press the "Run task" button
+      And I see "Task start request sent" on the page
+      #AC3 Disable task
+      Then I press the "Make inactive" button
+      And I see "Task 1 is inactive" on the page
+      And I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Inactive" in the same row as "ProcessDailyList" "1"
+      #AC4 Reenable task
+      And I click on the "1" link
+      Then I press the "Make active" button
+      And I see "Task 1 is active" on the page
+      And I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Active" in the same row as "ProcessDailyList" "1"
  
     Then I click on the "Transcripts" navigation link
     And I click on the "Advanced search" link
@@ -830,7 +878,6 @@ Feature: Admin portal
       Then I click on the "Your transcripts" link
       Then I click on the "Admin portal" link
 
-
     @DMP-3129
     Scenario: Search Results - Cases
       When I am logged on to the admin portal as an ADMIN user
@@ -868,8 +915,6 @@ Feature: Admin portal
       Then I click on the "Hearings" link
       Then I click on the "Cases" link
 
-
-
   @DMP-2728
   Scenario: Associated Audio files for deletion/hidden
     When I am logged on to the admin portal as an ADMIN user
@@ -886,11 +931,3 @@ Feature: Admin portal
     Then I see "There are other audio files associated with the file you are hiding and/or deleting" on the page
     Then I press the "Continue" button
     Then I see "There is a problem" on the page
-    
-    
-
-    
-
-
-
-
