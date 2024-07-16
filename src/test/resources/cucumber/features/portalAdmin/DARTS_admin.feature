@@ -483,14 +483,19 @@ Feature: Admin
     And I see "Requester" in the same row as "Requested by"
     And I see "17165" in the same row as "Request ID"
 
-  @DMP-2695 @DMP-2679
+  @DMP-2695 @DMP-2679 @DMP-3475
   Scenario: Transformed media-Change owner
     When I am logged on to the admin portal as an ADMIN user
     And I click on the "Transformed media" link
     And I see "Transformed media" on the page
     And I set "Request ID" to "8545"
     And I press the "Search" button
-    Then I see "Request details" on the page
+    And I click on the "Back" link
+    And I see "Transformed media" on the page
+    Then I click on the "101" link
+    And I see "Transformed media" on the page
+    And I see "101" on the page
+    And I see "Request details" on the page
     And I see "Owner" in the same row as "Mehta Purvi (mehta.purvi@hmcts.net)"
     And I click on the "Change" link
     Then I see "Change owner" on the page
@@ -535,8 +540,115 @@ Feature: Admin
 
     Then I see "Associated audio" on the page
     Then I verify the HTML table contains the following values
-      |Audio ID|Case ID   |Hearing date|Courthouse         |Start time|End time |Courtroom    |Channel number|
-      |3833    |T20230001 |07 Dec 2023 |Harrow Crown Court |2:00:00PM |2:01:00PM|Rayners room |1             |
+      |Audio ID|Case ID    |Hearing date|Courthouse         |Start time|End time|Courtroom    |Channel number|
+      |3833    |T20230001  |07 Dec 2023 |Harrow Crown Court |2:00PM    |2:01PM  |Rayners room |1             |
+
+    @DMP-3139
+    Scenario: Transcript advanced search
+      When I am logged on to the admin portal as an ADMIN user
+      And I click on the "Transcripts" link
+      And I click on the "Completed transcripts" link
+      Then I click on the "Advanced search" link
+      #Search with Courthouse
+      And I set "Courthouse" to "Leeds" and click away
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+        | Transcript ID | Case ID            | Courthouse    | Hearing Date | Request Method | Is hidden |
+        | 1             | Case1_LEEDS_DMP381 | LEEDS_DMP381  | 03 Nov 2023  | Manual         | No        |
+        | 21            | Case1_LEEDS_DMP381 | LEEDS_DMP381  | 03 Nov 2023  | Manual         | No        |
+        | 41            | Case1_LEEDS_DMP381 | LEEDS_DMP381  | 06 Nov 2023  | Automatic      | No        |
+        | 401           | Case1_LEEDS_DMP381 | LEEDS_DMP381  | 03 Nov 2023  | Manual         | No        |
+      And I clear the "Courthouse" field
+      #Search with Hearing Date
+      And I set "Hearing date" to "03/01/2024"
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+        | Transcript ID | Case ID        | Courthouse           | Hearing Date | Request Method | Is hidden |
+        | 933           | DMP-1071_case1 | DMP-1071_Courthouse  | 03 Jan 2024  | Manual         | Yes       |
+        | 953           | DMP-1071_case1 | DMP-1071_Courthouse  | 03 Jan 2024  | Manual         | No        |
+      And I clear the "Hearing date" field
+      #Search with Owner
+      And I set "Owner" to "Kyle"
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+        | Transcript ID | Case ID            | Courthouse | Hearing Date | Request Method | Is hidden |
+        | 561           | CASE5_Event_DMP461 | Swansea    | 10 Aug 2023  | Manual         | Yes       |
+        | 801           | CASE1009           | Swansea    | 15 Aug 2023  | Manual         | No        |
+        | 821           | CASE5_Event_DMP461 | Swansea    | 10 Aug 2023  | Manual         | No        |
+        | 1593          | CASE5_Event_DMP461 | Swansea    | 10 Aug 2023  | Manual         | No        |
+      And I clear the "Owner" field
+      #Search with Requested by
+      And I set "Requested by" to "Kyle"
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+        | Transcript ID | Case ID            | Courthouse | Hearing Date | Request Method | Is hidden |
+        | 561        | CASE5_Event_DMP461 | Swansea    | 10 Aug 2023  | Manual         | Yes       |
+        | 1593       | CASE5_Event_DMP461 | Swansea    | 10 Aug 2023  | Manual         | No        |
+      And I clear the "Requested by" field
+      #Search with Specific date
+      And I select the "Specific date" radio button
+      And I set "Enter a date" to "01/07/2024"
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+        | Transcript ID | Case ID           | Courthouse        | Hearing Date | Request Method | Is hidden |
+        | 7037       | DMP-3338-Case-002 | DMP-3338-BATH-AAB | 01 Jul 2024  | Manual         | Yes       |
+        | 7057       | DMP-3184-Case-008 | DMP-3184-BATH     | 13 Jun 2024  | Manual         | No        |
+      And I clear the "Enter a date" field
+      # Search with Date range
+      And I select the "Date range" radio button
+      And I set "Date from" to "01/07/2024"
+      And I set "Date to" to "08/07/2024"
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+        | Transcript ID | Case ID           | Courthouse        | Hearing Date | Request Method | Is hidden |
+        | 7037       | DMP-3338-Case-002 | DMP-3338-BATH-AAB | 01 Jul 2024  | Manual         | Yes       |
+        | 7057       | DMP-3184-Case-008 | DMP-3184-BATH     | 13 Jun 2024  | Manual         | No        |
+        | 7077       | DMP-2623-Case-008 | London            | 13 Jun 2024  | Manual         | No        |
+      And I clear the "Date from" field
+      And I clear the "Date to" field
+      #Search with Request method
+      And I select the "Automatic" radio button
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+        | Transcript ID | Case ID            | Courthouse        | Hearing Date | Request Method    | Is hidden |
+        | 441           | DMP1600-case1      | London_DMP1600    | 01 Dec 2023  | Automatic         | Yes       |
+        | 41            | Case1_LEEDS_DMP381 | LEEDS_DMP381      | 06 Nov 2023  | Automatic         | No        |
+      #Search with multiple fields
+      And I select the "Manual" radio button
+      And I set "Date from" to "01/07/2024"
+      And I set "Date to" to "08/07/2024"
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+        | Transcript ID | Case ID           | Courthouse        | Hearing Date | Request Method | Is hidden |
+        | 7037       | DMP-3338-Case-002 | DMP-3338-BATH-AAB | 01 Jul 2024  | Manual         | Yes       |
+        | 7057       | DMP-3184-Case-008 | DMP-3184-BATH     | 13 Jun 2024  | Manual         | No        |
+        | 7077       | DMP-2623-Case-008 | London            | 13 Jun 2024  | Manual         | No        |
+      #Search wit Transcript ID
+      And I click on the "Requests" link
+      And I set "Request ID" to "17165"
+      And I press the "Search" button
+      Then I see "Transcript request" on the page
+      And I see "Details" on the page
+      And I see "Current status" on the page
+      And I see "Status" in the same row as "Complete"
+      And I see "Assigned to " in the same row as "Transcriber"
+
+      And I see "Request details" on the page
+      And I see "Hearing date" in the same row as "15 Feb 2024"
+      And I see "Request type" in the same row as "Sentencing remarks"
+      And I see "Request method" in the same row as "Manual"
+      And I see "Request ID" in the same row as "17165"
+      And I see "Urgency" in the same row as "Overnight"
+      And I see "Audio for transcript" in the same row as "Start time null - End time null"
+      And I see "Requested by" in the same row as "Requester"
+      And I see "Received" in the same row as "19 Feb 2024 10:41:26"
+      And I see "Judge approval" in the same row as "Yes"
+
+      And I see "Case details" on the page
+      And I see "Case ID" in the same row as "S1034021"
+      And I see "Courthouse" in the same row as "Harrow Crown Court"
+      And I see "Judge(s)" in the same row as "S1034 judge"
+      And I see "Defendant(s)" in the same row as "S1034 defendant"
 
     @DMP-3315
     Scenario: Hearings search results
