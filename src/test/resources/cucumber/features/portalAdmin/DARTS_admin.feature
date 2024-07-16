@@ -520,7 +520,7 @@ Feature: Admin
     And I see "Date requested" in the same row as "20 December 2023"
     And I see "Hearing date" in the same row as "07 December 2023"
     And I see "Courtroom" in the same row as "Rayners room"
-    And I see "Audio requested" in the same row as "Start time 14:00 - End time 14:01"
+    And I see "Audio requested" in the same row as "Start time 2:00:00PM - End time 2:01:00PM"
 
     Then I see "Case details" on the page
     And I see "Case ID" in the same row as "T20230001"
@@ -535,8 +535,55 @@ Feature: Admin
 
     Then I see "Associated audio" on the page
     Then I verify the HTML table contains the following values
-      |Audio ID|Case ID|Hearing date|Courthouse         |Start time|End time|Courtroom    |Channel number|
-      |3833    |10458  |07 Dec 2023 |Harrow Crown Court |14:00     |14:01   |Rayners room |1             |
+      |Audio ID|Case ID   |Hearing date|Courthouse         |Start time|End time |Courtroom    |Channel number|
+      |3833    |T20230001 |07 Dec 2023 |Harrow Crown Court |2:00:00PM |2:01:00PM|Rayners room |1             |
+
+    @DMP-3315
+    Scenario: Hearings search results
+      When I am logged on to the admin portal as an ADMIN user
+      And I see "Search" on the page
+      And I set "Filter by courthouse" to "Swansea"
+      And I select the "Hearings" radio button
+      And I press the "Search" button
+      Then I see "Hearings" on the page
+      And I click on the pagination link "2"
+      And I see "Next" on the page
+      And I see "Previous" on the page
+      And I click on the pagination link "Previous"
+      And I click on the pagination link "Next"
+
+      And I select the "Date range" radio button
+      And I set "Date from" to "20/06/2024"
+      And I set "Date to" to "24/06/2024"
+      And I press the "Search" button
+      And I see "Showing 1-3 of 3" on the page
+      Then I verify the HTML table contains the following values
+        | Case ID         | Hearing date | Courthouse | Courtroom      |
+        | DMP-2747        | 20/06/2024   | Swansea    | 1              |
+        | DMP-2799-Case6  | 20/06/2024   | Swansea    | Room6-DMP-2799 |
+        | DMP-2799-AC3    | 20/06/2024   | Swansea    | DMP-2799-AC3   |
+
+      And I click on "Case ID" in the table header
+      And "Case ID" has sort "descending" icon
+      Then I verify the HTML table contains the following values
+        | Case ID         | Hearing date | Courthouse | Courtroom      |
+        | DMP-2799-Case6  | 20/06/2024   | Swansea    | Room6-DMP-2799 |
+        | DMP-2799-AC3    | 20/06/2024   | Swansea    | DMP-2799-AC3   |
+        | DMP-2747        | 20/06/2024   | Swansea    | 1              |
+
+      And I click on "Hearing date" in the table header
+      Then "Hearing date" has sort "descending" icon
+
+      And I click on "Courthouse" in the table header
+      Then "Courthouse" has sort "descending" icon
+
+      And I click on "Courtroom" in the table header
+      And "Courtroom" has sort "descending" icon
+      Then I verify the HTML table contains the following values
+        | Case ID         | Hearing date | Courthouse | Courtroom      |
+        | DMP-2799-Case6  | 20/06/2024   | Swansea    | Room6-DMP-2799 |
+        | DMP-2799-AC3    | 20/06/2024   | Swansea    | DMP-2799-AC3   |
+        | DMP-2747        | 20/06/2024   | Swansea    | 1              |
 
   @DMP-2709 @DMP-3384
   Scenario: Audio file-Details page
