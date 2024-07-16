@@ -61,7 +61,8 @@ public class Substitutions {
 			if (subsString.startsWith("date") || subsString.startsWith("numdate") ||
 					subsString.startsWith("dd-") || subsString.startsWith("mm-") ||
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd") ||
-					subsString.startsWith("timestamp-") || subsString.startsWith("displaydate-") ||
+					subsString.startsWith("timestamp-") || subsString.startsWith("displaydate-") || 
+					subsString.startsWith("displaydate0-") ||
 					subsString.startsWith("utc-") || subsString.startsWith("retention-")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
@@ -74,10 +75,18 @@ public class Substitutions {
 						if (subsString.equalsIgnoreCase("displaydate")) {
 							substitutionString = DateUtils.todayDisplay();
 						} else {
-							if (subsString.equalsIgnoreCase("timestamp")) {
-								substitutionString = DateUtils.timestamp();
+							if (subsString.equalsIgnoreCase("displaydate0")) {
+								substitutionString = DateUtils.todayDisplay0();
 							} else {
-								substitutionString = TestData.getProperty(subsTag);
+								if (subsString.startsWith("mac-address-")) {
+									substitutionString = macAddress(subsTag.substring(12));
+								} else {
+									if (subsString.startsWith("ip-address-")) {
+										substitutionString = ipAddress(subsTag.substring(11));
+									} else {
+										substitutionString = TestData.getProperty(subsTag);
+									}
+								}
 							}
 						}
 					}
@@ -93,8 +102,53 @@ public class Substitutions {
 		}
 	}
 	
+	/*
+	 * replace beginning of mac address supplied with sequence number
+	 * 
+	 */
+	static String macAddress(String input) {
+		String seq = ReadProperties.seq;
+		seq = (seq.length() % 2 == 0) ? seq : "0" + seq;
+		String output = "";
+		for (int index = 0; index < seq.length(); index = index + 2) {
+			output = output + seq.substring(index, index + 2) + "-";
+		}
+		output = output + input.substring(output.length());
+		return output;
+	}
+	
+	/*
+	 * replace beginning of ip address supplied with sequence number
+	 * use actual part if < 255 and not zero, otherwise use remainder 253
+	 * 
+	 */
+	static String ipAddress(String input) {
+		long seq = Long.parseLong(ReadProperties.seq);
+		String output = "";
+		int blocks = 0;
+		while (seq > 0) {
+			if (seq % 1000 < 255 && seq % 1000 > 0) {
+				output = String.valueOf(seq % 1000) + "." + output;
+				seq = seq / 1000;
+			} else {
+				output = String.valueOf(seq % 253 + 1) + "." + output;
+				seq = seq / 253;
+			}
+			blocks++;
+		}
+		String [] in = input.split("\\.");
+		for (; blocks < 3; blocks++) {
+			output = output + in[blocks] + ".";
+		}
+		output = output + in[3];
+		return output;
+	}
+	
 	@Test
 	public void test1() {
+		System.out.println("========================");
+		System.out.println("          1");
+		System.out.println("========================");
 		System.out.println(substituteValue("{{date-3}}"));
 		System.out.println(substituteValue("{{date-3/}}"));
 		System.out.println(substituteValue("{{timestamp}}"));
@@ -103,5 +157,16 @@ public class Substitutions {
 		System.out.println(substituteValue("{{displayDate-{{date+7 years}}}}"));
 		Assertions.assertEquals("12", substituteValue("{{dd-12/34/5678}}"));
 		Assertions.assertEquals("9 Dec 2023", substituteValue("{{displaydate-09-12-2023}}"));
+		System.out.println(substituteValue("{{displaydate-{{date+99years}}}}"));
+		System.out.println(substituteValue("{{displaydate0-{{date+99years}}}}"));
+	}
+	
+	@Test
+	public void test2() {
+		System.out.println("========================");
+		System.out.println("          2");
+		System.out.println("========================");
+		System.out.println(substituteValue("{{ip-address-123.456.789.012}}"));
+		System.out.println(substituteValue("{{mac-address-12-34-56-78-90-Ab}}"));
 	}
 }
