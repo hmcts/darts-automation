@@ -367,13 +367,17 @@ public class DateUtils {
 										if (subsString.startsWith("displaydate-")) {
 											substitutionString = displayDate(subsString.substring(12));
 										} else {
-											if (subsString.startsWith("utc-")) {
-												substitutionString = utcTimestamp(subsString.substring(4));
+											if (subsString.startsWith("displaydate0-")) {
+												substitutionString = displayDate0(subsString.substring(13));
 											} else {
-												if (subsString.startsWith("retention-")) {
-													substitutionString = retention(subsString.substring(10));
+												if (subsString.startsWith("utc-")) {
+													substitutionString = utcTimestamp(subsString.substring(4));
 												} else {
-													Assertions.fail("Invalid value to substitute =>" + subsString );
+													if (subsString.startsWith("retention-")) {
+														substitutionString = retention(subsString.substring(10));
+													} else {
+														Assertions.fail("Invalid value to substitute =>" + subsString );
+													}
 												}
 											}
 										}
@@ -412,6 +416,12 @@ public class DateUtils {
 		return date.format(formatter);
 	}
 	
+	public static String todayDisplay0() {
+		LocalDate date = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+		return date.format(formatter);
+	}
+	
 	public static String dateAsYyyyMmDd(String string) {
 		return datePart(string, "yyyy") + "-" + datePart(string, "mm") + "-" + datePart(string, "dd");
 	}
@@ -419,6 +429,12 @@ public class DateUtils {
 	public static String displayDate(String string) {
 		LocalDate date = LocalDate.parse(dateAsYyyyMmDd(string));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+		return date.format(formatter);
+	}
+	
+	public static String displayDate0(String string) {
+		LocalDate date = LocalDate.parse(dateAsYyyyMmDd(string));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 		return date.format(formatter);
 	}
 	
