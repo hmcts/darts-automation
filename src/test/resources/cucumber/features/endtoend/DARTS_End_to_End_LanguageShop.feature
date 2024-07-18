@@ -63,6 +63,6 @@ Feature: Language Shop User
     Then I press the "Yes - delete" button
 
     Examples:
-      | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse      | courtroom | HearingDate        | case_number   | startDate  | endDate     | timeStamp     | judges           | defendants           | prosecutors           | defenders           | message_id | eventId     | caseRetention | totalSentence | audioFile | startTime | endTime  |
-      | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | {{courthouse1}} | C{{seq}}  | {{todayDisplay()}} | S{{seq}}001-B | {{date+0}} | {{date+30}} | {{timestamp}} | S{{seq}} judge-B | S{{seq}} defendant-B | S{{seq}} prosecutor-B | S{{seq}} defender-B | {{seq}}001 | {{seq}}1001 |               |               | sample1   | 08:04:00  | 08:05:00 |
+      | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse      | courtroom | HearingDate        | case_number   | startDate  | endDate     | timeStamp     | defendants           | message_id | eventId     | caseRetention | totalSentence | audioFile   | startTime | endTime  |
+      | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | {{courthouse1}} | C{{seq}}  | {{todayDisplay()}} | S{{seq}}089-B | {{date+0}} | {{date+30}} | {{timestamp}} | S{{seq}} defendant-B | {{seq}}001 | {{seq}}1001 |               |               | sample1.mp2 | 08:04:00  | 08:05:00 |
 
