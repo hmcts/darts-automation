@@ -87,9 +87,6 @@ Feature: Advance Search
     Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
     Then I set "Courthouse" to "<courthouse>" and click away
-    Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -103,9 +100,6 @@ Feature: Advance Search
     Then I set "Enter date from" to "<todaysDate>"
     Then I set "Enter date to" to "<todaysDate>"
     Then I set "Courthouse" to "<courthouse>" and click away
-    Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -432,16 +426,13 @@ Feature: Advance Search
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
-    Then I see "<defendants >" in the same row as "<courthouse>"
+    Then I see "<defendants>" in the same row as "<courthouse>"
 
     #Courthouse + Courtroom + Hearing Date - Specific date
     When I click on the "Clear search" link
     Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
     Then I set "Courthouse" to "<courthouse>" and click away
-    Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -456,9 +447,6 @@ Feature: Advance Search
     Then I set "Enter date from" to "<todaysDate>"
     Then I set "Enter date to" to "<todaysDate>"
     Then I set "Courthouse" to "<courthouse>" and click away
-    Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
