@@ -1,4 +1,4 @@
-@DMP-3060 @EVENT_API @SOAP_EVENT @AUTOMATIC_TRANSCRIPT
+@DMP-3060 @EVENT_API @AUTOMATIC_TRANSCRIPT @SOAP_API
 Feature: Test operation of events causing an automatic transcription to be triggered
 
 				All non-sentencing events do NOT cause an auto transcript to be generated
@@ -8,12 +8,13 @@ Feature: Test operation of events causing an automatic transcription to be trigg
 
 @regression
 Scenario Outline: A single Automatic Transcription request is generated for custodial sentence events
-  Given I create a case
-    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
-    | <courthouse> | <case_numbers> | defendant one | test judge | test prosecutor | test defender |
-    And I authenticate from the XHIBIT source system
+  Given I authenticate from the XHIBIT source system
+  Given I add a daily list
+    | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
+    | 58b211f4-426d-81be-24{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    And I process the daily list for courthouse <courthouse>
     And I create events
-  | courthouse         | courtroom   | case_numbers   | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
+  | courthouse   | courtroom   | case_numbers   | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
   | <courthouse> | <courtroom> | <case_numbers> | {{timestamp-12:04:00}} | {{seq}}368 | {{seq}}1368 | 10100  |          | text {{seq}} |               |               | Case called on  |       |
   | <courthouse> | <courtroom> | <case_numbers> | {{timestamp-12:03:20}} | {{seq}}366 | {{seq}}1366 | 1100   |          | text {{seq}} |               |               | Hearing started |       |
   | <courthouse> | <courtroom> | <case_numbers> | {{timestamp-10:06:20}} | {{seq}}020 | {{seq}}1020 | 1000   | 1052     | text {{seq}} |               |               | Jury sworn-in                                                                                                                          |       |
@@ -153,10 +154,11 @@ Examples:
 
 @regression
 Scenario Outline: No Automatic Transcription request for non-custodial sentence or a sentencing event with an invalid sentence length / retention policy
-  Given I create a case
-    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
-    | <courthouse> | <case_numbers> | defendant one | test judge | test prosecutor | test defender |
-    And I authenticate from the XHIBIT source system
+  Given I authenticate from the XHIBIT source system
+  Given I add a daily list
+    | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
+    | 58b211f4-426d-81be-25{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    And I process the daily list for courthouse <courthouse>
     And I create events
   | courthouse         | courtroom   | case_numbers   | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
   | <courthouse> | <courtroom> | <case_numbers> | {{timestamp-12:04:00}} | {{seq}}368 | {{seq}}1368 | 10100  |          | text {{seq}} |               |               | Case called on  |       |

@@ -42,6 +42,15 @@ public class XmlUtils {
 		return xml.trim().replaceAll("((\s|\n)*)<", "<");
 	}
 	
+	public static String removeCdata(String input) {
+		if (input.contains("<![CDATA[")) {
+			String[] split1 = input.split("<!\\[CDATA\\[");
+			String[] split2 = split1[1].split("\\]\\]>");
+			input = split1[0] + split2[0].replace("&", "&amp").replace("<", "&lt;").replace(">", "&gt;") + split2[1];
+		}
+		return input;
+	}
+	
 //	public static String extractXmlValue(String xml, String path) {
 //		String returnValue = "";
 //		XmlPath xmlPath = new XmlPath(xml);
@@ -176,7 +185,8 @@ public class XmlUtils {
     		String macAddress,
     		String nodeType) {
     	XmlString xmlString = new XmlString()
-    			.addStartCdata()
+//    			.addStartCdata()
+				.startEncoding()
     			.addTag("node")
     			.addAttribute("type", nodeType)
 				.addTag("courthouse", courthouse)
@@ -185,7 +195,8 @@ public class XmlUtils {
     			.addTag("ip_address", ipAddress)
     			.addTag("mac_address", macAddress)
     			.addEndTag()
-    			.addEndCdata();
+//    			.addEndCdata();
+				.endEncoding();
 		return xmlString.xmlValue();
     }
     
@@ -211,8 +222,8 @@ public class XmlUtils {
     			.addTag("subType", subType)
 //    			.useLineEnd(false)
     			.addTag("document")
-//				.startEncoding()
-    			.addStartCdata()
+				.startEncoding()
+//    			.addStartCdata()
 					.addTag("cs:DailyList")
 	    			.addAttribute("xmlns:cs", "http://www.courtservice.gov.uk/schemas/courtservice")
 	    			.addAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
@@ -555,8 +566,8 @@ public class XmlUtils {
 			.addEndTag()
 			.addEndTag()
 			.addEndTag()
-//					.endEncoding()
-			.addEndCdata()
+			.endEncoding()
+//			.addEndCdata()
 //	    			.useLineEnd(true)
 					.addEndTag();
 
@@ -578,7 +589,8 @@ public class XmlUtils {
     			.addAttribute("xmlns:ns5", "http://com.synapps.mojdarts.service.com")
     			.addAttribute("xmlns:ns6", "http://rt.fs.documentum.emc.com/")
     			.addTag("document")
-    			.addStartCdata()
+				.startEncoding()
+//    			.addStartCdata()
     			.addTag("audio")
     			.addTag("start")
     			.addAttribute("Y", DateUtils.datePart(startDateTime, "Y"))
@@ -604,7 +616,8 @@ public class XmlUtils {
     			.addTag("courtroom", courtroom)
     			.addTagGroup("case_numbers", "case_number", caseNumbers)
     			.addEndTag()
-    			.addEndCdata()
+//    			.addEndCdata()
+				.startEncoding()
     			.addEndTag()
     			.addEndTag();
     			
@@ -720,6 +733,22 @@ public class XmlUtils {
 		    	 "2024-03-02T12:00:00",
 		    	 "fn",
 		    	 "0"));
+    }
+    
+    @Test
+	public void testXml7() {
+    	System.out.println(removeCdata("      <messageId>{{seq}}4014</messageId>\r\n"
+    			+ "      <type>10100</type>\r\n"
+    			+ "      <document>\r\n"
+    			+ "  <![CDATA[<be:DartsEvent xmlns:be=\"urn:integration-cjsonline-gov-uk:pilot:entities\" ID=\"{{seq}}14014\" Y=\"{{date-yyyy}}\" M=\"{{date-mm}}\" D=\"{{date-dd}}\" H=\"12\" MIN=\"04\" S=\"10\">\r\n"
+    			+ "    <be:CourtHouse>Harrow Crown Court</be:CourtHouse>\r\n"
+    			+ "    <be:CourtRoom>Room {{seq}}C</be:CourtRoom>\r\n"
+    			+ "    <be:CaseNumbers>\r\n"
+    			+ "      <be:CaseNumber>T{{seq}}251,T{{seq}}252</be:CaseNumber>\r\n"
+    			+ "    </be:CaseNumbers>\r\n"
+    			+ "    <be:EventText>text {{seq}} CD1</be:EventText>\r\n"
+    			+ "  </be:DartsEvent>]]>\r\n"
+    			+ "</document>"));
     }
 
 }

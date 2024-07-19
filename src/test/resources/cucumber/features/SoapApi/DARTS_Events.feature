@@ -1,4 +1,4 @@
-@DMP-3060
+@DMP-3060 @SOAP_API
 Feature: Test operation of SOAP events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
@@ -564,10 +564,11 @@ Scenario Outline: Create a StopAndClose event for custodial sentence - not life
 															retention is 7 years or length of sentence
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
-  Given I create a case
-    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
-    | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
-    And I authenticate from the XHIBIT source system
+  Given I authenticate from the XHIBIT source system
+  Given I add a daily list
+    | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
+    | 58b211f4-426d-81be-21{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    And I process the daily list for courthouse <courthouse>
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I see table darts.court_case column interpreter_used is "f" where cas_id = "{{cas.cas_id}}"
     And I see table darts.court_case column case_closed_ts is "null" where cas_id = "{{cas.cas_id}}"
@@ -604,10 +605,11 @@ Scenario Outline: Create a StopAndClose event for LIFE sentence
 															retention is 99 years
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
-  Given I create a case
-    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
-    | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
-    And I authenticate from the XHIBIT source system
+  Given I authenticate from the XHIBIT source system
+  Given I add a daily list
+    | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
+    | 58b211f4-426d-81be-22{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    And I process the daily list for courthouse <courthouse>
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I see table darts.court_case column interpreter_used is "f" where cas_id = "{{cas.cas_id}}"
     And I see table darts.court_case column case_closed_ts is "null" where cas_id = "{{cas.cas_id}}"
@@ -639,10 +641,11 @@ Examples:
 Scenario Outline: Create a StopAndClose event for non-custodial sentence
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
-  Given I create a case
-    | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
-    | <courthouse> | <caseNumbers> | defendant one | test judge | test prosecutor | test defender |
-    And I authenticate from the XHIBIT source system
+  Given I authenticate from the XHIBIT source system
+  Given I add a daily list
+    | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
+    | 58b211f4-426d-81be-23{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    And I process the daily list for courthouse <courthouse>
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I see table darts.court_case column interpreter_used is "f" where cas_id = "{{cas.cas_id}}"
     And I see table darts.court_case column case_closed_ts is "null" where cas_id = "{{cas.cas_id}}"
@@ -671,7 +674,7 @@ Examples:
   | Harrow Crown Court | Rm {{seq}}A22 | T{{seq}}222 | {{timestamp-12:07:00}} | {{seq}}622 | {{seq}}1622 | 30300 |         | text {{seq}} | 2             |               | Case closed  | 7Y0M0D            |
   
   
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression 
 Scenario Outline: Create a Null event
 # An event row is not created
   Given I authenticate from the XHIBIT source system
@@ -694,13 +697,30 @@ Scenario Outline: Create case with an event
     | <msgId>2     | <type> | <subType> | <eventId>2        | <courthouse> | <courtroom> | <caseNumber> | text {{seq}}C2 | <dateTime> | <caseRetention>             | <totalSentence>     |
 #    | <msgId>2     | <type> | <subType> | <eventId>2        | <courthouse> | <courtroom> | <caseNumber>D | text {{seq}}D1 | <dateTime> | <caseRetention>             | <totalSentence>     |
 #    | <msgId>3     | <type> | <subType> | <eventId>3        | <courthouse> | <courtroom> | <caseNumber>C,<caseNumber>D | text {{seq}}CD | <dateTime> | <caseRetention>             | <totalSentence>     |
-  Then I see table COURTCASE column COUNT(cas_id) is "1" where cas.case_number = "<caseNumber>C" and courthouse_name = "<courthouse>"
-   And I see table EVENT column COUNT(eve_id) is "2" where cas.case_number = "<caseNumber>C" and courthouse_name = "<courthouse>"
+  Then I see table COURTCASE column COUNT(cas_id) is "1" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>"
+   And I see table EVENT column COUNT(eve_id) is "2" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>"
 
 Examples:
-  | courthouse         | courtroom     | caseNumber  | dateTime               | msgId      | eventId     | type  | subType | eventText      | caseRetention | totalSentence | text                                                                                                                                   | notes |
-  | Harrow Crown Court | Room {{seq}}Z | T{{seq}}210 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}C1 |               |               | Case called on  |       |
+  | courthouse         | courtroom     | caseNumber  | dateTime               | msgId      | eventId     | type  | subType | eventText     | caseRetention | totalSentence | text                                                                                                                                   | notes |
+  | Harrow Crown Court | 1             | T{{seq}}210 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}1 |               |               | Case called on  |       |
+  | Harrow Crown Court | Room {{seq}}Z | T{{seq}}211 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}1 |               |               | Case called on  |       |
 
+
+@EVENT_API @SOAP_EVENT @regression
+Scenario Outline: Event creates a courtroom / hearing
+  Given I create a case
+    | courthouse   | case_number  | defendants    | judges     | prosecutors     | defenders     |
+    | <courthouse> | <caseNumber> | defendant one | test judge | test prosecutor | test defender |
+  Given I see table COURTCASE column COUNT(cas_id) is "1" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>"
+  Given I authenticate from the XHIBIT source system
+   And I create an event
+    | message_id  | type  | sub_type  | event_id  | courthouse   | courtroom   | case_numbers | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
+    | <msgId>    | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumber> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
+  Then I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
+Examples:
+  | courthouse         | courtroom     | caseNumber  | dateTime               | msgId    | eventId  | type   | subType | eventText     | caseRetention | totalSentence | text                      | notes               |
+  | Harrow Crown Court | Room {{seq}}B | T{{seq}}260 | {{timestamp-10:00:00}} | {{seq}}0 | {{seq}}0 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant | courtroom & hearing |
+  | Harrow Crown Court | 1             | T{{seq}}261 | {{timestamp-10:00:00}} | {{seq}}1 | {{seq}}1 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant | hearing only        |
 
 
 @EVENT_API @SOAP_API @DMP-2835 @regression @TODO
@@ -747,6 +767,26 @@ Scenario: Event for 2 cases from XHIBIT
   """
 	Then the API status code is 200
 #TODO Database verifications here
+
+@EVENT_API @SOAP_API @DMP-2960 @regression
+Scenario: Create an event baseline
+  Given I authenticate from the XHIBIT source system
+	When I call POST SOAP API using soap action addDocument and body:
+	"""
+      <messageId>{{seq}}4015</messageId>
+      <type>10100</type>
+      <document>
+  <![CDATA[<be:DartsEvent xmlns:be="urn:integration-cjsonline-gov-uk:pilot:entities" ID="{{seq}}14015" Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="12" MIN="04" S="10">
+    <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
+    <be:CourtRoom>Room {{seq}}</be:CourtRoom>
+    <be:CaseNumbers>
+      <be:CaseNumber>T{{seq}}201</be:CaseNumber>
+    </be:CaseNumbers>
+    <be:EventText>text {{seq}} CD2</be:EventText>
+  </be:DartsEvent>]]>
+</document>
+  """
+	Then the API status code is 200
 
 @EVENT_API @SOAP_API @DMP-2960 @regression
 Scenario: Verify that VIQ cannot create an event
@@ -819,8 +859,8 @@ Scenario Outline: Verify that a hearing courtroom can be modified by an event
 																									 ** n.b. Portal will be changed to ignore hearings where 'hearing_is_actual' is false
   Given I authenticate from the XHIBIT source system
   When I add a daily list
-  | messageId                        | type | subType | documentName              | courthouse   | courtroom    | caseNumber   | startDate  | startTime | endDate    | timeStamp     |
-  | 58b211f4-426d-81be-00{{seq}}901  | DL   | DL      | DL {{date+0/}} {{seq}}901 | <courthouse> | <courtroom1> | <caseNumber> | {{date+0}} | 16:00     | {{date+0}} | {{timestamp}} |
+    | messageId                        | type | subType | documentName              | courthouse   | courtroom    | caseNumber   | startDate  | startTime | endDate    | timeStamp     |
+    | 58b211f4-426d-81be-00{{seq}}901  | DL   | DL      | DL {{date+0/}} {{seq}}901 | <courthouse> | <courtroom1> | <caseNumber> | {{date+0}} | 16:00     | {{date+0}} | {{timestamp}} |
    And I process the daily list for courthouse <courthouse>
   Then I see table CASE_HEARING column hearing_is_actual is "f" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom1>"
 
@@ -834,17 +874,19 @@ Scenario Outline: Verify that a hearing courtroom can be modified by an event
 Examples:
   | courthouse         | courtroom1    | courtroom2    | caseNumber  | dateTime               | msgId      | eventId     | type   | subType | eventText     | caseRetention | totalSentence | text                                                                                                                                   | notes |
   | Harrow Crown Court | Room {{seq}}A | Room {{seq}}B | T{{seq}}258 | {{timestamp-10:00:00}} | {{seq}}450 | {{seq}}1450 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
+  | Harrow Crown Court | Room {{seq}}A | 1             | T{{seq}}259 | {{timestamp-10:00:00}} | {{seq}}450 | {{seq}}1450 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
 
 
 @EVENT_API @SOAP_EVENT @regression @DMP-1941 @DMP-1928
 Scenario Outline: Create Poll Check events
-These tests will help populate the relevant section of the DARTS Dynatrace Dashboard each time they are executed
-NB: The usual 'Then' step is missing as the 'When' step includes the assertion of the API response code
+  These tests will help populate the relevant section of the DARTS Dynatrace Dashboard each time they are executed
+  NB: The usual 'Then' step is missing as the 'When' step includes the assertion of the API response code
   Given I authenticate from the <source> source system
   When  I create an event
     | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
     | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
-  Examples:
-    | source | courthouse         | courtroom    | caseNumbers     | dateTime               | msgId        | eventId       | type   | subType | eventText         | caseRetention | totalSentence |
-    | CPP    | Harrow Crown Court | Room {{seq}} | T{{seq}}2070501 | {{timestamp-10:00:00}} | {{seq}}20705 | -{{seq}}20705 | 20705  |         | CPP Daily Test    |               |               |
-    | XHIBIT | Harrow Crown Court | Room {{seq}} | T{{seq}}2070501 | {{timestamp-10:01:01}} | {{seq}}20705 | {{seq}}20705  | 20705  |         | Xhibit Daily Test |               |               |
+Examples:
+    | source | courthouse         | courtroom    | caseNumbers     | dateTime               | msgId      | eventId    | type   | subType | eventText         | caseRetention | totalSentence |
+    | CPP    | Harrow Crown Court | Room {{seq}} | T{{seq}}2070501 | {{timestamp-10:01:01}} | {{seq}}705 | {{seq}}705 | 20705  |         | CPP Daily Test    |               |               |
+    | XHIBIT | Harrow Crown Court | Room {{seq}} | T{{seq}}2070502 | {{timestamp-10:02:02}} | {{seq}}705 | {{seq}}705 | 20705  |         | Xhibit Daily Test |               |               |
+
