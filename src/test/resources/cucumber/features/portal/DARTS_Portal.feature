@@ -138,8 +138,6 @@ Scenario Outline: Requester-Approver links
 Examples:
 	| role 	  	        | search            | yourAudio | yourTranscripts | transcriptRequests | yourWork |
 	| REQUESTERAPPROVER | Search for a case | Y         | Y               | N                  | N        |
-	
-
 
 @Admin @smoketest @demo
 Scenario: Admin User
