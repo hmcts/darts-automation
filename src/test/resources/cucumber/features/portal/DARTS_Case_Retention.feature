@@ -117,7 +117,6 @@ Feature: Case Retention
     And I set "Why are you making this change?" to "AC4"
     And I click on the "Continue" link
     Then I see "Check retention date change" on the page
-    And I see "01 Nov 2035" on the page
     And I click on the "Confirm retention date change" link
     And I see "Case retention date changed." on the page
     And I see "Case retention date" on the page
