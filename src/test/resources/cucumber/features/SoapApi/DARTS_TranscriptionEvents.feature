@@ -10,8 +10,8 @@ Feature: Test operation of events causing an automatic transcription to be trigg
 Scenario Outline: A single Automatic Transcription request is generated for custodial sentence events
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
-    | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
-    | 58b211f4-426d-81be-24{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber     | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
+    | 58b211f4-426d-81be-24{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <case_numbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
     And I process the daily list for courthouse <courthouse>
     And I create events
   | courthouse   | courtroom   | case_numbers   | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
@@ -157,7 +157,7 @@ Scenario Outline: No Automatic Transcription request for non-custodial sentence 
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
-    | 58b211f4-426d-81be-25{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    | 58b211f4-426d-81be-25{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <case_numbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
     And I process the daily list for courthouse <courthouse>
     And I create events
   | courthouse         | courtroom   | case_numbers   | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
@@ -186,7 +186,7 @@ Scenario Outline: No Automatic Transcription request for non-custodial sentence 
    And I see table CASE_TRANSCRIPTION column COUNT(tra_id) is "0" where cas.case_number = "<case_numbers>" and courthouse_name = "<courthouse>"
 #      Any non-sentencing event does not create a transcript event
   When  I create an event
-  | courthouse         | courtroom    | case_numbers | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
+  | courthouse   | courtroom   | case_numbers   | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
   | <courthouse> | <courtroom> | <case_numbers> | {{timestamp-10:00:00}} | {{seq}}001 | {{seq}}1001 | 1000   | 1001    | text {{seq}} |               |               | Offences put to defendant                                                                                                              |       |
   | <courthouse> | <courtroom> | <case_numbers> | {{timestamp-10:00:20}} | {{seq}}002 | {{seq}}1002 | 1000   | 1002    | text {{seq}} |               |               | Proceedings in chambers                                                                                                                |       |
   | <courthouse> | <courtroom> | <case_numbers> | {{timestamp-10:00:40}} | {{seq}}003 | {{seq}}1003 | 1000   | 1003    | text {{seq}} |               |               | Prosecution opened                                                                                                                     |       |
