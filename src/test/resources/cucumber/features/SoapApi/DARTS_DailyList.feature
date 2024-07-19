@@ -427,7 +427,7 @@ Scenario: Daily List successful
    And I see table darts.daily_list column job_status is "NEW" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f4-426d-81be-000{{seq}}001"
   When I process the daily list for courthouse "York"
   Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f4-426d-81be-000{{seq}}001"
-   And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}110" and courthouse_name = "York" and courtroom_name = "1"
+   And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}110" and courthouse_name = "YORK" and courtroom_name = "1"
   
 
 	
@@ -609,6 +609,6 @@ Scenario: Daily List successful with TimeMarkingNote 3:00 PM
    And I see table darts.daily_list column job_status is "NEW" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f4-426d-81be-000{{seq}}002"
   When I process the daily list for courthouse "York"
   Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f4-426d-81be-000{{seq}}002"
-   And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}120" and courthouse_name = "York" and courtroom_name = "1"
+   And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}120" and courthouse_name = "YORK" and courtroom_name = "1"
   
   

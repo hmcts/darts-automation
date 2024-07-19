@@ -261,7 +261,7 @@ public class StepDef_soapApi extends StepDef_base {
 	@When("I call POST SOAP API using soap body:")
 	public void callPostApiWithXmlBody(String docString) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
-		ApiResponse apiResponse = soapApi.postSoap("", Substitutions.substituteValue(docString));
+		ApiResponse apiResponse = soapApi.postSoap("", XmlUtils.removeCdata(Substitutions.substituteValue(docString)));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -269,7 +269,7 @@ public class StepDef_soapApi extends StepDef_base {
 	@When("I call POST SOAP API using soap action {word} and body:")
 	public void callPostSoapActionApiWithBody(String soapAction, String docString) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
-		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString));
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, XmlUtils.removeCdata(Substitutions.substituteValue(docString)));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -285,7 +285,7 @@ public class StepDef_soapApi extends StepDef_base {
 	@When("I call POST SOAP API using SOAPAction {word} and unencoded body:")
 	public void callPostSoapActionApiWithUnencodedBody(String soapAction, String docString) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
-		ApiResponse apiResponse = soapApi.postSoap("", soapAction, Substitutions.substituteValue(docString), false);
+		ApiResponse apiResponse = soapApi.postSoap("", soapAction, XmlUtils.removeCdata(Substitutions.substituteValue(docString)), false);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -293,7 +293,7 @@ public class StepDef_soapApi extends StepDef_base {
 	@When("I call POST {word} SOAP API using soap body:")
 	public void callPostApiWithBody(String endPoint, String docString) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, Substitutions.substituteValue(docString));
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, XmlUtils.removeCdata(Substitutions.substituteValue(docString)));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -301,7 +301,7 @@ public class StepDef_soapApi extends StepDef_base {
 	@When("I call POST {word} SOAP API using soap action {word} and body:")
 	public void callPostSoapActionApiWithBody(String endPoint, String soapAction, String docString) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString));
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, XmlUtils.removeCdata(Substitutions.substituteValue(docString)));
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -309,7 +309,7 @@ public class StepDef_soapApi extends StepDef_base {
 	@When("I call POST {word} SOAP API using SOAPAction {word} and encoded body:")
 	public void callPostSoapActionApiWithEncodedBody(String endPoint, String soapAction, String docString) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString), true);
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, XmlUtils.removeCdata(Substitutions.substituteValue(docString)), true);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
@@ -317,7 +317,7 @@ public class StepDef_soapApi extends StepDef_base {
 	@When("I call POST {word} SOAP API using SOAPAction {word} and body:")
 	public void callPostSoapActionApiWithNotEncodedBody(String endPoint, String soapAction, String docString) {
 		soapApi.setDefaultSource(SOURCE_XHIBIT);
-		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, Substitutions.substituteValue(docString), false);
+		ApiResponse apiResponse = soapApi.postSoap(endPoint, soapAction, XmlUtils.removeCdata(Substitutions.substituteValue(docString)), false);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}

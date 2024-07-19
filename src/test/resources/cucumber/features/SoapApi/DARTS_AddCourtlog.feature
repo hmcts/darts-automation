@@ -1,7 +1,7 @@
 Feature: Cases EndPoint using SOAP
 
 @COURTLOG @SOAP_API @regression
-Scenario Outline: SOAP courtLog where case exists
+Scenario Outline: SOAP courtLog where case exists & hearing exists
 	Given I create a case
 	| courthouse   | case_number  | defendants   | judges   | prosecutors   | defenders   |
 	| <courthouse> | <caseNumber> | <defendants> | <judges> | <prosecutors> | <defenders> |
@@ -31,6 +31,7 @@ Examples:
 
 @COURTLOG @SOAP_API @regression
 Scenario Outline: SOAP courtLog where case dooes not exist and the courtlog creates the case
+  Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>"
 	 When I add courtlogs
 	| courthouse   | courtroom   | case_numbers   | text                  | date       | time     |
 	| <courthouse> | <courtroom> | <caseNumber>   | log details {{seq}}-1 | {{date-0}} | 10:00:01 |
@@ -53,6 +54,7 @@ Scenario Outline: SOAP courtLog where case dooes not exist and the courtlog crea
 Examples:
 	| courthouse         | courtroom    | caseNumber  | defendants                        | judges     | prosecutors     | defenders     |
 	| Harrow Crown Court | room {{seq}} | T{{seq}}122 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
+	
 
 @COURTLOG @SOAP_API @regression
 Scenario: addLogEntry successful baseline
