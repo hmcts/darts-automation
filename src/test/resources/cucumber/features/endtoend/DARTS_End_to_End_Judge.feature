@@ -1,6 +1,7 @@
 Feature: Judge
 
   @end2end @end2end5 @DMP-2200
+  @reads-system-properties
   Scenario Outline: Judge
     #Given I create a case
      # | courthouse   | |case_number   | defendants   | judges   | prosecutors   | defenders   |

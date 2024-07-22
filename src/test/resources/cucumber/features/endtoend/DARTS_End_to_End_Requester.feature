@@ -1,6 +1,7 @@
 Feature: Requester
 
   @end2end @end2end2 @DMP-2206
+  @reads-system-properties
   Scenario Outline: Requester
     Given I add a daily lists
       | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime      | endDate   | timeStamp   | defendant    | urn           |

@@ -5,6 +5,7 @@ Feature: Add Daily List using SOAP
 #
 	
 @Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+  @reads-and-writes-system-properties
 Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 		First is replaced
 		Second is ignored when processed
@@ -250,6 +251,7 @@ Scenario: Daily List malformed fails
 	Then the API status code is 400
 	
 @Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+  @reads-and-writes-system-properties
 Scenario: Daily List successful
   Given I authenticate from the CPP source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -432,6 +434,7 @@ Scenario: Daily List successful
 
 	
 @Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+  @reads-and-writes-system-properties
 Scenario: Daily List successful with TimeMarkingNote 3:00 PM
   Given I authenticate from the CPP source system
 	When I call POST SOAP API using soap action addDocument and body:
