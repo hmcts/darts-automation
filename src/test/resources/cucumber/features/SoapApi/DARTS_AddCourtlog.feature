@@ -26,7 +26,7 @@ Scenario Outline: SOAP courtLog where case exists & hearing exists
 
 Examples:
 	| courthouse         | courtroom    | caseNumber  | defendants                        | judges     | prosecutors     | defenders     |
-	| Harrow Crown Court | room {{seq}} | T{{seq}}121 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
+	| Harrow Crown Court | Room {{seq}} | T{{seq}}121 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 
 
 @COURTLOG @SOAP_API @regression
@@ -53,7 +53,7 @@ Scenario Outline: SOAP courtLog where case dooes not exist and the courtlog crea
 
 Examples:
 	| courthouse         | courtroom    | caseNumber  | defendants                        | judges     | prosecutors     | defenders     |
-	| Harrow Crown Court | room {{seq}} | T{{seq}}122 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
+	| Harrow Crown Court | Room {{seq}} | T{{seq}}122 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 	
 
 @COURTLOG @SOAP_API @regression
@@ -64,7 +64,7 @@ Scenario: addLogEntry successful baseline
 <document xmlns="">
 <![CDATA[<log_entry Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="11" MIN="00" S="03">
   <courthouse>Harrow Crown Court</courthouse>
-  <courtroom>room 9335</courtroom>
+  <courtroom>Room 9335</courtroom>
   <case_numbers>
     <case_number>T{{seq}}121</case_number>
   </case_numbers>
@@ -83,7 +83,7 @@ Scenario: addLogEntry with invalid court fails
 <document xmlns="">
 <![CDATA[<log_entry Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="11" MIN="00" S="03">
   <courthouse>No Crown Court</courthouse>
-  <courtroom>room 9335</courtroom>
+  <courtroom>Room 9335</courtroom>
   <case_numbers>
     <case_number>T0000000</case_number>
   </case_numbers>
@@ -101,7 +101,7 @@ Scenario: addLogEntry with authenticating from XHIBIT fails
 <document xmlns="">
 <![CDATA[<log_entry Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="11" MIN="00" S="03">
   <courthouse>Harrow Crown Court</courthouse>
-  <courtroom>room 9335</courtroom>
+  <courtroom>Room 9335</courtroom>
   <case_numbers>
     <case_number>T0000000</case_number>
   </case_numbers>

@@ -1,4 +1,4 @@
-@DMP-3060 @EVENT_API @AUTOMATIC_TRANSCRIPT @SOAP_API
+@DMP-3060 @AUTOMATIC_TRANSCRIPT @SOAP_API
 Feature: Test operation of events causing an automatic transcription to be triggered
 
 				All non-sentencing events do NOT cause an auto transcript to be generated
@@ -7,11 +7,12 @@ Feature: Test operation of events causing an automatic transcription to be trigg
 				A single transcript is requested if there is more than 1 sentencing event
 
 @regression
+  @reads-system-properties
 Scenario Outline: A single Automatic Transcription request is generated for custodial sentence events
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber     | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
-    | 58b211f4-426d-81be-24{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <case_numbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    | 58b211f4-426d-81be-24{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}241 | <courthouse> | <courtroom> | <case_numbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
     And I process the daily list for courthouse <courthouse>
     And I create events
   | courthouse   | courtroom   | case_numbers   | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
@@ -153,11 +154,12 @@ Examples:
 
 
 @regression
+  @reads-system-properties
 Scenario Outline: No Automatic Transcription request for non-custodial sentence or a sentencing event with an invalid sentence length / retention policy
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
-    | 58b211f4-426d-81be-25{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <case_numbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
+    | 58b211f4-426d-81be-25{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}251 | <courthouse> | <courtroom> | <case_numbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
     And I process the daily list for courthouse <courthouse>
     And I create events
   | courthouse         | courtroom   | case_numbers   | date_time              | message_id | event_id    | type   | sub_type | event_text   | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |

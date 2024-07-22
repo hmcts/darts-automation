@@ -1,6 +1,7 @@
 Feature: Language Shop User
 
   @end2end @end2end7 @DMP-2056
+  @reads-system-properties
   Scenario Outline: Language Shop User
 #    Given I create a case
 #      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
