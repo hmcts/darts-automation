@@ -481,48 +481,96 @@ Feature: Admin portal
     And I see "Event mapping" on the page
     And I see "Automated tasks" on the page
 
-  @DMP-2959
-  Scenario: Add error messaging to Search Transcripts screen
-    When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "System configuration" link
-    Then I click on "Create new version" in the same row as "DMP-2474-4 retention policy type."
-    And I clear the "Display name" field
-    And I set "Display name" to "DMP-2471-Display name-1" and click away
-    Then I see "Enter a unique display name" on the page
+    @DMP-2959
+    Scenario: Add error messaging to Search Transcripts screen
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "System configuration" link
+      Then I click on "Create new version" in the same row as "DMP-2474-4 retention policy type."
+      And I clear the "Display name" field
+      And I set "Display name" to "DMP-2471-Display name-1" and click away
+      Then I see "Enter a unique display name" on the page
 
-    And  I clear the "Display name" field
-    When I set "Display name" to "" and click away
-    Then I see "Enter a display name" on the page
+      And  I clear the "Display name" field
+      When I set "Display name" to "" and click away
+      Then I see "Enter a display name" on the page
 
-    And I clear the "Name" field
-    When I set "Name" to "Test" and click away
-    Then I see "Enter a unique name" on the page
+      And I clear the "Name" field
+      When I set "Name" to "Test" and click away
+      Then I see "Enter a unique name" on the page
 
-    And I clear the "Name" field
-    When I set "Name" to "" and click away
-    Then I see "Enter a name" on the page
+      And I clear the "Name" field
+      When I set "Name" to "" and click away
+      Then I see "Enter a name" on the page
 
-    And I clear the "Description" field
-    When I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A" and click away
-    Then I see "Enter a description shorter than 256 characters" on the page
+      And I clear the "Description" field
+      When I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A" and click away
+      Then I see "Enter a description shorter than 256 characters" on the page
 
-    And I clear the "Description" field
-    When I set "Years" to "00" and click away
-    Then I see "Enter a duration of at least 1 day" on the page
-    And I set "Months" to "01"
-    When I set "Start date" to "{{date-10/}}"
-    And I set "Hour" to "14"
-    And I set "Minutes" to "20" and click away
+      And I clear the "Description" field
+      When I set "Years" to "00" and click away
+      Then I see "Enter a duration of at least 1 day" on the page
+      And I set "Months" to "01"
+      When I set "Start date" to "{{date-10/}}"
+      And I set "Hour" to "14"
+      And I set "Minutes" to "20" and click away
 
-    And I click on the "Create" link
-    Then I see "Enter a policy start date in the future" on the page
-    And I see "Enter a policy start time in the future" on the page
+      And I click on the "Create" link
+      Then I see "Enter a policy start date in the future" on the page
+      And I see "Enter a policy start time in the future" on the page
 
-    Then I set "Display name" to "DMP-2474-Automation-1"
-    And I set "Name" to "DMP-2474-Automation-1"
-    And I set "Start date" to "{{date+0/}}"
-    And I click on the "Create" link
-    Then I see "Retention policy version created" on the page
+     Then I set "Display name" to "DMP-2474-Automation-1"
+     And I set "Name" to "DMP-2474-Automation-1"
+     And I set "Start date" to "{{date+0/}}"
+     And I click on the "Create" link
+     Then I see "Retention policy version created" on the page
+
+    @DMP-2669 @DMP2668
+    Scenario: Automated tasks- primary & details page
+      #DMP-2668-AC1-AC2
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Automated tasks" on the page
+      And I see "ID" on the page
+      And I see "Name" on the page
+      And I see "Description" on the page
+      And I see "Cron expression" on the page
+      And I see "Status" on the page
+      And I see "Run task" on the page
+      And I press the "Run task" button in the same row as "ApplyRetention" "11"
+      And I see "Task start request sent" on the page
+      #DMP2669 AC1  View Automated tasks
+      Then I click on the "1" link
+      And I see "Automated task" on the page
+      And I see "ProcessDailyList" on the page
+      And I see "ID" on the page
+      And I see "Name" on the page
+      And I see "Description" on the page
+      And I see "Cron expression" on the page
+      And I see "Cron editable" on the page
+      And I see "Date created" on the page
+      And I see "Created by" on the page
+      And I see "Date modified" on the page
+      And I see "Modified by" on the page
+      And I see "Run task" on the page
+      And I see "Make inactive" on the page
+      And I see "Active" on the page
+      #AC2 Run task
+      Then I press the "Run task" button
+      And I see "Task start request sent" on the page
+      #AC3 Disable task
+      Then I press the "Make inactive" button
+      And I see "Task 1 is inactive" on the page
+      And I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Inactive" in the same row as "ProcessDailyList" "1"
+      #AC4 Reenable task
+      And I click on the "1" link
+      Then I press the "Make active" button
+      And I see "Task 1 is active" on the page
+      And I click on the "System configuration" link
+      And I click on the "Automated tasks" link
+      And I see "Active" in the same row as "ProcessDailyList" "1"
  
     Then I click on the "Transcripts" navigation link
     And I click on the "Advanced search" link
@@ -791,3 +839,225 @@ Feature: Admin portal
     And I see "Go back" on the page
     And I click on the "Go back" link
     Then I see "Offences put to defendant" on the page
+
+    @DMP-1662
+    Scenario: Deletion Reasons
+      When I am logged on to the admin portal as an ADMIN user
+      And I click on the "Transcripts" link
+      Then I click on the "Completed transcripts" link
+      And I set "Case ID" to "DMP1600-case1"
+      And I press the "Search" button
+      Then I click on "761" in the same row as "Manual"
+      And I see " Hide or delete " on the page
+      And I press the " Hide or delete " button
+      Then I press the "Hide or delete" button
+      #Error Message
+      And I see "Select a reason for hiding and/or deleting the file" on the page
+      And I see "Enter a ticket reference" on the page
+      And I see "Provide details relating to this action" on the page
+      #Cancel
+      And I see "Select a reason" on the page
+      And I see " Other reason to hide only " on the page
+      And I see " File will be hidden only " on the page
+      And I check the " Other reason to hide only " checkbox
+      And I set "Enter ticket reference" to "DMP1600"
+      And I set "Comments" to "Test"
+      And I click on the "Cancel" link
+      #Hide file
+      And I press the " Hide or delete " button
+      And I see "Select a reason" on the page
+      And I see " Other reason to hide only " on the page
+      And I see " File will be hidden only " on the page
+      And I select the "Other reason to hide only" radio button
+      And I set "Enter ticket reference" to "DMP1600"
+      And I set "Comments" to "Test" and click away
+      Then I see "You have 252 characters remaining" on the page
+      And I press the "Hide or delete" button
+      Then I see " File(s) successfully hidden or marked for deletion " on the page
+      And I see "Check for associated files" on the page
+      And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+      Then I press the "Continue" button
+      And I see "Important" on the page
+      And I see "This file is hidden in DARTS" on the page
+
+      @DMP-3247 @DMP-3382
+      Scenario: Transcription File Details Page
+        When I am logged on to the admin portal as an ADMIN user
+        And I click on the "Transcripts" link
+        Then I click on the "Completed transcripts" link
+        And I set "Case ID" to "C1216002"
+        And I press the "Search" button
+        #Basic details
+        Then I click on the "Back" link
+        And I see "Transcripts" on the page
+        And I click on the "Completed transcripts" link
+        And I set "Case ID" to "C1216002"
+        And I press the "Search" button
+
+        Then I see "Transcript file" on the page
+        And I see "Basic details" on the page
+        And I see "C1216002" in the same row as "Case ID"
+        And I see "02 Apr 2024" in the same row as "Hearing date"
+        And I see "Harrow Crown Court" in the same row as "Courthouse"
+        And I see "1216-9" in the same row as "Courtroom"
+        And I see "DefC 1216-9" in the same row as "Defendant(s)"
+        And I see "Defendant(s)" in the same row as "Judge(s)"
+
+        And I see "Request details" on the page
+        And I see "Specified Times" in the same row as "Request type"
+        And I see "23345" in the same row as "Request ID"
+        And I see "Overnight" in the same row as "Urgency"
+        And I see "Requester" in the same row as "Requested by"
+        And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
+        And I see "Yes" in the same row as "Judge approval"
+        #Advanced details
+        Then I click on the "Advanced details" link
+        And I see "Advanced details" on the page
+        And I see "Transcription object ID" on the page
+        And I see "Content object ID" on the page
+        And I see "Clip ID" on the page
+        And I see "cDc5hZaR35EMEvnA3XJDyQ==" in the same row as "Checksum"
+        And I see "0.98MB" in the same row as "File size"
+        And I see "application/msword" in the same row as "File type"
+        And I see "file-sample_1MB.doc" in the same row as "Filename"
+        And I see "02 Apr 2024 at 9:49:55AM" in the same row as "Date uploaded"
+        And I see "Transcriber" in the same row as "Uploaded by"
+        And I see "Transcriber" in the same row as "Last modified by"
+        And I see "No" in the same row as "Transcription hidden?"
+        And I see "" in the same row as "Hidden by"
+        And I see "" in the same row as "Date hidden"
+        And I see "" in the same row as "Retain until"
+        And I see " Hide or delete " on the page
+        And I press the " Hide or delete " button
+        Then I press the "Hide or delete" button
+      #Error Message
+        And I see "Select a reason for hiding and/or deleting the file" on the page
+        And I see "Enter a ticket reference" on the page
+        And I see "Provide details relating to this action" on the page
+      #Cancel
+        And I see "Select a reason" on the page
+        And I see " Other reason to hide only " on the page
+        And I see " File will be hidden only " on the page
+        And I check the " Other reason to hide only " checkbox
+        And I set "Enter ticket reference" to "DMP1600"
+        And I set "Comments" to "Test"
+        And I click on the "Cancel" link
+        #Hide file
+        Then I press the " Hide or delete " button
+        And I select the "Other reason to hide only" radio button
+        And I set "Enter ticket reference" to "DMP1600"
+        And I set "Comments" to "Test" and click away
+        Then I see "You have 252 characters remaining" on the page
+        And I press the "Hide or delete" button
+
+        Then I see " File(s) successfully hidden or marked for deletion " on the page
+        And I see "Check for associated files" on the page
+        And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+        And I press the "Continue" button
+        And I see "Important" on the page
+        And I see "This file is hidden in DARTS" on the page
+        And I see "DARTS users cannot view this file. You can unhide the file" on the page
+        And I see "Hidden by - Darts Admin" on the page
+        And I see "Reason - Other reason to hide only" on the page
+        And I see "Test" on the page
+        And I click on the "Advanced details" link
+        And I see "Yes" in the same row as "Transcription hidden?"
+        And I see "Unhide" on the page
+        #Unhide file
+        Then I press the "Unhide" button
+        And I do not see "Important" on the page
+        And I click on the "Advanced details" link
+        And I see "No" in the same row as "Transcription hidden?"
+        And I see " Hide or delete " on the page
+
+    @DMP-3234
+    Scenario: Add a link to "user portal" link to each admin portal screen
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Users" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Groups" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Courthouses" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Transformed media" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "Transcripts" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "File deletion" link
+      Then I click on the "User portal" link
+      And I press the "back" button on my browser
+      And I click on the "System configuration" link
+      Then I click on the "User portal" link
+
+    @DMP-3235
+    Scenario: Add a link to "Admin portal" to each DARTS portal screen
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "User portal" link
+      Then I click on the "Admin portal" link
+      Then I click on the "User portal" link
+      Then I click on the "Your audio" link
+      Then I click on the "Admin portal" link
+      Then I click on the "User portal" link
+      Then I click on the "Your transcripts" link
+      Then I click on the "Admin portal" link
+
+    @DMP-3129
+    Scenario: Search Results - Cases
+      When I am logged on to the admin portal as an ADMIN user
+      #Filter by courthouse
+      Then I set "Filter by courthouse" to "Swansea"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Case ID
+      Then I set "Case ID" to "CASE1009"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Courtroom
+      Then I set "Courtroom" to "ROOM_A"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Hearing Date-Specific Date
+      Then I select the "Specific date" radio button
+      Then I set "Enter a date" to "03/07/2024"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+      Then I refresh the page
+      #Hearing Date-Date Range
+      Then I refresh the page
+      Then I select the "Date range" radio button
+      Then I set "Date from" to "02/07/2024"
+      Then I set "Date to" to "03/07/2024"
+      Then I press the "Search" button
+      Then I click on the "Hearings" link
+      Then I click on the "Cases" link
+
+  @DMP-2728
+  Scenario: Associated Audio files for deletion/hidden
+    When I am logged on to the admin portal as an ADMIN user
+    When I set "Case ID" to "CASE1009"
+    Then I press the "Search" button
+    Then I click on the "Audio" link
+    Then I click on "Audio ID" in the table header
+    Then I click on the "1313" link
+    Then I press the "Hide or delete" button
+    Then I select the "Other reason to hide only" radio button
+    Then I set "Enter ticket reference" to "Test"
+    Then I set "Comments" to "Test"
+    Then I press the "Hide or delete" button
+    Then I see "There are other audio files associated with the file you are hiding and/or deleting" on the page
+    Then I press the "Continue" button
+    Then I see "There is a problem" on the page

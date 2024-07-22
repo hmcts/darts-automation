@@ -87,9 +87,6 @@ Feature: Advance Search
     Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
     Then I set "Courthouse" to "<courthouse>" and click away
-    Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -103,9 +100,6 @@ Feature: Advance Search
     Then I set "Enter date from" to "<todaysDate>"
     Then I set "Enter date to" to "<todaysDate>"
     Then I set "Courthouse" to "<courthouse>" and click away
-    Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -432,16 +426,13 @@ Feature: Advance Search
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
-    Then I see "<defendants >" in the same row as "<courthouse>"
+    Then I see "<defendants>" in the same row as "<courthouse>"
 
     #Courthouse + Courtroom + Hearing Date - Specific date
     When I click on the "Clear search" link
     Then I select the "Specific date" radio button
     Then I set "Enter a date" to "<todaysDate>"
     Then I set "Courthouse" to "<courthouse>" and click away
-    Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -456,9 +447,6 @@ Feature: Advance Search
     Then I set "Enter date from" to "<todaysDate>"
     Then I set "Enter date to" to "<todaysDate>"
     Then I set "Courthouse" to "<courthouse>" and click away
-    Then I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
     Then I see "1 result" on the page
@@ -712,6 +700,6 @@ Feature: Advance Search
 
     Examples:
       | user        | courthouse      | courtroom | case_number   | dateTime      | message_id | eventId     | type  | subType | caseRetention | totalSentence | prosecutors           | defenders           | defendants           | judges           | keywords             | todaysDate  |
-      | REQUESTER   | {{courthouse1}} | C{{seq}}  | S{{seq}}082-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |
-      | JUDGE       | {{courthouse1}} | C{{seq}}  | S{{seq}}082-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |
-      | TRANSCRIBER | {{courthouse1}} | C{{seq}}  | S{{seq}}082-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |
+      | REQUESTER   | {{courthouse1}} | C{{seq}}  | S{{seq}}091-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |
+      | JUDGE       | {{courthouse1}} | C{{seq}}  | S{{seq}}092-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |
+      | TRANSCRIBER | {{courthouse1}} | C{{seq}}  | S{{seq}}093-B | {{timestamp}} | {{seq}}082 | {{seq}}1042 | 21200 | 11000   |               |               | S{{seq}} prosecutor-B | S{{seq}} defender-B | S{{seq}} defendant-B | S{{seq}} judge-B | SIT LOG-82-{{seq}}-B | {{date+0/}} |
