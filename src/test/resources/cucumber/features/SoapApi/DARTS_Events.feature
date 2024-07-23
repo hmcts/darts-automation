@@ -854,6 +854,27 @@ Scenario: Verify that event creation for an invalid courthouse fails
   """
 	Then the API status code is 404
 
+@EVENT_API @SOAP_API @DMP-2960 @regression
+Scenario: Create an event using invalid type / subtype
+  Given I authenticate from the XHIBIT source system
+	When I call POST SOAP API using soap action addDocument and body:
+	"""
+      <messageId>{{seq}}4015</messageId>
+      <type>1</type>
+      <subType>1</subType>
+      <document>
+  <![CDATA[<be:DartsEvent xmlns:be="urn:integration-cjsonline-gov-uk:pilot:entities" ID="{{seq}}14015" Y="{{yyyy-{{date-0}}}}" M="{{mm-{{date-0}}}}" D="{{dd-{{date-0}}}}" H="12" MIN="04" S="10">
+    <be:CourtHouse>Harrow Crown Court</be:CourtHouse>
+    <be:CourtRoom>Room {{seq}}</be:CourtRoom>
+    <be:CaseNumbers>
+      <be:CaseNumber>T{{seq}}201</be:CaseNumber>
+    </be:CaseNumbers>
+    <be:EventText>text {{seq}} CD2</be:EventText>
+  </be:DartsEvent>]]>
+</document>
+  """
+	Then the API status code is 404
+
 
 @EVENT_API @SOAP_EVENT @regression
   @reads-system-properties

@@ -617,7 +617,7 @@ public class XmlUtils {
     			.addTagGroup("case_numbers", "case_number", caseNumbers)
     			.addEndTag()
 //    			.addEndCdata()
-				.startEncoding()
+				.endEncoding()
     			.addEndTag()
     			.addEndTag();
     			
