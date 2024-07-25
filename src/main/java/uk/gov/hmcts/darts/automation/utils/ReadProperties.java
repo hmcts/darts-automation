@@ -112,9 +112,9 @@ public class ReadProperties {
 	
 // generate sequence number for dynamic data {{seq}}
 // if runLocal, if seq is set in system parameters, use that, otherwise use seq from testdata.properties prefixed by seq_prefix
-// if not run_local, use build no from build info
+// if not run_local, use build no from build info prefixed by remote_prefix from environment.properties
 	
-	public static String seq = runLocal ? ((getSystemValue("seq") == null) ? emptyIfNull(getSystemValue("seq_prefix")) + TestData.getNextSeqNo() : getSystemValue("seq")) : buildNo;
+	public static String seq = runLocal ? ((getSystemValue("seq") == null) ? emptyIfNull(getSystemValue("seq_prefix")) + TestData.getNextSeqNo() : getSystemValue("seq")) : main("remote_prefix") + buildNo;
 			 
 	private static int instanceCount = 0;
     
