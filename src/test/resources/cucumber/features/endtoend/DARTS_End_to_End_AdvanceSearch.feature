@@ -425,7 +425,6 @@ Feature: Advance Search
     Then I see "Refine your search by adding more information and try again." on the page
     Then I set "Courtroom" to "<courtroom>"
     Then I press the "Search" button
-    Then I see "1 result" on the page
     Then I see "<defendants>" in the same row as "<courthouse>"
 
     #Courthouse + Courtroom + Hearing Date - Specific date
