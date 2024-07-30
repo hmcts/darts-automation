@@ -1,6 +1,7 @@
+ @ts4
 Feature: Admin
 
-  @DMP-2323
+  @DMP-2323 @regression
   Scenario: Admin change transcription status data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors             | defenders             |
@@ -16,7 +17,7 @@ Feature: Admin
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
       | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
 
-  @DMP-2187 @regression
+  @DMP-2187 @regression @obsolete
   Scenario: Admin access and landing page
     Given I am logged on to the admin portal as an ADMIN user
     #DMP-2187-AC1 and AC2
@@ -106,7 +107,7 @@ Feature: Admin
 
     Examples:
       | Full name  | Email                 | Description |
-      | Joe Bloggs | darts.test4@hmcts.net | Test        |
+      | Joe Bloggs | darts.test{{seq}}@hmcts.net | Test        |
 
   @DMP-630-AC3-1 @regression
   Scenario Outline: Create a new user account with existing email address
@@ -249,8 +250,8 @@ Feature: Admin
     And I see "This user is not a member of any groups." on the page
     And I press the "Assign groups" button
     And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requestor"
-    And I press the "Assign groups" button
+    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
+    And I press the "Assign groups (1)" button
     Then I see "Assigned 1 group" on the page
     And I do not see "This user is not a member of any groups." on the page
 
@@ -262,8 +263,8 @@ Feature: Admin
     And I click on the "Groups" sub-menu link
     And I press the "Assign groups" button
     And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requestor"
-    And I press the "Assign groups" button
+    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
+    And I press the "Assign groups (1)" button
     Then I see "Assigned 1 group" on the page
 
     When I click on the "Users" link
@@ -274,8 +275,8 @@ Feature: Admin
     And I click on the "Groups" sub-menu link
     And I press the "Assign groups" button
     And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requestor"
-    And I press the "Assign groups" button
+    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
+    And I press the "Assign groups (1)" button
     Then I see "Assigned 1 group" on the page
 
   @DMP-2323 @DMP-2340 @regression
