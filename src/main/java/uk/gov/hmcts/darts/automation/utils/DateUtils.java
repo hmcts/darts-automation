@@ -653,7 +653,9 @@ public class DateUtils {
 		
 		String currentOffset = ZonedDateTime.now(ZoneId.of("Europe/London")).getOffset().toString();
 		
-		return retentionString + " " + currentOffset.substring(1) + ":00" + currentOffset.substring(0, 3);
+		retentionString = retentionString + " " + currentOffset.substring(1) + ":00" + currentOffset.substring(0, 3);
+		
+		return dateFormat.format((Date)cal.getTime()) + " 00:00:00+00";
 	}
 	
 	public static String returnNumericDateCcyymmdd(String date) {

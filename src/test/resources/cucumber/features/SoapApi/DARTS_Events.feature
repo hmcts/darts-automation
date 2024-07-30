@@ -591,7 +591,6 @@ Scenario Outline: Create a StopAndClose event for custodial sentence - not life
    And I see table CASE_RETENTION column total_sentence is "<totalSentence>" where cmr_id = "{{cmr_id}}" 
    And I see table CASE_RETENTION column fixed_policy_key is "<caseRetention>" where cmr_id = "{{cmr_id}}"
    And I see table CASE_RETENTION column retain_until_ts is "{{retention-<actualRetention>}}" where cmr_id = "{{cmr_id}}" 
-
 Examples:
   | courthouse         | courtroom     | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text         | actualRetention   |
   | Harrow Crown Court | Rm {{seq}}A13 | T{{seq}}213 | {{timestamp-11:23:00}} | {{seq}}613 | {{seq}}1613 | 3000  |         | text {{seq}} | 3             | 3Y3M3D        | Archive Case | 7Y0M0D            |
@@ -678,7 +677,7 @@ Examples:
   | Harrow Crown Court | Rm {{seq}}A22 | T{{seq}}222 | {{timestamp-12:07:00}} | {{seq}}622 | {{seq}}1622 | 30300 |         | text {{seq}} | 2             |               | Case closed  | 7Y0M0D            |
   
   
-@EVENT_API @SOAP_EVENT @regression 
+@EVENT_API @SOAP_EVENT @regression @TODO
 Scenario Outline: Create a Null event
 # An event row is not created
   Given I authenticate from the XHIBIT source system

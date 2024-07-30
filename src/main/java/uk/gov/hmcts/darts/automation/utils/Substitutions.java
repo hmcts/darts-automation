@@ -169,4 +169,13 @@ public class Substitutions {
 		System.out.println(substituteValue("{{ip-address-123.456.789.012}}"));
 		System.out.println(substituteValue("{{mac-address-12-34-56-78-90-Ab}}"));
 	}
+	
+	@Test
+	public void test3() {
+		System.out.println("========================");
+		System.out.println("          3");
+		System.out.println("========================");
+		System.out.println(substituteValue("{{retention-7Y3M7D}}"));
+		System.out.println(substituteValue("{{retention-7Y0M0D}}"));
+	}
 }

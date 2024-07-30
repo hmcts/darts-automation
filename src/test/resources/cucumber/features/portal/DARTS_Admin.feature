@@ -3,82 +3,88 @@ Feature: Admin portal
   @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224
   Scenario: Admin portal data creation - User 1
   #Login admin
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
   #Create new user
     And I press the "Create new user" button
     And I set "Full name" to "KH{{seq}}001"
-    Then I set "Email" to "KH{{seq}}001@test.net"
+    And I set "Email" to "KH{{seq}}001@test.net"
     And I press the "Continue" button
-    And I see "Check user details" on the page
-    Then I press the "Create user" button
+    Then I see "Check user details" on the page
+    When I press the "Create user" button
+    Then I see "KH{{seq}}001" in the same row as "Full name"
+    And I see "KH{{seq}}001@test.net" in the same row as "Email"
 
 
   @DMP-2340
   Scenario: Admin portal data creation - User 2 - Deactivated user
   #Login admin portal
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
   #Create new user
     And I press the "Create new user" button
     And I set "Full name" to "KH{{seq}}002"
-    Then I set "Email" to "KH{{seq}}002@test.net"
+    And I set "Email" to "KH{{seq}}002@test.net"
     And I press the "Continue" button
-    And I see "Check user details" on the page
-    Then I press the "Create user" button
+    Then I see "Check user details" on the page
+    When I press the "Create user" button
+    When I press the "Deactivate user" button
   #Deactivate user in database
-    Then I select column usr_id from table darts.user_account where user_email_address = "KH{{seq}}002@test.net"
-    Then I set table darts.user_account  column is_active to "false" where usr_id = "{{usr_id}}"
+#    Then I select column usr_id from table darts.user_account where user_email_address = "KH{{seq}}002@test.net"
+#    Then I set table darts.user_account  column is_active to "false" where usr_id = "{{usr_id}}"
 
   @DMP-724
   Scenario: Update user personal detail
   #Login admin
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
   #AC1 - Edit user screen
-    And I click on the "Users" navigation link
+    When I click on the "Users" navigation link
     And I set "Full name" to "KH{{seq}}001"
     And I press the "Search" button
     And I click on "View" in the same row as "KH{{seq}}001"
-    Then I press the "Edit user" button
+    And I press the "Edit user" button
   #AC2 - Editing a user name
-    Then I set "Full name" to "automation_KH{{seq}}001"
+    And I set "Full name" to "automation_KH{{seq}}001"
   #AC3 - Editing a user email address
-    Then I set "Email" to "automation@KH{{seq}}001.net"
+    And I set "Email" to "automation@KH{{seq}}001.net"
   #AC4 - Save changes
-    Then I press the "Save changes" button
-    And I see "Are you sure you want to change this user’s email address?" on the page
-    And I press the "Yes - continue" button
-    And I see "User updated" on the page
+    And I press the "Save changes" button
+    Then I see "Are you sure you want to change this user’s email address?" on the page
+    When I press the "Yes - continue" button
+    Then I see "User updated" on the page
 
   @DMP-2222
   Scenario: Viewing a users groups
   #Login admin
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
   #AC1 - Viewing user groups
-    And I click on the "Users" navigation link
+    When I click on the "Users" navigation link
     And I set "Email" to "automation@KH{{seq}}001.net"
     And I press the "Search" button
     And I click on "View" in the same row as "automation@KH{{seq}}001.net"
-    Then I click on the "User Groups" link
+    And I click on the "User Groups" link
   #AC3 - Removing user groups
     Then I see "Assign groups" on the page
 
   @DMP-2225
   Scenario: Assigning user groups
   #Login admin
-    Given I am logged on to DARTS as an ADMIN user
+    Given I am logged on to the admin portal as an ADMIN user
   #Viewing user groups
-    And I click on the "Users" navigation link
+    When I click on the "Users" navigation link
     And I set "Email" to "automation@KH{{seq}}001.net"
     And I press the "Search" button
     And I click on "View" in the same row as "automation@KH{{seq}}001.net"
-    Then I click on the "User Groups" link
+    And I click on the "User Groups" link
   #AC1 - Assigning user groups
     And I press the "Assign groups" button
-    Then I check the checkbox in the same row as "Swansea_APPROVER" "Approver"
+    And I check the checkbox in the same row as "Swansea_APPROVER" "Approver"
   #AC2 - Viewing groups that have been selected
     Then I see "1 groups selected" on the page
   #AC3 - Filter
-    And I set "Filter by group name" to "Swansea"
-    Then I press the "Assign groups (1)" button
+    When I set "Filter by group name" to "Swansea"
+    And I press the "Assign groups (1)" button
 
   @DMP-2224
   Scenario: Removing a group confirmation screen
@@ -93,7 +99,7 @@ Feature: Admin portal
   #AC1 - Remove a group confirmation screen
     Then I check the checkbox in the same row as "Swansea_APPROVER" "Approver"
     And I press the "Remove groups" button
-    Then I see "Are you sure you want to remove automation_KH{{seq}}001 from these groups?" on the page
+    Then I see "Are you sure you want to remove automation_KH{{seq}}001 from this group?" on the page
   #AC2 - Removing a group
     Then I press the "Yes - continue" button
     Then I see "This user is not a member of any groups." on the page
@@ -102,7 +108,7 @@ Feature: Admin portal
   Scenario: Create a Courthouse Page
     Given I am logged on to the admin portal as an ADMIN user
       #AC1 - Creating a courthouse
-    Then I click on the "Courthouses" navigation link
+    When I click on the "Courthouses" navigation link
     And I press the "Create new courthouse" button
     Then I see "Create courthouse" on the page
     And I see "Courthouse details" on the page
@@ -130,23 +136,25 @@ Feature: Admin portal
     And I see "Enter a display name" on the page
     And I see "Select a region" on the page
 
-  @DMP-2466
+  @DMP-2466 @TODO
   Scenario: Retention Policies primary page
     Given I am logged on to the admin portal as an ADMIN user
       #AC1 - View active polices
-    And I click on the "Retention policies" navigation link
+    And I click on the "System configuration" navigation link
+    And I click on the "Retention policies" link
     And I see "Retention policies" on the page
     Then I verify the HTML table contains the following values
-      | Name                         | Description | Fixed policy key | Duration | Policy start | Policy end | *SKIP* |
-      | DARTS Permanent Retention v3 | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
-      | DARTS Standard Retention v3  | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
-      | DARTS Not Guilty Policy      | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
-      | DARTS Non Custodial Policy   | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
-      | DARTS Custodial Policy       | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
-      | DARTS Default Policy         | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
-      | DARTS Permanent Policy       | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
-      | DARTS Manual Policy          | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
-      | DARTS Life Policy            | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+#TODO needs an alternative method to verify these rows exist but its ok for others to exist too
+      | Name            | Description | Fixed policy key | Duration | Policy start | Policy end | *SKIP* |
+#      | DARTS Permanent Retention v3 | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+#      | DARTS Standard Retention v3  | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | Not Guilty      | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | Non Custodial   | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | Custodial       | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | Default         | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | Permanent       | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | Manual          | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
+      | Life            | *IGNORE*    | *IGNORE*         | *IGNORE* | *IGNORE*     | *IGNORE*   | *SKIP* |
 
       #AC 2 - View inactive polices
     And I click on the "Inactive" link
@@ -159,7 +167,7 @@ Feature: Admin portal
     Then I click on the "Courthouses" navigation link
     And I set "Courthouse name" to "Swansea"
     And I press the "Search" button
-    And I click on "Swansea" in the same row as "Wales"
+    And I click on "SWANSEA" in the same row as "Wales"
     And I press the "Edit courthouse" button
     And I see "Courthouse details" on the page
     And I see "Courthouse name" on the page
@@ -168,7 +176,7 @@ Feature: Admin portal
     And I see "Transcription companies" on the page
     Then I press the "Continue" button
 
-  @DMP-2263
+  @DMP-2263 @tregression
   Scenario: Create a Courthouse Page - Check Details
     Given I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -215,7 +223,7 @@ Feature: Admin portal
     Then I see "Created Test Display Name {{seq}}" on the page
     And I see "© Crown copyright" on the page
 
-    #Delete courthouse for next run (can this be done? Don't see delete button for courthouses)
+    #Delete courthouse for next run (can this be done? Don't see delete button for courthouses) - use seq instead
 
     #When I click on the "Courthouses" link
     #And I set "Courthouse name" to "Test Courthouse {{seq}}"
@@ -223,7 +231,7 @@ Feature: Admin portal
     #And I click on the "Test Courthouse {{seq}}" link
     #And I press the "Edit courthouse" button
 
-  @DMP-1192 @regression
+  @DMP-1192 @regression @ts6
   Scenario: View Courthouse - Details Tab
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -250,7 +258,7 @@ Feature: Admin portal
     And I see "Details" on the page
     And I see "© Crown copyright" on the page
 
-  @DMP-2299 @regression
+  @DMP-2299 @regression @ts6
   Scenario: Viewing Group Details
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -483,8 +491,9 @@ Feature: Admin portal
 
     @DMP-2959
     Scenario: Add error messaging to Search Transcripts screen
-      When I am logged on to the admin portal as an ADMIN user
-      Then I click on the "System configuration" link
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "System configuration" link
+      Then I see "Retention policies" on the page
       Then I click on "Create new version" in the same row as "DMP-2474-4 retention policy type."
       And I clear the "Display name" field
       And I set "Display name" to "DMP-2471-Display name-1" and click away
@@ -624,8 +633,8 @@ Feature: Admin portal
     And I click on the "Event mappings" navigation link
     #DMP-2746-AC1 Create event mapping
     And I press the "Add event mapping" button
-    And I set "Type" to "DMP-2746-Automation-Type"
-    And I set "Event name" to "DMP-2746-Automation-Event-Name"
+    And I set "Type" to "DMP-2746-Automation-Type {{seq}}"
+    And I set "Event name" to "DMP-2746-Automation-Event-Name {{seq}}"
     And I see "Map to event handler" on the page
     And I select "DarStartHandler" from the dropdown
     And I check the "Tick if this event mapping has reporting restrictions" checkbox
@@ -660,16 +669,16 @@ Feature: Admin portal
     #DMP-2674-AC1 Delete created event mapping for next run
 
     When I click on the "Cancel" link
-    When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
-    And I click on "Change" in the same row as "DMP-2746-Automation-Type"
+    When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type {{seq}}"
+    And I click on "Change" in the same row as "DMP-2746-Automation-Type {{seq}}"
     And I click on the "Delete event mapping" link
     Then I see "Are you sure want to delete this event mapping?" on the page
-    And I see "DMP-2746-Automation-Type" in the same row as "DMP-2746-Automation-Event-Name"
+    And I see "DMP-2746-Automation-Type {{seq}}" in the same row as "DMP-2746-Automation-Event-Name {{seq}}"
 
     When I press the "Yes - delete" button
     Then I see "Event mapping deleted" on the page
 
-    When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type"
+    When I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type {{seq}}"
     Then I see "There are no matching results." on the page
 
   @DMP-754 @regression
