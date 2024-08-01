@@ -1,4 +1,3 @@
- @ts4
 Feature: Admin
 
   @DMP-2323 @regression
@@ -75,10 +74,11 @@ Feature: Admin
 
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
-    And I press the "Create new user" button
-    And I see "Create user" on the page
+    Then I see "Search for user" on the page
+    When I press the "Create new user" button
+    Then I see "Create user" on the page
     And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
+    When I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
@@ -106,15 +106,16 @@ Feature: Admin
     Then I press the "Create user" button
 
     Examples:
-      | Full name  | Email                 | Description |
+      | Full name  | Email                       | Description |
       | Joe Bloggs | darts.test{{seq}}@hmcts.net | Test        |
 
   @DMP-630-AC3-1 @regression
   Scenario Outline: Create a new user account with existing email address
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
-    And I press the "Create new user" button
-    And I see "Create user" on the page
+    Then I see "Search for user" on the page
+    When I press the "Create new user" button
+    Then I see "Create user" on the page
     And I see "Enter user details" on the page
     And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
@@ -132,8 +133,9 @@ Feature: Admin
   Scenario Outline: Create a new user account with invalid email format
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
-    And I press the "Create new user" button
-    And I see "Create user" on the page
+    Then I see "Search for user" on the page
+    When I press the "Create new user" button
+    Then I see "Create user" on the page
     And I see "Enter user details" on the page
     And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
@@ -151,8 +153,9 @@ Feature: Admin
   Scenario Outline: Create a new user account without full name
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
-    And I press the "Create new user" button
-    And I see "Create user" on the page
+    Then I see "Search for user" on the page
+    When I press the "Create new user" button
+    Then I see "Create user" on the page
     And I see "Enter user details" on the page
     And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
@@ -170,8 +173,9 @@ Feature: Admin
   Scenario Outline: Create a new user account without Email address
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
-    And I press the "Create new user" button
-    And I see "Create user" on the page
+    Then I see "Search for user" on the page
+    When I press the "Create new user" button
+    Then I see "Create user" on the page
     And I see "Enter user details" on the page
     And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"
@@ -189,7 +193,9 @@ Feature: Admin
   Scenario Outline: Create a new user account with more than 256 characters
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
-    And I press the "Create new user" button
+    Then I see "Search for user" on the page
+    When I press the "Create new user" button
+    Then I see "Create user" on the page
     And I see "Enter user details" on the page
     And I set "Full name" to "<Full name>"
     And I set "Email" to "<Email>"

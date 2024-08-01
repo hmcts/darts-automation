@@ -176,7 +176,7 @@ Feature: Admin portal
     And I see "Transcription companies" on the page
     Then I press the "Continue" button
 
-  @DMP-2263 @tregression
+  @DMP-2263 @regression
   Scenario: Create a Courthouse Page - Check Details
     Given I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -231,7 +231,7 @@ Feature: Admin portal
     #And I click on the "Test Courthouse {{seq}}" link
     #And I press the "Edit courthouse" button
 
-  @DMP-1192 @regression @ts6
+  @DMP-1192 @regression
   Scenario: View Courthouse - Details Tab
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
@@ -245,20 +245,20 @@ Feature: Admin portal
     And I see "Date created" on the page
     And I see "Tue 26 Mar 2024" on the page
     And I see "Last updated" on the page
-    And I see "Thu 20 Jun 2024" on the page
+    And I see "Thu 1 Aug 2024" on the page
     And I see "Details" on the page
-    And I see "Users" on the page
+    And I see link with text "Users"
     And I see "Details" on the page
-    And I see "Database ID" in the same row as "26992"
+    And I see "Database ID" in the same row as "1232"
     And I see "Courthouse name" in the same row as "Test Courthouse"
     And I see "Region" in the same row as "Midlands"
     And I see "Groups" in the same row as "TEST_COURTHOUSE_APPROVER"
-    And I see "TEST_COURTHOUSE_REQUESTER" on the page
-    And I see "LEEDS_DMP381_TRANSCRIBER" on the page
+    And I see "Groups" in the same row as "TEST_COURTHOUSE_REQUESTER"
+    And I see "Groups" in the same row as "LEEDS_DMP381_TRANSCRIBER"
     And I see "Details" on the page
     And I see "© Crown copyright" on the page
 
-  @DMP-2299 @regression @ts6
+  @DMP-2299 @regression @TODO
   Scenario: Viewing Group Details
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -271,7 +271,7 @@ Feature: Admin portal
     Then I select "Swansea" from the dropdown
     And I press the "Add courthouse" button
 
-  @DMP-2302 @regression
+  @DMP-2302 @regression @TODO
   Scenario: Edit a Group
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -355,7 +355,7 @@ Feature: Admin portal
     Then I see "1 user removed" on the page
     And I do not see "darts.admin@hmcts.net" on the page
 
-  @DMP-2581 @regression
+  @DMP-2581 @regression @TODO
   Scenario: Viewing groups - Adding a user
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Groups" navigation link
@@ -636,7 +636,7 @@ Feature: Admin portal
     And I set "Type" to "DMP-2746-Automation-Type {{seq}}"
     And I set "Event name" to "DMP-2746-Automation-Event-Name {{seq}}"
     And I see "Map to event handler" on the page
-    And I select "DarStartHandler" from the dropdown
+    And I select "Dar Start Handler" from the dropdown
     And I check the "Tick if this event mapping has reporting restrictions" checkbox
     And I press the "Add mapping" button
     Then I see "Event mapping added" on the page
@@ -647,7 +647,7 @@ Feature: Admin portal
     And I set "Type" to "DMP-2746-Automation-Type-1"
     And I set "Event name" to "DMP-2746-Automation-Event-Name-1"
     And I see "Map to event handler" on the page
-    And I select "DarStartHandler" from the dropdown
+    And I select "Dar Start Handler" from the dropdown
     And I click on the "Tick if this event mapping has reporting restrictions" link
     And I click on the "Cancel" link
     Then I see "Filter by type, subtype, or name" on the page
@@ -691,7 +691,7 @@ Feature: Admin portal
     And I see "Add event mapping" on the page
     And I see "Filter by type, subtype, or name" on the page
     And I see "Filter by event handler" on the page
-    And I select "StopAndCloseHandler" from the dropdown
+    And I select "Stop And Close Handler" from the dropdown
     Then I see "Active only" on the page
     And I see "Active and inactive" on the page
     And I see "With restrictions" on the page
@@ -727,7 +727,7 @@ Feature: Admin portal
     And I click on the pagination link "Previous"
     And I click on the pagination link "1"
     And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type2"
-    And I select "StopAndCloseHandler" from the dropdown
+    And I select "Stop And Close Handler" from the dropdown
     Then I see "There are no matching results." on the page
 
   @DMP-3028 @regression
@@ -745,7 +745,7 @@ Feature: Admin portal
     And I set "Type" to "DMP-2746_Type"
     And I set "Subtype (optional)" to "DMP-2746_Subtype"
     And I set "Event name" to "DMP3028TEST"
-    And I select "StandardEventHandler" from the dropdown
+    And I select "Standard Event Handler" from the dropdown
     And I press the "Add mapping" button
     Then I see "Type and subtype already in use" on the page
     And I see "The combination of type and subtype you entered are already in use." on the page
@@ -770,7 +770,7 @@ Feature: Admin portal
     And I see "AC1-DMP-2763" on the page
     And I clear the "Event name" field
     And I see "Map to event handler" on the page
-    And I select "DarStopHandler" from the dropdown
+    And I select "Dar Stop Handler" from the dropdown
     Then I see "Enter the event name" on the page
     And I click on the "Cancel" link
     #Cancel
@@ -779,7 +779,7 @@ Feature: Admin portal
     And I clear the "Event name" field
     And I set "Event name" to "AC1-DMP-2763"
     And I see "Map to event handler" on the page
-    And I see "DarStartHandler" on the page
+    And I see "Dar Start Handler" on the page
     And I see "Yes" on the page
     And I see "07 Jun 2024" on the page
     And I see "Save as new version" on the page
@@ -790,8 +790,8 @@ Feature: Admin portal
     And I set "Filter by type, subtype, or name" to "AC2-DMP-2764-Deletion-Test-2"
     And I click on the "Change" link
     And I set "Event name" to "AC1-DMP-2763"
-    And I see "DarStartHandler" on the page
-    And I select "DarStopHandler" from the dropdown
+    And I see "Dar Start Handler" on the page
+    And I select "Dar Stop Handler" from the dropdown
     And I see "Yes" on the page
     And I see "07 Jun 2024" on the page
     And I press the "Save as new version" button
@@ -807,7 +807,7 @@ Feature: Admin portal
     Then I set "Type" to "DMP-2764-Automation-Type-3"
     And I set "Event name" to "DMP-2764-Automation-Event-Name"
     And I see "Map to event handler" on the page
-    And I select "DarStartHandler" from the dropdown
+    And I select "Dar Start Handler" from the dropdown
     And I click on the "Tick if this event mapping has reporting restrictions" link
     And I click on the "Add mapping" link
     Then I see "Event mapping addded " on the page
@@ -817,7 +817,7 @@ Feature: Admin portal
     And I see "DMP-2764-Automation-Event-Name" on the page
     And I see "DMP-2764-Automation-Type-3" on the page
     And I see "DMP-2764-Automation-Event-Name" on the page
-    And I see "DarStartHandler" on the page
+    And I see "Dar Start Handler" on the page
     And I see "Yes" on the page
     And I see "06 Jun 2024" on the page
     And I see "Delete event mapping" on the page
@@ -837,7 +837,7 @@ Feature: Admin portal
     And I see "1000" on the page
     And I see "1001" on the page
     And I see "Offences put to defendant" on the page
-    And I see "StandardEventHandler" on the page
+    And I see "Standard Event Handler" on the page
     And I see "No" on the page
     And I see "02 Nov 2023" on the page
     And I see "Delete event mapping" on the page

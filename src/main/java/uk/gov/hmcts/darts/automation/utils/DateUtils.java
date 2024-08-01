@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -599,6 +600,7 @@ public class DateUtils {
 	public static String retention(String offset) {
 		String offsetU = offset.toUpperCase();
 		Date dateToday = new Date();
+		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dateToday);
 		try {
@@ -651,11 +653,14 @@ public class DateUtils {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String retentionString = dateFormat.format((Date)cal.getTime());
 		
-		String currentOffset = ZonedDateTime.now(ZoneId.of("Europe/London")).getOffset().toString();
-		
-		retentionString = retentionString + " " + currentOffset.substring(1) + ":00" + currentOffset.substring(0, 3);
-		
-		return dateFormat.format((Date)cal.getTime()) + " 00:00:00+00";
+		ZonedDateTime utcDateTime = ZonedDateTime.of(LocalDate.parse(retentionString), LocalTime.parse("00:00:00"), ZoneId.of("UTC+00:00"));
+		ZonedDateTime actualDateTime = utcDateTime.withZoneSameInstant(ZoneId.of("Europe/London"));
+
+		String currentOffset = actualDateTime.getOffset().toString();
+
+		return DateTimeFormatter
+		.ofPattern("yyyy-MM-dd' 'HH:mm:ss")
+		.format(actualDateTime) + (currentOffset.equals("Z") ? "+00" : currentOffset.substring(0, 3));
 	}
 	
 	public static String returnNumericDateCcyymmdd(String date) {
@@ -905,6 +910,8 @@ public class DateUtils {
 		System.out.println("========================");
 		System.out.println("          9");
 		System.out.println("========================");
+		System.out.println(Substitutions.substituteValue("{{retention-3Y4M5D}}"));
+		System.out.println(Substitutions.substituteValue("{{retention-3Y0M0D}}"));
 		System.out.println(Substitutions.substituteValue("{{retention-3Y4M5D}}"));
 	}
 
