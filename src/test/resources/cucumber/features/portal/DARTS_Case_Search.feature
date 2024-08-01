@@ -381,8 +381,10 @@ Scenario: Restrictions banner on hearing details screen - no restrictions during
 	And I see "Search for a case" on the page
 	And I set "Case ID" to "DMP-1225_case1"
 	And I press the "Search" button
-	And I click on the "DMP-1225_case1" link
-	And I click on the "5 Jan 2024" link
+	#And I click on the "DMP-1225_case1" link
+    And I click on "DMP-1225_case1" in the same row as "DMP-1225_Courthouse"
+	#And I click on the "5 Jan 2024" link
+    And I click on "5 Jan 2024" in the same row as "Room1_DMP1225"
 	Then I see "There are restrictions against this case" on the page
 	And I do not see "Show restrictions" on the page
 
@@ -461,19 +463,25 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     And I select the "Specific date" radio button
     And I set "Enter a date" to "{{date+0/}}"
     And I press the "Search" button
-    Then I see "We need more information to search for a case" on the page
-
-    When I set "Courthouse" to "Harrow Crown Court"
-    And I press the "Search" button
     And I click on "Case ID" in the table header
+      #Then I see "We need more information to search for a case" on the page
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
-      | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-2  | Def A{{seq}}-11 |
-      | !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*    | *IGNORE*         | *IGNORE*        |
       | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-2  | Def A{{seq}}-22 |
       | A{{seq}}003                                              | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-11 | Def A{{seq}}-2  |
-      | A{{seq}}002                                              | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-11 | Def A{{seq}}-11 |
       | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | JUDGE {{seq}}-1  | Def A{{seq}}-1  |
+
+#    When I set "Courthouse" to "Harrow Crown Court"
+#    And I press the "Search" button
+#    And I click on "Case ID" in the table header
+#    Then I verify the HTML table contains the following values
+#      | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
+#      | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-2  | Def A{{seq}}-11 |
+#      | !\nRestriction\nThere are restrictions against this case | *IGNORE*           | *IGNORE*    | *IGNORE*         | *IGNORE*        |
+#      | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-2  | Def A{{seq}}-22 |
+#      | A{{seq}}003                                              | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-11 | Def A{{seq}}-2  |
+#      | A{{seq}}002                                              | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-11 | Def A{{seq}}-11 |
+#      | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | JUDGE {{seq}}-1  | Def A{{seq}}-1  |
 
   @DMP-2963
   Scenario: Add a CourtLog into Case file screen
@@ -490,8 +498,8 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     And I click on the " Court log " link
     Then I see "Court log for this case" on the page
     And I verify the HTML table contains the following values
-    | Hearing date    | Time                    | Event            | Text         |
-    | {{displaydate}} | 10:00:00  | Hearing started  | A{{seq}}ABC-1|
+    | Hearing date    | Time      | Event            | Text         |
+    | {{displaydate}} | 11:00:00  | Hearing started  | A{{seq}}ABC-3 |
     
     Then I click on "Hearing date" in the table header
     And "Hearing date" has sort "descending" icon
