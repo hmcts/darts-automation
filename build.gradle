@@ -122,8 +122,8 @@ dependencies {
 	implementation 'io.cucumber:cucumber-gherkin'
 	
 //	implementation(platform("org.hamcrest:hamcrest-bom:2.2"))
-	implementation "org.hamcrest:hamcrest:2.2"
-	implementation "org.hamcrest:hamcrest-core:2.2"
+	implementation "org.hamcrest:hamcrest:3.0"
+	implementation "org.hamcrest:hamcrest-core:3.0"
 	
   implementation 'commons-io:commons-io:2.16.1'
 
