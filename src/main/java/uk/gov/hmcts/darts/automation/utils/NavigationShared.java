@@ -592,7 +592,7 @@ public class NavigationShared {
 	public String setElementValueTo(WebElement webElement, String value) throws Exception {
 		webElement.clear();
 		String substitutedValue = Substitutions.substituteValue(value);
-		webElement.sendKeys(substitutedValue);
+		webElement.sendKeys(substitutedValue + Keys.TAB);
 
 		log.info("Set input field =>" + webElement.toString() + "<= to =>" + substitutedValue);
 		waitForBrowserReadyState();

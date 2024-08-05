@@ -11,6 +11,13 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 		Second is ignored when processed
 		Third is processed & create a case
 		Daily list for tomorrow is not processed today
+		
+	Given that courthouse <courthouse> case <caseNumber>1 does not exist
+	Given that courthouse <courthouse> case <caseNumber>3 does not exist
+	Given that courthouse <courthouse> case <caseNumber>9 does not exist
+  Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>1"
+  Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>9"
+  Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>3"
   Given I authenticate from the <source> source system
 # First daily list for today
   When I add a daily list
