@@ -1,6 +1,7 @@
+@ts6
 Feature: Admin portal
 
-  @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224
+  @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression
   Scenario: Admin portal data creation - User 1
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
@@ -16,7 +17,7 @@ Feature: Admin portal
     And I see "KH{{seq}}001@test.net" in the same row as "Email"
 
 
-  @DMP-2340
+  @DMP-2340 @regression
   Scenario: Admin portal data creation - User 2 - Deactivated user
   #Login admin portal
     Given I am logged on to the admin portal as an ADMIN user
@@ -33,7 +34,7 @@ Feature: Admin portal
 #    Then I select column usr_id from table darts.user_account where user_email_address = "KH{{seq}}002@test.net"
 #    Then I set table darts.user_account  column is_active to "false" where usr_id = "{{usr_id}}"
 
-  @DMP-724
+  @DMP-724 @regression
   Scenario: Update user personal detail
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
@@ -54,7 +55,7 @@ Feature: Admin portal
     When I press the "Yes - continue" button
     Then I see "User updated" on the page
 
-  @DMP-2222
+  @DMP-2222 @regresion
   Scenario: Viewing a users groups
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
@@ -67,7 +68,7 @@ Feature: Admin portal
   #AC3 - Removing user groups
     Then I see "Assign groups" on the page
 
-  @DMP-2225
+  @DMP-2225 @regression
   Scenario: Assigning user groups
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
@@ -86,7 +87,7 @@ Feature: Admin portal
     When I set "Filter by group name" to "Swansea"
     And I press the "Assign groups (1)" button
 
-  @DMP-2224
+  @DMP-2224 @regression
   Scenario: Removing a group confirmation screen
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
@@ -295,10 +296,11 @@ Feature: Admin portal
 
   @DMP-2305 @regression
   Scenario: Removing users from a group confirmation screen
-    When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "Groups" navigation link
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Groups" navigation link
+    And I set "Filter by name" to "swansea"
     And I click on the "Swansea_ADMIN" link
-    And I click on the "Group users" link
+    And I click on the "Users" sub-menu link
     And I check the checkbox in the same row as "darts.superuser@hmcts.net" "Active"
     And I press the "Remove users" button
     And I see "Are you sure you want to remove 1 user from this group?" on the page
@@ -311,7 +313,7 @@ Feature: Admin portal
     And I click on the "Courthouses" link
     And I set "Courthouse name" to "Swansea"
     And I press the "Search" button
-    And I click on "Swansea" in the same row as "Wales"
+    And I click on "SWANSEA" in the same row as "Wales"
     And I press the "Edit courthouse" button
     And I press the "Continue" button
     Then I see "Check details" on the page
@@ -339,6 +341,7 @@ Feature: Admin portal
     #AC1 - View users
     And I see "You can search for cases, hearings, events and audio." on the page
     And I click on the "Groups" navigation link
+    And I set "Filter by name" to "swansea"
     And I click on the "Swansea_ADMIN" link
     And I click on the "Group users" link
     Then I do not see "darts.admin@hmcts.net" on the page
@@ -378,45 +381,68 @@ Feature: Admin portal
     And I see "3 result" on the page
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region |
+      | BRISTOL              | Bristol              | South West |
       | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
-      | Bristol              | Bristol              |        |
       | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
     Then I click on "Courthouse name" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region |
       | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
       | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
-      | Bristol              | Bristol              |        |
+      | BRISTOL              | Bristol              | South West |
 
     When I click on the "Clear search" link
     Then I set "Display name" to "Bristol"
     Then I press the "Search" button
-    And I see "3 result" on the page
+    And I see "3 results" on the page
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region |
+      | BRISTOL              | Bristol              |        |
       | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
-      | Bristol              | Bristol              |        |
       | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
     Then I click on "Display name" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region |
       | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
       | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
-      | Bristol              | Bristol              |        |
+      | BRISTOL              | Bristol              |        |
 
     When I click on the "Clear search" link
-    Then I set "Region" to "South East"
+    Then I set "Region" to "London"
     Then I press the "Search" button
-    And I see "2 result" on the page
+    And I see "29 results" on the page
+    And I set "Courthouse name" to "guil"
+    Then I press the "Search" button
+    And I see "2 results" on the page
     And I verify the HTML table contains the following values
       | Courthouse name            | Display name                | Region     |
-      | Guildford Court            | GF Court                    | South East |
-      | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East |
+      | GUILDFORD                  | GF Court                    | London |
+      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
+    When I click on the "Clear search" link
+    Then I set "Region" to "London"
+    And I set "Courthouse name" to "guil"
+    Then I press the "Search" button
+    And I see "4 results" on the page
+    And I verify the HTML table contains the following values
+      | Courthouse name            | Display name                | Region     |
+      | GUILDFORD                  | GF Court                    | London |
+      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
+      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales |
+      | Guildford Court               | GF Court                     |       |
     Then I click on "Region" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name            | Display name                | Region     |
-      | Guildford Court            | GF Court                    | South East |
-      | DMP-2339-Update-Courthouse | DMP-2339-Update-DisplayName | South East |
+      | Guildford Court               | GF Court                     |       |
+      | GUILDFORD                  | GF Court                    | London |
+      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
+      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales |
+    Then I click on "Region" in the table header
+    And I verify the HTML table contains the following values
+      | Courthouse name            | Display name                | Region     |
+      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales |
+      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
+      | GUILDFORD                  | GF Court                    | London |
+      | Guildford Court               | GF Court                     |       |
     When I click on the "Clear search" link
 
     #AC2 Search Courthouse-No results
@@ -636,7 +662,7 @@ Feature: Admin portal
     And I set "Type" to "DMP-2746-Automation-Type {{seq}}"
     And I set "Event name" to "DMP-2746-Automation-Event-Name {{seq}}"
     And I see "Map to event handler" on the page
-    And I select "Dar Start Handler" from the dropdown
+    And I select "Dar Start Handler" from the "Map to event handler" dropdown
     And I check the "Tick if this event mapping has reporting restrictions" checkbox
     And I press the "Add mapping" button
     Then I see "Event mapping added" on the page
@@ -647,7 +673,7 @@ Feature: Admin portal
     And I set "Type" to "DMP-2746-Automation-Type-1"
     And I set "Event name" to "DMP-2746-Automation-Event-Name-1"
     And I see "Map to event handler" on the page
-    And I select "Dar Start Handler" from the dropdown
+    And I select "Dar Start Handler" from the "Map to event handler" dropdown
     And I click on the "Tick if this event mapping has reporting restrictions" link
     And I click on the "Cancel" link
     Then I see "Filter by type, subtype, or name" on the page
@@ -691,16 +717,16 @@ Feature: Admin portal
     And I see "Add event mapping" on the page
     And I see "Filter by type, subtype, or name" on the page
     And I see "Filter by event handler" on the page
-    And I select "Stop And Close Handler" from the dropdown
+    And I select "Stop And Close Handler" from the "Filter by event handler" dropdown
     Then I see "Active only" on the page
     And I see "Active and inactive" on the page
     And I see "With restrictions" on the page
     And I see "Without restrictions" on the page
     And I verify the HTML table contains the following values
       | Type                   | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
-      | 3000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | 1000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | 30300                  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 3000                   |          | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 30300                  |          | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 1000                   | 999      | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
       | DMP-2764-Accessibility | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
     When  I select the "Active and inactive" radio button
@@ -717,7 +743,7 @@ Feature: Admin portal
       | Type | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
       | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
-    When I select "All" from the dropdown
+    When I select "All" from the "Filter by event handler" dropdown
     And I click on the "Without restrictions" link
     And I see "Next" on the page
     And I click on the pagination link "Next"
@@ -727,7 +753,7 @@ Feature: Admin portal
     And I click on the pagination link "Previous"
     And I click on the pagination link "1"
     And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type2"
-    And I select "Stop And Close Handler" from the dropdown
+    And I select "Stop And Close Handler" from the "Filter by event handler" dropdown
     Then I see "There are no matching results." on the page
 
   @DMP-3028 @regression
@@ -770,7 +796,7 @@ Feature: Admin portal
     And I see "AC1-DMP-2763" on the page
     And I clear the "Event name" field
     And I see "Map to event handler" on the page
-    And I select "Dar Stop Handler" from the dropdown
+    And I select "Dar Stop Handler" from the "Map to event handler" dropdown
     Then I see "Enter the event name" on the page
     And I click on the "Cancel" link
     #Cancel
@@ -807,7 +833,7 @@ Feature: Admin portal
     Then I set "Type" to "DMP-2764-Automation-Type-3"
     And I set "Event name" to "DMP-2764-Automation-Event-Name"
     And I see "Map to event handler" on the page
-    And I select "Dar Start Handler" from the dropdown
+    And I select "Dar Start Handler" from the "Map to event handler" dropdown
     And I click on the "Tick if this event mapping has reporting restrictions" link
     And I click on the "Add mapping" link
     Then I see "Event mapping addded " on the page

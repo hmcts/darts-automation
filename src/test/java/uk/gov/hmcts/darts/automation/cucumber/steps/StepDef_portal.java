@@ -12,6 +12,7 @@ import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
+import uk.gov.hmcts.darts.automation.utils.Database;
 import uk.gov.hmcts.darts.automation.pageObjects.Portal;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class StepDef_portal extends StepDef_base {
     private Portal portal;
     private Prompt prompt;
     private WaitUtils WAIT;
+    private Database DB;
     private String savedRequestId;
   
 	public StepDef_portal(SeleniumWebDriver driver, TestData testdata) {
@@ -296,5 +298,11 @@ public class StepDef_portal extends StepDef_base {
 			}
 		}
 		Assertions.assertEquals(0, errorCount, "Errors found verifying links: " + errorLinks);
+	}
+	
+	@Given("that courthouse \"([^\"]*)\" case \"([^\"]*)\" does not exist")
+	public void caseDoesNotExist(String courthouse, String caseNumber) throws Exception {
+		String count = DB.returnSingleValue("COURTCASE", "count(cas_id)", "courthouse_name", "courthouse", "case_number", "caseNumber");
+		Assertions.assertEquals("0", count, "Case already exists");
 	}
 }
