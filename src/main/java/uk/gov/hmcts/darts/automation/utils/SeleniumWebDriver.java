@@ -40,13 +40,14 @@ public class SeleniumWebDriver {
 		String usingDriver = ReadProperties.machine("usingDriver");
 		String usingProxy = ReadProperties.machine("usingProxy");
 		String runHeadless = ReadProperties.machine("run_Headless");
+		String downloadFilepath = ReadProperties.getDownloadFilepath();
 		log.info("browser =>" + usingDriver);
 		String os = System.getProperty("os.name");
 		log.info("OS =>" + os);
 		switch (usingDriver.toLowerCase()) {
 		case "firefox":
 			FirefoxOptions firefoxOptions = new FirefoxOptions();
-			System.setProperty("webdriver.gecko.driver", ReadProperties.getHostProperty("firefoxDriverLocation"));
+//			System.setProperty("webdriver.gecko.driver", ReadProperties.getHostProperty("firefoxDriverLocation"));
 			FirefoxProfile firefoxProfile = new FirefoxProfile();
 			if (usingProxy.equals("1")) {
 				firefoxOptions.addPreference("network.proxy.type", 1);
@@ -56,6 +57,13 @@ public class SeleniumWebDriver {
 			} else {
 				// Assuming no proxy
 			}
+			
+// Download options for firefox (folderList): 
+//		0 - download to the desktop, 
+//		1 - download to the default "Downloads" directory, 
+//		2 - use the directory
+			firefoxOptions.addPreference("browser.download.folderList", 2);
+			firefoxOptions.addPreference("browser.download.dir", downloadFilepath);
 
 			if (runHeadless.equalsIgnoreCase("true") || !ReadProperties.runLocal) {	
 				firefoxOptions.addArguments("-headless");
@@ -64,27 +72,37 @@ public class SeleniumWebDriver {
 			webDriver = new FirefoxDriver(firefoxOptions);
 			webDriver.manage().window().maximize();
 			webDriver.manage().window().setSize(new Dimension(1920, 1080));
+			log.info(((FirefoxDriver)webDriver).getCapabilities().toString());
 			break;
-		case "ie":
-		case "internet explorer":
-			InternetExplorerOptions ieOptions = new InternetExplorerOptions();
-			System.setProperty("webdriver.ie.driver", ReadProperties.getHostProperty("ieDriverLocation"));
-			if (usingProxy.equals("1")) {
-				ieOptions.setCapability("network.proxy.type", 1);
-				ieOptions.setCapability("network.proxy.socks", "127.0.0.1");
-				ieOptions.setCapability("network.proxy.socks_port", 1337);
-				ieOptions.setCapability("network.proxy.socks_version", 5);
-			} else {
-				// Assuming no proxy
-			}
-			ieOptions.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
-			webDriver = new InternetExplorerDriver(ieOptions);
-			webDriver.manage().window().maximize();
-			webDriver.manage().window().setSize(new Dimension(1920, 1080));
-			break;
+//		case "ie":
+//		case "internet explorer":
+//			InternetExplorerOptions ieOptions = new InternetExplorerOptions();
+//				System.setProperty("webdriver.ie.driver", ReadProperties.getHostProperty("ieDriverLocation"));
+//			if (usingProxy.equals("1")) {
+//				ieOptions.setCapability("network.proxy.type", 1);
+//				ieOptions.setCapability("network.proxy.socks", "127.0.0.1");
+//				ieOptions.setCapability("network.proxy.socks_port", 1337);
+//				ieOptions.setCapability("network.proxy.socks_version", 5);
+//			} else {
+//				// Assuming no proxy
+//			}
+//			ieOptions.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
+//			webDriver = new InternetExplorerDriver(ieOptions);
+//			webDriver.manage().window().maximize();
+//			webDriver.manage().window().setSize(new Dimension(1920, 1080));
+//			break;
 		case "edge":
+			HashMap<String, Object> edgePrefs = new HashMap<String, Object>();
+			edgePrefs.put("profile.default_content_settings.popups", 0);
+			edgePrefs.put("download.default_directory", downloadFilepath);
+			
 			EdgeOptions edgeOptions = new EdgeOptions();
-			System.setProperty("webdriver.edge.driver", ReadProperties.getHostProperty("edgeDriverLocation"));
+			edgeOptions.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
+			edgeOptions.addArguments("--start-maximized");
+			edgeOptions.addArguments("--no-proxy-server");
+			edgeOptions.addArguments("--window-size=1920,1080");
+			edgeOptions.setExperimentalOption("prefs", edgePrefs);
+//			System.setProperty("webdriver.edge.driver", ReadProperties.getHostProperty("edgeDriverLocation"));
 			if (usingProxy.equals("1")) {
 				edgeOptions.setCapability("network.proxy.type", 1);
 				edgeOptions.setCapability("network.proxy.socks", "127.0.0.1");
@@ -101,11 +119,11 @@ public class SeleniumWebDriver {
 			webDriver = new EdgeDriver(edgeOptions);
 			webDriver.manage().window().maximize();
 			webDriver.manage().window().setSize(new Dimension(1920, 1080));
+			log.info(((EdgeDriver)webDriver).getCapabilities().toString());
 			break;
 
 		case "chrome":
 
-			String downloadFilepath = ReadProperties.getDownloadFilepath();
 			log.info("Download File Path being set to =>"+downloadFilepath);
 
 			HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
