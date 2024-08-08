@@ -1,4 +1,3 @@
-@ts6
 Feature: Admin portal
 
   @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression

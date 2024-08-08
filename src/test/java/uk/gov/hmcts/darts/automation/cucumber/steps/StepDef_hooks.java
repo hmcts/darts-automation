@@ -98,7 +98,9 @@ public class StepDef_hooks extends StepDef_base {
 		if (webDriver != null) {
 			log.info("closing browser");
 			webDriver.close();
-			webDriver.quit();
+			if (webDriver != null && !ReadProperties.machine("usingDriver").equalsIgnoreCase("firefox")) {
+				webDriver.quit();
+			}
 		}
 	}
 	
