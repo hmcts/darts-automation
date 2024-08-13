@@ -90,13 +90,17 @@ public class StepDef_jsonApi extends StepDef_base {
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 	}
+
+	@When("^I load an audio file$")
+	public void loadAudioFile(List<Map<String,String>> dataTable) {
+		loadAudioFileUsingJson(dataTable);
+	}
 	
 // sample cucumber:
-// When I load an audio file
+// When I load an audio file using json
 // |courthouse|courtroom|case_numbers|date|startTime|endTime|audioFile|
 	@When("^I load an audio file using json$")
-//	@When("^I load an audio file$")
-	public void loadAudioFile(List<Map<String,String>> dataTable) {
+	public void loadAudioFileUsingJson(List<Map<String,String>> dataTable) {
 		for (Map<String, String> map : dataTable) {
 			String date = getValue(map, "date");
 			String audioFile = getValue(map, "audioFile");

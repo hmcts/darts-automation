@@ -12,9 +12,9 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 		Third is processed & create a case
 		Daily list for tomorrow is not processed today
 		
-	Given that courthouse <courthouse> case <caseNumber>1 does not exist
-	Given that courthouse <courthouse> case <caseNumber>3 does not exist
-	Given that courthouse <courthouse> case <caseNumber>9 does not exist
+	Given that courthouse "<courthouse>" case "<caseNumber>1" does not exist
+	Given that courthouse "<courthouse>" case "<caseNumber>3" does not exist
+	Given that courthouse "<courthouse>" case "<caseNumber>9" does not exist
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>1"
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>9"
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>3"
@@ -46,8 +46,8 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
    And I select column cas.cas_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and case_number = "<caseNumber>1"
    And I select column hea_id from table CASE_HEARING where cas.cas_id = "{{cas.cas_id}}" and hearing_date = "{{date-yyyymmdd-0}}"
    And I see table CASE_HEARING column case_closed is "f" where cas.cas_id = "{{cas.cas_id}}"
-   And I see table CASE_HEARING_JUDGE column judge_name is "judge name {{seq}}" where hea_id = "{{hea_id}}"
-   And I see table CASE_JUDGE column judge_name is "judge name {{seq}}" where cas_id = "{{cas.cas_id}}"
+   And I see table CASE_HEARING_JUDGE column judge_name is "{{upper-case-judge name {{seq}}}}" where hea_id = "{{hea_id}}"
+   And I see table CASE_JUDGE column judge_name is "{{upper-case-judge name {{seq}}}}" where cas_id = "{{cas.cas_id}}"
    And I see table darts.prosecutor column prosecutor_name is "prosecutor {{seq}}" where cas_id = "{{cas.cas_id}}"
    And I see table darts.defence column defence_name is "defence {{seq}}" where cas_id = "{{cas.cas_id}}"
    And I see table darts.defendant column defendant_name is "<defendant>" where cas_id = "{{cas.cas_id}}"
@@ -62,8 +62,8 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
    And I select column cas.cas_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "2" and case_number = "<caseNumber>3"
    And I select column hea_id from table CASE_HEARING where cas.cas_id = "{{cas.cas_id}}" and hearing_date = "{{date-yyyymmdd-0}}"
    And I see table CASE_HEARING column case_closed is "f" where cas.cas_id = "{{cas.cas_id}}"
-   And I see table CASE_HEARING_JUDGE column judge_name is "judge name {{seq}}" where hea_id = "{{hea_id}}" and jud_id = "{{jud_id}}"
-   And I see table CASE_JUDGE column judge_name is "judge name {{seq}}" where cas_id = "{{cas.cas_id}}" and jud_id = "{{jud_id}}"
+   And I see table CASE_HEARING_JUDGE column judge_name is "{{upper-case-judge name {{seq}}}}" where hea_id = "{{hea_id}}" and jud_id = "{{jud_id}}"
+   And I see table CASE_JUDGE column judge_name is "{{upper-case-judge name {{seq}}}}" where cas_id = "{{cas.cas_id}}" and jud_id = "{{jud_id}}"
    And I see table darts.prosecutor column prosecutor_name is "prosecutor {{seq}}" where cas_id = "{{cas.cas_id}}"
    And I see table darts.defence column defence_name is "defence {{seq}}" where cas_id = "{{cas.cas_id}}"
    And I see table darts.defendant column defendant_name is "<caseNumber>3 defendant" where cas_id = "{{cas.cas_id}}"

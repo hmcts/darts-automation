@@ -213,39 +213,7 @@ Feature: Admin
   @DMP-2931 @regression
   Scenario: Remove user role, single and multiple, test cancel link
     Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Courthouses" link
-    And I set "Courthouse name" to "Harrow"
-    And I press the "Search" button
-    And I click on the "Harrow Crown Court" link
-    And I click on the "Users" sub-menu link
-    And I check the checkbox in the same row as "Testuserfour" "testuserfour@hmcts.net"
-    And I press the "Remove user role" button
-    Then I see "You are removing 1 user role from Harrow Crown Court" on the page
-
-    When I click on the "Cancel" link
-    Then I see "Courthouse record" on the page
-    And I do not see "You are removing 1 user role from Harrow Crown Court" on the page
-
-    When I check the checkbox in the same row as "Testuserfour" "testuserfour@hmcts.net"
-    And I press the "Remove user role" button
-    And I see "You are removing 1 user role from Harrow Crown Court" on the page
-    And I see "Testuserfour" in the same row as "testuserfour@hmcts.net"
-    And I press the "Confirm" button
-    Then I see "1 user role removed from Harrow Crown Court" on the page
-    And I do not see "Testuserfour" on the page
-
-    When I check the checkbox in the same row as "Testuserfive" "testuserfive@hmcts.net"
-    And I check the checkbox in the same row as "Testusersix" "testusersix@hmcts.net"
-    And I press the "Remove user roles" button
-    And I see "You are removing 2 user roles from Harrow Crown Court" on the page
-    And I see "Testuserfive" in the same row as "testuserfive@hmcts.net"
-    And I see "Testusersix" in the same row as "testusersix@hmcts.net"
-    And I press the "Confirm" button
-    Then I see "2 user roles removed from Harrow Crown Court" on the page
-    And I do not see "Testuserfive" on the page
-    And I do not see "Testusersix" on the page
-
-    #Add users back to roles for next run
+    #Add users roles for test
 
     When I click on the "Users" link
     And I set "Full name" to "Testuserfour"
@@ -284,6 +252,38 @@ Feature: Admin
     And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
     And I press the "Assign groups (1)" button
     Then I see "Assigned 1 group" on the page
+    When I click on the "Courthouses" link
+    And I set "Courthouse name" to "Harrow"
+    And I press the "Search" button
+    And I click on the "Harrow Crown Court" link
+    And I click on the "Users" sub-menu link
+    And I check the checkbox in the same row as "Testuserfour" "testuserfour@hmcts.net"
+    And I press the "Remove user role" button
+    Then I see "You are removing 1 user role from Harrow Crown Court" on the page
+
+    When I click on the "Cancel" link
+    Then I see "Courthouse record" on the page
+    And I do not see "You are removing 1 user role from Harrow Crown Court" on the page
+
+    When I check the checkbox in the same row as "Testuserfour" "testuserfour@hmcts.net"
+    And I press the "Remove user role" button
+    And I see "You are removing 1 user role from Harrow Crown Court" on the page
+    And I see "Testuserfour" in the same row as "testuserfour@hmcts.net"
+    And I press the "Confirm" button
+    Then I see "1 user role removed from Harrow Crown Court" on the page
+    And I do not see "Testuserfour" on the page
+
+    When I check the checkbox in the same row as "Testuserfive" "testuserfive@hmcts.net"
+    And I check the checkbox in the same row as "Testusersix" "testusersix@hmcts.net"
+    And I press the "Remove user roles" button
+    And I see "You are removing 2 user roles from Harrow Crown Court" on the page
+    And I see "Testuserfive" in the same row as "testuserfive@hmcts.net"
+    And I see "Testusersix" in the same row as "testusersix@hmcts.net"
+    And I press the "Confirm" button
+    Then I see "2 user roles removed from Harrow Crown Court" on the page
+    And I do not see "Testuserfive" on the page
+    And I do not see "Testusersix" on the page
+
 
   @DMP-2323 @DMP-2340 @regression
   Scenario: Deactivate user and last user in group

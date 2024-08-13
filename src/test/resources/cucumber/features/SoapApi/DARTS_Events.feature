@@ -11,6 +11,7 @@ Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 
 @EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
   @reads-system-properties
 Scenario Outline: Create a case for event tests
+  Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
   Given I add a daily list
   | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
   | 58b211f4-426d-81be-20{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
@@ -252,17 +253,17 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:09:40}} | {{seq}}210 | {{seq}}1210 | 40738  |         | text {{seq}} |               |               | Verdict                                                                                                                                |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:10:00}} | {{seq}}211 | {{seq}}1211 | 40750  | 12309   | text {{seq}} |               |               | Driving disqualification suspended pending appeal subsequent to imposition (3075)                                                      |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:10:20}} | {{seq}}212 | {{seq}}1212 | 40750  |         | text {{seq}} |               |               | Sentencing                                                                                                                             |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:32:20}} | {{seq}}273 | {{seq}}1273 | 40750  | 12400   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) - ADULTS                                   |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:32:40}} | {{seq}}274 | {{seq}}1274 | 40750  | 12401   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) - JUVENILES                                |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:32:20}} | {{seq}}273 | {{seq}}1273 | 40750  | 12400   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) – ADULTS                                   |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:32:40}} | {{seq}}274 | {{seq}}1274 | 40750  | 12401   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) – JUVENILES                                |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:10:40}} | {{seq}}213 | {{seq}}1213 | 40751  |         | text {{seq}} |               |               | Sentencing                                                                                                                             |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:39:20}} | {{seq}}294 | {{seq}}1294 | 40751  | 12400   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) - ADULTS                                   |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:39:40}} | {{seq}}295 | {{seq}}1295 | 40751  | 12401   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) - JUVENILES                                |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:39:20}} | {{seq}}294 | {{seq}}1294 | 40751  | 12400   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) – ADULTS                                   |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:39:40}} | {{seq}}295 | {{seq}}1295 | 40751  | 12401   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) – JUVENILES                                |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:11:00}} | {{seq}}214 | {{seq}}1214 | 40752  |         | text {{seq}} |               |               | Sentencing                                                                                                                             |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:46:20}} | {{seq}}315 | {{seq}}1315 | 40752  | 12400   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) - ADULTS                                   |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:46:40}} | {{seq}}316 | {{seq}}1316 | 40752  | 12401   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) - JUVENILES                                |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:46:20}} | {{seq}}315 | {{seq}}1315 | 40752  | 12400   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) – ADULTS                                   |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:46:40}} | {{seq}}316 | {{seq}}1316 | 40752  | 12401   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) – JUVENILES                                |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:11:20}} | {{seq}}215 | {{seq}}1215 | 40753  |         | text {{seq}} |               |               | Sentencing                                                                                                                             |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:53:20}} | {{seq}}336 | {{seq}}1336 | 40753  | 12400   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) - ADULTS                                   |       |
-  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:53:40}} | {{seq}}337 | {{seq}}1337 | 40753  | 12401   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) - JUVENILES                                |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:53:20}} | {{seq}}336 | {{seq}}1336 | 40753  | 12400   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) – ADULTS                                   |       |
+  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:53:40}} | {{seq}}337 | {{seq}}1337 | 40753  | 12401   | text {{seq}} | 4             | 26Y0M0D       | Disqualification Order (from working with children) – JUVENILES                                |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:11:40}} | {{seq}}216 | {{seq}}1216 | 40754  |         | text {{seq}} |               |               | Sentencing                                                                                                                             |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:12:00}} | {{seq}}217 | {{seq}}1217 | 40755  |         | text {{seq}} |               |               | Sentencing                                                                                                                             |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:12:20}} | {{seq}}218 | {{seq}}1218 | 40756  |         | text {{seq}} |               |               | Guilty                                                                                                                                 |       |
@@ -607,6 +608,7 @@ Scenario Outline: Create a StopAndClose event for LIFE sentence
 															retention is 99 years
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
+  Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
@@ -644,6 +646,7 @@ Examples:
 Scenario Outline: Create a StopAndClose event for non-custodial sentence
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
+  Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
@@ -692,6 +695,7 @@ Examples:
 
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Create case with an event
+  Given that courthouse "<courthouse>" case "<caseNumber>" does not exist
   Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>"
   Given I authenticate from the CPP source system
   When  I create an event
@@ -711,6 +715,7 @@ Examples:
 
 @EVENT_API @SOAP_EVENT @regression
 Scenario Outline: Event creates a courtroom / hearing
+  Given that courthouse "<courthouse>" case "<caseNumber>" does not exist
   Given I create a case
     | courthouse   | case_number  | defendants    | judges     | prosecutors     | defenders     |
     | <courthouse> | <caseNumber> | defendant one | test judge | test prosecutor | test defender |
@@ -813,6 +818,7 @@ Scenario: Verify that VIQ cannot create an event
 
 @EVENT_API @SOAP_API @DMP-2960 @regression
 Scenario: Verify that a case is created by an event if the case does not already exist
+  Given that courthouse "Harrow Crown Court" case "T{{seq}}256" does not exist
   Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "T{{seq}}256" and courthouse_name = "Harrow Crown Court"
     And I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -882,6 +888,7 @@ Scenario Outline: Verify that a hearing courtroom can be modified by an event
 																									if the first event added is for a different courtroom
 																									 then the existing hearing should be updated with the new courtroom
 																									 ** n.b. Portal will be changed to ignore hearings where 'hearing_is_actual' is false
+  Given that courthouse "<courthouse>" case "<caseNumber>" does not exist
   Given I authenticate from the XHIBIT source system
   When I add a daily list
     | messageId                        | type | subType | documentName              | courthouse   | courtroom    | caseNumber   | startDate  | startTime | endDate    | timeStamp     |

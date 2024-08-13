@@ -37,6 +37,7 @@ public class StepDef_portal extends StepDef_base {
         prompt = new Prompt(webDriver);
         portal = new Portal(webDriver, testdata);
         WAIT = new WaitUtils(webDriver);
+		DB = new Database();
     }
 
     @Given("^I am on the portal page$")
@@ -300,9 +301,9 @@ public class StepDef_portal extends StepDef_base {
 		Assertions.assertEquals(0, errorCount, "Errors found verifying links: " + errorLinks);
 	}
 	
-	@Given("that courthouse \"([^\"]*)\" case \"([^\"]*)\" does not exist")
+	@Given("^that courthouse \"([^\"]*)\" case \"([^\"]*)\" does not exist$")
 	public void caseDoesNotExist(String courthouse, String caseNumber) throws Exception {
-		String count = DB.returnSingleValue("COURTCASE", "count(cas_id)", "courthouse_name", "courthouse", "case_number", "caseNumber");
+		String count = DB.returnSingleValue("COURTCASE", "courthouse_name", courthouse, "case_number", caseNumber, "count(cas_id)");
 		Assertions.assertEquals("0", count, "Case already exists");
 	}
 }

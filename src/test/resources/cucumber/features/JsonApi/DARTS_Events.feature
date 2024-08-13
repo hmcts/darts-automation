@@ -2,6 +2,7 @@ Feature: Test operation of post events
 
   @EVENT_API @EVENT1
   Scenario Outline: Create a case and hearing via events
+    Given that courthouse "<courthouse>" case "<case_number>" does not exist
     When I create a case
       | courthouse   | case_number   | defendants    | judges     | prosecutors     | defenders     |
       | <courthouse> | <case_number> | defendant one | test judge | test prosecutor | test defender |
@@ -38,6 +39,7 @@ Feature: Test operation of post events
 
   @EVENT_API @EVENT1A
   Scenario Outline: Create a case and hearing via events
+    Given that courthouse "<courthouse>" case "<case_number>" does not exist
     When I create an event
       | message_id  | type  | sub_type | event_id    | courthouse   | courtroom   | case_numbers  | event_text                 | date_time              | case_retention_fixed_policy | case_total_sentence | start_time             | end_time               |
       | 0012{{seq}} | 40750 | 11505    | 1012{{seq}} | <courthouse> | <courtroom> | <case_number> | [Defendant: DEFENDANT ONE] | {{timestamp-09:16:00}} | 4                           | 26Y0M0D             | {{timestamp-09:16:01}} | {{timestamp-09:16:59}} |
