@@ -95,7 +95,7 @@ public class TestData {
 	public static String getProperty(String property) {
 		String returnValue;
 		try {
-			returnValue = properties.getProperty(property);
+			returnValue = properties.getProperty(Thread.currentThread().getId() + "_" + property);
 			if (returnValue == null) {
 				returnValue = readProperty(property);
 				if (returnValue != null) {
@@ -170,7 +170,7 @@ public class TestData {
 	}
 	
 	public void setProperty(String property, String value) {
-		properties.setProperty(property, value);
+		properties.setProperty(Thread.currentThread().getId() + "_" + property, value);
 		log.debug("Value added to properties:", property, value);
 	}
 	
@@ -261,7 +261,7 @@ public class TestData {
 		String text;
 		try {
 // n.b. readAllBytes works for binary files too
-			text = new String(Files.readAllBytes(Paths.get("filePath")));
+			text = new String(Files.readAllBytes(Paths.get(filePath)));
 			return text;
 		} catch (IOException e) {
 			log.warn("error reading file {}", filePath);

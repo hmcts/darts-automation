@@ -590,9 +590,13 @@ public class NavigationShared {
 	}
 	
 	public String setElementValueTo(WebElement webElement, String value) throws Exception {
+		webElement.click();
 		webElement.clear();
 		String substitutedValue = Substitutions.substituteValue(value);
-		webElement.sendKeys(substitutedValue + Keys.TAB);
+// following is a fix for firefox not always sending the whole string
+//		webElement.sendKeys(substitutedValue);
+		substitutedValue.chars().forEach(c -> webElement.sendKeys(String.valueOf((char)c).toString()));
+		webElement.sendKeys(Keys.TAB);
 
 		log.info("Set input field =>" + webElement.toString() + "<= to =>" + substitutedValue);
 		waitForBrowserReadyState();

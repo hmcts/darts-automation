@@ -84,7 +84,11 @@ public class Substitutions {
 									if (subsString.startsWith("ip-address-")) {
 										substitutionString = ipAddress(subsTag.substring(11));
 									} else {
-										substitutionString = TestData.getProperty(subsTag);
+										if (subsString.startsWith("upper-case-")) {
+											substitutionString = subsTag.substring(11).toUpperCase();
+										} else {
+											substitutionString = TestData.getProperty(subsTag);
+										}
 									}
 								}
 							}
@@ -177,5 +181,14 @@ public class Substitutions {
 		System.out.println("========================");
 		System.out.println(substituteValue("{{retention-7Y3M7D}}"));
 		System.out.println(substituteValue("{{retention-7Y0M0D}}"));
+	}
+	
+	@Test
+	public void test4() {
+		System.out.println("========================");
+		System.out.println("          4");
+		System.out.println("========================");
+		System.out.println(substituteValue("{{upper-case-abcd}}"));
+		System.out.println(substituteValue("{{upper-case-efGH}}"));
 	}
 }

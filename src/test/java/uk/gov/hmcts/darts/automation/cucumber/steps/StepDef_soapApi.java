@@ -232,12 +232,18 @@ public class StepDef_soapApi extends StepDef_base {
 			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
 		}
 	}
+
+// current default for add audio is via json
+//	@When("^I load an audio file$")
+//	public void loadAudioFile(List<Map<String,String>> dataTable) {
+//		loadAudioFileUsingSoap(dataTable);
+//	}
 	
 	// sample cucumber:
-	// When I load an audio file
+	// When I load an audio file using SOAP
 	// |courthouse|courtroom|case_numbers|date|startTime|endTime|audioFile|channel|
-		@When("^I load an audio file$")
-		public void loadAudioFile(List<Map<String,String>> dataTable) {
+		@When("^I load an audio file using SOAP$")
+		public void loadAudioFileUsingSoap(List<Map<String,String>> dataTable) {
 			soapApi.setDefaultSource(SOURCE_VIQ);
 			for (Map<String, String> map : dataTable) {
 				String date = getValue(map, "date");
@@ -251,7 +257,7 @@ public class StepDef_soapApi extends StepDef_base {
 						audioFile,
 						getValue(map, "channel", "1"));
 //				audioFile = ReadProperties.main("audioFileLocation") + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
-				ApiResponse apiResponse = soapApi.postSoapWithAudio("", "addAudio", xml, audioFile);
+				ApiResponse apiResponse = soapApi.postSoapWithAudio("", "addAudio", xml, audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2"));
 				testdata.statusCode = apiResponse.statusCode;
 				testdata.responseString = apiResponse.responseString;
 				Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);

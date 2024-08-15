@@ -138,21 +138,23 @@ Scenario Outline: Requester-Approver links
 Examples:
 	| role 	  	        | search            | yourAudio | yourTranscripts | transcriptRequests | yourWork |
 	| REQUESTERAPPROVER | Search for a case | Y         | Y               | N                  | N        |
+	
+
 
 @Admin @smoketest @demo
 Scenario: Admin User
 	When  I am logged on to the admin portal as an ADMIN user
 	Then  I see "Users" on the page
 	 And  I verify links with text:
-		 | Users | Groups | Organisations | Courthouses | Transformed media | Transcripts | File deletion | System configuration | Search | Node registry | Transcript requests | Retention policies | Your audio |
-		 | Y     | Y      | N             | Y           | Y                 | Y           | Y             | Y                    | Y      | N             | N                   | N                  | N          |
+		| Groups | Organisations | Courthouses | Transformed media | Transcripts | File deletion             | System configuration | Search | Users | Node registry | Transcript requests | Retention policies | Your audio | Events |
+		| Y      | N             | Y           | Y                 | Y           | Files marked for deletion | Y                    | Y      | Y     | N             |  N                  | N                  | N          | N      |
 	 And I verify sub-menu links for "File deletion":
 		| Transcripts | Audio files |
 		| Y           | Y           |
 	 And I verify sub-menu links for "Transcripts":
-		 | Completed transcripts |
-		 | Y                     |
-	And I verify sub-menu links for "System configuration":
+		| Completed transcripts | Requests            |
+		| Y                     | Transcript requests |
+	 And I verify sub-menu links for "System configuration":
 		| Event mappings | Automated tasks | Retention policies |
 		| Y              | Y               | Y                  |
 	When I click on the "Retention policies" sub-menu link
@@ -161,3 +163,7 @@ Scenario: Admin User
 	Then I see link with text "HMCTS"
 	 And I see link with text "DARTS"
 	 And I see link with text "Sign out"
+	When I click on the "User portal" link
+	Then I see link with text "Your transcripts"
+	When I click on the "Admin portal" link
+	Then I see "You can search for cases, hearings, events and audio." on the page
