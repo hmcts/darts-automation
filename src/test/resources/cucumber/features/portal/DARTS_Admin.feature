@@ -1,3 +1,4 @@
+@ts7
 Feature: Admin portal
 
   @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression
@@ -379,15 +380,15 @@ Feature: Admin portal
     Then I press the "Search" button
     And I see "3 result" on the page
     And I verify the HTML table contains the following values
-      | Courthouse name      | Display name         | Region |
+      | Courthouse name      | Display name         | Region     |
       | BRISTOL              | Bristol              | South West |
-      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
-      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
+      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |            |
+      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |            |
     Then I click on "Courthouse name" in the table header
     And I verify the HTML table contains the following values
-      | Courthouse name      | Display name         | Region |
-      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
-      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
+      | Courthouse name      | Display name         | Region     |
+      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |            |
+      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |            |
       | BRISTOL              | Bristol              | South West |
 
     When I click on the "Clear search" link
@@ -395,16 +396,16 @@ Feature: Admin portal
     Then I press the "Search" button
     And I see "3 results" on the page
     And I verify the HTML table contains the following values
-      | Courthouse name      | Display name         | Region |
-      | BRISTOL              | Bristol              |        |
-      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
-      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
+      | Courthouse name      | Display name         | Region     |
+      | BRISTOL              | Bristol              | South West |
+      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |            |
+      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |            |
     Then I click on "Display name" in the table header
     And I verify the HTML table contains the following values
-      | Courthouse name      | Display name         | Region |
-      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |        |
-      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |        |
-      | BRISTOL              | Bristol              |        |
+      | Courthouse name      | Display name         | Region     |
+      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |            |
+      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |            |
+      | BRISTOL              | Bristol              | South West |
 
     When I click on the "Clear search" link
     Then I set "Region" to "London"
@@ -414,34 +415,34 @@ Feature: Admin portal
     Then I press the "Search" button
     And I see "2 results" on the page
     And I verify the HTML table contains the following values
-      | Courthouse name            | Display name                | Region     |
-      | GUILDFORD                  | GF Court                    | London |
-      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
+      | Courthouse name              | Display name                 | Region     |
+      | GUILDFORD                    | GF Court                     | London     |
+      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London     |
     When I click on the "Clear search" link
     Then I set "Region" to "London"
     And I set "Courthouse name" to "guil"
     Then I press the "Search" button
     And I see "4 results" on the page
     And I verify the HTML table contains the following values
-      | Courthouse name            | Display name                | Region     |
-      | GUILDFORD                  | GF Court                    | London |
-      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
-      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales |
-      | Guildford Court               | GF Court                     |       |
+      | Courthouse name               | Display name                 | Region |
+      | GUILDFORD                     | GF Court                     | London |
+      | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
+      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
+      | Guildford Court               | GF Court                     |        |
     Then I click on "Region" in the table header
     And I verify the HTML table contains the following values
-      | Courthouse name            | Display name                | Region     |
-      | Guildford Court               | GF Court                     |       |
-      | GUILDFORD                  | GF Court                    | London |
-      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
-      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales |
+      | Courthouse name               | Display name                 | Region |
+      | Guildford Court               | GF Court                     |        |
+      | GUILDFORD                     | GF Court                     | London |
+      | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
+      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
     Then I click on "Region" in the table header
     And I verify the HTML table contains the following values
-      | Courthouse name            | Display name                | Region     |
-      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales |
-      | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
-      | GUILDFORD                  | GF Court                    | London |
-      | Guildford Court               | GF Court                     |       |
+      | Courthouse name               | Display name                 | Region |
+      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
+      | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
+      | GUILDFORD                     | GF Court                     | London |
+      | Guildford Court               | GF Court                     |        |
     When I click on the "Clear search" link
 
     #AC2 Search Courthouse-No results

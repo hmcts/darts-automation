@@ -233,6 +233,7 @@ public class StepDef_soapApi extends StepDef_base {
 		}
 	}
 
+// current default for add audio is via json
 //	@When("^I load an audio file$")
 //	public void loadAudioFile(List<Map<String,String>> dataTable) {
 //		loadAudioFileUsingSoap(dataTable);
@@ -256,7 +257,7 @@ public class StepDef_soapApi extends StepDef_base {
 						audioFile,
 						getValue(map, "channel", "1"));
 //				audioFile = ReadProperties.main("audioFileLocation") + audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2");
-				ApiResponse apiResponse = soapApi.postSoapWithAudio("", "addAudio", xml, audioFile);
+				ApiResponse apiResponse = soapApi.postSoapWithAudio("", "addAudio", xml, audioFile + (audioFile.endsWith(".mp2") ? "" : ".mp2"));
 				testdata.statusCode = apiResponse.statusCode;
 				testdata.responseString = apiResponse.responseString;
 				Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);

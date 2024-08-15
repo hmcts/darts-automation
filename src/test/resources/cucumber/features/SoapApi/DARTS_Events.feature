@@ -709,8 +709,8 @@ Scenario Outline: Create case with an event
 
 Examples:
   | courthouse         | courtroom     | caseNumber  | dateTime               | msgId      | eventId     | type  | subType | eventText     | caseRetention | totalSentence | text                                                                                                                                   | notes |
-  | Harrow Crown Court | 1             | T{{seq}}210 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}1 |               |               | Case called on  |       |
-  | Harrow Crown Court | Room {{seq}}Z | T{{seq}}211 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}1 |               |               | Case called on  |       |
+  | Harrow Crown Court | 1             | T{{seq}}230 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}1 |               |               | Case called on  |       |
+  | Harrow Crown Court | Room {{seq}}Z | T{{seq}}231 | {{timestamp-12:04:00}} | {{seq}}401 | {{seq}}1401 | 10100 |         | text {{seq}}1 |               |               | Case called on  |       |
 
 
 @EVENT_API @SOAP_EVENT @regression
