@@ -1,7 +1,7 @@
 Feature: Language Shop User
 
   @end2end @end2end7 @DMP-2056
-  @reads-system-properties
+  @reads-and-writes-system-properties
   Scenario Outline: Language Shop User
 #    Given I create a case
 #      | courthouse   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -9,7 +9,8 @@ Feature: Language Shop User
     Given I add a daily lists
       | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime   | endDate   | timeStamp   | defendant    | urn           |
       | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |
-    When I process the daily list for courthouse <courthouse>
+    When I process the daily list for courthouse "<courthouse>"
+     And I wait for case "<case_number>" courthouse "<courthouse>"
 
     Given I add courtlogs
       | dateTime    | courthouse   | courtroom   | case_numbers  | text         |

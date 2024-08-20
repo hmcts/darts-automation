@@ -181,14 +181,14 @@ public class Database extends Postgres {
 	}
 	
 	public boolean courtExists(String courthouse) throws Exception {
-		return returnSingleValue("darts.courthouse", "courthouse_name", courthouse, "count(courthouse_name)").equals("1");
+		return returnSingleValue("darts.courthouse", "upper(courthouse_name)", courthouse.toUpperCase(), "count(courthouse_name)").equals("1");
 	}
 	
 	public boolean courtCaseExists(String courtHouse, String caseNumber) throws Exception {
 		return returnSingleValue("select count(1) "
 				+ "from " + courtCaseJoin
 				+ "where cas.case_number = ? "
-				+ "and cth.courthouse_name = ?", caseNumber, courtHouse).equals("1");
+				+ "and upper(cth.courthouse_name) = ?", caseNumber, courtHouse.toUpperCase()).equals("1");
 	}
 	
 	public int updateRow(String table, String keyCol, String keyVal, String UpdateCol, String newVal) throws Exception {

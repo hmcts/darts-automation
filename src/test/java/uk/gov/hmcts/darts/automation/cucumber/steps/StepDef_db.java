@@ -16,7 +16,9 @@ import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
+import uk.gov.hmcts.darts.automation.pageObjects.DbUtils;
 import uk.gov.hmcts.darts.automation.utils.Database;
+import uk.gov.hmcts.darts.automation.pageObjects.DbUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,11 +28,13 @@ public class StepDef_db extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_db");
 	private Database DB;
+	private DbUtils dbUtils;
 	
 	
 	public StepDef_db(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
 		DB = new Database();
+		dbUtils = new DbUtils(webDriver, testdata);
 	}
 	
 	@When("I execute update sql:")
@@ -135,6 +139,23 @@ public class StepDef_db extends StepDef_base {
 	public void saveSelectSql(String name, String docString) throws Exception {
 		String returnVal = DB.returnSingleValue(Substitutions.substituteValue(docString));
 		testdata.setProperty(name, returnVal);
+	}
+	
+	@Then("I wait for case {string} courtroom {string} courthouse {string}")
+	public void waitForCaseCreation(String caseNumber, String courthouse, String courtroom)  throws Exception {
+		DbUtils dbUtils = new DbUtils(webDriver, testdata);
+		dbUtils.waitForCaseCreation(courthouse, courtroom, caseNumber);
+	}
+	
+	@Given("^that courthouse \"([^\"]*)\" case \"([^\"]*)\" does not exist$")
+	public void caseDoesNotExist(String courthouse, String caseNumber) throws Exception {
+		String count = DB.returnSingleValue("COURTCASE", "courthouse_name", Substitutions.substituteValue(courthouse), "case_number", Substitutions.substituteValue(caseNumber), "count(cas_id)");
+		Assertions.assertEquals("0", count, "Case already exists");
+	}
+
+	@When("I wait for case {string} courthouse {string}")
+	public void processTheDailyListForCourthouseCase(String caseNumber, String courthouse) {
+		dbUtils.waitForCaseCreation(Substitutions.substituteValue(courthouse), Substitutions.substituteValue(caseNumber));
 	}
 	
 

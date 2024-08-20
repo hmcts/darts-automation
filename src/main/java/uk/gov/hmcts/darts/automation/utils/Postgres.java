@@ -75,7 +75,15 @@ public class Postgres {
 	}
 	
 	String sqlCondition(String table, String column, String value) throws Exception {
-		return column + (value.strip().equalsIgnoreCase("NULL") ? " is " : " = ") + delimitedValue(table, column, value);
+		switch (column.toLowerCase()) {
+			case "courthouse_name":
+			case "courtroom_name":
+				return "upper(" + column + ")" + (value.strip().equalsIgnoreCase("NULL") ? " is " : " = ") + delimitedValue(table, column, value.toUpperCase()); 
+
+		    default:
+				return column 
+						+ (value.strip().equalsIgnoreCase("NULL") ? " is " : " = ") + delimitedValue(table, column, value);
+		}
 	}
 	
 	String extractSingleValueFromResultSet(ResultSet rs) throws Exception {
@@ -258,6 +266,7 @@ public class Postgres {
 			case "character": 
 			case "string": 
 			case "date": 
+			case "text":
 			case "timestamp": 
 					delimiter = "'";
 					break;
@@ -357,8 +366,17 @@ public class Postgres {
 		return initialValue;
 	}
 
+
 	@Test
-	public void test() throws Exception {
+	public void test0() throws Exception {
+		Postgres pg = new Postgres();
+		System.out.println(sqlCondition("darts.courthouse", "courthouse_name", "aa"));
+		System.out.println(sqlCondition("darts.courthouse", "upper(courthouse_name)", "AA"));
+		System.out.println(sqlCondition("darts.courthouse", "display_name", "12"));
+	}
+	
+	@Test
+	public void test1() throws Exception {
 		Postgres pg = new Postgres();
 		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "case_number", "12"), "'12'");
 		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "case_number", null), "null");
@@ -368,6 +386,11 @@ public class Postgres {
 		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", "12"), "12");
 		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", "null"), "null");
 		Assertions.assertEquals(pg.delimitedValue("darts.court_case", "cth_id", null), "null");
+	}
+
+	@Test
+	public void test2() throws Exception {
+		Postgres pg = new Postgres();
 // following relies on existing table data & may break
 		Assertions.assertEquals(pg.returnSingleValue("select cas_id from darts.court_case where case_number = '174'"), "81");
 		Assertions.assertEquals(pg.returnSingleValue("select case_closed from darts.court_case where case_number = '174'"), "null");
