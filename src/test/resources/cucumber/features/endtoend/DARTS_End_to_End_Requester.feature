@@ -1,12 +1,13 @@
 Feature: Requester
 
   @end2end @end2end2 @DMP-2206
-  @reads-system-properties
+  @reads-and-writes-system-properties
   Scenario Outline: Requester
     Given I add a daily lists
       | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime      | endDate   | timeStamp   | defendant    | urn           |
       | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <DL_startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |
-    When I process the daily list for courthouse <courthouse>
+    When I process the daily list for courthouse "<courthouse>"
+     And I wait for case "<case_number>" courthouse "<courthouse>"
     Then I create an event
       | message_id | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                    | date_time  | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -151,3 +152,4 @@ Feature: Requester
     Examples:
       | DL_message_id                 | DL_type | DL_subType | documentName          | courthouse      | courtroom   | case_number   | eventId     | defendants            | startDate  | DL_startTime | endDate     | timeStamp     | HearingDate     | transcription-type | urgency   | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            | reason                                            |
       | DARTS_E2E_{{date+0/}}_{{seq}} | DL      | DL         | Dailylist_{{date+0/}} | {{courthouse1}} | C{{seq}}-86 | S{{seq}}086-B | {{seq}}1001 | S{{seq}} defendant-86 | {{date+0}} | 10:00:00     | {{date+30}} | {{timestamp}} | {{displaydate}} | Sentencing remarks | Overnight |               |               | {{timestamp}} | sample1.mp2 | 08:03:00  | 08:04:00 | file-sample_1MB.doc | 99 Years Permanent Retention for case S{{seq}}009 |
+      

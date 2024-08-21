@@ -22,7 +22,6 @@ import uk.gov.hmcts.darts.automation.utils.ReadProperties;
 import uk.gov.hmcts.darts.automation.utils.SoapApi;
 import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import uk.gov.hmcts.darts.automation.utils.XmlUtils;
-import uk.gov.hmcts.darts.automation.pageObjects.DbUtils;
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
 import uk.gov.hmcts.darts.automation.utils.DateUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
@@ -37,6 +36,7 @@ public class StepDef_soapApi extends StepDef_base {
 
 	private static Logger log = LogManager.getLogger("StepDef_soapApi");
 	private SoapApi soapApi;
+    private WaitUtils wait;
 	private static String SOURCE_XHIBIT = "XHIBIT";
 	private static String SOURCE_CPP = "CPP";
 	private static String SOURCE_VIQ = "VIQ";
@@ -45,6 +45,7 @@ public class StepDef_soapApi extends StepDef_base {
 	public StepDef_soapApi(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
 		soapApi = new SoapApi();
+        wait = new WaitUtils(webDriver);
 	}
 	
 /*
@@ -230,6 +231,7 @@ public class StepDef_soapApi extends StepDef_base {
 			testdata.statusCode = apiResponse.statusCode;
 			testdata.responseString = apiResponse.responseString;
 			Assertions.assertTrue(apiResponse.statusCode.equals("200")||apiResponse.statusCode.equals("201"), "Invalid API response " + apiResponse.statusCode);
+			wait.pause(2);
 		}
 	}
 
@@ -347,12 +349,6 @@ public class StepDef_soapApi extends StepDef_base {
 		ApiResponse apiResponse = soapApi.postSoapBinaryFile(endPoint, soapAction, filename);
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
-	}
-	
-	@Then("I wait for courtroom {string} courthouse {string} case {string} to be ready")
-	public void waitForCaseCreation(String courthouse, String courtroom, String caseNumber)  throws Exception {
-		DbUtils dbUtils = new DbUtils(webDriver, testdata);
-		dbUtils.waitForCaseCreation(courthouse, courtroom, caseNumber);
 	}
 	
 

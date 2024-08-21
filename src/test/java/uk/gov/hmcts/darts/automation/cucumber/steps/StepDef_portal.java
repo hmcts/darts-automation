@@ -9,6 +9,7 @@ import uk.gov.hmcts.darts.automation.utils.DateUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
 import uk.gov.hmcts.darts.automation.utils.Prompt;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
+import uk.gov.hmcts.darts.automation.utils.Substitutions;
 import uk.gov.hmcts.darts.automation.utils.TestData;
 import uk.gov.hmcts.darts.automation.utils.WaitUtils;
 import uk.gov.hmcts.darts.automation.utils.ReadProperties;
@@ -28,7 +29,7 @@ public class StepDef_portal extends StepDef_base {
     private static Logger log = LogManager.getLogger("StepDef_portal");
     private Portal portal;
     private Prompt prompt;
-    private WaitUtils WAIT;
+    private WaitUtils wait;
     private Database DB;
     private String savedRequestId;
   
@@ -36,7 +37,7 @@ public class StepDef_portal extends StepDef_base {
 		super(driver, testdata);
         prompt = new Prompt(webDriver);
         portal = new Portal(webDriver, testdata);
-        WAIT = new WaitUtils(webDriver);
+        wait = new WaitUtils(webDriver);
 		DB = new Database();
     }
 
@@ -185,6 +186,11 @@ public class StepDef_portal extends StepDef_base {
  		}
  	}
  	
+ 	@Then("I wait for {} seconds")
+ 	public void waitForSeconds(int seconds) throws Exception {
+		wait.pause(seconds);
+ 	}
+ 	
  	@Then("^I wait for the audio Request ID to be ready$")
  	public void waitForAudioRequestIdToBeReady() throws Exception {
     	if (savedRequestId.isBlank()) {
@@ -299,11 +305,5 @@ public class StepDef_portal extends StepDef_base {
 			}
 		}
 		Assertions.assertEquals(0, errorCount, "Errors found verifying links: " + errorLinks);
-	}
-	
-	@Given("^that courthouse \"([^\"]*)\" case \"([^\"]*)\" does not exist$")
-	public void caseDoesNotExist(String courthouse, String caseNumber) throws Exception {
-		String count = DB.returnSingleValue("COURTCASE", "courthouse_name", courthouse, "case_number", caseNumber, "count(cas_id)");
-		Assertions.assertEquals("0", count, "Case already exists");
 	}
 }

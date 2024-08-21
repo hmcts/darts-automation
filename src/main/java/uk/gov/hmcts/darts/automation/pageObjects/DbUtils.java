@@ -40,13 +40,13 @@ public class DbUtils {
     	log.info("Waiting {} secs for case to be inserted: {} {} {}", waitTimeInSeconds, courthouse, courtroom, caseNumber);
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
-                .pollingEvery(Duration.ofSeconds(20));  
-        Function<WebDriver, Boolean> requestedAudioIsReady = new Function<WebDriver, Boolean>() {
+                .pollingEvery(Duration.ofSeconds(2));  
+        Function<WebDriver, Boolean> caseIsReady = new Function<WebDriver, Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
-            	String casId = "";
+            	String caseCount = "0";
 				try {
-			    	casId = DB.returnSingleValue("CASE_HEARING", 
+					caseCount = DB.returnSingleValue("CASE_HEARING",
 			    			"upper(courthouse_name)",  courthouse.toUpperCase(), 
 			    			"upper(courtroom_name)",  courtroom.toUpperCase(), 
 			    			"case_number",  caseNumber,
@@ -54,15 +54,47 @@ public class DbUtils {
 				} catch (Exception e) {
 					log.warn("Exception in database call \r\n {e}");
 				}
-            	log.warn("cas_id: {}", casId);
-            	return !casId.isBlank();
+            	log.info("Case count: {}", caseCount);
+            	return !caseCount.equals("0");
             };
         };
         try {
-            wait.until(requestedAudioIsReady);
-            log.info("Audio request ready");
+            wait.until(caseIsReady);
+            log.info("case ready");
         } catch (TimeoutException e) {
-            log.warn("Wait complete - request not ready");
+            log.fatal("Wait complete - case not ready");
+            Assertions.fail("Case not created");
+        }
+    }
+    
+    public void waitForCaseCreation(String courthouse, String caseNumber) {
+        int waitTimeInSeconds = 300;
+    	log.info("Waiting {} secs for case to be inserted: {} {}", waitTimeInSeconds, courthouse, caseNumber);
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
+                .pollingEvery(Duration.ofSeconds(2));  
+        Function<WebDriver, Boolean> caseIsReady = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+            	String caseCount = "0";
+				try {
+					caseCount = DB.returnSingleValue("CASE_HEARING",
+							"cas.case_number", caseNumber, 
+							"upper(courthouse_name)", courthouse.toUpperCase(),
+							"count(cas.case_number)");
+				} catch (Exception e) {
+					log.warn("Exception in database call \r\n {e}");
+				}
+            	log.info("Case count: {}", caseCount);
+            	return !caseCount.equals("0");
+            };
+        };
+        try {
+            wait.until(caseIsReady);
+            log.info("case ready");
+        } catch (TimeoutException e) {
+            log.fatal("Wait complete - case not ready");
+            Assertions.fail("Case not created");
         }
     }
     

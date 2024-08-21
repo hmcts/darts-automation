@@ -9,13 +9,14 @@ Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 
 			handler, event_name & event_text is as expected
 
 @EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
-  @reads-system-properties
+  @reads-and-writes-system-properties
 Scenario Outline: Create a case for event tests
   Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
   Given I add a daily list
   | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
   | 58b211f4-426d-81be-20{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
-    And I process the daily list for courthouse <courthouse>
+    And I process the daily list for courthouse "<courthouse>"
+   And I wait for case "<caseNumbers>" courthouse "<courthouse>"
 Examples:
   | courthouse         | courtroom    | caseNumbers  |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201  | 
@@ -562,16 +563,18 @@ Examples:
 
   
 @EVENT_API @SOAP_EVENT @regression
-  @reads-system-properties
+  @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for custodial sentence - not life
 															retention is 7 years or length of sentence
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
   Given I authenticate from the XHIBIT source system
+  Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
     | 58b211f4-426d-81be-21{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}211 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
-    And I process the daily list for courthouse <courthouse>
+    And I process the daily list for courthouse "<courthouse>"
+   And I wait for case "<caseNumbers>" courthouse "<courthouse>"
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I see table darts.court_case column interpreter_used is "f" where cas_id = "{{cas.cas_id}}"
     And I see table darts.court_case column case_closed_ts is "null" where cas_id = "{{cas.cas_id}}"
@@ -601,7 +604,7 @@ Examples:
   
   
 @EVENT_API @SOAP_EVENT @regression
-  @reads-system-properties
+  @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for LIFE sentence
 													Difference from other sentencing event is 
 															table CASE_RETENTION column total_sentence is not set
@@ -613,7 +616,8 @@ Scenario Outline: Create a StopAndClose event for LIFE sentence
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
     | 58b211f4-426d-81be-22{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}221 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
-    And I process the daily list for courthouse <courthouse>
+    And I process the daily list for courthouse "<courthouse>"
+   And I wait for case "<caseNumbers>" courthouse "<courthouse>"
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I see table darts.court_case column interpreter_used is "f" where cas_id = "{{cas.cas_id}}"
     And I see table darts.court_case column case_closed_ts is "null" where cas_id = "{{cas.cas_id}}"
@@ -642,7 +646,7 @@ Examples:
   
   
 @EVENT_API @SOAP_EVENT @regression
-  @reads-system-properties
+  @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for non-custodial sentence
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
@@ -651,7 +655,8 @@ Scenario Outline: Create a StopAndClose event for non-custodial sentence
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
     | 58b211f4-426d-81be-23{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}231 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
-    And I process the daily list for courthouse <courthouse>
+    And I process the daily list for courthouse "<courthouse>"
+   And I wait for case "<caseNumbers>" courthouse "<courthouse>"
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
     And I see table darts.court_case column interpreter_used is "f" where cas_id = "{{cas.cas_id}}"
     And I see table darts.court_case column case_closed_ts is "null" where cas_id = "{{cas.cas_id}}"
@@ -882,7 +887,7 @@ Scenario: Create an event using invalid type / subtype
 
 
 @EVENT_API @SOAP_EVENT @regression
-  @reads-system-properties
+  @reads-and-writes-system-properties
 Scenario Outline: Verify that a hearing courtroom can be modified by an event
 																									where a case is added via daily lists (so a hearing record exists)
 																									if the first event added is for a different courtroom
@@ -893,7 +898,8 @@ Scenario Outline: Verify that a hearing courtroom can be modified by an event
   When I add a daily list
     | messageId                        | type | subType | documentName              | courthouse   | courtroom    | caseNumber   | startDate  | startTime | endDate    | timeStamp     |
     | 58b211f4-426d-81be-00{{seq}}901  | DL   | DL      | DL {{date+0/}} {{seq}}901 | <courthouse> | <courtroom1> | <caseNumber> | {{date+0}} | 16:00     | {{date+0}} | {{timestamp}} |
-   And I process the daily list for courthouse <courthouse>
+   And I process the daily list for courthouse "<courthouse>"
+   And I wait for case "<caseNumber>" courthouse "<courthouse>"
   Then I see table CASE_HEARING column hearing_is_actual is "f" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom1>"
 
    And I create an event

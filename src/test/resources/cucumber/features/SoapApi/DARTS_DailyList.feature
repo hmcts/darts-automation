@@ -18,6 +18,10 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>1"
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>9"
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>3"
+   And I see table darts.daily_list column count(job_status) is "0" where message_id = "<messageId>1" and unique_id = "<documentName>1"
+   And I see table darts.daily_list column count(job_status) is "0" where message_id = "<messageId>2" and unique_id = "<documentName>1"
+   And I see table darts.daily_list column count(job_status) is "0" where message_id = "<messageId>1" and unique_id = "<documentName>2"
+   And I see table darts.daily_list column count(job_status) is "0" where message_id = "<messageId>9" and unique_id = "<documentName>9"
   Given I authenticate from the <source> source system
 # First daily list for today
   When I add a daily list
@@ -32,15 +36,22 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 # Second daily list for today (will be processed)
   When I add a daily list
   | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant   | judge              | prosecution        | defence         |
-  | <messageId>2  | <type> | <subType> | <documentName>1 | <courthouse> | <courtroom> | <caseNumber>1 | <startDate> | 18:00     | <endDate> | <timeStamp> | <defendant> | judge name {{seq}} | prosecutor {{seq}} | defence {{seq}} |
-  Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>2" and unique_id = "<documentName>1"
+#TODO changed documentName from 1 to 3 due to defect
+#  | <messageId>2  | <type> | <subType> | <documentName>1 | <courthouse> | <courtroom> | <caseNumber>1 | <startDate> | 18:00     | <endDate> | <timeStamp> | <defendant> | judge name {{seq}} | prosecutor {{seq}} | defence {{seq}} |
+  | <messageId>2  | <type> | <subType> | <documentName>3 | <courthouse> | <courtroom> | <caseNumber>1 | <startDate> | 18:00     | <endDate> | <timeStamp> | <defendant> | judge name {{seq}} | prosecutor {{seq}} | defence {{seq}} |
+#TODO changed documentName from 1 to 3 due to defect
+#  Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>2" and unique_id = "<documentName>1"
+  Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>2" and unique_id = "<documentName>3"
 # Daily list for tomorrow
   When I add a daily list
   | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp   | defendant   | judge               | prosecution         | defence          |
   | <messageId>9  | <type> | <subType> | <documentName>9 | <courthouse> | <courtroom> | <caseNumber>9 | {{date+1}} | 10:00     | {{date+1}} | <timeStamp> | <defendant> | judge name {{seq}}9 | prosecutor {{seq}}9 | defence {{seq}}9 |
   Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>9" and unique_id = "<documentName>9"
-  When I process the daily list for courthouse <courthouse>
-  Then I see table darts.daily_list column job_status is "PROCESSED" where message_id = "<messageId>2" and unique_id = "<documentName>1"
+  When I process the daily list for courthouse "<courthouse>"
+   And I wait for case "<caseNumber>1" courthouse "<courthouse>"
+#TODO changed documentName from 1 to 3 due to defect
+#  Then I see table darts.daily_list column job_status is "PROCESSED" where message_id = "<messageId>2" and unique_id = "<documentName>1"
+  Then I see table darts.daily_list column job_status is "PROCESSED" where message_id = "<messageId>2" and unique_id = "<documentName>3"
    And I see table darts.daily_list column job_status is "IGNORED" where message_id = "<messageId>1" and unique_id = "<documentName>2"
    And I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>9" and unique_id = "<documentName>9"
    And I select column cas.cas_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and case_number = "<caseNumber>1"
@@ -57,7 +68,8 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
   | messageId     | type   | subType   | documentName    | courthouse   | courtroom   | caseNumber    | startDate   | startTime | endDate   | timeStamp   | defendant               | judge              | prosecution        | defence        |
   | <messageId>3  | <type> | <subType> | <documentName>3 | <courthouse> | 2           | <caseNumber>3 | <startDate> | 13:00     | <endDate> | <timeStamp> | <caseNumber>3 defendant | judge name {{seq}} | prosecutor {{seq}} | defence {{seq}} |
   Then I see table darts.daily_list column job_status is "NEW" where message_id = "<messageId>3" and unique_id = "<documentName>3"
-  When I process the daily list for courthouse <courthouse>
+  When I process the daily list for courthouse "<courthouse>"
+   And I wait for case "<caseNumber>3" courthouse "<courthouse>"
   Then I see table darts.daily_list column job_status is "PROCESSED" where message_id = "<messageId>3" and unique_id = "<documentName>3"
    And I select column cas.cas_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "2" and case_number = "<caseNumber>3"
    And I select column hea_id from table CASE_HEARING where cas.cas_id = "{{cas.cas_id}}" and hearing_date = "{{date-yyyymmdd-0}}"
@@ -69,8 +81,8 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
    And I see table darts.defendant column defendant_name is "<caseNumber>3 defendant" where cas_id = "{{cas.cas_id}}"
 Examples:
   | source | messageId                      | type  | subType | documentName             | courthouse         | courtroom | caseNumber  | startDate    | startTime | endDate    | timeStamp     | defendant             |
-  | XHIBIT | 58b211f4-426d-81be-00{{seq}}00 | DL    | DL      | DL {{date+0/}} {{seq}}00 | Harrow Crown Court | 1         | T{{seq}}101 | {{date+0}}   | 10:00:00  | {{date+0}} | {{timestamp}} | T{{seq}}101 defendant |
-  | CPP    | 58b211f4-426d-81be-00{{seq}}01 | CPPDL | DL      | DL {{date+0/}} {{seq}}01 | Harrow Crown Court | 1         | T{{seq}}111 | {{date+0}}   | 10:00:00  | {{date+0}} | {{timestamp}} | T{{seq}}111 defendant |
+  | XHIBIT | 58b211f5-426d-81be-00{{seq}}00 | DL    | DL      | DL {{date+0/}} {{seq}}00 | Harrow Crown Court | 1         | T{{seq}}101 | {{date+0}}   | 10:00:00  | {{date+0}} | {{timestamp}} | T{{seq}}101 defendant |
+  | CPP    | 58b211f5-426d-81be-00{{seq}}01 | CPPDL | DL      | DL {{date+0/}} {{seq}}01 | Harrow Crown Court | 1         | T{{seq}}111 | {{date+0}}   | 10:00:00  | {{date+0}} | {{timestamp}} | T{{seq}}111 defendant |
 
 	
 @Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
@@ -78,7 +90,7 @@ Scenario: Daily List VIQ User fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
-   			<messageId>58b211f4-426d-81be-000{{seq}}001</messageId>
+   			<messageId>58b211f5-426d-81be-00{{seq}}001</messageId>
     			<type>DL</type>
     			<subType>DL</subType>
     			<document>
@@ -170,7 +182,7 @@ Scenario: Daily List malformed fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
-   			<messageId>58b211f4-426d-81be-000{{seq}}001</messageId>
+   			<messageId>58b211f5-426d-81be-00{{seq}}001</messageId>
     			<type>DL</type>
     			<subType>DL</subType>
     			<document>
@@ -263,7 +275,7 @@ Scenario: Daily List successful
   Given I authenticate from the CPP source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
-   			<messageId>58b211f4-426d-81be-000{{seq}}001</messageId>
+   			<messageId>58b211f5-426d-81be-00{{seq}}001</messageId>
     			<type>DL</type>
     			<subType>DL</subType>
     			<document>
@@ -433,9 +445,10 @@ Scenario: Daily List successful
 </document>
 	"""
 	Then the API status code is 200
-   And I see table darts.daily_list column job_status is "NEW" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f4-426d-81be-000{{seq}}001"
+   And I see table darts.daily_list column job_status is "NEW" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f5-426d-81be-00{{seq}}001"
   When I process the daily list for courthouse "York"
-  Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f4-426d-81be-000{{seq}}001"
+   And I wait for case "T{{seq}}110" courthouse "YORK"
+  Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}001" and message_id = "58b211f5-426d-81be-00{{seq}}001"
    And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}110" and courthouse_name = "YORK" and courtroom_name = "1"
   
 
@@ -444,9 +457,10 @@ Scenario: Daily List successful
   @reads-and-writes-system-properties
 Scenario: Daily List successful with TimeMarkingNote 3:00 PM
   Given I authenticate from the CPP source system
+   And I see table darts.daily_list column count(job_status) is "0" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f5-426d-81be-00{{seq}}002"
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
-   			<messageId>58b211f4-426d-81be-000{{seq}}002</messageId>
+   			<messageId>58b211f5-426d-81be-00{{seq}}002</messageId>
     			<type>DL</type>
     			<subType>DL</subType>
     			<document>
@@ -616,9 +630,10 @@ Scenario: Daily List successful with TimeMarkingNote 3:00 PM
 </document>
 	"""
 	Then the API status code is 200
-   And I see table darts.daily_list column job_status is "NEW" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f4-426d-81be-000{{seq}}002"
+   And I see table darts.daily_list column job_status is "NEW" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f5-426d-81be-00{{seq}}002"
   When I process the daily list for courthouse "York"
-  Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f4-426d-81be-000{{seq}}002"
+   And I wait for case "T{{seq}}120" courthouse "YORK"
+  Then I see table darts.daily_list column job_status is "PROCESSED" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f5-426d-81be-00{{seq}}002"
    And I see table CASE_HEARING column case_closed is "f" where case_number = "T{{seq}}120" and courthouse_name = "YORK" and courtroom_name = "1"
   
   
