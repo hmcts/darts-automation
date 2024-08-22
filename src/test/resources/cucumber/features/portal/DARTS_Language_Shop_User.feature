@@ -3,7 +3,7 @@ Feature: Language Shop User
   Background:
     Given I am logged on to DARTS as an LANGUAGESHOP user
 
-  @DMP-770
+  @DMP-770 @review
   Scenario Outline: Verify download playback file
     When I click on the "Your audio" link
     When I click on "View" in the same row as "<CaseID>"
@@ -22,7 +22,7 @@ Feature: Language Shop User
       | CaseID        | Courthouse    | Defendants | HearingDate | StartTime | EndTime  |
       | Case1_DMP1398 | LEEDS_DMP1398 |            | 2 Nov 2023  | 15:20:23  | 15:21:23 |
 
-  @DMP-2137-AC1 @regression
+  @DMP-2137-AC1 @regression @review
     Scenario: Translation QA User Permissions
 
     #Global Access = True Interpreter = True
@@ -32,7 +32,7 @@ Feature: Language Shop User
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137    | DMP-1289-BATH      | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137    | DMP-1289-BATH      | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     #Advanced search
     When I click on the "Clear search" link
@@ -45,9 +45,10 @@ Feature: Language Shop User
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137    | DMP-1289-BATH      | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137    | DMP-1289-BATH      | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Courthouse" to "DMP-1289-BATH"
     And I set "Defendant's name" to "Joe Bloggs"
     And I set "Judge's name" to "Jane Bloggs"
@@ -55,90 +56,102 @@ Feature: Language Shop User
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137    | DMP-1289-BATH      | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137    | DMP-1289-BATH      | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/01/2024"
-    And I set "Enter date to" to "20/01/2024"
+    And I set "Date from" to "07/01/2024"
+    And I set "Date to" to "20/01/2024"
     And I set "Case ID" to "DMP-2137"
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137    | DMP-1289-BATH      | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137    | DMP-1289-BATH      | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Case ID" to "1" and click away
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     And I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Courtroom" to "2"
     And I press the "Search" button
     Then I see an error message "You must also enter a courthouse"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "15/01/2026"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "{{date+7/}}"
-    And I set "Enter date to" to "{{date-7/}}"
+    And I set "Date from" to "{{date+7/}}"
+    And I set "Date to" to "{{date+7/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/01/2026"
-    And I set "Enter date to" to "20/01/2026"
+    And I set "Date from" to "07/01/2024"
+    And I set "Date to" to "20/01/2026"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "20/01/2024"
+    And I set "Date to" to "20/01/2024"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/01/2024"
+    And I set "Date from" to "07/01/2024"
     And I press the "Search" button
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "Invalid"
+    And I set "Date from" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "Invalid"
+    And I set "Date to" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     And I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "DMP-2137"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137    | DMP-1289-BATH      | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137    | DMP-1289-BATH      | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     And I click on the "Search" link
     And I see "Search for a case" on the page
@@ -146,10 +159,10 @@ Feature: Language Shop User
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137    | DMP-1289-BATH      | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137    | DMP-1289-BATH      | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on "DMP-2137" in the same row as "DMP-1289-BATH"
-    And I click on "15 Jan 2024" in the same row as "Courtroom SIT1"
+    And I click on "15 Jan 2024" in the same row as "COURTROOM SIT1"
     Then I see "Events and audio recordings" on the page
     And I set the time fields of "Start Time" to "16:00:00"
     And I set the time fields of "End Time" to "16:02:00"
@@ -191,7 +204,7 @@ Feature: Language Shop User
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-2  | LEEDS_DMP381       | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-2  | LEEDS_DMP381       | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     #Advanced search
     When I click on the "Clear search" link
@@ -204,9 +217,10 @@ Feature: Language Shop User
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-2  | LEEDS_DMP381       | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-2  | LEEDS_DMP381       | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Courthouse" to "LEEDS_DMP381"
     And I set "Defendant's name" to "Joe Bloggs"
     And I set "Judge's name" to "Jane Bloggs"
@@ -214,83 +228,94 @@ Feature: Language Shop User
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-2  | LEEDS_DMP381       | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-2  | LEEDS_DMP381       | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/04/2024"
-    And I set "Enter date to" to "23/04/2024"
+    And I set "Date from" to "07/04/2024"
+    And I set "Date to" to "23/04/2024"
     And I set "Case ID" to "DMP-2137-2"
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-2  | LEEDS_DMP381       | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-2  | LEEDS_DMP381       | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Case ID" to "1" and click away
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     And I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Courtroom" to "2"
     And I press the "Search" button
     Then I see an error message "You must also enter a courthouse"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "23/04/2026"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/01/2026"
-    And I set "Enter date to" to "20/01/2026"
+    And I set "Date from" to "07/01/2026"
+    And I set "Date to" to "20/01/2026"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "20/01/2024"
+    And I set "Date to" to "20/01/2024"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/01/2024"
+    And I set "Date from" to "07/01/2024"
     And I press the "Search" button
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "Invalid"
+    And I set "Date from" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "Invalid"
+    And I set "Date to" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     And I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "DMP-2137-2"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-2  | LEEDS_DMP381       | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-2  | LEEDS_DMP381       | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     And I click on the "Search" link
     And I see "Search for a case" on the page
@@ -298,7 +323,7 @@ Feature: Language Shop User
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-2  | LEEDS_DMP381       | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-2  | LEEDS_DMP381       | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on "DMP-2137-2" in the same row as "LEEDS_DMP381"
     And I click on "23 Apr 2024" in the same row as "Courtroom SIT1"
@@ -343,7 +368,7 @@ Feature: Language Shop User
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-3  | Swansea            | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-3  | SWANSEA            | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     #Advanced search
     When I click on the "Clear search" link
@@ -356,9 +381,10 @@ Feature: Language Shop User
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-3  | Swansea            | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-3  | SWANSEA            | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Courthouse" to "Swansea"
     And I set "Defendant's name" to "Joe Bloggs"
     And I set "Judge's name" to "Jane Bloggs"
@@ -366,83 +392,94 @@ Feature: Language Shop User
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-3  | Swansea            | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-3  | SWANSEA            | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/04/2024"
-    And I set "Enter date to" to "23/04/2024"
+    And I set "Date from" to "07/04/2024"
+    And I set "Date to" to "23/04/2024"
     And I set "Case ID" to "DMP-2137-3"
     And I press the "Search" button
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-3  | Swansea            | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-3  | SWANSEA            | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Case ID" to "1" and click away
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     And I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Courtroom" to "2"
     And I press the "Search" button
     Then I see an error message "You must also enter a courthouse"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "23/04/2026"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/01/2026"
-    And I set "Enter date to" to "20/01/2026"
+    And I set "Date from" to "07/01/2026"
+    And I set "Date to" to "20/01/2026"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "20/01/2024"
+    And I set "Date to" to "20/01/2024"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "07/01/2024"
+    And I set "Date from" to "07/01/2024"
     And I press the "Search" button
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "Invalid"
+    And I set "Date from" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "Invalid"
+    And I set "Date to" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     And I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "DMP-2137-3"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-3  | Swansea            | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-3  | SWANSEA            | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     And I click on the "Search" link
     And I see "Search for a case" on the page
@@ -450,7 +487,7 @@ Feature: Language Shop User
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom        | Judge(s)     | Defendant(s) |
-      | DMP-2137-3  | Swansea            | Courtroom SIT1   | Jane Bloggs  | Joe Bloggs   |
+      | DMP-2137-3  | SWANSEA            | COURTROOM SIT1   | Jane Bloggs  | Joe Bloggs   |
 
     When I click on "DMP-2137-3" in the same row as "Swansea"
     And I click on "23 Apr 2024" in the same row as "Courtroom SIT1"

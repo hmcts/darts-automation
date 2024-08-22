@@ -1,3 +1,4 @@
+@ts6
 Feature: Case Retention
 
   @DMP-1369 @DMP-1406 @DMP-1413 @DMP-1899 @regression
@@ -8,6 +9,7 @@ Feature: Case Retention
       | Harrow Crown Court | {{seq}}-31 | R{{seq}}GH1 | Def {{seq}}-31 | Judge {{seq}}-31 | testprosecutor {{seq}}-31 | testdefender {{seq}}-31 |
       | Harrow Crown Court | {{seq}}-32 | R{{seq}}IJ1 | Def {{seq}}-32 | Judge {{seq}}-32 | testprosecutor {{seq}}-32 | testdefender {{seq}}-32 |
       | Harrow Crown Court | {{seq}}-33 | R{{seq}}KL1 | Def {{seq}}-33 | Judge {{seq}}-33 | testprosecutor {{seq}}-33 | testdefender {{seq}}-33 |
+      | Harrow Crown Court | {{seq}}-34 | R{{seq}}MN1 | Def {{seq}}-34 | Judge {{seq}}-34 | testprosecutor {{seq}}-34 | testdefender {{seq}}-34 |
 
     Given I authenticate from the CPP source system
     Given I create an event
@@ -16,6 +18,7 @@ Feature: Case Retention
       | {{seq}}001 | 1100 |          | {{seq}}1170 | Harrow Crown Court | {{seq}}-31 | R{{seq}}GH1  | {{seq}}ABC-31 | {{timestamp-10:03:00}} |
       | {{seq}}001 | 1100 |          | {{seq}}1171 | Harrow Crown Court | {{seq}}-32 | R{{seq}}IJ1  | {{seq}}ABC-32 | {{timestamp-10:04:00}} |
       | {{seq}}001 | 1100 |          | {{seq}}1172 | Harrow Crown Court | {{seq}}-33 | R{{seq}}KL1  | {{seq}}ABC-33 | {{timestamp-10:05:00}} |
+      | {{seq}}001 | 1100 |          | {{seq}}1173 | Harrow Crown Court | {{seq}}-34 | R{{seq}}MN1  | {{seq}}ABC-34 | {{timestamp-10:06:00}} |
 
   @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history
@@ -42,8 +45,8 @@ Feature: Case Retention
   # Close the case
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers  | event_text        | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}005 | 30300 |          | {{seq}}1177 | Harrow Crown Court | {{seq}}-28 | <case_number> | Close case{{seq}} | {{timestamp-11:00:00}} | <caseRetention>             | <totalSentence>     |
+      | message_id | type  | sub_type | event_id    | courthouse         | courtroom   | case_numbers  | event_text        | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}005 | 30300 |          | {{seq}}1177 | Harrow Crown Court | <courtroom> | <case_number> | Close case{{seq}} | {{timestamp-11:00:00}} | <caseRetention>             | <totalSentence>     |
 
     Then I click on the breadcrumb link "<case_number>"
     And I click on the "<case_number>" link
@@ -178,11 +181,130 @@ Feature: Case Retention
     And I see "Case retention date" on the page
 
     Examples:
-      | case_number | caseRetention | totalSentence | retention_displayname | display_retentiondate             |
-      | R{{seq}}EF1 | 1             | 1Y0M0D        | Not Guilty            | {{displayDate-{{date+1 years}}}}  |
-      | R{{seq}}GH1 | 2             | 7Y0M0D        | Non Custodial         | {{displayDate-{{date+7 years}}}}  |
-      | R{{seq}}IJ1 | 3             | 7Y0M0D        | Custodial             | {{displayDate-{{date+7 years}}}}  |
-      | R{{seq}}KL1 | 4             | 99Y0M0D       | Life                  | {{displayDate-{{date+99 years}}}} |
+      | case_number | caseRetention | totalSentence | retention_displayname | display_retentiondate             | courtroom  | ref |
+      | R{{seq}}EF1 | 1             | 1Y0M0D        | Not Guilty            | {{displayDate-{{date+1 years}}}}  | {{seq}}-30 | 30  |
+      | R{{seq}}GH1 | 2             | 7Y0M0D        | Non Custodial         | {{displayDate-{{date+7 years}}}}  | {{seq}}-31 | 31  |
+      | R{{seq}}IJ1 | 3             | 3Y0M0D        | Custodial             | {{displayDate-{{date+7 years}}}}  | {{seq}}-32 | 32  |
+      | R{{seq}}KL1 | 3             | 8Y0M0D        | Custodial             | {{displayDate-{{date+8 years}}}}  | {{seq}}-33 | 33  |
+
+  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
+  Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history LIFE SENTENCE
+    #Case is open
+    Given I am logged on to DARTS as an JUDGE user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    And I click on the "<case_number>" link
+    And I see "Retained until" on the page
+    And I see "No date applied" on the page
+    And I click on the "View or change" link
+    And I see "This case is still open or was recently closed." on the page
+    And I see "The retention date for this case cannot be changed while the case is open or while a retention policy is currently pending." on the page
+    And I see "Case retention date" on the page
+    And I see "Case details" on the page
+    And I see "<case_number>" on the page
+    And I see "Current retention details" on the page
+    And I see "A retention policy has yet to be applied to this case." on the page
+    And I see "Retention audit history" on the page
+    And I see "No history to show" on the page
+
+  # Close the case
+    Given I authenticate from the CPP source system
+    Given I create an event
+      | message_id | type  | sub_type | event_id    | courthouse         | courtroom   | case_numbers  | event_text        | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}005 | 30300 |          | {{seq}}1177 | Harrow Crown Court | <courtroom> | <case_number> | Close case{{seq}} | {{timestamp-11:00:00}} | <caseRetention>             | <totalSentence>     |
+
+    Then I click on the breadcrumb link "<case_number>"
+    And I click on the "<case_number>" link
+    And I see "Retained until" on the page
+    And I see "No date applied" on the page
+    And I click on the "View or change" link
+    And I see "This case is still open or was recently closed." on the page
+    And I see "The retention date for this case cannot be changed while the case is open or while a retention policy is currently pending." on the page
+    And I see "Case retention date" on the page
+    And I see "Case details" on the page
+    And I see "<case_number>" on the page
+    And I see "Current retention details" on the page
+    And I see "A retention policy has yet to be applied to this case." on the page
+    Then I verify the HTML table "Retention audit history" contains the following values
+      | Date retention changed | Retention date          | Amended by | Retention policy        | Comments | Status  |
+      | *NO-CHECK*             | <display_retentiondate> | *NO-CHECK* | <retention_displayname> |          | PENDING |
+
+    # 7 days Past Case Close Event
+    Then I select column cas_id from table darts.court_case where case_number = "<case_number>"
+    Then I set table darts.case_retention column current_state to "COMPLETE" where cas_id = "{{cas_id}}"
+
+    Then I click on the breadcrumb link "<case_number>"
+    And I click on the "<case_number>" link
+    And I click on the "View or change" link
+    And I see "Change retention date" on the page
+    Then I verify the HTML table "Retention audit history" contains the following values
+      | Date retention changed | Retention date          | Amended by | Retention policy        | Comments | Status   |
+      | *NO-CHECK*             | <display_retentiondate> | *NO-CHECK* | <retention_displayname> |          | COMPLETE |
+
+    #Transcriber Users @DMP-1369
+    Then I Sign out
+
+    Then I see "Sign in to the DARTS Portal" on the page
+    Given I am logged on to DARTS as an TRANSCRIBER user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    And I click on the "<case_number>" link
+    And I do not see "Retained until" on the page
+
+    #DMP-2161-AC5 Permanent retention
+    Then I Sign out
+    Then I see "Sign in to the DARTS Portal" on the page
+    Given I am logged on to DARTS as an Judge user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    And I click on the "<case_number>" link
+    And I click on the "View or change" link
+    Then I see "<retention_displayname>" on the page
+    And I click on the "Change retention date" link
+    And I click on the "Retain permanently (99 years)" link
+    And I set "Why are you making this change?" to "AC5 99 Years Permanent Retention"
+    And I click on the "Continue" link
+    Then I see "Check retention date change" on the page
+    And I see "<case_number>" in the same row as "Case ID"
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "Change case retention date" on the page
+    And I see "{{displaydate0{{date+99years}}}} (Permanent)" in the same row as "Retain case until"
+    And I see "AC5 99 Years Permanent Retention" in the same row as "Reason for change"
+    And I press the "Confirm retention date change" button
+    Then I see "Case retention date changed." on the page
+    And I see "{{displaydate0{{date+99years}}}}" in the same row as "Retain case until"
+
+    # DMP-2161-AC2 DMP-1450-AC1 Sign in as a Requester
+    Then I Sign out
+    Then I see "Sign in to the DARTS Portal" on the page
+    Given I am logged on to DARTS as an REQUESTER user
+    When I click on the "Search" link
+    And I see "Search for a case" on the page
+    And I set "Case ID" to "<case_number>"
+    And I press the "Search" button
+    And I click on the "<case_number>" link
+    And I click on the "View or change" link
+    Then I see "<retention_displayname>" on the page
+    And I click on the "Change retention date" link
+    And  I click on the "Retain until a specific date" link
+    And I set "Enter a date to retain the case until" to "01/11/2023"
+    And I set "Why are you making this change?" to "AC2"
+    And I click on the "Continue" link
+    And I see "Change case retention date" on the page
+    Then I see an error message "You do not have permission to reduce the current retention date."
+    Then I see an error message "Please refer to the DARTS retention policy guidance."
+    Then I click on the "Cancel" link
+    And I see "Case retention date" on the page
+
+    Examples:
+      | case_number | caseRetention | totalSentence | retention_displayname | display_retentiondate             | courtroom  | ref |
+      | R{{seq}}MN1 | 4             | 99Y0M0D       | Life                  | {{displayDate-{{date+99 years}}}} | {{seq}}-34 | 34  |
 
   @DMP-1413 @regression
   Scenario: Change Retention Date by increasing it with specific date

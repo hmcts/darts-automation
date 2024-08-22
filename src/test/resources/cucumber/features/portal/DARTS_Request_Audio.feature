@@ -35,7 +35,7 @@ Scenario: Request Audio with Request Type Playback Only
   And I press the "Search" button
   Then I verify the HTML table contains the following values
     | Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
-    | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | Judge B{{seq}}-6 | Def B{{seq}}-6 |
+    | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | JUDGE B{{seq}}-6 | Def B{{seq}}-6 |
 
   #Case Details
 
@@ -88,7 +88,7 @@ Scenario: Request Audio with Request Type Download
   And I press the "Search" button
   Then I verify the HTML table contains the following values
     | Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
-    | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | Judge B{{seq}}-6 | Def B{{seq}}-6 |
+    | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | JUDGE B{{seq}}-6 | Def B{{seq}}-6 |
 
   #Case Details
 
@@ -283,7 +283,7 @@ Scenario: Request Audio by setting Start Time and End Time
   And I see "We are preparing your audio." on the page
   And I see "When it is ready we will send an email to Transcriber and notify you in the DARTS application." on the page
 
-@DMP-658 @regression
+@DMP-658 @regression @review
 Scenario Outline: Request Audio Events only available for hearing
   Given I am logged on to DARTS as an external user
   And I click on the "Search" link

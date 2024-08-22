@@ -8,7 +8,7 @@ Scenario Outline: SOAP registerNode including create courtroom
 	| <courthouse> | <courtroom> | <hostname> | <ip_address> | <mac_address> | <type> |
 	Then I find node_id in the xml response at "node_id"
 	 And I see table NODE_REGISTER column courthouse_name is "{{upper-case-<courthouse>}}" where node_id = "{{node_id}}"
-	 And I see table NODE_REGISTER column courtroom_name is "<courtroom>" where node_id = "{{node_id}}"
+	 And I see table NODE_REGISTER column courtroom_name is "{{upper-case-<courtroom>}}" where node_id = "{{node_id}}"
 	 And I see table NODE_REGISTER column hostname is "<hostname>" where node_id = "{{node_id}}"
 	 And I see table NODE_REGISTER column mac_address is "<mac_address>" where node_id = "{{node_id}}"
 #TODO currently ip_address is set to darts-stub-services.staging.platform.hmcts.net in staging 
