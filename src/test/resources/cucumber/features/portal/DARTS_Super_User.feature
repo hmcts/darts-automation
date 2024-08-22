@@ -146,27 +146,27 @@ Feature: Super User Permission
 
     When I click on the "Clear search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "{{date+7/}}"
-    And I set "Enter date to" to "{{date-7/}}"
+    And I set "Date from" to "{{date+7/}}"
+    And I set "Date to" to "{{date-7/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "{{date-10/}}"
-    And I set "Enter date to" to "{{date+10/}}"
+    And I set "Date from" to "{{date-10/}}"
+    And I set "Date to" to "{{date+10/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "{{date-7/}}"
+    And I set "Date to" to "{{date-7/}}"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
     When I click on the "Clear search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "{{date-10/}}"
+    And I set "Date from" to "{{date-10/}}"
     And I press the "Search" button
     And I see an error message "You have not selected an end date. Select an end date to define your search"
 
@@ -178,14 +178,14 @@ Feature: Super User Permission
 
     When I click on the "Clear search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "Invalid"
+    And I set "Date from" to "Invalid"
     And I press the "Search" button
     And I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
     And I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "Invalid"
+    And I set "Date to" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"

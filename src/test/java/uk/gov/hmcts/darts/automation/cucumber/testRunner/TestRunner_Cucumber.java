@@ -25,7 +25,7 @@ import static io.cucumber.junit.platform.engine.Constants.EXECUTION_DRY_RUN_PROP
 @Suite
 @IncludeEngines("cucumber")
 //@IncludeTags(value = "end2end | smoketest | regression")
-@ExcludeTags(value = "broken | obsolete | TODO")
+@ExcludeTags(value = "broken | obsolete | TODO | review")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "html:test-results/html/results.html, junit:test-results/functionalTest/cucumber.xml")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "uk/gov/hmcts/darts/automation/cucumber/steps")

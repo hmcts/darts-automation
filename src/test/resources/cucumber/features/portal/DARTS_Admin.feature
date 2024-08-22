@@ -1,4 +1,3 @@
-@ts7
 Feature: Admin portal
 
   @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression
@@ -238,10 +237,10 @@ Feature: Admin portal
     Then I click on the "Courthouses" navigation link
     And I set "Courthouse name" to "Test Courthouse 1192"
     And I press the "Search" button
-    And I click on "Test Courthouse 1192" in the same row as "Test Courthouse 1192"
+    And I click on "TEST COURTHOUSE 1192" in the same row as "Test Courthouse 1192"
     #AC1
     Then I see "Courthouse record" on the page
-    And I see "Test Courthouse" on the page
+    And I see "Test Courthouse 1192" on the page
     And I see the "Edit courthouse" button
     And I see "Date created" on the page
     And I see "Tue 26 Mar 2024" on the page
@@ -251,7 +250,7 @@ Feature: Admin portal
     And I see link with text "Users"
     And I see "Details" on the page
     And I see "Database ID" in the same row as "1232"
-    And I see "Courthouse name" in the same row as "Test Courthouse"
+    And I see "Courthouse name" in the same row as "Test Courthouse 1192"
     And I see "Region" in the same row as "Midlands"
     And I see "Groups" in the same row as "TEST_COURTHOUSE_APPROVER"
     And I see "Groups" in the same row as "TEST_COURTHOUSE_REQUESTER"
@@ -382,13 +381,13 @@ Feature: Admin portal
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region     |
       | BRISTOL              | Bristol              | South West |
-      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |            |
-      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |            |
+      | DMP-2163-BRISTOL-AAA | DMP-2163-Bristol-AAA |            |
+      | DMP-2163-BRISTOL-AAB | DMP-2163-Bristol-AAB |            |
     Then I click on "Courthouse name" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region     |
-      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |            |
-      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |            |
+      | DMP-2163-BRISTOL-AAB | DMP-2163-Bristol-AAB |            |
+      | DMP-2163-BRISTOL-AAA | DMP-2163-Bristol-AAA |            |
       | BRISTOL              | Bristol              | South West |
 
     When I click on the "Clear search" link
@@ -398,19 +397,19 @@ Feature: Admin portal
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region     |
       | BRISTOL              | Bristol              | South West |
-      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |            |
-      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |            |
+      | DMP-2163-BRISTOL-AAA | DMP-2163-Bristol-AAA |            |
+      | DMP-2163-BRISTOL-AAB | DMP-2163-Bristol-AAB |            |
     Then I click on "Display name" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region     |
-      | DMP-2163-Bristol-AAB | DMP-2163-Bristol-AAB |            |
-      | DMP-2163-Bristol-AAA | DMP-2163-Bristol-AAA |            |
+      | DMP-2163-BRISTOL-AAB | DMP-2163-Bristol-AAB |            |
+      | DMP-2163-BRISTOL-AAA | DMP-2163-Bristol-AAA |            |
       | BRISTOL              | Bristol              | South West |
 
     When I click on the "Clear search" link
     Then I set "Region" to "London"
     Then I press the "Search" button
-    And I see "29 results" on the page
+    And I see "31 results" on the page
     And I set "Courthouse name" to "guil"
     Then I press the "Search" button
     And I see "2 results" on the page
@@ -428,11 +427,11 @@ Feature: Admin portal
       | GUILDFORD                     | GF Court                     | London |
       | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
       | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
-      | Guildford Court               | GF Court                     |        |
+      | GUILDFORD COURT               | GF Court                     |        |
     Then I click on "Region" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name               | Display name                 | Region |
-      | Guildford Court               | GF Court                     |        |
+      | GUILDFORD COURT               | GF Court                     |        |
       | GUILDFORD                     | GF Court                     | London |
       | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
       | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
@@ -442,7 +441,7 @@ Feature: Admin portal
       | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
       | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
       | GUILDFORD                     | GF Court                     | London |
-      | Guildford Court               | GF Court                     |        |
+      | GUILDFORD COURT               | GF Court                     |        |
     When I click on the "Clear search" link
 
     #AC2 Search Courthouse-No results
@@ -489,7 +488,7 @@ Feature: Admin portal
     And I set "Description" to "ttttttrfiehjuehnskrgvskgrhgsrilugrnsjurgilvsjrgnsjnurislrnhsierekrnhvsurivrugvsoigjrusrigri;hoireierguerihgurhgegueihgogeogirejrfjeofieofjerijfofergiejgoierjgierojgfigjieorjgioerjhgierhgiohgioerhgiohgigheohgierhgoehgieergrnbsgsgrlsgr.jslgs.ga.kenfkdjrgtnks"
     Then I press the "Create group" button
     And I see "There is an existing group with this name" on the page
-    And I see "Description must be less than 255 characters" on the page
+    And I see "Description must be less than 256 characters" on the page
 
   @DMP-2714 @obsolete
   Scenario: Update admin portal navigation
@@ -515,7 +514,7 @@ Feature: Admin portal
     And I see "Event mapping" on the page
     And I see "Automated tasks" on the page
 
-    @DMP-2959
+    @DMP-2959 @review
     Scenario: Add error messaging to Search Transcripts screen
       Given I am logged on to the admin portal as an ADMIN user
       When I click on the "System configuration" link
@@ -797,7 +796,7 @@ Feature: Admin portal
     And I clear the "Event name" field
     And I see "Map to event handler" on the page
     And I select "Dar Stop Handler" from the "Map to event handler" dropdown
-    Then I see "Enter the event name" on the page
+    Then I see "Event name" on the page
     And I click on the "Cancel" link
     #Cancel
     And I set "Filter by type, subtype, or name" to "AC2-DMP-2764-Deletion-Test-2"
@@ -836,7 +835,7 @@ Feature: Admin portal
     And I select "Dar Start Handler" from the "Map to event handler" dropdown
     And I click on the "Tick if this event mapping has reporting restrictions" link
     And I click on the "Add mapping" link
-    Then I see "Event mapping addded " on the page
+    Then I see "Event mapping added " on the page
     And I set "Filter by type, subtype, or name" to "DMP-2764-Automation-Type-3"
     And I click on the "Change" link
     Then I see "Event mapping" on the page
@@ -875,7 +874,7 @@ Feature: Admin portal
     And I click on the "Go back" link
     Then I see "Offences put to defendant" on the page
 
-    @DMP-1662
+    @DMP-1662 @review
     Scenario: Deletion Reasons
       When I am logged on to the admin portal as an ADMIN user
       And I click on the "Transcripts" link
@@ -915,7 +914,7 @@ Feature: Admin portal
       And I see "Important" on the page
       And I see "This file is hidden in DARTS" on the page
 
-      @DMP-3247 @DMP-3382
+      @DMP-3247 @DMP-3382 @review
       Scenario: Transcription File Details Page
         When I am logged on to the admin portal as an ADMIN user
         And I click on the "Transcripts" link

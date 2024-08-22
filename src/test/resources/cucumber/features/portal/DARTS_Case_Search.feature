@@ -56,6 +56,7 @@ Scenario: Simple and Advanced Case Search
       | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1  | JUDGE {{seq}}-1  | Def A{{seq}}-1  |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And "Courthouse" is ""
     And "Courtroom" is ""
     And I set "Defendant's name" to "Def A{{seq}}-2"
@@ -68,6 +69,7 @@ Scenario: Simple and Advanced Case Search
       | A{{seq}}003 | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-11 | Def A{{seq}}-2  |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And "Defendant's name" is ""
     And I set "Judge's name" to "JUDGE {{seq}}-1"
     And I set "Case ID" to "A{{seq}}"
@@ -80,6 +82,7 @@ Scenario: Simple and Advanced Case Search
       | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1  | JUDGE {{seq}}-1  | Def A{{seq}}-1  |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And "Judge's name" is ""
     And I set "Keywords" to "A{{seq}}ABC-1"
     And I set "Case ID" to "A{{seq}}"
@@ -105,6 +108,7 @@ Scenario: Simple and Advanced Case Search
   #Change both specific and date range once Trevor's date/timestamp step is ready, some cases will be backdated
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And "Keywords" is ""
     And I select the "Specific date" radio button
     And I set "Enter a date" to "{{date+0/}}"
@@ -121,9 +125,10 @@ Scenario: Simple and Advanced Case Search
       | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | JUDGE {{seq}}-1  | Def A{{seq}}-1  |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "{{date+0/}}"
-    And I set "Enter date to" to "{{date+0/}}"
+    And I set "Date from" to "{{date+0/}}"
+    And I set "Date to" to "{{date+0/}}"
     And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
@@ -137,6 +142,7 @@ Scenario: Simple and Advanced Case Search
       | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | JUDGE {{seq}}-1  | Def A{{seq}}-1  |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Case ID" to "1" and click away
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
@@ -195,53 +201,61 @@ Scenario: Simple and Advanced Case Search
     Then I see an error message "You must also enter a courthouse"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "{{date+3/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "{{date+7/}}"
-    And I set "Enter date to" to "{{date-7/}}"
+    And I set "Date from" to "{{date+7/}}"
+    And I set "Date to" to "{{date-7/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "{{date-10/}}"
-    And I set "Enter date to" to "{{date+10/}}"
+    And I set "Date from" to "{{date-10/}}"
+    And I set "Date to" to "{{date+10/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "{{date-7/}}"
+    And I set "Date to" to "{{date-7/}}"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "{{date-10/}}"
+    And I set "Date from" to "{{date-10/}}"
     And I press the "Search" button
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date from" to "Invalid"
+    And I set "Date from" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
     Then I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I select the "Date range" radio button
-    And I set "Enter date to" to "Invalid"
+    And I set "Date to" to "Invalid"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
     Then I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
@@ -412,8 +426,8 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
   And I click on the "Advanced search" link
   And I set "Courthouse" to "Harrow Crown Court"
   And I select the "Date range" radio button
-  And I set "Enter date from" to "{{date-7/}}"
-  And I set "Enter date to" to "{{date+0/}}"
+  And I set "Date from" to "{{date-7/}}"
+  And I set "Date to" to "{{date+0/}}"
   And I set "Judge's name" to "JUDGE NAME"
   And I press the "Search" button
   And I see "Next" on the page
@@ -444,6 +458,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
       | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | JUDGE {{seq}}-1  | Def A{{seq}}-1  |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Courthouse" to "Harrow Crown Court"
     And I set "Defendant's name" to "Def A"
     And I press the "Search" button
@@ -459,6 +474,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
       | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-2  | Def A{{seq}}-22 |
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Keywords" to "A{{seq}}ABC"
     And I select the "Specific date" radio button
     And I set "Enter a date" to "{{date+0/}}"

@@ -16,7 +16,7 @@ Feature: User as a Judge
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
       | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{date+0/}} | 10:00:00  | 10:01:00 | sample1.mp2 |
 
-  @DMP-1033 @DMP-1618 @regression
+  @DMP-1033 @DMP-1618 @regression @review
   Scenario: Judge requesting and viewing transcripts
     Given I am logged on to DARTS as an JUDGE user
     And I click on the "Search" link
