@@ -85,7 +85,7 @@ Scenario Outline: SOAP getCases verifying result
               <defendant>test defendent1</defendant>
             </defendants>
             <judges>
-              <judge>test judge</judge>
+              <judge>TEST JUDGE</judge>
             </judges>
             <prosecutors>
               <prosecutor>test prosecutor1</prosecutor>
@@ -101,7 +101,7 @@ Scenario Outline: SOAP getCases verifying result
               <defendant>test defendent2</defendant>
             </defendants>
             <judges>
-              <judge>test judge</judge>
+              <judge>TEST JUDGE</judge>
             </judges>
             <prosecutors>
               <prosecutor>test prosecutor2</prosecutor>

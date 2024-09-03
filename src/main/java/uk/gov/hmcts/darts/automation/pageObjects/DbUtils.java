@@ -25,6 +25,8 @@ import uk.gov.hmcts.darts.automation.utils.*;
 public class DbUtils {
     private static Logger log = LogManager.getLogger("DbUtils");
 
+    private static int WAIT_TIME = 20;
+    
     private WebDriver webDriver;
     private TestData TD;
     private Database DB;
@@ -36,7 +38,7 @@ public class DbUtils {
     }
     
     public void waitForCaseCreation(String courthouse, String courtroom, String caseNumber)  throws Exception {
-        int waitTimeInSeconds = 300;
+        int waitTimeInSeconds = WAIT_TIME;
     	log.info("Waiting {} secs for case to be inserted: {} {} {}", waitTimeInSeconds, courthouse, courtroom, caseNumber);
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
@@ -44,7 +46,7 @@ public class DbUtils {
         Function<WebDriver, Boolean> caseIsReady = new Function<WebDriver, Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
-            	String caseCount = "0";
+            	String caseCount = "";
 				try {
 					caseCount = DB.returnSingleValue("CASE_HEARING",
 			    			"upper(courthouse_name)",  courthouse.toUpperCase(), 
@@ -68,7 +70,7 @@ public class DbUtils {
     }
     
     public void waitForCaseCreation(String courthouse, String caseNumber) {
-        int waitTimeInSeconds = 300;
+        int waitTimeInSeconds = WAIT_TIME;
     	log.info("Waiting {} secs for case to be inserted: {} {}", waitTimeInSeconds, courthouse, caseNumber);
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
@@ -76,7 +78,7 @@ public class DbUtils {
         Function<WebDriver, Boolean> caseIsReady = new Function<WebDriver, Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
-            	String caseCount = "0";
+            	String caseCount = "";
 				try {
 					caseCount = DB.returnSingleValue("CASE_HEARING",
 							"cas.case_number", caseNumber, 

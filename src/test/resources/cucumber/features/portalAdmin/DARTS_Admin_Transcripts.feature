@@ -13,19 +13,19 @@ Feature: Admin portal transcripts
 
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100 |          | {{seq}}1040 | Harrow Crown Court | {{seq}}-40 | G{{seq}}001  | {{seq}}ABC-40 | {{timestamp-10:30:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1041 | Harrow Crown Court | {{seq}}-40 | G{{seq}}001  | {{seq}}GHI-40 | {{timestamp-10:31:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1042 | Harrow Crown Court | {{seq}}-41 | G{{seq}}002  | {{seq}}ABC-41 | {{timestamp-11:00:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1043 | Harrow Crown Court | {{seq}}-41 | G{{seq}}002  | {{seq}}GHI-41 | {{timestamp-11:01:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1044 | Harrow Crown Court | {{seq}}-42 | G{{seq}}003  | {{seq}}ABC-42 | {{timestamp-11:30:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1045 | Harrow Crown Court | {{seq}}-42 | G{{seq}}003  | {{seq}}DEF-42 | {{timestamp-11:31:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1046 | Harrow Crown Court | {{seq}}-43 | G{{seq}}004  | {{seq}}ABC-43 | {{timestamp-12:00:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1047 | Harrow Crown Court | {{seq}}-43 | G{{seq}}004  | {{seq}}DEF-43 | {{timestamp-12:01:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1048 | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{seq}}ABC-44 | {{timestamp-12:30:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1049 | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{seq}}DEF-44 | {{timestamp-12:31:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1050 | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{seq}}ABC-45 | {{timestamp-13:00:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1051 | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{seq}}DEF-45 | {{timestamp-13:01:00}} |                             |                     |
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}040 | Harrow Crown Court | {{seq}}-40 | G{{seq}}001  | {{seq}}ABC-40 | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}041 | Harrow Crown Court | {{seq}}-40 | G{{seq}}001  | {{seq}}GHI-40 | {{timestamp-10:31:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}042 | Harrow Crown Court | {{seq}}-41 | G{{seq}}002  | {{seq}}ABC-41 | {{timestamp-11:00:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}043 | Harrow Crown Court | {{seq}}-41 | G{{seq}}002  | {{seq}}GHI-41 | {{timestamp-11:01:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}044 | Harrow Crown Court | {{seq}}-42 | G{{seq}}003  | {{seq}}ABC-42 | {{timestamp-11:30:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}045 | Harrow Crown Court | {{seq}}-42 | G{{seq}}003  | {{seq}}DEF-42 | {{timestamp-11:31:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}046 | Harrow Crown Court | {{seq}}-43 | G{{seq}}004  | {{seq}}ABC-43 | {{timestamp-12:00:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}047 | Harrow Crown Court | {{seq}}-43 | G{{seq}}004  | {{seq}}DEF-43 | {{timestamp-12:01:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}048 | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{seq}}ABC-44 | {{timestamp-12:30:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}049 | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{seq}}DEF-44 | {{timestamp-12:31:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}050 | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{seq}}ABC-45 | {{timestamp-13:00:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}051 | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{seq}}DEF-45 | {{timestamp-13:01:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile |
