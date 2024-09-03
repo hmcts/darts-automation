@@ -18,18 +18,18 @@ Feature: Annotation
 
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-29 | K{{seq}}002  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-30 | K{{seq}}003  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-31 | K{{seq}}004  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-32 | K{{seq}}005  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-33 | K{{seq}}006  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-34 | K{{seq}}007  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-35 | K{{seq}}008  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-36 | K{{seq}}009  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-37 | K{{seq}}010  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-38 | K{{seq}}011  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-39 | K{{seq}}012  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-29 | K{{seq}}002  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-30 | K{{seq}}003  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-31 | K{{seq}}004  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-32 | K{{seq}}005  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-33 | K{{seq}}006  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-34 | K{{seq}}007  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-35 | K{{seq}}008  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-36 | K{{seq}}009  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-37 | K{{seq}}010  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-38 | K{{seq}}011  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-39 | K{{seq}}012  | {{seq}}KH1 | {{timestamp-10:00:00}} |                             |                     |
 
   @DMP-1614 @regression
   Scenario: Annotation template

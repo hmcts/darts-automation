@@ -468,7 +468,7 @@ public class SoapApi {
 		if (xml.contains("&lt;")) {
 			result = xml;
 		} else {
-			result = xml.replace("&", "&amp").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apost;");
+			result = xml.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apost;");
 		}
 		return result;	
 	}

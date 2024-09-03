@@ -13,12 +13,12 @@ Feature: Case Retention
 
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              |
-      | {{seq}}001 | 1100 |          | {{seq}}1169 | Harrow Crown Court | {{seq}}-30 | R{{seq}}EF1  | {{seq}}ABC-30 | {{timestamp-10:02:00}} |
-      | {{seq}}001 | 1100 |          | {{seq}}1170 | Harrow Crown Court | {{seq}}-31 | R{{seq}}GH1  | {{seq}}ABC-31 | {{timestamp-10:03:00}} |
-      | {{seq}}001 | 1100 |          | {{seq}}1171 | Harrow Crown Court | {{seq}}-32 | R{{seq}}IJ1  | {{seq}}ABC-32 | {{timestamp-10:04:00}} |
-      | {{seq}}001 | 1100 |          | {{seq}}1172 | Harrow Crown Court | {{seq}}-33 | R{{seq}}KL1  | {{seq}}ABC-33 | {{timestamp-10:05:00}} |
-      | {{seq}}001 | 1100 |          | {{seq}}1173 | Harrow Crown Court | {{seq}}-34 | R{{seq}}MN1  | {{seq}}ABC-34 | {{timestamp-10:06:00}} |
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              |
+      | {{seq}}001 | 1100 |          | {{seq}}169 | Harrow Crown Court | {{seq}}-30 | R{{seq}}EF1  | {{seq}}ABC-30 | {{timestamp-10:02:00}} |
+      | {{seq}}001 | 1100 |          | {{seq}}170 | Harrow Crown Court | {{seq}}-31 | R{{seq}}GH1  | {{seq}}ABC-31 | {{timestamp-10:03:00}} |
+      | {{seq}}001 | 1100 |          | {{seq}}171 | Harrow Crown Court | {{seq}}-32 | R{{seq}}IJ1  | {{seq}}ABC-32 | {{timestamp-10:04:00}} |
+      | {{seq}}001 | 1100 |          | {{seq}}172 | Harrow Crown Court | {{seq}}-33 | R{{seq}}KL1  | {{seq}}ABC-33 | {{timestamp-10:05:00}} |
+      | {{seq}}001 | 1100 |          | {{seq}}173 | Harrow Crown Court | {{seq}}-34 | R{{seq}}MN1  | {{seq}}ABC-34 | {{timestamp-10:06:00}} |
 
   @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history
@@ -45,8 +45,8 @@ Feature: Case Retention
   # Close the case
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom   | case_numbers  | event_text        | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}005 | 30300 |          | {{seq}}1177 | Harrow Crown Court | <courtroom> | <case_number> | Close case{{seq}} | {{timestamp-11:00:00}} | <caseRetention>             | <totalSentence>     |
+      | message_id | type  | sub_type | event_id   | courthouse         | courtroom   | case_numbers  | event_text        | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}005 | 30300 |          | {{seq}}177 | Harrow Crown Court | <courtroom> | <case_number> | Close case{{seq}} | {{timestamp-11:00:00}} | <caseRetention>             | <totalSentence>     |
 
     Then I click on the breadcrumb link "<case_number>"
     And I click on the "<case_number>" link
@@ -212,8 +212,8 @@ Feature: Case Retention
   # Close the case
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom   | case_numbers  | event_text        | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}005 | 30300 |          | {{seq}}1177 | Harrow Crown Court | <courtroom> | <case_number> | Close case{{seq}} | {{timestamp-11:00:00}} | <caseRetention>             | <totalSentence>     |
+      | message_id | type  | sub_type | event_id   | courthouse         | courtroom   | case_numbers  | event_text        | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}005 | 30300 |          | {{seq}}177 | Harrow Crown Court | <courtroom> | <case_number> | Close case{{seq}} | {{timestamp-11:00:00}} | <caseRetention>             | <totalSentence>     |
 
     Then I click on the breadcrumb link "<case_number>"
     And I click on the "<case_number>" link
@@ -314,8 +314,8 @@ Feature: Case Retention
 
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              |
-      | {{seq}}011 | 1100 |          | {{seq}}1169 | Harrow Crown Court | {{seq}}-11 | R{{seq}}AB11 | {{seq}}ABC-11 | {{timestamp-10:02:00}} |
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              |
+      | {{seq}}011 | 1100 |          | {{seq}}169 | Harrow Crown Court | {{seq}}-11 | R{{seq}}AB11 | {{seq}}ABC-11 | {{timestamp-10:02:00}} |
 
     Given I am logged on to DARTS as an JUDGE user
     When I click on the "Search" link
@@ -332,8 +332,8 @@ Feature: Case Retention
   #Close case
     Given I authenticate from the CPP source system
     When I create an event
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 30300 |          | {{seq}}1168 | Harrow Crown Court | {{seq}}-29 | R{{seq}}AB11 | {{seq}}ABC-29 | {{timestamp-10:00:00}} | 3                           | 3Y3M3D              |
+      | message_id | type  | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 30300 |          | {{seq}}168 | Harrow Crown Court | {{seq}}-29 | R{{seq}}AB11 | {{seq}}ABC-29 | {{timestamp-10:00:00}} | 3                           | 3Y3M3D              |
 
     Then I click on the breadcrumb link "R{{seq}}AB11"
     And I see "No date applied" on the page

@@ -12,8 +12,8 @@ Feature: Judge
     When I process the daily list for courthouse "<courthouse>"
      And I wait for case "<case_number>" courthouse "<courthouse>"
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse   | courtroom   | case_numbers  | event_text                    | date_time              | case_retention_fixed_policy | case_total_sentence | start_time    | end_time      | is_mid_tier |
-      | {{seq}}001 | 1100 |          | {{seq}}1167 | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | {{timestamp-10:00:00}} | <caseRetention>             | <totalSentence>     | {{timestamp}} | {{timestamp}} | true        |
+      | message_id | type | sub_type | event_id   | courthouse   | courtroom   | case_numbers  | event_text                    | date_time              | case_retention_fixed_policy | case_total_sentence | start_time    | end_time      | is_mid_tier |
+      | {{seq}}001 | 1100 |          | {{seq}}167 | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | {{timestamp-10:00:00}} | <caseRetention>             | <totalSentence>     | {{timestamp}} | {{timestamp}} | true        |
 
     Given I am logged on to DARTS as an JUDGE user
     Then I set "Case ID" to "<case_number>"
@@ -42,9 +42,9 @@ Feature: Judge
     Then I see "A retention policy has yet to be applied to this case." on the page
 
     # Close the case
-    Given I create an event using json
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers  | event_text | date_time              |
-      | {{seq}}001 | 30300 |          | {{seq}}1167 | Harrow Crown Court | {{seq}}-28 | <case_number> | {{seq}}KH1 | {{timestamp-10:00:00}} |
+    Given I create an event
+      | message_id | type  | sub_type | event_id   | courthouse         | courtroom  | case_numbers  | event_text | date_time              |
+      | {{seq}}001 | 30300 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-28 | <case_number> | {{seq}}KH1 | {{timestamp-10:00:00}} |
 
     Then I click on the breadcrumb link "<case_number>"
     And I click on the "<case_number>" link

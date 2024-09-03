@@ -117,8 +117,14 @@ Examples:
 	| APPEALCOURT       | Search for a case | Y         | N               | N                  | N        |
 	| TRANSCRIBER       | Search for a case | Y         | N               | Y                  | Y        |
 	| LANGUAGESHOP      | Search for a case | Y         | N               | N                  | N        |
-	| ADMIN             | Search for a case | Y         | Y               | N                  | N        |
+	| ADMIN             | Search for a case | Y         | N               | N                  | N        |
 	| SUPERUSER         | Search for a case | Y         | Y               | N                  | N        |
+
+@review
+Examples:
+	| role 	  	        | search            | yourAudio | yourTranscripts | transcriptRequests | yourWork |
+	| ADMIN             | Search for a case | Y         | Y               | N                  | N        |
+
 
 @DMP-407 @smoketest @demo
 Scenario Outline: Requester-Approver links
@@ -152,8 +158,8 @@ Scenario: Admin User
 		| Transcripts | Audio files |
 		| Y           | Y           |
 	 And I verify sub-menu links for "Transcripts":
-		| Completed transcripts | Requests            |
-		| Y                     | Transcript requests |
+		| Completed transcripts | Transcript requests |
+		| Y                     | Y                   |
 	 And I verify sub-menu links for "System configuration":
 		| Event mappings | Automated tasks | Retention policies |
 		| Y              | Y               | Y                  |
@@ -164,6 +170,6 @@ Scenario: Admin User
 	 And I see link with text "DARTS"
 	 And I see link with text "Sign out"
 	When I click on the "User portal" link
-	Then I see link with text "Your transcripts"
+	Then I see link with text "Your audio"
 	When I click on the "Admin portal" link
 	Then I see "You can search for cases, hearings, events and audio." on the page

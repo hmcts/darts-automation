@@ -14,21 +14,21 @@ Feature: Request Transcript
 
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type  | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100  |          | {{seq}}1008 | Harrow Crown Court | {{seq}}-8  | C{{seq}}001  | {{seq}}ABC-8  | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1009 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}ABC-9  | {{timestamp-10:30:00}} |                             |                     |
-      | {{seq}}001 | 21200 | 11008    | {{seq}}1010 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}DEF-9  | {{timestamp-10:30:30}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}1011 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}GHI-9  | {{timestamp-10:31:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1012 | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{seq}}ABC-10 | {{timestamp-11:00:00}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}1013 | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{seq}}DEF-10 | {{timestamp-11:01:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1014 | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{seq}}ABC-11 | {{timestamp-11:30:00}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}1015 | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{seq}}DEF-11 | {{timestamp-11:31:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1016 | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{seq}}ABC-12 | {{timestamp-12:00:00}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}1017 | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{seq}}DEF-12 | {{timestamp-12:01:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1018 | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{seq}}ABC-13 | {{timestamp-12:30:00}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}1019 | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{seq}}DEF-13 | {{timestamp-12:31:00}} |                             |                     |
-      | {{seq}}001 | 1100  |          | {{seq}}1020 | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{seq}}ABC-14 | {{timestamp-13:00:00}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}1021 | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{seq}}DEF-14 | {{timestamp-13:01:00}} |                             |                     |
+      | message_id | type  | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100  |          | {{seq}}008 | Harrow Crown Court | {{seq}}-8  | C{{seq}}001  | {{seq}}ABC-8  | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}009 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}ABC-9  | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 21200 | 11008    | {{seq}}010 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}DEF-9  | {{timestamp-10:30:30}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}011 | Harrow Crown Court | {{seq}}-9  | C{{seq}}002  | {{seq}}GHI-9  | {{timestamp-10:31:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}012 | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{seq}}ABC-10 | {{timestamp-11:00:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}013 | Harrow Crown Court | {{seq}}-10 | C{{seq}}003  | {{seq}}DEF-10 | {{timestamp-11:01:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}014 | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{seq}}ABC-11 | {{timestamp-11:30:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}015 | Harrow Crown Court | {{seq}}-11 | C{{seq}}004  | {{seq}}DEF-11 | {{timestamp-11:31:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}016 | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{seq}}ABC-12 | {{timestamp-12:00:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}017 | Harrow Crown Court | {{seq}}-12 | C{{seq}}005  | {{seq}}DEF-12 | {{timestamp-12:01:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}018 | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{seq}}ABC-13 | {{timestamp-12:30:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}019 | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{seq}}DEF-13 | {{timestamp-12:31:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}020 | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{seq}}ABC-14 | {{timestamp-13:00:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}021 | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{seq}}DEF-14 | {{timestamp-13:01:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |

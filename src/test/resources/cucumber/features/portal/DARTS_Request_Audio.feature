@@ -12,11 +12,11 @@ Scenario: Request Audio data creation
 
   Given I authenticate from the CPP source system
   Given I create an event
-    | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-    | {{seq}}006 | 1100 |          | {{seq}}1006 | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006  | B{{seq}}ABC-6 | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}007 | 1100 |          | {{seq}}1007 | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007  | B{{seq}}ABC-7 | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}008 | 1100 |          | {{seq}}1008 | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | B{{seq}}ABC-8 | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}009 | 1100 |          | {{seq}}1009 | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | B{{seq}}ABC-9 | {{timestamp-10:00:00}} |                             |                     |
+    | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+    | {{seq}}006 | 1100 |          | {{seq}}006 | Harrow Crown Court | B{{seq}}-6 | B{{seq}}006  | B{{seq}}ABC-6 | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}007 | 1100 |          | {{seq}}007 | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007  | B{{seq}}ABC-7 | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}008 | 1100 |          | {{seq}}008 | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | B{{seq}}ABC-8 | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}009 | 1100 |          | {{seq}}009 | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | B{{seq}}ABC-9 | {{timestamp-10:00:00}} |                             |                     |
 
   When I load an audio file
     | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |

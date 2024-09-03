@@ -46,7 +46,7 @@ public class XmlUtils {
 		if (input.contains("<![CDATA[")) {
 			String[] split1 = input.split("<!\\[CDATA\\[");
 			String[] split2 = split1[1].split("\\]\\]>");
-			input = split1[0] + split2[0].replace("&", "&amp").replace("<", "&lt;").replace(">", "&gt;") + split2[1];
+			input = split1[0] + split2[0].replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&apos;") + split2[1];
 		}
 		return input;
 	}

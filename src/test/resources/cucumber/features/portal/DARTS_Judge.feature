@@ -8,9 +8,9 @@ Feature: User as a Judge
 
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100 |          | {{seq}}1024 | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{seq}}ABC-16 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1025 | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{seq}}DEF-16 | {{timestamp-10:01:00}} |                             |                     |
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}024 | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{seq}}ABC-16 | {{timestamp-10:00:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}025 | Harrow Crown Court | {{seq}}-16 | E{{seq}}001  | {{seq}}DEF-16 | {{timestamp-10:01:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
