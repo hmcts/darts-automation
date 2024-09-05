@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import uk.gov.hmcts.darts.automation.utils.*;
 import uk.gov.hmcts.darts.automation.utils.Credentials;
+import uk.gov.hmcts.darts.automation.pageObjects.Portal;
 
 public class AdminPortal {
     private static Logger log = LogManager.getLogger("AdminPortal");
@@ -33,6 +34,7 @@ public class AdminPortal {
     private TestData TD;
     private Database DB;
     private JsonApi jsonApi;
+    private Portal portal;
 
     public AdminPortal(WebDriver driver, TestData testdata) {
         this.webDriver = driver;
@@ -42,5 +44,23 @@ public class AdminPortal {
         GEN = new GenUtils(webDriver);
         DB = new Database();
     	jsonApi = new JsonApi();
+        portal = new Portal(webDriver, testdata);
+    }
+    
+    public void addGroupsToUser(String userName, String group) throws Exception {
+    	try {
+	    	NAV.click_link_by_text("Users");
+	    	NAV.set_valueTo("Full name", userName);
+	    	NAV.press_buttonByName("Search");
+	    	NAV.clickText_inSameRow_asText("View", userName);
+	    	portal.clickOnSubMenuLink("Groups");
+	    	NAV.press_buttonByName("Assign groups");
+	    	NAV.set_valueTo("Filter by group name", group);
+	    	NAV.checkUncheckCheckboxInTableRow(group, "Requester", "check");
+	    	NAV.press_buttonByName("Assign groups (1)");
+	    	log.info("User {} added to group {}", userName, group);
+    	} catch (Exception e) {
+    		log.warn("User {} not added to group {}", userName, group);
+    	}
     }
 }

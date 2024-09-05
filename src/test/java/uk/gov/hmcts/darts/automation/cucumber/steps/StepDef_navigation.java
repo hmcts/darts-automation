@@ -68,7 +68,7 @@ public class StepDef_navigation extends StepDef_base {
 	    	NAV.waitForPageLoad();
 	    	NAV.press_buttonByName(arg1);
 	    }
-	    NAV.waitForPageLoad(0, 5);
+	    NAV.waitForPageLoad(10);
 	}
 	
 	@When("^I expand the \"([^\"]*)\" accordion$")
@@ -79,7 +79,7 @@ public class StepDef_navigation extends StepDef_base {
         } catch (Exception e) {
             NAV.click_link_by_text(arg1);
         }
-        NAV.waitForPageLoad(0, 5);
+        NAV.waitForPageLoad(5);
     }
 
     @When("^I click on the \"([^\"]*)\" accordion$")
@@ -91,7 +91,7 @@ public class StepDef_navigation extends StepDef_base {
 	    } catch (Exception e) {
 			NAV.click_link_by_text(arg1);
 	    }
-	    NAV.waitForPageLoad(0, 5);
+	    NAV.waitForPageLoad(5);
 	}
 	
 	@When("^I set \"([^\"]*)\" to \"([^\"]*)\"$")
@@ -341,10 +341,10 @@ public class StepDef_navigation extends StepDef_base {
 	    try {
 	    	NAV.select_fromDropdown(option);
 	    } catch (Error e) {
-	    	NAV.waitForPageLoad(10,60);
+	    	NAV.waitForPageLoad(1000,60);
 	    	NAV.select_fromDropdown(option);
 	    } catch (Exception e) {
-	    	NAV.waitForPageLoad(10,60);
+	    	NAV.waitForPageLoad(1000,60);
 	    	NAV.select_fromDropdown(option);
 	    }
 	};

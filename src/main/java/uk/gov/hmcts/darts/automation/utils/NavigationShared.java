@@ -364,6 +364,7 @@ public class NavigationShared {
 				Substitutions.substituteValue(rowData1),
 				Substitutions.substituteValue(rowData2),
 				buttonText))).click();
+		waitForPageLoad();
 	}
 	
 	public void checkUncheckCheckboxInTableRow(String rowData1, String rowData2, String action) throws Exception {
@@ -416,6 +417,7 @@ public class NavigationShared {
 				}
 			}
 		}
+		waitForBrowserReadyState();
 	}
 	
 	public void clickOnLabel(String labelText) {
@@ -431,6 +433,7 @@ public class NavigationShared {
 			log.info("element found - try 2");
 		}
 		targetElement.click();
+		waitForBrowserReadyState();
 	}
 	
 	public void checkRadioButton(String label) throws Exception {
@@ -486,6 +489,7 @@ public class NavigationShared {
 			log.error("invalid action passed to check-uncheck "+action);
 			clickChecboxElement(webElement);
 		}
+		waitForPageLoad();
 	}
 	
 	public void set_unset_checkbox(String labelText, String header, String action) throws Exception {
@@ -740,6 +744,7 @@ public class NavigationShared {
 		WebElement checkbox = find_inputBy_labelName(checkbox_name);
 		if (checkbox.isSelected()) {
 			checkbox.click();
+			waitForPageLoad();
 		}
 		waitForBrowserReadyState();
 		log.info("Clicked on checkbox with for, checking if unchecked");	
@@ -754,26 +759,41 @@ public class NavigationShared {
 	public WebElement check_checkbox(String location_name) {
 		log.info("About to check checkbox if already not checked");
 		WebElement checkbox = null;
-		waitForLoadingIcon();
+//		waitForLoadingIcon();
 		try {
 			checkbox = find_inputBy_labelName(location_name);
-			checkbox.click();
-			log.info("Clicked on checkbox with for, checking if checked");
+//			checkbox.click();
+//			log.info("Clicked on checkbox with for, checking if checked");
 			if (checkbox.isSelected()) {
 				log.info("Checkbox is already set - nothing to do");
 				waitForBrowserReadyState();
 				return null;
 			}
-		} catch (Exception e) {
-			try {
-				log.info("error clicking in checkbox - try clicking on label");
-				clickOnLabel(location_name);
+			checkbox.click();
+			log.info("Clicked on checkbox with for, checking if checked");
+			if (checkbox.isSelected()) {
+				log.info("Checkbox is set - done");
+				waitForPageLoad();
 				waitForBrowserReadyState();
-				return null;
-			} catch (Exception e1) {
-				log.info("element not found - continuing .....");
+				return checkbox;
 			}
+			
+		} catch (Exception e) {
+			log.info("Checkbox did not change state");
 		}
+		try {
+			log.info("error clicking in checkbox - try clicking on label");
+			clickOnLabel(location_name);
+			waitForBrowserReadyState();
+			if (checkbox.isSelected()) {
+				log.info("Checkbox is set - done");
+				waitForPageLoad();
+				return checkbox;
+			}
+		} catch (Exception e1) {
+			log.info("element not found - continuing .....");
+		}
+//		}
 		WebElement parentLocation = find_locationParent(location_name);
 
 		WebElement checkbox_location = parentLocation.findElement(By.cssSelector("input")); // Not an appropriate way of
@@ -826,11 +846,11 @@ public class NavigationShared {
 	}
 
 	public void waitForPageLoad() {
-		waitForPageLoad(2, 120);
+		waitForPageLoad(100, 10);
 	}
 
 	public void waitForPageLoad(int waitTime) {
-		waitForPageLoad(1, waitTime);
+		waitForPageLoad(100, waitTime);
 	}
 
 	/**
@@ -839,11 +859,12 @@ public class NavigationShared {
 	# * @param waitTime
 	 */
 	public void waitForPageLoad(int initialWait, int postWait) {
+		initialWait = (initialWait == 0) ? 100 : initialWait;
 		log.info("Waiting for Loading Icon to become visible");
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(initialWait));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(initialWait));
 		try {
 			wait.ignoring(UnhandledAlertException.class)
-				.pollingEvery(Duration.ofMillis(200))
+				.pollingEvery(Duration.ofMillis(20))
 				.until(ExpectedConditions.or
 					(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(LOADING_ICON_LOCATION)),
 							ExpectedConditions.alertIsPresent()));
@@ -937,7 +958,7 @@ public class NavigationShared {
 		}
 		waitForPageLoad();
 
-		log.info("Clicked on URL with link text =>" + label);
+		log.info("Clicked on link text =>" + label);
 		return link;
 	}
 	
@@ -985,6 +1006,7 @@ public class NavigationShared {
 				}
 			}
 		}
+		waitForPageLoad();
 	}
 
 
@@ -1005,6 +1027,7 @@ public class NavigationShared {
 			radioButtonLabel.click();
 		}
 		log.info("Clicked on radio button for =>"+caption+ "<= label =>" + label);
+		waitForPageLoad();
 	}
 
 	public void clickRadioButtonLabel(String label) throws Exception {
@@ -1012,6 +1035,7 @@ public class NavigationShared {
 		click_link_by_text(label);
 
 		log.info("Clicked on radio button label =>" + label);
+		waitForPageLoad();
 	}
 
 	public void clickCheckboxLabel(String label) throws Exception {
@@ -1090,6 +1114,7 @@ public class NavigationShared {
 			webElement.findElement(By.xpath("./descendant-or-self::*[last()]")).click();
 		}
 		log.info("Clicked on link inside WebElement provided - ok");
+		waitForPageLoad();
 	}
 	
 	public String findTextCellInHeader(List<WebElement> headerCells, String text, String defaultColumn) throws Exception {
@@ -1430,13 +1455,13 @@ public class NavigationShared {
 		try {
 			element.click();
 			log.info("Clicked on element as normal - Continuing");
-			waitForBrowserReadyState();
-			return;
 		} catch (Exception e) {
 			log.info("Unable ot click on element using Selenium, trying via Javascript");
 			((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 			log.info("Clicked on element using javascript - Continuing");
 		}
+		waitForBrowserReadyState();
+		return;
 	}
 
 	public void selectCheckbox_forRowWithText(String column, String rowText) {
@@ -1832,7 +1857,7 @@ public class NavigationShared {
 			Actions actions = new Actions(driver);
 			actions.click(click_text).perform();
 		}
-		waitForBrowserReadyState();
+		waitForPageLoad();
 		log.info("Clicked on =>"+clickText+"<= successfully");
 	}
 
@@ -1841,7 +1866,7 @@ public class NavigationShared {
 		WebElement element = driver.findElement(By.id(id));
 		wait.waitForClickableElement(element);
 		click_onElement(element);
-		waitForBrowserReadyState();
+		waitForPageLoad();;
 		log.info("Clicked on element with id =>"+id+"<= successfully");
 	}
 	
