@@ -214,48 +214,14 @@ Feature: Admin
   Scenario: Remove user role, single and multiple, test cancel link
     Given I am logged on to the admin portal as an ADMIN user
     #Add users roles for test
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testuserfour"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testuserfour"
-    And I see "First user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I see "This user is not a member of any groups." on the page
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
-    And I do not see "This user is not a member of any groups." on the page
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testuserfive"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testuserfive"
-    And I see "Second user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testusersix"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testusersix"
-    And I see "Third user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
+    Given I add user "Testuserfour" to group "Harrow Crown Court_REQUESTER"
+    Given I add user "Testuserfive" to group "Harrow Crown Court_REQUESTER"
+    Given I add user "Testusersix" to group "Harrow Crown Court_REQUESTER"
+    
     When I click on the "Courthouses" link
     And I set "Courthouse name" to "Harrow"
     And I press the "Search" button
-    And I click on the "Harrow Crown Court" link
+    And I click on the "HARROW CROWN COURT" link
     And I click on the "Users" sub-menu link
     And I check the checkbox in the same row as "Testuserfour" "testuserfour@hmcts.net"
     And I press the "Remove user role" button

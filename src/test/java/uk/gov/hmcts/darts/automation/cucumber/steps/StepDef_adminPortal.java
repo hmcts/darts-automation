@@ -35,4 +35,15 @@ public class StepDef_adminPortal extends StepDef_base {
         WAIT = new WaitUtils(webDriver);
     }
 
+    @Given("I add user \"([^\"]*)\" to group \"([^\"]*)\"$")
+    public void addGroupsToUser(String userName, String group) {
+        try {
+        	adminPortal.addGroupsToUser(userName, group);
+        } catch (Exception exception){
+            log.error("group add error {} {}", userName, group);
+        }
+    }
+
+	
+	
 }
