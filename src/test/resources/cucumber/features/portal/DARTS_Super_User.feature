@@ -4,7 +4,7 @@ Feature: Super User Permission
 
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges           | prosecutors         | defenders         |
-      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
+      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001 | Def A{{seq}}-1  | JUDGE {{seq}}-1  | testprosecutor      | testdefender      |
 
     Given I authenticate from the CPP source system
     Given I create an event
@@ -13,7 +13,7 @@ Feature: Super User Permission
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
-      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
+      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001  | {{date+0/}} | 09:30:00  | 09:31:00 | sample1.mp2 |
 
   @DMP-2404-CaseSearch
   Scenario: Case search
@@ -75,7 +75,7 @@ Feature: Super User Permission
 
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
-    Then I set "Judge's name" to "Judge {{seq}}-1"
+    Then I set "Judge's name" to "JUDGE {{seq}}-1"
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
@@ -109,7 +109,7 @@ Feature: Super User Permission
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
     Then I set "Defendant's name" to "Def A{{seq}}-1"
-    Then I set "Judge's name" to "Judge {{seq}}-1"
+    Then I set "Judge's name" to "JUDGE {{seq}}-1"
     Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
@@ -117,7 +117,7 @@ Feature: Super User Permission
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
     And I set "Courthouse" to "Harrow Crown Court"
-    Then I set "Judge's name" to "Judge {{seq}}-1"
+    Then I set "Judge's name" to "JUDGE {{seq}}-1"
     Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
@@ -132,14 +132,14 @@ Feature: Super User Permission
     Then I click on the "Advanced search" link
     And I set "Courtroom" to "A{{seq}}-1"
     And I set "Defendant's name" to "Def A{{seq}}-1"
-    And I set "Judge's name" to "Judge {{seq}}-1"
+    And I set "Judge's name" to "JUDGE {{seq}}-1"
     Then I press the "Search" button
     Then I see "You must also enter a courthouse" on the page
 
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
     And I set "Courtroom" to "A{{seq}}-1"
-    And I set "Judge's name" to "Judge {{seq}}-1"
+    And I set "Judge's name" to "JUDGE {{seq}}-1"
     Then I select the "Specific date" radio button
     And I set "Enter a date" to "{{date+0/}}"
     Then I press the "Search" button
@@ -503,3 +503,138 @@ Feature: Super User Permission
     And I see "10:31:00" on the page
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to Darts Admin and notify you in the DARTS application." on the page
+
+  # Maybe this could be a Scenario Outline with an example for each type of search?
+  @DMP-3810
+  Scenario: Can search for cases / audio / events / hearings
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Search" link
+    And I see "You can search for cases, hearings, events and audio." on the page
+
+    Then I set "Filter by courthouse" to "Harrow Crown Court"
+    And I select the "Cases" radio button
+
+    And I press the "Search" button
+    Then I see "There are more than 1000 results. Refine your search." on the page
+
+    Then I set "Case ID" to "A{{seq}}001"
+    And I press the "Search" button
+    And I see "Showing 1-1 of 1" on the page
+    And I verify the HTML table contains the following values
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+
+    Then I select the "Hearings" radio button
+    And I press the "Search" button
+    And I verify the HTML table contains the following values
+      | Case ID     | Hearing date               | Courthouse         | Courtroom  |
+      | A{{seq}}001 | {{displaydate-dd/mm/yyyy}} | Harrow Crown Court | A{{seq}}-1 |
+
+    Then I select the "Events" radio button
+    And I press the "Search" button
+    And I see "A{{seq}}-1" in the same row as "Hearing started"
+    And I see "A{{seq}}-1" in the same row as "Harrow Crown Court"
+    And I see "A{{seq}}-1" in the same row as "A{{seq}}ABC-1"
+
+    Then I select the "Audio" radio button
+    And I press the "Search" button
+    And I see "A{{seq}}-1" in the same row as "Harrow Crown Court"
+
+  # TODO: update the tested account
+  Scenario: Users
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Users" link
+    And I see "Search for user" on the page
+    And I do not see the "Create new user" button
+
+    Then I set "Email" to "DMP3810@hmcts.net"
+    And I press the "Search" button
+
+    Then I see "1 result" on the page
+    And I see "DMP 3810" in the same row as "DMP3810@hmcts.net"
+    And I click on "View" in the same row as "DMP3810@hmcts.net"
+
+    Then I see "User record" on the page
+    And I see "Active user" on the page
+    And I see "DMP 3810" on the page
+    And I see the "Deactivate user" button
+    And I do not see the "Edit user" button
+
+    Then I press the "Deactivate user" button
+    And I see "Deactivate user" on the page
+    And I see "Deactivating this user will remove their access to DARTS." on the page
+    And I see the "Deactivate user" button
+
+    Then I press the "Deactivate user" button
+    And I see "User record deactivated" on the page
+    And I see "DMP 3810" on the page
+    And I see "Inactive" on the page
+    And I do not see the "Activate user" button
+    And I do not see the "Deactivate user" button
+
+  Scenario: Courthouses
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Courthouses" link
+    And I see "Search for courthouse" on the page
+    And I do not see the "Create new courthouse" button
+
+    Then I set "Courthouse name" to "Harrow Crown Court"
+    And I press the "Search" button
+
+    Then I see "1 result" on the page
+    And I verify the HTML table contains the following values
+      | Courthouse name    | Display name       |
+      | HARROW CROWN COURT | Harrow Crown Court |
+
+    Then I click on "HARROW CROWN COURT" in the same row as "Harrow Crown Court"
+    And I see "Courthouse record" on the page
+    And I see "Harrow Crown Court" on the page
+    And I do not see the "Edit courthouse" button
+
+  Scenario: Transformed media
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Transformed media" link
+
+    Then I see "Transformed media" on the page
+    And I click on the "Advanced search" link
+    And I set "Case ID" to "A{{seq}}001"
+    And I press the "Search" button
+    And I see "A{{seq}}001" in the same row as "Harrow Crown Court"
+    And I see "A{{seq}}001" in the same row as "{{displaydate}}"
+    And I see "A{{seq}}001" in the same row as "DartsSuperUser"
+
+    Then I click on text in cell "1" of row "1"
+    And I see "Transformed media" on the page
+    And I see "Owner" in the same row as "DartsSuperUser (darts.superuser@hmcts.net)"
+    And I do not see link with text "Change"
+
+  # TODO: maybe this needs to be a scenario outline with 2 audios one normal one hidden
+  Scenario: Audio (accessed via search audio)
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Search" link
+    And I see "You can search for cases, hearings, events and audio." on the page
+
+    Then I set "Case ID" to "A{{seq}}001"
+    And I select the "Audio" radio button
+    And I press the "Search" button
+
+    Then I see "Harrow Crown Court" in the same row as "A{{seq}}-1"
+    And I click on text in cell "1" of row "1"
+
+    Then I see "Audio file" on the page
+    And I see "Basic details" on the page
+    And I see "Courthouse" in the same row as "Harrow Crown Court"
+    And I see "Courtroom" in the same row as "A{{seq}}-1"
+    And I see "Associated cases" on the page
+    And I verify the HTML table contains the following values
+      | Case ID     | Hearing date    | Defendant(s)   | Judge(s)        |
+      | A{{seq}}001 | {{displaydate0}} | Def A{{seq}}-1 | JUDGE {{seq}}-1 |
+    And I do not see link with text "Advanced details"
+    And I do not see the "Hide or delete" button
+    And I do not see the "Unhide" button
+    And I do not see the "Unmark for deletion and unhide" button

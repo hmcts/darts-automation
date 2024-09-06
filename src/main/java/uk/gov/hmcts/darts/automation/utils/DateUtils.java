@@ -366,7 +366,9 @@ public class DateUtils {
 									if (subsString.startsWith("timestamp-")) {
 										substitutionString = timestamp(subsString.substring(10, 18));
 									} else {
-										if (subsString.startsWith("displaydate-")) {
+										if ("displaydate-dd/mm/yyyy".equals(subsString)) {
+											substitutionString = todayDdmmyyWithForwardSlash();
+										} else if (subsString.startsWith("displaydate-")) {
 											substitutionString = displayDate(subsString.substring(12));
 										} else {
 											if (subsString.startsWith("displaydate0-")) {
@@ -401,10 +403,16 @@ public class DateUtils {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format((Date)cal.getTime());		
 	}
-	
+
 	public static String todayDdmmyy() {
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		return date.format(formatter);
+	}
+
+	public static String todayDdmmyyWithForwardSlash() {
+		LocalDate date = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		return date.format(formatter);
 	}
 	
