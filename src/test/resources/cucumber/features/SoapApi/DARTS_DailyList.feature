@@ -15,6 +15,7 @@ Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 	Given that courthouse "<courthouse>" case "<caseNumber>1" does not exist
 	Given that courthouse "<courthouse>" case "<caseNumber>3" does not exist
 	Given that courthouse "<courthouse>" case "<caseNumber>9" does not exist
+  Given I wait until there is not a daily list waiting for "<courthouse>"
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>1"
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>9"
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>3"
@@ -272,6 +273,8 @@ Scenario: Daily List malformed fails
 @Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
   @reads-and-writes-system-properties
 Scenario: Daily List successful
+  Given that courthouse "YORK" case "T{{seq}}110" does not exist
+  Given I wait until there is not a daily list waiting for "YORK"
   Given I authenticate from the CPP source system
 	When I call POST SOAP API using soap action addDocument and body:
 	"""
@@ -456,6 +459,8 @@ Scenario: Daily List successful
 @Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
   @reads-and-writes-system-properties
 Scenario: Daily List successful with TimeMarkingNote 3:00 PM
+  Given that courthouse "YORK" case "T{{seq}}120" does not exist
+  Given I wait until there is not a daily list waiting for "YORK"
   Given I authenticate from the CPP source system
    And I see table darts.daily_list column count(job_status) is "0" where unique_id = "CSDDL170974{{seq}}002" and message_id = "58b211f5-426d-81be-00{{seq}}002"
 	When I call POST SOAP API using soap action addDocument and body:

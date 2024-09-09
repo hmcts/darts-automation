@@ -10,6 +10,7 @@ Feature: Test operation of events causing an automatic transcription to be trigg
   @reads-and-writes-system-properties
 Scenario Outline: A single Automatic Transcription request is generated for custodial sentence events
   Given that courthouse "<courthouse>" case "<case_numbers>" does not exist
+  Given I wait until there is not a daily list waiting for "<courthouse>"
   Given I authenticate from the CPP source system
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber     | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
@@ -159,6 +160,7 @@ Examples:
   @reads-and-writes-system-properties
 Scenario Outline: No Automatic Transcription request for non-custodial sentence or a sentencing event with an invalid sentence length / retention policy
   Given that courthouse "<courthouse>" case "<case_numbers>" does not exist
+  Given I wait until there is not a daily list waiting for "<courthouse>"
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
