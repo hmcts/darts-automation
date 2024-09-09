@@ -523,13 +523,13 @@ Feature: Super User Permission
     And I see "Showing 1-1 of 1" on the page
     And I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     Then I select the "Hearings" radio button
     And I press the "Search" button
     And I verify the HTML table contains the following values
       | Case ID     | Hearing date               | Courthouse         | Courtroom  |
-      | A{{seq}}001 | {{displaydate-dd/mm/yyyy}} | Harrow Crown Court | A{{seq}}-1 |
+      | A{{seq}}001 | {{date+0/}} | Harrow Crown Court | A{{seq}}-1 |
 
     Then I select the "Events" radio button
     And I press the "Search" button
@@ -594,6 +594,7 @@ Feature: Super User Permission
     And I see "Harrow Crown Court" on the page
     And I do not see the "Edit courthouse" button
 
+  # Two things that could happen here... one result redirects to the record, more than one result shows a list of results
   Scenario: Transformed media
     Given I am logged on to DARTS as a SUPERUSER user
     And I click on the "Admin portal" link
@@ -607,12 +608,15 @@ Feature: Super User Permission
     And I see "A{{seq}}001" in the same row as "{{displaydate}}"
     And I see "A{{seq}}001" in the same row as "DartsSuperUser"
 
-    Then I click on text in cell "1" of row "1"
+    Then I select column cas_id from table darts.court_case where case_number = "A{{seq}}001"
+    And I select column hea_id from table darts.hearing where cas_id = "{{cas_id}}"
+    And I select column mer_id from table darts.media_request where hea_id = "{{hea_id}}"
+    And I select column trm_id from table darts.transformed_media where mer_id = "{{mer_id}}"
+    And I click on "{{trm_id}}" in the same row as "A{{seq}}001"
     And I see "Transformed media" on the page
     And I see "Owner" in the same row as "DartsSuperUser (darts.superuser@hmcts.net)"
     And I do not see link with text "Change"
 
-  # TODO: maybe this needs to be a scenario outline with 2 audios one normal one hidden
   Scenario: Audio (accessed via search audio)
     Given I am logged on to DARTS as a SUPERUSER user
     And I click on the "Admin portal" link
@@ -624,7 +628,9 @@ Feature: Super User Permission
     And I press the "Search" button
 
     Then I see "Harrow Crown Court" in the same row as "A{{seq}}-1"
-    And I click on text in cell "1" of row "1"
+    Then I select column cas_id from table darts.court_case where case_number = "A{{seq}}001"
+    And I select column med_id from table darts.media_linked_case where cas_id = "{{cas_id}}"
+    And I click on "{{med_id}}" in the same row as "A{{seq}}-1"
 
     Then I see "Audio file" on the page
     And I see "Basic details" on the page
