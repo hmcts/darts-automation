@@ -34,7 +34,7 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
 
     When I click on the "Clear search" link
     And I click on the "Advanced search" link
@@ -109,7 +109,7 @@ Feature: Super User Permission
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
     Then I set "Defendant's name" to "Def A{{seq}}-1"
-    Then I set "Judge's name" to "{{upper-case-judge {{seq}}-1}}"
+    Then I set "Judge's name" to "Judge {{seq}}-1"
     Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
@@ -132,7 +132,7 @@ Feature: Super User Permission
     Then I click on the "Advanced search" link
     And I set "Courtroom" to "A{{seq}}-1"
     And I set "Defendant's name" to "Def A{{seq}}-1"
-    And I set "Judge's name" to "{{upper-case-judge {{seq}}-1}}"
+    And I set "Judge's name" to "Judge {{seq}}-1"
     Then I press the "Search" button
     Then I see "You must also enter a courthouse" on the page
 
@@ -522,8 +522,8 @@ Feature: Super User Permission
     And I press the "Search" button
     And I see "Showing 1-1 of 1" on the page
     And I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)                       | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
 
     Then I select the "Hearings" radio button
     And I press the "Search" button
