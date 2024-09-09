@@ -445,16 +445,6 @@ public class StepDef_navigation extends StepDef_base {
 		}
 	};
 
-	@When("^I click on text in cell \"([0-9]+)\" of row \"([0-9]+)\"$")
-	public void clickText_inCell_ofRow (Integer cell, Integer row) throws Exception {
-		try {
-			NAV.clickText_inCell_ofRow(cell, row);
-		} catch (Exception e) {
-			NAV.waitForPageLoad();
-			NAV.clickText_inCell_ofRow(cell, row);
-		}
-	};
-	
 	@Then("^I see the \"([^\"]*)\" button$")
 	public void buttonVisible(String arg1) throws Exception {
 	    if (NAV.buttonVisible(arg1)) {

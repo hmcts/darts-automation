@@ -1861,15 +1861,6 @@ public class NavigationShared {
 		log.info("Clicked on =>"+clickText+"<= successfully");
 	}
 
-	public void clickText_inCell_ofRow(Integer cell, Integer row) {
-		log.info("Going to click text in cell =>"+cell+"<= of row =>"+row+"<= in a table");
-
-		String xpath = "//table[@class='govuk-table']//tr["+row+"]//td["+cell+"]//a";
-		WebElement tableCell = driver.findElement(By.xpath(xpath));
-
-		tableCell.click();
-	}
-
 	public void clickOnElementWithId(String id) {
 
 		WebElement element = driver.findElement(By.id(id));
