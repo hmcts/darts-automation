@@ -30,11 +30,13 @@ public class DbUtils {
     private WebDriver webDriver;
     private TestData TD;
     private Database DB;
+    private WaitUtils WAIT_UTILS;
 
     public DbUtils(WebDriver driver, TestData testdata) {
         this.webDriver = driver;
         this.TD = testdata;
         DB = new Database();
+        WAIT_UTILS = new WaitUtils(webDriver);
     }
     
     public void waitForCaseCreation(String courthouse, String courtroom, String caseNumber)  throws Exception {
@@ -97,6 +99,38 @@ public class DbUtils {
         } catch (TimeoutException e) {
             log.fatal("Wait complete - case not ready");
             Assertions.fail("Case not created");
+        }
+    }
+    
+    public void waitForDailyListToBeProcessed(String courthouse) {
+        int waitTimeInSeconds = WAIT_TIME;
+    	log.info("Waiting {} secs for daily list to be processed: {}", waitTimeInSeconds, courthouse);
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
+                .pollingEvery(Duration.ofSeconds(2));  
+        Function<WebDriver, Boolean> noDailyList = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+            	String listCount = "";
+				try {
+					listCount = DB.returnSingleValue("darts.daily_list",
+							"listing_courthouse", courthouse, 
+							"job_status", "NEW",
+							"start_dt", DateUtils.todayYyyymmdd(),
+							"count(dal_id)");
+				} catch (Exception e) {
+					log.warn("Exception in database call \r\n {e}");
+				}
+            	log.info("List count: {}", listCount);
+            	return listCount.equals("0");
+            };
+        };
+        try {
+            wait.until(noDailyList);
+            log.info("no daily lists waiting to be processed");
+            WAIT_UTILS.pause(10);
+        } catch (TimeoutException e) {
+            log.warn("Wait complete - daily list not processed for: {}", courthouse);
         }
     }
     

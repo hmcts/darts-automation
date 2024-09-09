@@ -157,6 +157,11 @@ public class StepDef_db extends StepDef_base {
 	public void processTheDailyListForCourthouseCase(String caseNumber, String courthouse) {
 		dbUtils.waitForCaseCreation(Substitutions.substituteValue(courthouse), Substitutions.substituteValue(caseNumber));
 	}
+
+	@When("I wait until there is not a daily list waiting for \"([^\"]*)\"$")
+	public void waitForDailyListToBeProcessed(String courthouse) {
+		dbUtils.waitForDailyListToBeProcessed(Substitutions.substituteValue(courthouse));
+	}
 	
 
 	

@@ -3,6 +3,8 @@ Feature: Requester
   @end2end @end2end2 @DMP-2206
   @reads-and-writes-system-properties
   Scenario Outline: Requester
+    Given that courthouse "<courthouse>" case "<case_number>" does not exist
+    Given I wait until there is not a daily list waiting for "<courthouse>"
     Given I add a daily lists
       | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime      | endDate   | timeStamp   | defendant    | urn           |
       | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <DL_startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |

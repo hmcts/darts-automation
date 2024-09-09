@@ -12,6 +12,7 @@ Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 
   @reads-and-writes-system-properties
 Scenario Outline: Create a case for event tests
   Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
+  Given I wait until there is not a daily list waiting for "<courthouse>"
   Given I add a daily list
   | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
   | 58b211f4-426d-81be-20{{seq}}00 | DL   | DL      | DL {{date+0/}} {{seq}}201 | <courthouse> | <courtroom> | <caseNumbers> | {{date+0}} | 09:50     | {{date+0}} | {{timestamp}} | defendant one | judge name | prosecutor name | defence name |
@@ -568,6 +569,7 @@ Scenario Outline: Create a StopAndClose event for custodial sentence - not life
 															retention is 7 years or length of sentence
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
+  Given I wait until there is not a daily list waiting for "<courthouse>"
   Given I authenticate from the XHIBIT source system
   Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
   Given I add a daily list
@@ -612,6 +614,7 @@ Scenario Outline: Create a StopAndClose event for LIFE sentence
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
   Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
+  Given I wait until there is not a daily list waiting for "<courthouse>"
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
     | messageId                      | type | subType | documentName              | courthouse   | courtroom   | caseNumber    | startDate  | startTime | endDate    | timeStamp     | defendant     | judge      | prosecution     | defence      |
@@ -650,6 +653,7 @@ Examples:
 Scenario Outline: Create a StopAndClose event for non-custodial sentence
 													Only 1 stop & close event per case works due to retentions
 													Test creates a courtroom & hearing for each case
+  Given I wait until there is not a daily list waiting for "<courthouse>"
   Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
   Given I authenticate from the XHIBIT source system
   Given I add a daily list
@@ -894,6 +898,7 @@ Scenario Outline: Verify that a hearing courtroom can be modified by an event
 																									 then the existing hearing should be updated with the new courtroom
 																									 ** n.b. Portal will be changed to ignore hearings where 'hearing_is_actual' is false
   Given that courthouse "<courthouse>" case "<caseNumber>" does not exist
+  Given I wait until there is not a daily list waiting for "<courthouse>"
   Given I authenticate from the XHIBIT source system
   When I add a daily list
     | messageId                        | type | subType | documentName              | courthouse   | courtroom    | caseNumber   | startDate  | startTime | endDate    | timeStamp     |
