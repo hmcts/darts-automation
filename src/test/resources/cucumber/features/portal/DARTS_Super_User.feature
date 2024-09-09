@@ -4,7 +4,7 @@ Feature: Super User Permission
 
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges           | prosecutors         | defenders         |
-      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001 | Def A{{seq}}-1  | JUDGE {{seq}}-1  | testprosecutor      | testdefender      |
+      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
 
     Given I authenticate from the CPP source system
     Given I create an event
@@ -75,7 +75,7 @@ Feature: Super User Permission
 
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
-    Then I set "Judge's name" to "JUDGE {{seq}}-1"
+    Then I set "Judge's name" to "Judge {{seq}}"
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
@@ -109,7 +109,7 @@ Feature: Super User Permission
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
     Then I set "Defendant's name" to "Def A{{seq}}-1"
-    Then I set "Judge's name" to "JUDGE {{seq}}-1"
+    Then I set "Judge's name" to "{{upper-case-judge {{seq}}-1}}"
     Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
@@ -117,7 +117,7 @@ Feature: Super User Permission
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
     And I set "Courthouse" to "Harrow Crown Court"
-    Then I set "Judge's name" to "JUDGE {{seq}}-1"
+    Then I set "Judge's name" to "Judge {{seq}}-1"
     Then I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
@@ -132,14 +132,14 @@ Feature: Super User Permission
     Then I click on the "Advanced search" link
     And I set "Courtroom" to "A{{seq}}-1"
     And I set "Defendant's name" to "Def A{{seq}}-1"
-    And I set "Judge's name" to "JUDGE {{seq}}-1"
+    And I set "Judge's name" to "{{upper-case-judge {{seq}}-1}}"
     Then I press the "Search" button
     Then I see "You must also enter a courthouse" on the page
 
     When I click on the "Clear search" link
     Then I click on the "Advanced search" link
     And I set "Courtroom" to "A{{seq}}-1"
-    And I set "Judge's name" to "JUDGE {{seq}}-1"
+    And I set "Judge's name" to "Judge {{seq}}-1"
     Then I select the "Specific date" radio button
     And I set "Enter a date" to "{{date+0/}}"
     Then I press the "Search" button
@@ -237,7 +237,7 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
     Then I see "Events and audio recordings" on the page
@@ -283,7 +283,7 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on the "{{displaydate}}" link
@@ -340,7 +340,7 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I see "Retained until" on the page
     And I see "No date applied" on the page
@@ -445,7 +445,7 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
@@ -522,8 +522,8 @@ Feature: Super User Permission
     And I press the "Search" button
     And I see "Showing 1-1 of 1" on the page
     And I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)                       | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     Then I select the "Hearings" radio button
     And I press the "Search" button
@@ -632,8 +632,8 @@ Feature: Super User Permission
     And I see "Courtroom" in the same row as "A{{seq}}-1"
     And I see "Associated cases" on the page
     And I verify the HTML table contains the following values
-      | Case ID     | Hearing date    | Defendant(s)   | Judge(s)        |
-      | A{{seq}}001 | {{displaydate0}} | Def A{{seq}}-1 | JUDGE {{seq}}-1 |
+      | Case ID     | Hearing date    | Defendant(s)   | Judge(s)                        |
+      | A{{seq}}001 | {{displaydate0}} | Def A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} |
     And I do not see link with text "Advanced details"
     And I do not see the "Hide or delete" button
     And I do not see the "Unhide" button
