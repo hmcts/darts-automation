@@ -1,6 +1,7 @@
 package uk.gov.hmcts.darts.automation.utils;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
 import java.sql.Timestamp;
@@ -413,13 +414,13 @@ public class DateUtils {
 	
 	public static String todayDisplay() {
 		LocalDate date = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH);
 		return date.format(formatter);
 	}
 	
 	public static String todayDisplay0() {
 		LocalDate date = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
 		return date.format(formatter);
 	}
 	
@@ -429,13 +430,13 @@ public class DateUtils {
 	
 	public static String displayDate(String string) {
 		LocalDate date = LocalDate.parse(dateAsYyyyMmDd(string));
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH);
 		return date.format(formatter);
 	}
 	
 	public static String displayDate0(String string) {
 		LocalDate date = LocalDate.parse(dateAsYyyyMmDd(string));
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
 		return date.format(formatter);
 	}
 	
