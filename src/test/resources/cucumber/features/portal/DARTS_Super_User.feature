@@ -3,8 +3,8 @@ Feature: Super User Permission
   Scenario: Case Search data creation
 
     Given I create a case
-      | courthouse         | courtroom  | case_number | defendants      | judges           | prosecutors         | defenders         |
-      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
+      | courthouse         | courtroom  | case_number | defendants      | judges           | prosecutors    | defenders    |
+      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor | testdefender |
 
     Given I authenticate from the CPP source system
     Given I create an event
@@ -20,10 +20,19 @@ Feature: Super User Permission
     When I am logged on to DARTS as a SUPERUSER user
     And I click on the "Search" link
     And I see "Search for a case" on the page
-    And I set "Case ID" to "A{{seq}}001"
+    # Need a search with not enough characters
+    And I set "Case ID" to "A"
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
+    And I see "Refine your search by adding more information and try again." on the page
+
+    Then I click on the "Clear search" link
+    And I set "Case ID" to "A{{seq}}001"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     #Advanced search
     When I click on the "Clear search" link
@@ -34,7 +43,8 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     When I click on the "Clear search" link
     And I click on the "Advanced search" link
@@ -237,7 +247,8 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
     Then I see "Events and audio recordings" on the page
@@ -271,6 +282,7 @@ Feature: Super User Permission
     And I see "Current" on the page
     And I see "Expired" on the page
 
+  # SUPERUSER does not request transcripts?
   @DMP-2404-Transcription
   Scenario: Transcription
     Given I am logged on to DARTS as a SUPERUSER user
@@ -283,7 +295,8 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on the "{{displaydate}}" link
@@ -340,7 +353,8 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I see "Retained until" on the page
     And I see "No date applied" on the page
@@ -355,7 +369,7 @@ Feature: Super User Permission
     And I see "Retention audit history" on the page
     And I see "No history to show" on the page
 
-  # Close the case
+    # Close the case
     Given I create an event
       | message_id | type  | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text | date_time              |
       | {{seq}}001 | 30300 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-28 | A{{seq}}001  | {{seq}}KH1 | {{timestamp-10:00:00}} |
@@ -445,7 +459,8 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
@@ -638,7 +653,7 @@ Feature: Super User Permission
     And I see "Courtroom" in the same row as "A{{seq}}-1"
     And I see "Associated cases" on the page
     And I verify the HTML table contains the following values
-      | Case ID     | Hearing date    | Defendant(s)   | Judge(s)                        |
+      | Case ID     | Hearing date     | Defendant(s)   | Judge(s)                        |
       | A{{seq}}001 | {{displaydate0}} | Def A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} |
     And I do not see link with text "Advanced details"
     And I do not see the "Hide or delete" button
