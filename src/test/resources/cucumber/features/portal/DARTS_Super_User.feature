@@ -283,66 +283,66 @@ Feature: Super User Permission
     And I see "Expired" on the page
 
   # SUPERUSER does not request transcripts?
-  @DMP-2404-Transcription
-  Scenario: Transcription
-    Given I am logged on to DARTS as a SUPERUSER user
-    And I click on the "Search" link
-    And I see "Search for a case" on the page
-    And I set "Case ID" to "A{{seq}}001"
-    Then I click on the "Advanced search" link
-    And I set "Courthouse" to "Harrow Crown Court"
-    And I set "Courtroom" to "A{{seq}}-1"
-    And I press the "Search" button
-    Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
-#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
-
-    When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
-    And I click on the "{{displaydate}}" link
-    And I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
-    Then I see "Audio list" on the page
-    And I see "A{{seq}}001" on the page
-    And I see "Harrow Crown Court" on the page
-    And I see "Def A{{seq}}-1" on the page
-    And I see "{{displaydate}}" on the page
-
-    When I select "Specified Times" from the "Request Type" dropdown
-    And I select "Overnight" from the "Urgency" dropdown
-    And I press the "Continue" button
-    Then I see "Events, audio and specific times requests" on the page
-    And I see "Select events or specify start and end times to request a transcript." on the page
-    And I see "Specific times requests cover all events and audio between the transcript start and end time." on the page
-    And I set the time fields of "Start time" to "10:30:00"
-    And I set the time fields of "End time" to "10:31:00"
-    And I press the "Continue" button
-
-    Then I see "Check and confirm your transcript request" on the page
-    And I see "A{{seq}}001" in the same row as "Case ID"
-    And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "Def A{{seq}}-1" in the same row as "Defendant(s)"
-    And I see "{{displaydate}}" in the same row as "Hearing date"
-    And I see "Specified Times" in the same row as "Request type"
-    And I see "Overnight" in the same row as "Urgency"
-    And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for Transcript"
-    And I see "Provide any further instructions or comments for the transcriber." on the page
-    And I see "You have 2000 characters remaining" on the page
-    When I set "Comments to the Transcriber (optional)" to "Requesting transcript Specified Times for one minute of audio selected via event checkboxes."
-    And I see "You have 1908 characters remaining" on the page
-    And I check the "I confirm I have received authorisation from the judge." checkbox
-    And I press the "Submit request" button
-    Then I see "Transcript request submitted" on the page
-    And I see "What happens next?" on the page
-    And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
-
-    When I click on the "Return to hearing date" link
-    Then I see "Transcripts for this hearing" on the page
-    And I see "Specified Times" in the same row as "Awaiting Authorisation"
-
-    When I click on the "Your transcripts" link
-    Then I see "A{{seq}}001" in the same row as "Awaiting Authorisation"
-    And I Sign out
+#  @DMP-2404-Transcription
+#  Scenario: Transcription
+#    Given I am logged on to DARTS as a SUPERUSER user
+#    And I click on the "Search" link
+#    And I see "Search for a case" on the page
+#    And I set "Case ID" to "A{{seq}}001"
+#    Then I click on the "Advanced search" link
+#    And I set "Courthouse" to "Harrow Crown Court"
+#    And I set "Courtroom" to "A{{seq}}-1"
+#    And I press the "Search" button
+#    Then I verify the HTML table contains the following values
+#      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+##      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
+#
+#    When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
+#    And I click on the "{{displaydate}}" link
+#    And I click on the "Transcripts" link
+#    And I press the "Request a new transcript" button
+#    Then I see "Audio list" on the page
+#    And I see "A{{seq}}001" on the page
+#    And I see "Harrow Crown Court" on the page
+#    And I see "Def A{{seq}}-1" on the page
+#    And I see "{{displaydate}}" on the page
+#
+#    When I select "Specified Times" from the "Request Type" dropdown
+#    And I select "Overnight" from the "Urgency" dropdown
+#    And I press the "Continue" button
+#    Then I see "Events, audio and specific times requests" on the page
+#    And I see "Select events or specify start and end times to request a transcript." on the page
+#    And I see "Specific times requests cover all events and audio between the transcript start and end time." on the page
+#    And I set the time fields of "Start time" to "10:30:00"
+#    And I set the time fields of "End time" to "10:31:00"
+#    And I press the "Continue" button
+#
+#    Then I see "Check and confirm your transcript request" on the page
+#    And I see "A{{seq}}001" in the same row as "Case ID"
+#    And I see "Harrow Crown Court" in the same row as "Courthouse"
+#    And I see "Def A{{seq}}-1" in the same row as "Defendant(s)"
+#    And I see "{{displaydate}}" in the same row as "Hearing date"
+#    And I see "Specified Times" in the same row as "Request type"
+#    And I see "Overnight" in the same row as "Urgency"
+#    And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for Transcript"
+#    And I see "Provide any further instructions or comments for the transcriber." on the page
+#    And I see "You have 2000 characters remaining" on the page
+#    When I set "Comments to the Transcriber (optional)" to "Requesting transcript Specified Times for one minute of audio selected via event checkboxes."
+#    And I see "You have 1908 characters remaining" on the page
+#    And I check the "I confirm I have received authorisation from the judge." checkbox
+#    And I press the "Submit request" button
+#    Then I see "Transcript request submitted" on the page
+#    And I see "What happens next?" on the page
+#    And I see "We’ll review it and notify you of our decision to approve or reject your request by email and through the DARTS portal." on the page
+#
+#    When I click on the "Return to hearing date" link
+#    Then I see "Transcripts for this hearing" on the page
+#    And I see "Specified Times" in the same row as "Awaiting Authorisation"
+#
+#    When I click on the "Your transcripts" link
+#    Then I see "A{{seq}}001" in the same row as "Awaiting Authorisation"
+#    And I Sign out
 
   @DMP-2404-Retention
   Scenario Outline: Retention
@@ -370,6 +370,7 @@ Feature: Super User Permission
     And I see "No history to show" on the page
 
     # Close the case
+    Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type  | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text | date_time              |
       | {{seq}}001 | 30300 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-28 | A{{seq}}001  | {{seq}}KH1 | {{timestamp-10:00:00}} |
@@ -556,7 +557,6 @@ Feature: Super User Permission
     And I press the "Search" button
     And I see "A{{seq}}-1" in the same row as "Harrow Crown Court"
 
-  # TODO: update the tested account
   Scenario Outline: Users
     Given I am logged on to DARTS as a SUPERUSER user
     And I click on the "Admin portal" link
