@@ -373,7 +373,7 @@ Feature: Super User Permission
     Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type  | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text | date_time              |
-      | {{seq}}001 | 30300 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-28 | A{{seq}}001  | {{seq}}KH1 | {{timestamp-10:00:00}} |
+      | {{seq}}001 | 30300 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-1  | A{{seq}}001  | {{seq}}KH1 | {{timestamp-10:00:00}} |
 
     Then I click on the breadcrumb link "<case_number>"
     And I click on the "<case_number>" link
