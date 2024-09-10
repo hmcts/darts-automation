@@ -30,8 +30,8 @@ Feature: Super User Permission
     And I set "Case ID" to "A{{seq}}001"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)   | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK* | Def A{{seq}}-1 |
 #      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     #Advanced search
@@ -42,8 +42,8 @@ Feature: Super User Permission
     And I set "Courtroom" to "A{{seq}}-1"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)   | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK* | Def A{{seq}}-1 |
 #      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     When I click on the "Clear search" link
@@ -246,8 +246,8 @@ Feature: Super User Permission
 
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)   | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK* | Def A{{seq}}-1 |
 #      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
@@ -352,8 +352,8 @@ Feature: Super User Permission
     And I set "Case ID" to "A{{seq}}001"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)   | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK* | Def A{{seq}}-1 |
 #      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I see "Retained until" on the page
@@ -520,7 +520,6 @@ Feature: Super User Permission
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to Darts Admin and notify you in the DARTS application." on the page
 
-  # Maybe this could be a Scenario Outline with an example for each type of search?
   @DMP-3810
   Scenario: Can search for cases / audio / events / hearings
     Given I am logged on to DARTS as a SUPERUSER user
@@ -538,14 +537,14 @@ Feature: Super User Permission
     And I press the "Search" button
     And I see "Showing 1-1 of 1" on the page
     And I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)                       | Defendant(s)   |
       | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     Then I select the "Hearings" radio button
     And I press the "Search" button
     And I verify the HTML table contains the following values
-      | Case ID     | Hearing date               | Courthouse         | Courtroom  |
-      | A{{seq}}001 | {{date+0/}} | Harrow Crown Court | A{{seq}}-1 |
+      | Case ID     | Hearing date | Courthouse         | Courtroom  |
+      | A{{seq}}001 | {{date+0/}}  | Harrow Crown Court | A{{seq}}-1 |
 
     Then I select the "Events" radio button
     And I press the "Search" button
@@ -593,8 +592,8 @@ Feature: Super User Permission
     Then I set table darts.user_account  column is_active to "true" where usr_id = "{{usr_id}}"
 
     Examples:
-        | user_name | user_email_address |
-        | DMP 3810  | DMP3810@hmcts.net  |
+      | user_name | user_email_address |
+      | DMP 3810  | DMP3810@hmcts.net  |
 
   Scenario: Courthouses
     Given I am logged on to DARTS as a SUPERUSER user
@@ -660,7 +659,7 @@ Feature: Super User Permission
     And I see "Courtroom" in the same row as "A{{seq}}-1"
     And I see "Associated cases" on the page
     And I verify the HTML table contains the following values
-      | Case ID     | Hearing date     | Defendant(s)   | Judge(s)                        |
+      | Case ID     | Hearing date     | Defendant(s)   | Judge(s)                       |
       | A{{seq}}001 | {{displaydate0}} | Def A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} |
     And I do not see link with text "Advanced details"
     And I do not see the "Hide or delete" button
