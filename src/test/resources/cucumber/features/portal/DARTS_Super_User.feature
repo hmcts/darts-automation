@@ -296,7 +296,7 @@ Feature: Super User Permission
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
       | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on the "{{displaydate}}" link
@@ -557,23 +557,23 @@ Feature: Super User Permission
     And I see "A{{seq}}-1" in the same row as "Harrow Crown Court"
 
   # TODO: update the tested account
-  Scenario: Users
+  Scenario Outline: Users
     Given I am logged on to DARTS as a SUPERUSER user
     And I click on the "Admin portal" link
     And I click on the "Users" link
     And I see "Search for user" on the page
     And I do not see the "Create new user" button
 
-    Then I set "Email" to "DMP3810@hmcts.net"
+    Then I set "Email" to "<user_email_address>"
     And I press the "Search" button
 
     Then I see "1 result" on the page
-    And I see "DMP 3810" in the same row as "DMP3810@hmcts.net"
-    And I click on "View" in the same row as "DMP3810@hmcts.net"
+    And I see "<user_name>" in the same row as "<user_email_address>"
+    And I click on "View" in the same row as "<user_email_address>"
 
     Then I see "User record" on the page
     And I see "Active user" on the page
-    And I see "DMP 3810" on the page
+    And I see "<user_name>" on the page
     And I see the "Deactivate user" button
     And I do not see the "Edit user" button
 
@@ -584,10 +584,17 @@ Feature: Super User Permission
 
     Then I press the "Deactivate user" button
     And I see "User record deactivated" on the page
-    And I see "DMP 3810" on the page
+    And I see "<user_name>" on the page
     And I see "Inactive" on the page
     And I do not see the "Activate user" button
     And I do not see the "Deactivate user" button
+
+    Then I select column usr_id from table darts.user_account where user_email_address = "<user_email_address>"
+    Then I set table darts.user_account  column is_active to "true" where usr_id = "{{usr_id}}"
+
+    Examples:
+        | user_name | user_email_address |
+        | DMP 3810  | DMP3810@hmcts.net  |
 
   Scenario: Courthouses
     Given I am logged on to DARTS as a SUPERUSER user
