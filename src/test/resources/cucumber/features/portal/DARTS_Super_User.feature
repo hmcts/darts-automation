@@ -22,10 +22,20 @@ Feature: Super User Permission
     And I see "Search for a case" on the page
     And I set "Case ID" to "A{{seq}}001"
     And I press the "Search" button
+    Then I see "We need more information to search for a case" on the page
+    Then I see "Refine your search by adding more information and try again." on the page
+
+    #Advanced search
+    When I click on the "Clear search" link
+    And I set "Case ID" to "A{{seq}}001"
+    And I click on the "Advanced search" link
+    And I set "Courthouse" to "Harrow Crown Court"
+    And I set "Courtroom" to "A{{seq}}-1"
+    And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
-        #Advanced search
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+
     When I click on the "Clear search" link
     And I click on the "Advanced search" link
     And I set "Courthouse" to "Harrow Crown Court"
@@ -35,6 +45,7 @@ Feature: Super User Permission
     Then I see "A{{seq}}001" in the same row as "A{{seq}}-1"
 
     When I click on the "Clear search" link
+    And I click on the "Advanced search" link
     And I set "Courthouse" to "Harrow Crown Court"
     And I set "Courtroom" to "A{{seq}}-1"
     And I set "Keywords" to "A{{seq}}ABC-1"
@@ -49,24 +60,28 @@ Feature: Super User Permission
     Then I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     Then I set "Courthouse" to "Harrow Crown Court" and click away
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     Then I set "Defendant's name" to "Def A{{seq}}-1"
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     Then I set "Judge's name" to "Judge {{seq}}-1"
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
     Then I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     Then I set "Keywords" to "A{{seq}}ABC-1"
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
@@ -75,6 +90,7 @@ Feature: Super User Permission
     When I click on the "Clear search" link
     Then "Courthouse" is ""
     Then "Case ID" is ""
+    Then I click on the "Advanced search" link
     Then I set "Courthouse" to "Harrow Crown Court" and click away
     Then I set "Courtroom" to "A{{seq}}-1"
     Then I press the "Search" button
@@ -83,6 +99,7 @@ Feature: Super User Permission
 
     When I click on the "Clear search" link
     And I set "Case ID" to "Testing"
+    Then I click on the "Advanced search" link
     And I set "Courthouse" to "Test"
     And I set "Courtroom" to "Test1234"
     Then I press the "Search" button
@@ -90,6 +107,7 @@ Feature: Super User Permission
     And I see "Review the case ID, case reference or court reference you entered and try again." on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     Then I set "Defendant's name" to "Def A{{seq}}-1"
     Then I set "Judge's name" to "Judge {{seq}}-1"
     Then I press the "Search" button
@@ -97,6 +115,7 @@ Feature: Super User Permission
     Then I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I set "Courthouse" to "Harrow Crown Court"
     Then I set "Judge's name" to "Judge {{seq}}-1"
     Then I press the "Search" button
@@ -104,11 +123,13 @@ Feature: Super User Permission
     Then I see "Refine your search by adding more information and try again." on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I set "Courtroom" to "2"
     And I press the "Search" button
     Then I see an error message "You must also enter a courthouse"
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I set "Courtroom" to "A{{seq}}-1"
     And I set "Defendant's name" to "Def A{{seq}}-1"
     And I set "Judge's name" to "Judge {{seq}}-1"
@@ -116,6 +137,7 @@ Feature: Super User Permission
     Then I see "You must also enter a courthouse" on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I set "Courtroom" to "A{{seq}}-1"
     And I set "Judge's name" to "Judge {{seq}}-1"
     Then I select the "Specific date" radio button
@@ -124,6 +146,7 @@ Feature: Super User Permission
     Then I see "You must also enter a courthouse" on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     Then I set "Courtroom" to "A{{seq}}-1"
     Then I select the "Specific date" radio button
     Then I set "Enter a date" to "{{date+0/}}"
@@ -132,6 +155,7 @@ Feature: Super User Permission
     Then I see "You must also enter a courthouse" on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I set "Courtroom" to "A{{seq}}-1"
     Then I set "Defendant's name" to "Def A{{seq}}-1"
     Then I set "Keywords" to "A{{seq}}ABC-1"
@@ -139,19 +163,23 @@ Feature: Super User Permission
     Then I see "You must also enter a courthouse" on the page
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "{{date+3/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I select the "Date range" radio button
     And I set "Date from" to "{{date+7/}}"
     And I set "Date to" to "{{date-7/}}"
     And I press the "Search" button
-    Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
+    Then I see an error message "The start date must be before the end date"
+    And I see an error message "The end date must be after the start date"
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I select the "Date range" radio button
     And I set "Date from" to "{{date-10/}}"
     And I set "Date to" to "{{date+10/}}"
@@ -159,24 +187,28 @@ Feature: Super User Permission
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I select the "Date range" radio button
     And I set "Date to" to "{{date-7/}}"
     And I press the "Search" button
     Then I see an error message "You have not selected a start date. Select a start date to define your search"
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I select the "Date range" radio button
     And I set "Date from" to "{{date-10/}}"
     And I press the "Search" button
     And I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I select the "Specific date" radio button
     And I set "Enter a date" to "Invalid"
     And I press the "Search" button
     And I see an error message "You have not entered a recognised date in the correct format (for example 31/01/2023)"
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I select the "Date range" radio button
     And I set "Date from" to "Invalid"
     And I press the "Search" button
@@ -184,6 +216,7 @@ Feature: Super User Permission
     And I see an error message "You have not selected an end date. Select an end date to define your search"
 
     When I click on the "Clear search" link
+    Then I click on the "Advanced search" link
     And I select the "Date range" radio button
     And I set "Date to" to "Invalid"
     And I press the "Search" button
@@ -196,10 +229,15 @@ Feature: Super User Permission
     And I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "A{{seq}}001"
+
+    Then I click on the "Advanced search" link
+    And I set "Courthouse" to "Harrow Crown Court"
+    And I set "Courtroom" to "A{{seq}}-1"
+
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
     Then I see "Events and audio recordings" on the page
@@ -239,10 +277,13 @@ Feature: Super User Permission
     And I click on the "Search" link
     And I see "Search for a case" on the page
     And I set "Case ID" to "A{{seq}}001"
+    Then I click on the "Advanced search" link
+    And I set "Courthouse" to "Harrow Crown Court"
+    And I set "Courtroom" to "A{{seq}}-1"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on the "{{displaydate}}" link
@@ -299,7 +340,7 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I see "Retained until" on the page
     And I see "No date applied" on the page
@@ -404,7 +445,7 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | Judge {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
