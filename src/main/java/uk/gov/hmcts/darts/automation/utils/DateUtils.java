@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.zone.ZoneRules;
@@ -565,9 +566,48 @@ public class DateUtils {
  *  event & audio timestamps are stored in the database as UTC 
  *          "as timezones can change so this helps prevent inconsistent results from tests at different execution times"
  *          hopefully we won't change to BST all year or align with continental Europe in the future ...
+ *  although dates are usually input as today, add an offset based on the actual date
+ *  dates on inputs are as they would be displayed on the UI so in summer should have +01 & winter +00 / Z appended
  * 
  */
-	public static String utcTimestamp(String localTimestamp) {
+	public static String utcTimestamp(String inputTimestamp) {
+		String currentOffset;
+		
+		ZoneId zoneId = ZoneId.of("Europe/London");
+		ZoneRules zoneRules = zoneId.getRules();
+		ZonedDateTime now = ZonedDateTime.now(zoneId);
+		currentOffset = now.getOffset().toString();
+		boolean hasT = false;
+		String localTimestamp = inputTimestamp;
+		if (inputTimestamp.contains("T")) {
+			localTimestamp = inputTimestamp;
+			hasT = true;
+		} else {
+			localTimestamp = inputTimestamp.replace(" ", "T");
+		}
+		boolean hasZone = false;
+		if (inputTimestamp.endsWith("Z")) {
+			localTimestamp = localTimestamp.replace("Z", "");
+			hasZone = true;
+		} else {
+			if (localTimestamp.contains("+")) {
+				int pos = localTimestamp.lastIndexOf("+");
+				localTimestamp = localTimestamp.substring(0, pos-1);
+				hasZone = true;
+			}
+		}
+//		localTimestamp = localTimestamp.replace("Z", "").split("\\+")[0];
+		LocalDateTime localdateTime = LocalDateTime.parse(localTimestamp);
+		
+		ZoneOffset localOffset = zoneRules.getOffset(localdateTime);
+		Instant zonedTimestamp = localdateTime.toInstant(localOffset);
+		
+		String returnString = hasT ? zonedTimestamp.toString() : zonedTimestamp.toString().replace("T", " ");
+		
+		return hasZone ? returnString : returnString.replace("Z", "");
+	}
+	
+	public static String utcTimestampX(String localTimestamp) {
 		String currentOffset;
 		
 //		try {
@@ -583,7 +623,6 @@ public class DateUtils {
 		boolean isDst = zoneRules.isDaylightSavings(now.toInstant());
 		
 		localTimestamp = localTimestamp.replace(" ", "T");
-		
 		if (!(localTimestamp.endsWith("Z") || localTimestamp.contains("+"))) {
 			localTimestamp = localTimestamp + currentOffset;
 		}
@@ -903,7 +942,13 @@ public class DateUtils {
 		System.out.println(utcTimestamp("2024-06-10T10:43:25.720"));
 		System.out.println(substituteDateValue("utc-2024-06-10T10:43:25.720"));
 		System.out.println(utcTimestamp("2024-06-10 10:43:25.720"));
+		System.out.println(utcTimestamp("2024-06-10 10:43:25"));
+		System.out.println(utcTimestamp("2024-06-10 10:43:25.000"));
+		System.out.println(utcTimestamp("2024-06-10 10:43:25.720Z"));
 		System.out.println(utcTimestamp(timestamp()));
+		System.out.println(utcTimestamp("2024-11-10T10:43:25.720"));
+		System.out.println(substituteDateValue("utc-2024-11-10T10:43:25.720"));
+		System.out.println(utcTimestamp("2024-11-10 10:43:25.720"));
 	}
 	
 	@Test

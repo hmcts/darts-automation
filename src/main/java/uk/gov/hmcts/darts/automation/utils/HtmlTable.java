@@ -22,6 +22,7 @@ public class HtmlTable {
     private WaitUtils wait;
     private NavigationShared NAV;
     int errorCount = 0;
+    String errorText = "";
 
     public HtmlTable(WebDriver driver) {
         this.webDriver = driver;
@@ -48,6 +49,7 @@ public class HtmlTable {
         // Check number of rows in Datatable and html table are equal
         Assert.assertEquals("Datatable rows should match the HtmlTable rows", dataTableRows.size(), rowElements.size());
         errorCount = 0;
+        errorText = "";
 
         //Verify table header
         if (isFirstRowHeader) {
@@ -63,7 +65,7 @@ public class HtmlTable {
             List<WebElement> cellElements = rowElem.findElements(By.xpath(".//td"));
             compareTableData(cellElements, dataTableColumns, i);
         }
-        Assert.assertEquals(0, errorCount);
+        Assert.assertEquals("Table error: " + errorText, 0, errorCount);
         log.error("Html Table and Datatable has {} error count", errorCount);
     }
 
@@ -81,6 +83,7 @@ public class HtmlTable {
 
                 if (!expectedCell.equals(actualCell)) {
                     log.error("Value mismatch at Row: {} Column: {}. Expected: '{}', Actual: '{}'", rowIdx, dataTableIndex, expectedCell, actualCell);
+                    errorText = errorText + (errorText.isBlank() ? "" : ", ") + expectedCell;
                     errorCount++;
                 } else {
                     log.info("Values match at Row: {} Column: {}. Expected: '{}', Actual: '{}'", rowIdx, dataTableIndex, expectedCell, actualCell);

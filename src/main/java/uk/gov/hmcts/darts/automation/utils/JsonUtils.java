@@ -17,6 +17,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+//TODO do dateTimes need changing to UTC? Is that done in the XML transform?
 
 public class JsonUtils {
 	private static Logger log = LogManager.getLogger("JsonUtils");
@@ -57,7 +58,8 @@ public class JsonUtils {
     		String caseRetentionFixedPolicy,
     		String caseTotalSentence,
     		String startTime,
-    		String endTime, String is_mid_tier) {
+    		String endTime, 
+    		String is_mid_tier) {
     	JsonString eventJson = new JsonString();
     	eventJson.addJsonLine("message_id", messageId);
     	eventJson.addJsonLine("type", type);
@@ -99,10 +101,10 @@ public class JsonUtils {
     }
 
 	public static String buildAddCourtLogJson(String dateTime,
-										  String courthouse,
-										  String courtroom,
-										  String case_number,
-										  String text) {
+			  String courthouse,
+			  String courtroom,
+			  String case_number,
+			  String text) {
 		JsonString jsonString = new JsonString();
 		jsonString.addJsonLine("log_entry_date_time", dateTime);
 		jsonString.addJsonLine("courthouse", courthouse);
@@ -122,7 +124,8 @@ public class JsonUtils {
     	jsonString.addJsonLine("display_name", displayName.isBlank() ? courthouse : displayName);
 		return jsonString.jsonValue();
     }
-  
+
+//TODO do dateTimes need changing to UTC? Is that done in the XML transform?
     public static String buildAddAudioJson(String courthouse,
     		String courtroom,
     		String caseNumbers,
@@ -130,8 +133,8 @@ public class JsonUtils {
     		String endDateTime,
     		String fileName) {
     	JsonString jsonString = new JsonString()
-		    	.addJsonLine("started_at", startDateTime)
-		    	.addJsonLine("ended_at", endDateTime)
+		    	.addJsonLine("started_at", DateUtils.utcTimestamp(startDateTime))
+		    	.addJsonLine("ended_at", DateUtils.utcTimestamp(endDateTime))
 		    	.addJsonLine("channel", 1)
 		    	.addJsonLine("total_channels", 4)
 		    	.addJsonLine("format", "mp2")
