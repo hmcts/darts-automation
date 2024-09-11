@@ -218,8 +218,12 @@ public class StepDef_jsonApi extends StepDef_base {
 //		String endpoint = "/dailylists/run?listing_courthouse=";
 		String endpoint = "/dailylists/run";
 		ApiResponse apiResponse = jsonApi.postApi(endpoint, "");
+		while (apiResponse.statusCode.equals("409")) {
+			apiResponse = jsonApi.postApi(endpoint, "");
+		}
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
+		Assertions.assertEquals(String.valueOf("202"), testdata.statusCode, "Invalid status code");
 		wait.pause(5);
 	}
 
@@ -228,8 +232,12 @@ public class StepDef_jsonApi extends StepDef_base {
 //		String endpoint = "/dailylists/run?listing_courthouse=";
 		String endpoint = "/dailylists/run";
 		ApiResponse apiResponse = jsonApi.postApiWithQueryParams(endpoint, "listing_courthouse=" + Substitutions.substituteValue(courthouse));
+		while (apiResponse.statusCode.equals("409")) {
+			apiResponse = jsonApi.postApiWithQueryParams(endpoint, "listing_courthouse=" + Substitutions.substituteValue(courthouse));
+		}
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
+		Assertions.assertEquals(String.valueOf("202"), testdata.statusCode, "Invalid status code");
 		wait.pause(5);
 	}
 	
