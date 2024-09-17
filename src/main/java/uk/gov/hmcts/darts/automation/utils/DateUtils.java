@@ -2,6 +2,7 @@ package uk.gov.hmcts.darts.automation.utils;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
 import java.sql.Timestamp;
@@ -573,7 +574,9 @@ public class DateUtils {
 	public static String utcTimestamp(String inputTimestamp) {
 		String currentOffset;
 		
-		ZoneId zoneId = ZoneId.of("Europe/London");
+//		ZoneId zoneId = ZoneId.of("Europe/London");
+//		ZoneId.of(TimeZone.getDefault().getID());
+		ZoneId zoneId = TimeZone.getDefault().toZoneId(); 
 		ZoneRules zoneRules = zoneId.getRules();
 		ZonedDateTime now = ZonedDateTime.now(zoneId);
 		currentOffset = now.getOffset().toString();
@@ -635,6 +638,9 @@ public class DateUtils {
 /*
  *  return current date + retention supplied in Y%M%D% format 
  *          return date is in timestamp format with zero time
+ *          
+ *  Changed 2024-09-17 
+ *  		When run from jenkins, timezone is UTC 
  * 
  */
 	public static String retention(String offset) {
@@ -694,7 +700,8 @@ public class DateUtils {
 		String retentionString = dateFormat.format((Date)cal.getTime());
 		
 		ZonedDateTime utcDateTime = ZonedDateTime.of(LocalDate.parse(retentionString), LocalTime.parse("00:00:00"), ZoneId.of("UTC+00:00"));
-		ZonedDateTime actualDateTime = utcDateTime.withZoneSameInstant(ZoneId.of("Europe/London"));
+//		ZonedDateTime actualDateTime = utcDateTime.withZoneSameInstant(ZoneId.of("Europe/London"));
+		ZonedDateTime actualDateTime = utcDateTime.withZoneSameInstant(TimeZone.getDefault().toZoneId());
 
 		String currentOffset = actualDateTime.getOffset().toString();
 
@@ -956,6 +963,7 @@ public class DateUtils {
 		System.out.println("========================");
 		System.out.println("          9");
 		System.out.println("========================");
+		System.out.println(TimeZone.getDefault().getID());
 		System.out.println(Substitutions.substituteValue("{{retention-3Y4M5D}}"));
 		System.out.println(Substitutions.substituteValue("{{retention-3Y0M0D}}"));
 		System.out.println(Substitutions.substituteValue("{{retention-3Y4M5D}}"));
