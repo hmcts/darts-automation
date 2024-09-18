@@ -403,7 +403,7 @@ public class DateUtils {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format((Date)cal.getTime());		
 	}
-	
+
 	public static String todayDdmmyy() {
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
