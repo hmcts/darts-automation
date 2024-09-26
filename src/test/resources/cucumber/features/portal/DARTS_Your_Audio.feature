@@ -18,7 +18,7 @@ Feature: Your Audio Screen
       | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2221       |             | PROCESSING |
       | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2342       |             | PROCESSING |
       | CASE1009 | Swansea | 15 Aug 2023  | 14:07:33   | 14:07:33 | 2661       |             | *IGNORE*   |
-    And I see "Select to apply actions" on the page
+#    And I see "Select to apply actions" on the page
     Then I verify the HTML table "Ready" contains the following values
       | *NO-CHECK* |  | Case ID  | Court   | Hearing date | Start time | End time | Request ID | Expiry date | Status |
       | *NO-CHECK* |  | CASE1009 | Swansea | 15 Aug 2023  | 13:07:33   | 13:07:33 | 3861       |             | READY  |

@@ -8,9 +8,9 @@ Feature: Admin
 
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100 |          | {{seq}}1052 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}ABC-46 | {{timestamp-10:30:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1053 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}GHI-46 | {{timestamp-10:31:00}} |                             |                     |
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}052 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}ABC-46 | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}053 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}GHI-46 | {{timestamp-10:31:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
@@ -213,10 +213,15 @@ Feature: Admin
   @DMP-2931 @regression
   Scenario: Remove user role, single and multiple, test cancel link
     Given I am logged on to the admin portal as an ADMIN user
+    #Add users roles for test
+    Given I add user "Testuserfour" to group "Harrow Crown Court_REQUESTER"
+    Given I add user "Testuserfive" to group "Harrow Crown Court_REQUESTER"
+    Given I add user "Testusersix" to group "Harrow Crown Court_REQUESTER"
+    
     When I click on the "Courthouses" link
     And I set "Courthouse name" to "Harrow"
     And I press the "Search" button
-    And I click on the "Harrow Crown Court" link
+    And I click on the "{{upper-case-Harrow Crown Court}}" link
     And I click on the "Users" sub-menu link
     And I check the checkbox in the same row as "Testuserfour" "testuserfour@hmcts.net"
     And I press the "Remove user role" button
@@ -245,45 +250,6 @@ Feature: Admin
     And I do not see "Testuserfive" on the page
     And I do not see "Testusersix" on the page
 
-    #Add users back to roles for next run
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testuserfour"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testuserfour"
-    And I see "First user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I see "This user is not a member of any groups." on the page
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
-    And I do not see "This user is not a member of any groups." on the page
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testuserfive"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testuserfive"
-    And I see "Second user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testusersix"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testusersix"
-    And I see "Third user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
 
   @DMP-2323 @DMP-2340 @regression
   Scenario: Deactivate user and last user in group
@@ -413,12 +379,12 @@ Feature: Admin
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "H{{seq}}001"
     And I see "This transcript request is for user to be deactivated" in the same row as "Instructions"
     And I select the "Yes" radio button
     And I press the "Submit" button
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "H{{seq}}001" on the page
 
@@ -537,7 +503,7 @@ Feature: Admin
     Then I see "Case details" on the page
     And I see "Case ID" in the same row as "T20230001"
     And I see "Courthouse" in the same row as "Harrow Crown Court"
-    And I see "Judge(s)" in the same row as "test judge"
+    And I see "Judge(s)" in the same row as "{{upper-case-test judge}}"
     And I see "Defendant(s)" in the same row as "fred"
 
     Then I see "Media details" on the page
@@ -654,7 +620,7 @@ Feature: Admin
       And I see "Case details" on the page
       And I see "Case ID" in the same row as "S1034021"
       And I see "Courthouse" in the same row as "Harrow Crown Court"
-      And I see "Judge(s)" in the same row as "S1034 judge"
+      And I see "Judge(s)" in the same row as "{{upper-case-S1034 judge}}"
       And I see "Defendant(s)" in the same row as "S1034 defendant"
 
       And I click on the "Back" link

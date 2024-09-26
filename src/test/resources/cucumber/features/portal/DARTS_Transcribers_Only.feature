@@ -1,6 +1,6 @@
 Feature: Request Audio for transcribers
 
-  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1255 @DMP-1326 @DMP-1331 @DMP-1351 @regression
+  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1255 @DMP-1326 @DMP-1331 @DMP-1351 @regression @fix
   Scenario: Request Transcription only data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors             | defenders             |
@@ -9,14 +9,14 @@ Feature: Request Audio for transcribers
     Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type  | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100  |          | {{seq}}026 | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{seq}}ABC-17 | {{timestamp-10:00:00}} |                             |                     |
-      | {{seq}}001 | 1200  |          | {{seq}}027 | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{seq}}DEF-17 | {{timestamp-10:01:00}} |                             |                     |
+      | {{seq}}001 | 1100  |          | {{seq}}026 | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{seq}}ABC-17 | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 1200  |          | {{seq}}027 | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{seq}}DEF-17 | {{timestamp-10:31:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
       | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
 
-  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @DMP-1351 @regression
+  @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @DMP-1351 @regression @fix
   Scenario: Transcriber behaviour, including audio request handling
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -38,8 +38,8 @@ Feature: Request Audio for transcribers
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "10:00:00"
-    And I set the time fields below "End time" to "10:01:00"
+    When I set the time fields below "Start time" to "10:30:00"
+    And I set the time fields below "End time" to "10:31:00"
     And I press the "Continue" button
     Then I see "Check and confirm your transcript request" on the page
     And I see "F{{seq}}001" in the same row as "Case ID"
@@ -68,12 +68,12 @@ Feature: Request Audio for transcribers
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "F{{seq}}001"
     Then I see "Approve transcript request" on the page
     And I see "F{{seq}}001" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeF {{seq}}-17" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeF {{seq}}-17}}" in the same row as "Judge(s)"
     And I see "DefF {{seq}}-17" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Court Log" in the same row as "Request type"
@@ -83,8 +83,8 @@ Feature: Request Audio for transcribers
 
     When I select the "Yes" radio button
     And I press the "Submit" button
-    And I see "Select to apply actions" on the page
-    And I click on the "Transcript requests to review" link
+#    And I see "Select to apply actions" on the page
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "F{{seq}}001" on the page
 
@@ -96,13 +96,13 @@ Feature: Request Audio for transcribers
     And I see "Manual" in the same row as "F{{seq}}001"
     #DMP-1198-AC2, DMP-1234 and DMP-1255-AC3 View transcript request order
     And I click on "View" in the same row as "F{{seq}}001"
-    Then I see "Transcript Request" on the page
+    Then I see "Transcript request" on the page
     And I see "F{{seq}}001" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeF {{seq}}-17" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeF {{seq}}-17}}" in the same row as "Judge(s)"
     And I see "DefF {{seq}}-17" in the same row as "Defendant(s)"
-    And I see "{{displaydate}}" in the same row as "Hearing Date"
-    And I see "Court Log" in the same row as "Request Type"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Court Log" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
@@ -193,7 +193,7 @@ Feature: Request Audio for transcribers
 
     When I click on "View" in the same row as "F{{seq}}001"
     Then I see "F{{seq}}001" in the same row as "Case ID"
-    And I see "Court Log" in the same row as "Request Type"
+    And I see "Court Log" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"

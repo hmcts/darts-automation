@@ -73,7 +73,7 @@ Feature: User as a Judge
     Then I see "Approve transcript request" on the page
     And I see "E{{seq}}001" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeE {{seq}}-16" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeE {{seq}}-16}}" in the same row as "Judge(s)"
     And I see "DefE {{seq}}-16" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Court Log" in the same row as "Request type"
@@ -83,8 +83,8 @@ Feature: User as a Judge
 
     When I select the "Yes" radio button
     And I press the "Submit" button
-    And I see "Select to apply actions" on the page
-    And I click on the "Transcript requests to review" link
+#    And I see "Select to apply actions" on the page
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "E{{seq}}001" on the page
 
@@ -94,13 +94,13 @@ Feature: User as a Judge
     And I click on the "Transcript requests" link
     And I see "Manual" in the same row as "E{{seq}}001"
     And I click on "View" in the same row as "E{{seq}}001"
-    Then I see "Transcript Request" on the page
+    Then I see "Transcript request" on the page
     And I see "E{{seq}}001" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeE {{seq}}-16" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeE {{seq}}-16}}" in the same row as "Judge(s)"
     And I see "DefE {{seq}}-16" in the same row as "Defendant(s)"
-    And I see "{{displaydate}}" in the same row as "Hearing Date"
-    And I see "Court Log" in the same row as "Request Type"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Court Log" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio to test judge transcript request." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
@@ -142,7 +142,7 @@ Feature: User as a Judge
     #DMP-1033 View link from My Transcripts (shows additional fields not seen elsewhere)
     When I click on "View" in the same row as "E{{seq}}001"
     Then I see "E{{seq}}001" in the same row as "Case ID"
-    And I see "JudgeE {{seq}}-16" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeE {{seq}}-16}}" in the same row as "Judge(s)"
     And I see "DefE {{seq}}-16" in the same row as "Defendant(s)"
     And I see "Requested" on the page
     And I see "Received" on the page

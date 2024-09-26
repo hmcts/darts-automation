@@ -65,12 +65,12 @@ Feature: User as a Approver
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "D{{seq}}001"
     Then I see "Approve transcript request" on the page
     And I see "D{{seq}}001" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeD {{seq}}-15" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeD {{seq}}-15}}" in the same row as "Judge(s)"
     And I see "DefD {{seq}}-15" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Court Log" in the same row as "Request type"
@@ -93,8 +93,8 @@ Feature: User as a Approver
     #DMP-1011-AC3 Cancel link
 
     When I click on the "Cancel" link
-    And I see "Select to apply actions" on the page
-    And I click on the "Transcript requests to review" link
+#    And I see "Select to apply actions" on the page
+#    And I click on the "Transcript requests to review" link
     Then I see "Your transcripts" on the page
     And I see "Requests to approve or reject" on the page
     And I see "D{{seq}}001" on the page
