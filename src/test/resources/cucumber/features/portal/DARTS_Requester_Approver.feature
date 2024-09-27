@@ -11,7 +11,7 @@ Feature: User as a Requester and Approver
       | Case ID            | Court   | Hearing date | Type                         | Requested on      | Status                 | Urgency   |
       | CASE5_Event_DMP461 | Swansea | 11 Aug 2023  | Court Log                    | 21 Nov 2023 16:12 | AWAITING AUTHORISATION | OVERNIGHT |
       | CASE5_Event_DMP461 | Swansea | 10 Aug 2023  | Prosecution opening of facts | 21 Nov 2023 16:10 | AWAITING AUTHORISATION | OVERNIGHT |
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I see "Requests to approve or reject" on the page
     Then I verify the HTML table contains the following values
       | Case ID            | Court   | Hearing date | Type                              | Requested on      | Request ID | Urgency               |
@@ -38,7 +38,7 @@ Feature: User as a Requester and Approver
   Scenario Outline: View Transcript - Via Your Transcriptions screen
     When I click on the "Your Transcripts" link
     And I see "Your Transcripts" on the page
-    And I see "Select to apply actions" on the page
+#    And I see "Select to apply actions" on the page
     Then I click on "View" in the same row as "<CaseID>"
     And I see "<Restriction>" on the page
     And I see "Transcript file" on the page

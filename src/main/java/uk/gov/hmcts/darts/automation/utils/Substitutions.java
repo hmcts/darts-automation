@@ -61,8 +61,8 @@ public class Substitutions {
 			if (subsString.startsWith("date") || subsString.startsWith("numdate") ||
 					subsString.startsWith("dd-") || subsString.startsWith("mm-") ||
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd") ||
-					subsString.startsWith("timestamp-") || subsString.startsWith("displaydate-") || 
-					subsString.startsWith("displaydate0-") ||
+					subsString.startsWith("timestamp-") || subsString.startsWith("timestampwithoffset-") || 
+					subsString.startsWith("displaydate-") || subsString.startsWith("displaydate0-") ||
 					subsString.startsWith("utc-") || subsString.startsWith("retention-")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {

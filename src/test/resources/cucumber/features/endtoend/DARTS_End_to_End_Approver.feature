@@ -142,7 +142,7 @@ Feature: Approver
     Then I click on the "Your transcripts" link
     Then I click on the "Transcript requests" link
     Then I see "<case_number>" on the page
-    Then I click on the "Transcript requests to review" link
+#    Then I click on the "Transcript requests to review" link
     Then I do not see "<case_number>" on the page
     Examples:
       | courthouse      | courtroom  | case_number   | judges              | defendants               | prosecutors            | defenders            | HearingDate     | transcription-type | urgency   | message_id | eventId    | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  |

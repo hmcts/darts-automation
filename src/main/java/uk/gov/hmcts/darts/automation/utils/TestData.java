@@ -215,7 +215,8 @@ public class TestData {
 	}
 	
 	public static String getNextSeqNo() {
-		return getNext("seq");
+		String seq = "000" + getNext("seq");
+		return seq.substring(seq.length() - 4);
 	}
 	
 	public static String getNextCaseNumber(String courtHouse, String caseType) {

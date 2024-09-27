@@ -380,7 +380,11 @@ public class DateUtils {
 													if (subsString.startsWith("retention-")) {
 														substitutionString = retention(subsString.substring(10));
 													} else {
-														Assertions.fail("Invalid value to substitute =>" + subsString );
+														if (subsString.startsWith("timestampwithoffset-")) {
+															substitutionString = timestampWithOffset(subsString.substring(20));
+														} else {
+															Assertions.fail("Invalid value to substitute =>" + subsString );
+														}
 													}
 												}
 											}
@@ -403,7 +407,7 @@ public class DateUtils {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormat.format((Date)cal.getTime());		
 	}
-
+	
 	public static String todayDdmmyy() {
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -564,7 +568,7 @@ public class DateUtils {
 	}
 	
 /*
- *  event & audio timestamps are stored in the database as UTC 
+ *  audio timestamps are stored in the database as UTC 
  *          "as timezones can change so this helps prevent inconsistent results from tests at different execution times"
  *          hopefully we won't change to BST all year or align with continental Europe in the future ...
  *  although dates are usually input as today, add an offset based on the actual date
@@ -608,6 +612,57 @@ public class DateUtils {
 		String returnString = hasT ? zonedTimestamp.toString() : zonedTimestamp.toString().replace("T", " ");
 		
 		return hasZone ? returnString : returnString.replace("Z", "");
+	}
+	
+/*
+ *  event timestamps are sent in SOAP as current TZ without offset & stored in the database as UTC 
+ *  		Accessing these times from the database in BST it is in UTC +01
+ *          "as timezones can change so this helps prevent inconsistent results from tests at different execution times"
+ *          hopefully we won't change to BST all year or align with continental Europe in the future ...
+ *  although dates are usually input as today, add an offset based on the actual date
+ *  dates on inputs are as they would be displayed on the UI so in summer should have +01 & winter +00 / Z appended
+ * 
+ */
+	public static String timestampWithOffset(String inputTimestamp) {
+		String currentOffset;
+		
+		ZoneId zoneId = ZoneId.of("Europe/London");
+//		ZoneId zoneId = TimeZone.getDefault().toZoneId(); 
+		ZoneRules zoneRules = zoneId.getRules();
+		ZonedDateTime now = ZonedDateTime.now(zoneId);
+		currentOffset = now.getOffset().toString();
+		boolean hasT = false;
+		String localTimestamp = inputTimestamp;
+		String inputOffset = "";
+		if (inputTimestamp.contains("T")) {
+			localTimestamp = inputTimestamp;
+			hasT = true;
+		} else {
+			localTimestamp = inputTimestamp.replace(" ", "T");
+		}
+		boolean hasZone = false;
+//		ZonedDateTime zonedDateTime = ZonedDateTime.parse(localTimestamp);
+		if (localTimestamp.endsWith("Z")) {
+			localTimestamp = localTimestamp.replace("Z", "");
+			hasZone = true;
+		} else {
+			if (localTimestamp.contains("+")) {
+				int pos = localTimestamp.lastIndexOf("+");
+				inputOffset = localTimestamp.substring(pos+1);
+				localTimestamp = localTimestamp.substring(0, pos-1);
+				hasZone = true;
+			}
+		}
+//		localTimestamp = localTimestamp.replace("Z", "").split("\\+")[0];
+		LocalDateTime localdateTime = LocalDateTime.parse(localTimestamp);
+		
+		ZoneOffset localOffset = zoneRules.getOffset(localdateTime);
+		Instant instant = localdateTime.toInstant(localOffset);
+		
+		String returnString = hasT ? instant.toString() : instant.toString().replace("T", " ");
+		
+//		return hasZone ? returnString : returnString.replace("Z", "");
+		return returnString.replace("Z", "") + localOffset.getId().toString().split(":")[0].replace("Z", "+00");
 	}
 	
 	public static String utcTimestampX(String localTimestamp) {
@@ -802,7 +857,7 @@ public class DateUtils {
 	}
 	
 	@Test
-	public void test1() {
+	public void test01() {
 		System.out.println("========================");
 		System.out.println("          1");
 		System.out.println("========================");
@@ -825,7 +880,7 @@ public class DateUtils {
 	}
 	
 	@Test
-	public void test2() {
+	public void test02() {
 		System.out.println("========================");
 		System.out.println("          2");
 		System.out.println("========================");
@@ -839,7 +894,7 @@ public class DateUtils {
 	}
 	
 	@Test
-	public void test3() {
+	public void test03() {
 		System.out.println("========================");
 		System.out.println("          3");
 		System.out.println("========================");
@@ -877,7 +932,7 @@ public class DateUtils {
 	}
 	
 	@Test
-	public void test4() {
+	public void test04() {
 		System.out.println("========================");
 		System.out.println("          4");
 		System.out.println("========================");
@@ -891,7 +946,7 @@ public class DateUtils {
 	}
 	
 	@Test
-	public void test5() {
+	public void test05() {
 		System.out.println("========================");
 		System.out.println("          5");
 		System.out.println("========================");
@@ -900,7 +955,7 @@ public class DateUtils {
 	}
 	
 	@Test
-	public void test6() {
+	public void test06() {
 		System.out.println("========================");
 		System.out.println("          6");
 		System.out.println("========================");
@@ -919,7 +974,7 @@ public class DateUtils {
 	}
 	
 	@Test
-	public void test7() {
+	public void test07() {
 		System.out.println("========================");
 		System.out.println("          7");
 		System.out.println("========================");
@@ -942,7 +997,7 @@ public class DateUtils {
 	}
 	
 	@Test
-	public void test8() {
+	public void test08() {
 		System.out.println("========================");
 		System.out.println("          8");
 		System.out.println("========================");
@@ -956,10 +1011,11 @@ public class DateUtils {
 		System.out.println(utcTimestamp("2024-11-10T10:43:25.720"));
 		System.out.println(substituteDateValue("utc-2024-11-10T10:43:25.720"));
 		System.out.println(utcTimestamp("2024-11-10 10:43:25.720"));
+		System.out.println(substituteDateValue("timestamp-10:43:25.720"));
 	}
 	
 	@Test
-	public void test9() {
+	public void test09() {
 		System.out.println("========================");
 		System.out.println("          9");
 		System.out.println("========================");
@@ -967,6 +1023,32 @@ public class DateUtils {
 		System.out.println(Substitutions.substituteValue("{{retention-3Y4M5D}}"));
 		System.out.println(Substitutions.substituteValue("{{retention-3Y0M0D}}"));
 		System.out.println(Substitutions.substituteValue("{{retention-3Y4M5D}}"));
+	}
+	
+	@Test
+	public void test10() {
+		System.out.println("========================");
+		System.out.println("         10");
+		System.out.println("========================");
+		System.out.println(timestampWithOffset("2024-06-10T10:43:25.720+01:00"));
+		System.out.println(timestampWithOffset("2024-06-10T10:43:25.720+01"));
+		System.out.println(timestampWithOffset("2024-06-10 10:43:25.720"));
+		System.out.println(timestampWithOffset("2024-06-10 10:43:25"));
+		System.out.println(timestampWithOffset("2024-06-10 10:43:25.000"));
+		System.out.println(timestampWithOffset("2024-06-10 10:43:25.720Z"));
+		System.out.println(timestampWithOffset(timestamp()));
+		System.out.println(timestampWithOffset("2024-11-10T10:43:25.720+00"));
+		System.out.println(timestampWithOffset("2024-11-10 10:43:25.720"));
+		System.out.println(timestampWithOffset("2024-11-10 10:43:25.000"));
+		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10T10:43:25.720+01:00"));
+		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10T10:43:25.720+01"));
+		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.720"));
+		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10 10:43:25"));
+		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.000"));
+		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.720Z"));
+		System.out.println(substituteDateValue("timestampwithoffset-" + timestamp()));
+		System.out.println(substituteDateValue("timestampwithoffset-2024-11-10T10:43:25.720+00"));
+		System.out.println(substituteDateValue("timestampwithoffset-2024-11-10 10:43:25.720"));
 	}
 
 }
