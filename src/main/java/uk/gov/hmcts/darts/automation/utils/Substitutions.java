@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.TimeZone;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -63,7 +64,8 @@ public class Substitutions {
 					subsString.startsWith("yyyy-") || subsString.startsWith("yyyymmdd") ||
 					subsString.startsWith("timestamp-") || subsString.startsWith("timestampwithoffset-") || 
 					subsString.startsWith("displaydate-") || subsString.startsWith("displaydate0-") ||
-					subsString.startsWith("utc-") || subsString.startsWith("retention-")) {
+					subsString.startsWith("utc-") || subsString.startsWith("retention-") ||
+					subsString.startsWith("db-timestamp-")) {
 				substitutionString = DateUtils.substituteDateValue(subsString);
 			} else {
 				if (subsString.equalsIgnoreCase("seq")) {
@@ -191,5 +193,20 @@ public class Substitutions {
 		System.out.println("========================");
 		System.out.println(substituteValue("{{upper-case-abcd}}"));
 		System.out.println(substituteValue("{{upper-case-efGH}}"));
+	}
+	
+	@Test
+	public void test5() {
+		System.out.println("========================");
+		System.out.println("          5");
+		System.out.println("========================");
+		System.out.println("Europe/London");
+		TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"));
+		System.out.println(substituteValue("{{db-timestamp-2024-06-10 10:00:01}}"));
+		System.out.println(substituteValue("{{db-timestamp-2024-11-10 10:00:01}}"));
+		System.out.println("UTC");
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		System.out.println(substituteValue("{{db-timestamp-2024-06-10 10:00:01}}"));
+		System.out.println(substituteValue("{{db-timestamp-2024-11-10 10:00:01}}"));
 	}
 }

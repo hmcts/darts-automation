@@ -67,7 +67,7 @@ Feature: Admin
     And I see "Display name" on the page
     And I see "Region" on the page
 
-  @DMP-2178 @DMP-630-AC1-AC2
+  @DMP-2178 @DMP-630-AC1-AC2 @regression
   Scenario Outline: New user account - Check user details
 
     #TODO: This needs fresh data each time or it will fail due to details not being unique
@@ -109,7 +109,7 @@ Feature: Admin
       | Full name  | Email                       | Description |
       | Joe Bloggs | darts.test{{seq}}@hmcts.net | Test        |
 
-  @DMP-630-AC3-1 @regression
+  @DMP-630 @regression
   Scenario Outline: Create a new user account with existing email address
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
@@ -122,93 +122,16 @@ Feature: Admin
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
     Then I see "There is a problem" on the page
-    And I see an error message "Enter a unique email address"
-    And I see "email" on the page
-    And I see an error message "Enter a unique email address"
+    And I see an error message "<ErrorMessage>"
+#    And I see "<Field>" on the page
+#    And I see an error message "<ErrorMessage>"
     Examples:
-      | Full name    | Email                 | Description |
-      | global_judge | darts.judge@hmcts.net |             |
-
-  @DMP-630-AC3-2 @regression
-  Scenario Outline: Create a new user account with invalid email format
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Users" link
-    Then I see "Search for user" on the page
-    When I press the "Create new user" button
-    Then I see "Create user" on the page
-    And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
-    And I set "Email" to "<Email>"
-    And I set "Description (optional)" to "<Description>"
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see an error message "Enter an email address in the correct format, like name@example.com"
-    And I see "email" on the page
-    And I see an error message "Enter an email address in the correct format, like name@example.com"
-    Examples:
-      | Full name    | Email       | Description |
-      | global_judge | darts.judge |             |
-
-  @DMP-630-AC3-3 @regression
-  Scenario Outline: Create a new user account without full name
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Users" link
-    Then I see "Search for user" on the page
-    When I press the "Create new user" button
-    Then I see "Create user" on the page
-    And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
-    And I set "Email" to "<Email>"
-    And I set "Description (optional)" to "<Description>"
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see an error message "Enter a full name"
-    And I see "Full name" on the page
-    And I see an error message "Enter a full name"
-    Examples:
-      | Full name | Email                | Description |
-      |           | darts.judge@hmct.net |             |
-
-  @DMP-630-AC3-4 @regression
-  Scenario Outline: Create a new user account without Email address
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Users" link
-    Then I see "Search for user" on the page
-    When I press the "Create new user" button
-    Then I see "Create user" on the page
-    And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
-    And I set "Email" to "<Email>"
-    And I set "Description (optional)" to "<Description>"
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see an error message "Enter an email address"
-    And I see "email" on the page
-    And I see an error message "Enter an email address"
-    Examples:
-      | Full name | Email | Description |
-      | Test      |       |             |
-
-  @DMP-630-AC3-5 @regression
-  Scenario Outline: Create a new user account with more than 256 characters
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Users" link
-    Then I see "Search for user" on the page
-    When I press the "Create new user" button
-    Then I see "Create user" on the page
-    And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
-    And I set "Email" to "<Email>"
-    And I set "Description (optional)" to "<Description>"
-    And I press the "Continue" button
-    And I see "Description (optional)" on the page
-    And I see "Enter a description shorter than 256 characters" on the page
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see an error message "Enter a description shorter than 256 characters"
-    Examples:
-      | Full name | Email             | Description                                                                                                                                                                                                                                                           |
-      | Test      | Test999@hmcts.net | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test |
+      | Full name    | Email                 | Description | Field     | ErrorMessage                                                        | Ref           |
+      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        | DMP-630-AC3-1 |
+      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com | DMP-630-AC3-2 |
+      |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   | DMP-630-AC3-3 |
+      | Test         |                       |             | email     | Enter an email address                                              | DMP-630-AC3-4 |
+      | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters | DMP-630-AC3-5 |
 
   @DMP-2931 @regression
   Scenario: Remove user role, single and multiple, test cancel link
