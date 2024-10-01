@@ -383,7 +383,11 @@ public class DateUtils {
 														if (subsString.startsWith("timestampwithoffset-")) {
 															substitutionString = timestampWithOffset(subsString.substring(20));
 														} else {
-															Assertions.fail("Invalid value to substitute =>" + subsString );
+															if (subsString.startsWith("db-timestamp-")) {
+																substitutionString = dbTimestamp(subsString.substring(13));
+															} else {
+																Assertions.fail("Invalid value to substitute =>" + subsString );
+															}
 														}
 													}
 												}
@@ -616,6 +620,8 @@ public class DateUtils {
 	
 /*
  *  event timestamps are sent in SOAP as current TZ without offset & stored in the database as UTC 
+ *      If the soap message is sent from a server set to UTC when actually in BST, the database will still be updated as 1 hour earlier in UTC
+ *         When accessing the tables directly, a UTC server would have to use 1 hr earlier +00
  *  		Accessing these times from the database in BST it is in UTC +01
  *          "as timezones can change so this helps prevent inconsistent results from tests at different execution times"
  *          hopefully we won't change to BST all year or align with continental Europe in the future ...
@@ -665,29 +671,55 @@ public class DateUtils {
 		return returnString.replace("Z", "") + localOffset.getId().toString().split(":")[0].replace("Z", "+00");
 	}
 	
-	public static String utcTimestampX(String localTimestamp) {
+	public static String dbTimestamp(String inputTimestamp) {
 		String currentOffset;
 		
-//		try {
-//			currentOffset = "+" + zonedTimestamp().split("+")[1];
-//		} catch (Exception e) {
-//			currentOffset = "+00:00";
-//		}
-		
-		ZoneId zoneId = ZoneId.of("Europe/London");
-		ZoneRules zoneRules = zoneId.getRules();
-		ZonedDateTime now = ZonedDateTime.now(zoneId);
+		ZoneId zoneIdUk = ZoneId.of("Europe/London");
+//		ZoneId zoneId = ZoneId.of(TimeZone.getDefault().getID());
+		ZoneId zoneIdClient = TimeZone.getDefault().toZoneId(); 
+		ZoneRules zoneRulesUk = zoneIdUk.getRules();
+		ZonedDateTime now = ZonedDateTime.now(zoneIdUk);
 		currentOffset = now.getOffset().toString();
-		boolean isDst = zoneRules.isDaylightSavings(now.toInstant());
+		boolean hasT = false;
+		String localTimestamp = inputTimestamp;
+		if (inputTimestamp.contains("T")) {
+			localTimestamp = inputTimestamp;
+			hasT = true;
+		} else {
+			localTimestamp = inputTimestamp.replace(" ", "T");
+		}
+		boolean hasZone = false;
+		if (inputTimestamp.endsWith("Z")) {
+			localTimestamp = localTimestamp.replace("Z", "");
+			hasZone = true;
+		} else {
+			if (localTimestamp.contains("+")) {
+				int pos = localTimestamp.lastIndexOf("+");
+				localTimestamp = localTimestamp.substring(0, pos-1);
+				hasZone = true;
+			}
+		}
+//		localTimestamp = localTimestamp.replace("Z", "").split("\\+")[0];
+		LocalDateTime localdateTime = LocalDateTime.parse(localTimestamp);
 		
-		localTimestamp = localTimestamp.replace(" ", "T");
-		if (!(localTimestamp.endsWith("Z") || localTimestamp.contains("+"))) {
-			localTimestamp = localTimestamp + currentOffset;
+		ZoneOffset offsetUk = zoneRulesUk.getOffset(localdateTime);
+		Instant instant = localdateTime.toInstant(offsetUk);
+		ZonedDateTime zdt = ZonedDateTime.ofInstant(instant, zoneIdClient);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy-MM-dd hh:mm:ss.SSSx", Locale.ENGLISH);
+		String xx = zdt.format(formatter);
+		String timeString = zdt.toString().split("\\[")[0];
+		String returnString = hasT ? timeString : timeString.replace("T", " ");
+
+		if (timeString.endsWith("Z")) {
+			returnString = returnString.replace("Z", "+00");
+		} else {
+			if (returnString.contains("+")) {
+				int pos = returnString.lastIndexOf(":");
+				returnString = returnString.substring(0, pos);
+			}
 		}
 		
-		Instant zonedTimestamp = Instant.parse(localTimestamp);
-		
-		return zonedTimestamp.toString();
+		return returnString;
 	}
 	
 /*
@@ -1030,25 +1062,46 @@ public class DateUtils {
 		System.out.println("========================");
 		System.out.println("         10");
 		System.out.println("========================");
+		String timestamp = timestamp();
 		System.out.println(timestampWithOffset("2024-06-10T10:43:25.720+01:00"));
 		System.out.println(timestampWithOffset("2024-06-10T10:43:25.720+01"));
 		System.out.println(timestampWithOffset("2024-06-10 10:43:25.720"));
 		System.out.println(timestampWithOffset("2024-06-10 10:43:25"));
 		System.out.println(timestampWithOffset("2024-06-10 10:43:25.000"));
 		System.out.println(timestampWithOffset("2024-06-10 10:43:25.720Z"));
-		System.out.println(timestampWithOffset(timestamp()));
+		System.out.println(timestampWithOffset(timestamp));
 		System.out.println(timestampWithOffset("2024-11-10T10:43:25.720+00"));
 		System.out.println(timestampWithOffset("2024-11-10 10:43:25.720"));
 		System.out.println(timestampWithOffset("2024-11-10 10:43:25.000"));
-		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10T10:43:25.720+01:00"));
-		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10T10:43:25.720+01"));
-		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.720"));
-		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10 10:43:25"));
-		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.000"));
-		System.out.println(substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.720Z"));
-		System.out.println(substituteDateValue("timestampwithoffset-" + timestamp()));
-		System.out.println(substituteDateValue("timestampwithoffset-2024-11-10T10:43:25.720+00"));
-		System.out.println(substituteDateValue("timestampwithoffset-2024-11-10 10:43:25.720"));
+		System.out.println(timestampWithOffset("2024-11-10 10:43:25"));
+		Assertions.assertEquals(timestampWithOffset("2024-06-10T10:43:25.720+01:00"), substituteDateValue("timestampwithoffset-2024-06-10T10:43:25.720+01:00"));
+		Assertions.assertEquals(timestampWithOffset("2024-06-10T10:43:25.720+01"), substituteDateValue("timestampwithoffset-2024-06-10T10:43:25.720+01"));
+		Assertions.assertEquals(timestampWithOffset("2024-06-10 10:43:25.720"), substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.720"));
+		Assertions.assertEquals(timestampWithOffset("2024-06-10 10:43:25"), substituteDateValue("timestampwithoffset-2024-06-10 10:43:25"));
+		Assertions.assertEquals(timestampWithOffset("2024-06-10 10:43:25.000"), substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.000"));
+		Assertions.assertEquals(timestampWithOffset("2024-06-10 10:43:25.720Z"), substituteDateValue("timestampwithoffset-2024-06-10 10:43:25.720Z"));
+		Assertions.assertEquals(timestampWithOffset(timestamp), substituteDateValue("timestampwithoffset-" + timestamp));
+		Assertions.assertEquals(timestampWithOffset("2024-11-10T10:43:25.720+00"), substituteDateValue("timestampwithoffset-2024-11-10T10:43:25.720+00"));
+		Assertions.assertEquals(timestampWithOffset("2024-11-10 10:43:25.720"), substituteDateValue("timestampwithoffset-2024-11-10 10:43:25.720"));
+	}
+	
+	@Test
+	public void test11() {
+		System.out.println("========================");
+		System.out.println("         11");
+		System.out.println("========================");
+		System.out.println("Europe/London");
+		TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"));
+		System.out.println(dbTimestamp("2024-06-10 10:00:01"));
+		System.out.println(dbTimestamp("2024-11-10 10:00:01"));
+		Assertions.assertEquals(dbTimestamp("2024-06-10 10:00:01"), substituteDateValue("db-timestamp-2024-06-10 10:00:01"));
+		Assertions.assertEquals(dbTimestamp("2024-11-10 10:00:01"), substituteDateValue("db-timestamp-2024-11-10 10:00:01"));
+		System.out.println("UTC");
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		System.out.println(dbTimestamp("2024-06-10 10:00:01"));
+		System.out.println(dbTimestamp("2024-11-10 10:00:01"));
+		Assertions.assertEquals(dbTimestamp("2024-06-10 10:00:01"), substituteDateValue("db-timestamp-2024-06-10 10:00:01"));
+		Assertions.assertEquals(dbTimestamp("2024-11-10 10:00:01"), substituteDateValue("db-timestamp-2024-11-10 10:00:01"));
 	}
 
 }
