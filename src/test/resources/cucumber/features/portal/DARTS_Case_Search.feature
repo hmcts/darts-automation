@@ -211,7 +211,7 @@ Scenario: Simple and Advanced Case Search
     And I click on the "Advanced search" link
     And I select the "Date range" radio button
     And I set "Date from" to "{{date+7/}}"
-    And I set "Date to" to "{{date-7/}}"
+    And I set "Date to" to "{{date+7/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
@@ -222,6 +222,15 @@ Scenario: Simple and Advanced Case Search
     And I set "Date to" to "{{date+10/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
+
+    When I click on the "Clear search" link
+    And I click on the "Advanced search" link
+    And I select the "Date range" radio button
+    And I set "Date from" to "{{date-7/}}"
+    And I set "Date to" to "{{date-10/}}"
+    And I press the "Search" button
+    Then I see an error message "The start date must be before the end date"
+    Then I see an error message "The end date must be after the start date"
 
     When I click on the "Clear search" link
     And I click on the "Advanced search" link

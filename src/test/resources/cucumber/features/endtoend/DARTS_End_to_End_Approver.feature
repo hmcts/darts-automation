@@ -1,4 +1,4 @@
-Feature: Approver
+Feature: End-to-end Approver
 
   @end2end @end2end3 @DMP-2201
   Scenario Outline: Approver - Approves the request
@@ -52,8 +52,8 @@ Feature: Approver
     Then I Sign out
 
     Examples:
-      | courthouse         | courtroom | case_number   | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId     | caseRetention | totalSentence | dateTime      | audioFile   |
-      | Harrow Crown Court | {{seq}}   | R{{seq}}051-B | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}1001 |               |               | {{timestamp}} | sample1.mp2 |
+      | courthouse         | courtroom | case_number   | judges         | defendants          | prosecutors          | defenders          | HearingDate                 | transcription-type | urgency   | message_id | eventId    | caseRetention | totalSentence | dateTime      | audioFile   |
+      | Harrow Crown Court | {{seq}}   | R{{seq}}051-B | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate(17-01-2024)}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}001 |               |               | {{timestamp}} | sample1.mp2 |
 
   @end2end @end2end3 @DMP-2201
   Scenario Outline: Approver - Rejects the request
@@ -142,7 +142,7 @@ Feature: Approver
     Then I click on the "Your transcripts" link
     Then I click on the "Transcript requests" link
     Then I see "<case_number>" on the page
-#    Then I click on the "Transcript requests to review" link
+    Then I click on the "Transcript requests to review" link
     Then I do not see "<case_number>" on the page
     Examples:
       | courthouse      | courtroom  | case_number   | judges              | defendants               | prosecutors            | defenders            | HearingDate     | transcription-type | urgency   | message_id | eventId    | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  |
