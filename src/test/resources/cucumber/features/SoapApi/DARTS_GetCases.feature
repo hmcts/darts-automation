@@ -69,9 +69,9 @@ Scenario Outline: SOAP getCases verifying result
 	| <courthouse> | <caseNumber>1 | <defendantName>1 | <judgeName> | <prosecutorName>1 | <defenderName>1 |
 	| <courthouse> | <caseNumber>2 | <defendantName>2 | <judgeName> | <prosecutorName>2 | <defenderName>2 |
     And I create events
-  | courthouse   | courtroom   | case_numbers  | date_time              | message_id | event_id    | type   | sub_type | event_text    | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
-  | <courthouse> | <courtroom> | <caseNumber>1 | {{timestamp-12:04:00}} | {{seq}}368 | {{seq}}1368 | 10100  |          | text1 {{seq}} |               |               | Case called on  |       |
-  | <courthouse> | <courtroom> | <caseNumber>2 | {{timestamp-12:05:00}} | {{seq}}369 | {{seq}}1369 | 10100  |          | text2 {{seq}} |               |               | Case called on  |       |
+  | courthouse   | courtroom   | case_numbers  | date_time              | message_id | event_id   | type   | sub_type | event_text    | case_retention_fixed_policy | case_total_sentence | text                                                                                                                                   | notes |
+  | <courthouse> | <courtroom> | <caseNumber>1 | {{timestamp-12:04:00}} | {{seq}}368 | {{seq}}368 | 10100  |          | text1 {{seq}} |               |               | Case called on  |       |
+  | <courthouse> | <courtroom> | <caseNumber>2 | {{timestamp-12:05:00}} | {{seq}}369 | {{seq}}369 | 10100  |          | text2 {{seq}} |               |               | Case called on  |       |
 	When I call SOAP getCases
 	| courthouse   | courtroom   | date   |
 	| <courthouse> | <courtroom> | {{yyyymmdd}} |
@@ -85,7 +85,7 @@ Scenario Outline: SOAP getCases verifying result
               <defendant>test defendent1</defendant>
             </defendants>
             <judges>
-              <judge>TEST JUDGE</judge>
+              <judge>test judge</judge>
             </judges>
             <prosecutors>
               <prosecutor>test prosecutor1</prosecutor>
@@ -101,7 +101,7 @@ Scenario Outline: SOAP getCases verifying result
               <defendant>test defendent2</defendant>
             </defendants>
             <judges>
-              <judge>TEST JUDGE</judge>
+              <judge>test judge</judge>
             </judges>
             <prosecutors>
               <prosecutor>test prosecutor2</prosecutor>

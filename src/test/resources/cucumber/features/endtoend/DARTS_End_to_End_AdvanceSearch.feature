@@ -1,10 +1,10 @@
-Feature: Advance Search
+Feature: End-to-end Advance Search
 
   @end2end @end2end6 @DMP-1927 @demo
   Scenario Outline: Advance Search for a case details created using Case and Courtlogs
     Given I create a case
-      | courthouse   | courtroom   | case_number   | defendants   | judges                  | prosecutors   | defenders   |
-      | <courthouse> | <courtroom> | <case_number> | <defendants> | {{upper-case-<judges>}} | <prosecutors> | <defenders> |
+      | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
+      | <courthouse> | <courtroom> | <case_number> | <defendants> | <judges> | <prosecutors> | <defenders> |
     Given I add courtlogs
       | dateTime   | courthouse   | courtroom   | case_numbers  | text       |
       | <dateTime> | <courthouse> | <courtroom> | <case_number> | <keywords> |
