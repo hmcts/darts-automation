@@ -1,4 +1,4 @@
-Feature: Judge
+Feature: End-to-end Judge
 
   @end2end @end2end5 @DMP-2200
   @reads-and-writes-system-properties
@@ -36,8 +36,8 @@ Feature: Judge
     #Judge to view documents uploaded by themselves
     Then I click on the "All annotations" link
     Then I verify the HTML table "All annotations" contains the following values
-      | Hearing date  | File name             | Format        | Date created  | Comments |
-      | <HearingDate> | <annotation_document> | Word Document | <HearingDate> |          |
+      | Hearing date     | File name             | Format        | Date created     | Comments |
+      | {{displaydate0}} | <annotation_document> | Word Document | {{displaydate0}} |          |
 
     Then I click on the "View or change" link
     Then I see "This case is still open or was recently closed." on the page
@@ -84,10 +84,10 @@ Feature: Judge
     And I see "<case_number>" in the same row as "Case ID"
     And I see "<courthouse>" in the same row as "Courthouse"
     And I see "Change case retention date" on the page
-    And I see "{{displaydate(date+99years)}} (Permanent)" in the same row as "Retain case until"
+    And I see "{{displaydate-{{date+99years}}}} (Permanent)" in the same row as "Retain case until"
     And I press the "Confirm retention date change" button
     Then I see "Case retention date changed." on the page
-    And I see "{{displaydate(date+99years)}}" in the same row as "Retain case until"
+    And I see "{{displaydate-{{date+99years}}}}" in the same row as "Retain case until"
 
     And I click on the "Change retention date" link
     And I click on the "Retain until a specific date" link
@@ -95,12 +95,12 @@ Feature: Judge
     And I set "Why are you making this change?" to "Change Retention for {{seq}}"
     And I click on the "Continue" link
     Then I see "Check retention date change" on the page
-    And I see "{{displaydate(date+7years)}}" on the page
+    And I see "{{displaydate-{{date+7years}}}}" on the page
     And I click on the "Confirm retention date change" link
     And I see "Case retention date changed." on the page
     And I see "Case retention date" on the page
     Then I click on the breadcrumb link "<case_number>"
-    And I see "{{displaydate(date+7years)}}" on the page
+    And I see "{{displaydate-{{date+7years}}}}" on the page
 
 
     Examples:
