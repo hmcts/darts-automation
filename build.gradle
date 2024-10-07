@@ -113,7 +113,7 @@ dependencies {
 	
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
 	
-	implementation(platform("io.cucumber:cucumber-bom:7.19.0"))
+	implementation(platform("io.cucumber:cucumber-bom:7.20.0"))
 	implementation 'io.cucumber:cucumber-picocontainer'
 	implementation 'io.cucumber:cucumber-java'
 	implementation 'io.cucumber:cucumber-junit'
