@@ -48,10 +48,28 @@ public class WaitUtils {
 			log.error("Timed out waiting for Element to be clickable => "+name);
 		}
 	}
+
+	public void waitForClickableElement(By name, int wait_time) {
+		log.info("Waiting for element to be clickable =>"+wait_time+"<= seconds");
+		try {
+			new WebDriverWait(driver, Duration.ofSeconds(wait_time))
+				.pollingEvery(Duration.ofMillis(200))
+				.ignoring(StaleElementReferenceException.class)
+				.until(ExpectedConditions.elementToBeClickable(name));
+			log.info("Element now clickable => "+name);
+		} catch (Exception e) {
+			log.error("Timed out waiting for Element to be clickable => "+name);
+		}
+	}
+
 	public void waitForClickableElement(WebElement name) {
 		waitForClickableElement(name, TIME_IN_SECONDS);
 	}
-	
+
+	public void waitForClickableElement(By name) {
+		waitForClickableElement(name, TIME_IN_SECONDS);
+	}
+
 	public void waitForTextOnPage(String text) {
 		waitForTextOnPage(text, 10);
 	}

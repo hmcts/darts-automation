@@ -1,7 +1,7 @@
 Feature: Judge
 
   @end2end @end2end5 @DMP-2200
-  @reads-and-writes-system-properties
+    @reads-and-writes-system-properties @HearingDate0Prefix
   Scenario Outline: Judge
     #Given I create a case
      # | courthouse   | |case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -12,7 +12,7 @@ Feature: Judge
       | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime   | endDate   | timeStamp   | defendant    | urn           |
       | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |
     When I process the daily list for courthouse "<courthouse>"
-     And I wait for case "<case_number>" courthouse "<courthouse>"
+    And I wait for case "<case_number>" courthouse "<courthouse>"
     Given I create an event
       | message_id | type | sub_type | event_id   | courthouse   | courtroom   | case_numbers  | event_text                    | date_time              | case_retention_fixed_policy | case_total_sentence | start_time    | end_time      | is_mid_tier |
       | {{seq}}001 | 1100 |          | {{seq}}167 | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | {{timestamp-10:00:00}} | <caseRetention>             | <totalSentence>     | {{timestamp}} | {{timestamp}} | true        |

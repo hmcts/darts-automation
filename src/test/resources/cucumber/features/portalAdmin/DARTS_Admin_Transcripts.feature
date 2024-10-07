@@ -36,7 +36,7 @@ Feature: Admin portal transcripts
       | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2   |
       | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2   |
 
-  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression
+  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression @MissingData
   Scenario: Change manual transcription status
 
     Given I am logged on to DARTS as an REQUESTER user

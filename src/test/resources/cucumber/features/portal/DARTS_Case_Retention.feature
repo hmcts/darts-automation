@@ -20,7 +20,7 @@ Feature: Case Retention
       | {{seq}}001 | 1100 |          | {{seq}}172 | Harrow Crown Court | {{seq}}-33 | R{{seq}}KL1  | {{seq}}ABC-33 | {{timestamp-10:05:00}} |
       | {{seq}}001 | 1100 |          | {{seq}}173 | Harrow Crown Court | {{seq}}-34 | R{{seq}}MN1  | {{seq}}ABC-34 | {{timestamp-10:06:00}} |
 
-  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
+  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression @MissingData
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history
     #Case is open
     Given I am logged on to DARTS as an JUDGE user
@@ -187,7 +187,7 @@ Feature: Case Retention
       | R{{seq}}IJ1 | 3             | 3Y0M0D        | Custodial             | {{displayDate-{{date+7 years}}}}  | {{seq}}-32 | 32  |
       | R{{seq}}KL1 | 3             | 8Y0M0D        | Custodial             | {{displayDate-{{date+8 years}}}}  | {{seq}}-33 | 33  |
 
-  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
+  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression @MissingData
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history LIFE SENTENCE
     #Case is open
     Given I am logged on to DARTS as an JUDGE user

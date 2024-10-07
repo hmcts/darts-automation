@@ -367,7 +367,7 @@ Feature: Admin
       | Media ID | Case ID  | Courthouse         | Hearing date | Owner       | Requested by | Date requested | Last accessed | File type | Size  | Filename                   |
       | 518      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | MP3       | 0.2MB | B9160006_15_Feb_2024_1.mp3 |
       | 519      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | ZIP       | 0.9MB | B9160006_15_Feb_2024_1.zip |
-      | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requester   | Requester    | 15 Feb 2024    |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
+      | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requestor   | Requestor    | 15 Feb 2024    |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
     And I see "Showing 1-3 of 3 results" on the page
 
     #DMP-2678-AC2 Single search result takes user directly to file details screen
@@ -376,7 +376,7 @@ Feature: Admin
     And I press the "Search" button
     Then I do not see "Showing" on the page
     And I see "Request details" on the page
-    And I see "Requester" in the same row as "Requested by"
+    And I see "Requestor" in the same row as "Requested by"
     And I see "17165" in the same row as "Request ID"
 
   @DMP-2695 @DMP-2679 @DMP-3475
@@ -416,7 +416,7 @@ Feature: Admin
     And I see "101" on the page
     And I see "Request details" on the page
     And I see "Owner" in the same row as "Mehta Purvi (mehta.purvi@hmcts.net)"
-    And I see "Requested by" in the same row as "Requester"
+    And I see "Requested by" in the same row as "Requestor"
     And I see "Request ID" in the same row as "8545"
     And I see "Date requested" in the same row as "20 December 2023"
     And I see "Hearing date" in the same row as "07 December 2023"

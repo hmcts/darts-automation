@@ -436,7 +436,7 @@ Scenario: Update preview button on hearing screen
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
   Then I see "This audio is not currently available in DARTS, please try again later." on the page
 
-  @DMP-2562 @regression
+  @DMP-2562 @regression @MissingData
   Scenario: Request download audio for Super Admin
     When I am logged on to DARTS as an Admin user
     And I click on the "Search" link

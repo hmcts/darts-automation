@@ -117,13 +117,8 @@ Examples:
 	| APPEALCOURT       | Search for a case | Y         | N               | N                  | N        |
 	| TRANSCRIBER       | Search for a case | Y         | N               | Y                  | Y        |
 	| LANGUAGESHOP      | Search for a case | Y         | N               | N                  | N        |
-	| ADMIN             | Search for a case | Y         | N               | N                  | N        |
+    | ADMIN             | Search for a case | Y         | Y               | N                  | N        |
 	| SUPERUSER         | Search for a case | Y         | Y               | N                  | N        |
-
-@review
-Examples:
-	| role 	  	        | search            | yourAudio | yourTranscripts | transcriptRequests | yourWork |
-	| ADMIN             | Search for a case | Y         | Y               | N                  | N        |
 
 
 @DMP-407 @smoketest @demo
@@ -144,7 +139,7 @@ Scenario Outline: Requester-Approver links
 Examples:
 	| role 	  	        | search            | yourAudio | yourTranscripts | transcriptRequests | yourWork |
 	| REQUESTERAPPROVER | Search for a case | Y         | Y               | N                  | N        |
-	
+
 
 
 @Admin @smoketest @demo

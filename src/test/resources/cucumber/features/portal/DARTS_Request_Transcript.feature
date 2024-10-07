@@ -39,7 +39,7 @@ Feature: Request Transcript
       | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2 |
       | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2 |
 
-  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-2740 @regression
+  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-2740 @regression @MissingData
   Scenario: Request Transcription, Specified Times with Event Checkboxes
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -427,7 +427,7 @@ Feature: Request Transcript
     Then I see "file-sample_1MB.doc" on the page
     And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
 
-  @DMP-696 @DMP-1053 @DMP-1203 @DMP-1243 @DMP-1326 @DMP-2123 @regression @fix
+  @DMP-696 @DMP-1053 @DMP-1203 @DMP-1243 @DMP-1326 @DMP-2123 @regression @fix @MissingData
   Scenario: Request Transcription, Court Log, Assign to me and get audio, complete and single delete
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -907,7 +907,7 @@ Feature: Request Transcript
     And I see "Court Log" in the same row as "Rejected"
     And I see "Specified Times" in the same row as "Awaiting Authorisation"
 
-  @DMP-872 @DMP-862 @regression
+  @DMP-872 @DMP-862 @regression @MissingData
   Scenario: No Audio Available for Transcript Request
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -938,7 +938,7 @@ Feature: Request Transcript
       | Case ID     | Courthouse         | Courtroom | Judge(s)         | Defendant(s)   |
       | C{{seq}}001 | Harrow Crown Court | {{seq}}-8 | JudgeC {{seq}}-8 | DefC {{seq}}-8 |
 
-  @DMP-892 @DMP-917 @DMP-1012 @regression
+  @DMP-892 @DMP-917 @DMP-1012 @regression @MissingData
   Scenario: Transcript - Request a new transcript cancel links
 
     #TODO: Are cancel links working as intended? AC seems to indicate cancel takes you back to Hearing Details rather than back a screen. Check this.

@@ -141,7 +141,7 @@ public class Portal {
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Sign in");
         NAV.waitForBrowserReadyState();
-        if (webDriver.findElements(By.xpath("//input[@type='" + "email" + "']")).size() == 0) {
+        if (webDriver.findElements(By.xpath("//input[@type='" + "email" + "']")).isEmpty()) {
             List<WebElement> another = webDriver.findElements(By.xpath("//*[text() = 'Use another account']"));
             if (another.size() == 1) {
                 another.get(0).click();
