@@ -93,15 +93,17 @@ public class Database extends Postgres {
 				+ "left join darts.media med\r\n"
 				+ "using (med_id)\r\n";
 		
-		final String hearingMediaRequestJoin = "darts.courthouse cth\r\n"
-				+ "inner join darts.courtroom ctr\r\n"
-				+ "using(cth_id)\r\n"
-				+ "inner join darts.hearing hea\r\n"
-				+ "using (ctr_id)\r\n"
-				+ "inner join darts.court_case cas\r\n"
-				+ "using (cth_id)\r\n"
-				+ "left join darts.media_request\r\n"
-				+ "using (hea_id)\r\n";
+		final String hearingMediaRequestJoin = "darts.court_case cas\n"
+				+ "inner join darts.hearing hea\n"
+				+ "using (cas_id)\n"
+				+ "inner join darts.courtroom ctr\n"
+				+ "using (ctr_id)\n"
+				+ "inner join darts.courthouse cth\n"
+				+ "on ctr.cth_id = cth.cth_id\n"
+				+ "left join darts.media_request mer\n"
+				+ "using (hea_id)\n"
+				+ "left join darts.user_account usr\n"
+				+ "on usr.usr_id = mer.requestor\r\n";
 		
 		final String caseManagementRetentionJoin = "darts.case_management_retention cmr\r\n"
 				+ "join darts.retention_policy_type rpt\r\n"
@@ -232,7 +234,7 @@ public class Database extends Postgres {
 	}
 
 	@Test
-	public void test() throws Exception {
+	public void testDB1() throws Exception {
 		Database db = new Database();
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "case_number", "12"), "'12'");
 		Assertions.assertEquals(db.delimitedValue("darts.court_case", "case_number", null), "null");
@@ -284,6 +286,15 @@ public class Database extends Postgres {
 //		System.out.println(db.returnSingleValue("darts.transformed_media",
 //				"mer_id", "23645",
 //				"trm_id"));
+	}
+
+	@Test
+	public void testDB2() throws Exception {
+		System.out.println("*******  2 *******");
+		Database db = new Database();
+		System.out.println(db.returnSingleValue("EVENT",
+				"eve.eve_id", "616358",
+				"event_ts"));
 	}
 
 

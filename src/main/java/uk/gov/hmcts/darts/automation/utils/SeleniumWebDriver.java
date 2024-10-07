@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
@@ -126,7 +127,7 @@ public class SeleniumWebDriver {
 
 			log.info("Download File Path being set to =>"+downloadFilepath);
 
-			HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
+			Map<String, Object> chromePrefs = new HashMap<String, Object>();
 			chromePrefs.put("profile.default_content_settings.popups", 0);
 			chromePrefs.put("download.default_directory", downloadFilepath);
 
