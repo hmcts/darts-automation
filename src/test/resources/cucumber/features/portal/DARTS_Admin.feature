@@ -422,6 +422,7 @@ Feature: Admin portal
       | GUILDFORD                    | Guildford                    | London |
       | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
     When I click on the "Clear search" link
+#    Then I set "Region" to "London"
     And I set "Courthouse name" to "guil"
     Then I press the "Search" button
     And I see "4 results" on the page

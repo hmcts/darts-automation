@@ -84,7 +84,7 @@ public class HtmlTable {
                 if (!expectedCell.equals(actualCell)) {
                     log.error("Value mismatch at Row: {} Column: {}. Expected: '{}', Actual: '{}'", rowIdx, dataTableIndex, expectedCell, actualCell);
                     errorText = errorText + (errorText.isBlank() ? "" : ", ")
-                        + ( "Expected: '" + expectedCell + "' to equal '" + actualCell + "'");
+                        + ( "Expected: >" + expectedCell + "<, actual: >" + actualCell + "<");
                     errorCount++;
                 } else {
                     log.info("Values match at Row: {} Column: {}. Expected: '{}', Actual: '{}'", rowIdx, dataTableIndex, expectedCell, actualCell);

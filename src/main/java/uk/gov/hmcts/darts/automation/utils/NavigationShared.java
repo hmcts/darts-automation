@@ -958,60 +958,58 @@ public class NavigationShared {
 		}
 		waitForPageLoad();
 
-        log.info("Clicked on link text =>" + label);
-        return link;
-    }
-
-    public void clickOnNavigationLink(String linkText) throws Exception {
-        log.info("About to clicked on link in Navigation with link text =>" + linkText);
-        WebElement link;
-        try {
+		log.info("Clicked on link text =>" + label);
+		return link;
+	}
+	
+	public void clickOnNavigationLink(String linkText) throws Exception {
+		log.info("About to clicked on link in Navigation with link text =>" + linkText);
+		WebElement link;
+		try {
             By by = By.xpath("//nav//a[normalize-space(text())=\"" + linkText + "\"]");
-            wait.waitForClickableElement(by);
-            link = driver.findElement(by);
+            link = wait.waitForClickableElement(by);
             clickLink(link, linkText);
-        } catch (Exception e) {
-            log.error("Navigation Link not found {}", linkText);
-            throw (e);
-        }
-    }
-
-    public void click_link_by_text(String arg1) throws Exception {
-        log.info("About to clicked on link with link text =>" + arg1);
-        arg1 = Substitutions.substituteValue(arg1);
-        waitForLoadingIcon(15);
-        WebElement linkText;
-        try {
-            log.info("try 1 - linkText");
-            linkText = return_oneVisibleFromList(driver.findElements(By.linkText(arg1)));
-            log.info("link found on try 1");
-            clickLink(linkText, arg1);
-        } catch (Exception e1) {
-            try {
-                log.info("element not found on try 1 so try 2 - xpath =text or xpath = lower case text");
-                linkText =
-                    return_oneVisibleFromList(driver.findElements(By.xpath("//*[text()[(normalize-space(.)=\"" + arg1
-                        + "\")]]" + "|" + "//*[text()[(normalize-space(.)=\"" + arg1.toLowerCase() + "\")]]")));
-                log.info("element found on try 2");
-                clickLink(linkText, arg1);
-            } catch (Exception e2) {
-                try {
-                    log.info("element not found on try 2 so try 3 - partialLinkText");
-                    wait.activateImplicitWait();
-                    linkText = return_oneVisibleFromList(driver.findElements(By.partialLinkText(arg1)));
-                    log.info("element found on try 3");
-                    clickLink(linkText, arg1);
-                } catch (Exception e3) {
-                    log.info("element not found on try 3 so try4 - xpath contains text");
-                    linkText = return_oneVisibleFromList(
-                        driver.findElements(By.xpath("//*[text()[contains(., '" + arg1 + "')]]")));
-                    clickLink(linkText, arg1);
-                    log.info("element found on try 4");
-                }
-            }
-        }
-        waitForPageLoad();
-    }
+		} catch (Exception e) {
+			log.error("Navigation Link not found {}", linkText);
+			throw(e);
+		}
+	}
+	
+	public void click_link_by_text(String arg1) throws Exception {
+		log.info("About to clicked on link with link text =>" + arg1);
+		arg1 = Substitutions.substituteValue(arg1);
+		waitForLoadingIcon(15);
+		WebElement linkText;
+		try {
+			log.info("try 1 - linkText");
+			linkText = return_oneVisibleFromList(driver.findElements(By.linkText(arg1)));
+			log.info("link found on try 1");
+			clickLink(linkText, arg1);
+		} catch (Exception e1) {
+			try {
+				log.info("element not found on try 1 so try 2 - xpath =text or xpath = lower case text");
+				linkText = return_oneVisibleFromList(driver.findElements(By.xpath("//*[text()[(normalize-space(.)=\"" + arg1
+						+ "\")]]" + "|" + "//*[text()[(normalize-space(.)=\"" + arg1.toLowerCase() + "\")]]")));
+				log.info("element found on try 2");
+				clickLink(linkText, arg1);
+			} catch (Exception e2) {
+				try {
+				log.info("element not found on try 2 so try 3 - partialLinkText");
+				wait.activateImplicitWait();
+				linkText = return_oneVisibleFromList(driver.findElements(By.partialLinkText(arg1)));
+				log.info("element found on try 3");
+				clickLink(linkText, arg1);
+				} catch (Exception e3) {
+					log.info("element not found on try 3 so try4 - xpath contains text");
+					linkText = return_oneVisibleFromList(
+							driver.findElements(By.xpath("//*[text()[contains(., '" + arg1 + "')]]")));
+					clickLink(linkText, arg1);
+					log.info("element found on try 4");
+				}
+			}
+		}
+		waitForPageLoad();
+	}
 
 
 	public void select_radioButtonWithLabel(String caption, String label) {
@@ -1809,79 +1807,69 @@ public class NavigationShared {
 		return count;
 	}
 
-    public void seeText_inSameRow_asText(String searchText, String nextToText) throws Exception {
-        log.info("About to look for text =>" + searchText + "<= in the same row as =>" + nextToText);
-        String substitutedValue = Substitutions.substituteValue(searchText);
-        nextToText = Substitutions.substituteValue(nextToText);
-        driver.findElement(
-            By.xpath(
-                "//table//tr[.//*[contains(normalize-space(text()),\"" + substitutedValue
-                    + "\")]]//*[text()[contains(normalize-space(.), \"" + nextToText + "\")]]"
-                    + " | "
-                    + "//table//tr[.//*[contains(text(),\"" + nextToText + "\")]]//*[text()[contains(., \""
-                    + substitutedValue + "\")]]"
-                    + " | "
-                    + "//dl//div//*[contains(text(),\"" + nextToText
-                    + "\")]//ancestor::div[@class='govuk-summary-list__row']//*[text()[contains(., \""
-                    + substitutedValue + "\")]]"
-                    + " | "
-                    + String.format(
-                    "//*[.//*[contains(normalize-space(text()),\"%s\")]]//*[contains(normalize-space(text()),\"%s\")]",
-                    nextToText, substitutedValue)
-                    + " | "
-                    + String.format(
-                    "//*[.//*[text()[contains(normalize-space(.),\"%s\")]]]//*[text()[contains(normalize-space(.),"
-                        + "\"%s\")]]",
-                    nextToText, substitutedValue)
-            ));
-        log.info("Found text =>" + substitutedValue + "<= in the same row as =>" + nextToText);
-    }
-
-    public void clickText_inSameRow_asText(String clickText, String nextToText) throws Exception {
-        log.info("Going to click on text =>" + clickText + "<= in a row that contains text =>" + nextToText);
-        clickText = Substitutions.substituteValue(clickText);
-        nextToText = Substitutions.substituteValue(nextToText);
-        wait.activateImplicitWait();
-        /**
-         *
-         * TODO - Refactor this block
-         */
-        By by =  By.xpath(
-            "//table//tr[.//td[contains(text(),\"" + nextToText + "\")]]//td[text()[contains(., \"" + clickText
-                + "\")]]"
-                + "|"
-                + "//table//tr[.//td//a[contains(text(),\"" + nextToText + "\")]]//td//a[text()[contains(., \""
-                + clickText + "\")]]"
-                + "|"
-                + "//table//tr[.//td[contains(text(),\"" + nextToText + "\")]]//td//a[text()[contains(., \""
-                + clickText + "\")]]"
-                + "|"
-                + "//table//tr[.//*[contains(text(),\"" + nextToText + "\")]]//a[text()[contains(., \"" + clickText
-                + "\")]]"
-                + "|"
-                + "//dl//div[.//*[contains(text(),\"" + nextToText + "\")]]//a[text()[contains(., \"" + clickText
-                + "\")]]" // removed [@class='govuk-summary-list__row']
-                + "");
-
-        wait.waitForClickableElement(by);
-        WebElement click_text = driver.findElement(by);
-        try {
-            click_onElement(click_text);
-        } catch (Exception e) {
-            Actions actions = new Actions(driver);
-            actions.click(click_text).perform();
-        }
-        waitForPageLoad();
-        log.info("Clicked on =>" + clickText + "<= successfully");
-    }
+	public void seeText_inSameRow_asText(String searchText, String nextToText) throws Exception {
+		log.info("About to look for text =>"+searchText+"<= in the same row as =>"+nextToText);
+		String substitutedValue = Substitutions.substituteValue(searchText);
+		nextToText = Substitutions.substituteValue(nextToText);
+		driver.findElement(
+				By.xpath(
+						"//table//tr[.//*[contains(normalize-space(text()),\""+substitutedValue+"\")]]//*[text()[contains(normalize-space(.), \""+nextToText+"\")]]"
+						+ " | "
+						+ "//table//tr[.//*[contains(text(),\""+nextToText+"\")]]//*[text()[contains(., \""+substitutedValue+"\")]]"
+						+ " | "
+						+ "//dl//div//*[contains(text(),\""+nextToText+"\")]//ancestor::div[@class='govuk-summary-list__row']//*[text()[contains(., \""+substitutedValue+"\")]]"
+						+ " | "
+						+ String.format(
+							"//*[.//*[contains(normalize-space(text()),\"%s\")]]//*[contains(normalize-space(text()),\"%s\")]",
+							nextToText, substitutedValue)
+						+ " | "
+						+ String.format(
+							"//*[.//*[text()[contains(normalize-space(.),\"%s\")]]]//*[text()[contains(normalize-space(.),\"%s\")]]",
+							nextToText, substitutedValue)
+					));
+		log.info("Found text =>"+substitutedValue+"<= in the same row as =>"+nextToText);		
+	}
+	
+	public void clickText_inSameRow_asText(String clickText, String nextToText) throws Exception {
+		log.info("Going to click on text =>"+clickText+"<= in a row that contains text =>"+nextToText);
+		clickText = Substitutions.substituteValue(clickText);
+		nextToText = Substitutions.substituteValue(nextToText);
+		wait.activateImplicitWait();
+		/**
+		 * 
+		 * TODO - Refactor this block
+		 */
+////		WebElement click_text = driver.findElement(
+		By by = By.xpath(
+				"//table//tr[.//td[contains(text(),\"" + nextToText + "\")]]//td[text()[contains(., \"" + clickText + "\")]]"
+				+ "|"
+				+ "//table//tr[.//td//a[contains(text(),\"" + nextToText + "\")]]//td//a[text()[contains(., \"" + clickText + "\")]]"
+				+ "|"
+				+ "//table//tr[.//td[contains(text(),\"" + nextToText + "\")]]//td//a[text()[contains(., \"" + clickText + "\")]]"
+				+ "|"
+				+ "//table//tr[.//*[contains(text(),\"" + nextToText + "\")]]//a[text()[contains(., \"" + clickText + "\")]]"
+				+ "|"
+				+ "//dl//div[.//*[contains(text(),\"" + nextToText + "\")]]//a[text()[contains(., \"" + clickText + "\")]]" // removed [@class='govuk-summary-list__row']
+				+ "");
+		
+		WebElement click_text = wait.waitForClickableElement(by);
+		try {
+			click_onElement(click_text);
+		} catch (Exception e) {
+			Actions actions = new Actions(driver);
+			actions.click(click_text).perform();
+		}
+		waitForPageLoad();
+		log.info("Clicked on =>" + clickText + "<= successfully");
+	}
 
 	public void clickOnElementWithId(String id) {
 
 		WebElement element = driver.findElement(By.id(id));
 		wait.waitForClickableElement(element);
 		click_onElement(element);
-		waitForPageLoad();;
-		log.info("Clicked on element with id =>"+id+"<= successfully");
+		waitForPageLoad();
+		log.info("Clicked on element with id =>" + id+"<= successfully");
 	}
 	
 	public void clickOnLink_forLabel(String linkText, String text) {
