@@ -36,7 +36,7 @@ Feature: Admin portal transcripts
       | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2   |
       | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2   |
 
-  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression @MissingData
+  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression
   Scenario: Change manual transcription status
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -554,7 +554,7 @@ Feature: Admin portal transcripts
     And I see "Closed" in the same row as "Status"
 
     When I click on the "History" link
-    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    Then I see "Requested by Requestor (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for awaiting authorisation to requested scenario" on the page
     And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
     And I see "Requested by Darts Admin (darts.admin@hmcts.net)" on the page

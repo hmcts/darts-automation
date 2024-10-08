@@ -948,7 +948,7 @@ Feature: Admin portal
     And I see "Specified Times" in the same row as "Request type"
     And I see "23345" in the same row as "Request ID"
     And I see "Overnight" in the same row as "Urgency"
-    And I see "Requester" in the same row as "Requested by"
+    And I see "Requestor" in the same row as "Requested by"
     And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
         #Advanced details
