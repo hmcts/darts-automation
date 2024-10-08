@@ -156,7 +156,7 @@ Scenario: Simple and Advanced Case Search
     And I see "adding more information to your search" on the page
     And I see "using filters to restrict the number of results" on the page
 
-  @DMP-509 @DMP-507 @DMP-860 @regression @demo
+  @DMP-509 @DMP-507 @DMP-860 @regression @demo @MissingData
   Scenario: Case details and Hearing details
 
 	#Case Details
@@ -438,6 +438,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
   And I set "Date from" to "{{date-7/}}"
   And I set "Date to" to "{{date+0/}}"
   And I set "Judge's name" to "JUDGE NAME"
+  And I set "Courtroom" to "3"
   And I press the "Search" button
   And I see "Next" on the page
   And I click on the pagination link "2"
@@ -446,7 +447,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
   And I click on the pagination link "Previous"
   And I click on the pagination link "Next"
 
-@DMP-2769 @regression
+@DMP-2769 @regression @MissingData
   Scenario: Advanced Search Restrictions
     Given I am logged on to DARTS as an APPROVER user
     And I click on the "Search" link

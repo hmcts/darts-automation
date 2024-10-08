@@ -16,7 +16,7 @@ Feature: User as a Approver
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
       | Harrow Crown Court | {{seq}}-15 | D{{seq}}001  | {{date+0/}} | 10:00:00  | 10:01:00 | sample1.mp2 |
 
-  @DMP-1011 @DMP-1815 @regression
+  @DMP-1011 @DMP-1815 @regression @MissingData
   Scenario: Approver screen errors and cancel
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link

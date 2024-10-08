@@ -103,7 +103,7 @@ Examples:
 	| Harrow Crown Court | T{{seq}}604 | MISSING         | MISSING    | MISSING         | MISSING       |
 
 
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706 @SOAP_API @ADD_CASE @ClientProblemException
 Scenario Outline: SOAP addCase with participant elements empty
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case

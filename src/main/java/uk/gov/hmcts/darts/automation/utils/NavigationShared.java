@@ -966,10 +966,11 @@ public class NavigationShared {
 		log.info("About to clicked on link in Navigation with link text =>" + linkText);
 		WebElement link;
 		try {
-		link = driver.findElement(By.xpath("//nav//a[normalize-space(text())=\"" + linkText + "\"]"));
-		clickLink(link, 
-				linkText);
-		} catch (Exception e) {log.error("Navigation Link not found " + linkText);
+            By by = By.xpath("//nav//a[normalize-space(text())=\"" + linkText + "\"]");
+            link = wait.waitForClickableElement(by);
+            clickLink(link, linkText);
+		} catch (Exception e) {
+			log.error("Navigation Link not found {}", linkText);
 			throw(e);
 		}
 	}
@@ -1000,7 +1001,8 @@ public class NavigationShared {
 				clickLink(linkText, arg1);
 				} catch (Exception e3) {
 					log.info("element not found on try 3 so try4 - xpath contains text");
-					linkText = return_oneVisibleFromList(driver.findElements(By.xpath("//*[text()[contains(., '" + arg1 + "')]]")));
+					linkText = return_oneVisibleFromList(
+							driver.findElements(By.xpath("//*[text()[contains(., '" + arg1 + "')]]")));
 					clickLink(linkText, arg1);
 					log.info("element found on try 4");
 				}
@@ -1837,20 +1839,20 @@ public class NavigationShared {
 		 * 
 		 * TODO - Refactor this block
 		 */
-		WebElement click_text = driver.findElement(
-				By.xpath(
-						"//table//tr[.//td[contains(text(),\""+nextToText+"\")]]//td[text()[contains(., \""+clickText+"\")]]"
-								+ "|"
-						+ "//table//tr[.//td//a[contains(text(),\""+nextToText+"\")]]//td//a[text()[contains(., \""+clickText+"\")]]"
-								+ "|"
-						+ "//table//tr[.//td[contains(text(),\""+nextToText+"\")]]//td//a[text()[contains(., \""+clickText+"\")]]"
-								+ "|"
-						+ "//table//tr[.//*[contains(text(),\""+nextToText+"\")]]//a[text()[contains(., \""+clickText+"\")]]"
-								+ "|"
-						+ "//dl//div[.//*[contains(text(),\""+nextToText+"\")]]//a[text()[contains(., \""+clickText+"\")]]" // removed [@class='govuk-summary-list__row']
-				+ ""));
+////		WebElement click_text = driver.findElement(
+		By by = By.xpath(
+				"//table//tr[.//td[contains(text(),\"" + nextToText + "\")]]//td[text()[contains(., \"" + clickText + "\")]]"
+				+ "|"
+				+ "//table//tr[.//td//a[contains(text(),\"" + nextToText + "\")]]//td//a[text()[contains(., \"" + clickText + "\")]]"
+				+ "|"
+				+ "//table//tr[.//td[contains(text(),\"" + nextToText + "\")]]//td//a[text()[contains(., \"" + clickText + "\")]]"
+				+ "|"
+				+ "//table//tr[.//*[contains(text(),\"" + nextToText + "\")]]//a[text()[contains(., \"" + clickText + "\")]]"
+				+ "|"
+				+ "//dl//div[.//*[contains(text(),\"" + nextToText + "\")]]//a[text()[contains(., \"" + clickText + "\")]]" // removed [@class='govuk-summary-list__row']
+				+ "");
 		
-		wait.waitForClickableElement(click_text);
+		WebElement click_text = wait.waitForClickableElement(by);
 		try {
 			click_onElement(click_text);
 		} catch (Exception e) {
@@ -1858,7 +1860,7 @@ public class NavigationShared {
 			actions.click(click_text).perform();
 		}
 		waitForPageLoad();
-		log.info("Clicked on =>"+clickText+"<= successfully");
+		log.info("Clicked on =>" + clickText + "<= successfully");
 	}
 
 	public void clickOnElementWithId(String id) {
@@ -1866,8 +1868,8 @@ public class NavigationShared {
 		WebElement element = driver.findElement(By.id(id));
 		wait.waitForClickableElement(element);
 		click_onElement(element);
-		waitForPageLoad();;
-		log.info("Clicked on element with id =>"+id+"<= successfully");
+		waitForPageLoad();
+		log.info("Clicked on element with id =>" + id+"<= successfully");
 	}
 	
 	public void clickOnLink_forLabel(String linkText, String text) {

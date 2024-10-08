@@ -117,10 +117,10 @@ Examples:
 	| APPEALCOURT       | Search for a case | Y         | N               | N                  | N        |
 	| TRANSCRIBER       | Search for a case | Y         | N               | Y                  | Y        |
 	| LANGUAGESHOP      | Search for a case | Y         | N               | N                  | N        |
-	| ADMIN             | Search for a case | Y         | N               | N                  | N        |
+	| ADMIN             | Search for a case | Y         | Y               | N                  | N        |
 	| SUPERUSER         | Search for a case | Y         | Y               | N                  | N        |
 
-@review
+@obsolete
 Examples:
 	| role 	  	        | search            | yourAudio | yourTranscripts | transcriptRequests | yourWork |
 	| ADMIN             | Search for a case | Y         | Y               | N                  | N        |
