@@ -8,9 +8,9 @@ Feature: Admin
 
     Given I authenticate from the CPP source system
     Given I create an event
-      | message_id | type | sub_type | event_id    | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
-      | {{seq}}001 | 1100 |          | {{seq}}1052 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}ABC-46 | {{timestamp-10:30:00}} |                             |                     |
-      | {{seq}}001 | 1200 |          | {{seq}}1053 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}GHI-46 | {{timestamp-10:31:00}} |                             |                     |
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}052 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}ABC-46 | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}053 | Harrow Crown Court | {{seq}}-46 | H{{seq}}001  | {{seq}}GHI-46 | {{timestamp-10:31:00}} |                             |                     |
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
@@ -67,7 +67,7 @@ Feature: Admin
     And I see "Display name" on the page
     And I see "Region" on the page
 
-  @DMP-2178 @DMP-630-AC1-AC2
+  @DMP-2178 @DMP-630-AC1-AC2 @regression
   Scenario Outline: New user account - Check user details
 
     #TODO: This needs fresh data each time or it will fail due to details not being unique
@@ -109,7 +109,7 @@ Feature: Admin
       | Full name  | Email                       | Description |
       | Joe Bloggs | darts.test{{seq}}@hmcts.net | Test        |
 
-  @DMP-630-AC3-1 @regression
+  @DMP-630 @regression
   Scenario Outline: Create a new user account with existing email address
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
@@ -122,101 +122,29 @@ Feature: Admin
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
     Then I see "There is a problem" on the page
-    And I see an error message "Enter a unique email address"
-    And I see "email" on the page
-    And I see an error message "Enter a unique email address"
+    And I see an error message "<ErrorMessage>"
+    And I see "<Field>" on the page
+    And I see an error message "<ErrorMessage>"
     Examples:
-      | Full name    | Email                 | Description |
-      | global_judge | darts.judge@hmcts.net |             |
-
-  @DMP-630-AC3-2 @regression
-  Scenario Outline: Create a new user account with invalid email format
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Users" link
-    Then I see "Search for user" on the page
-    When I press the "Create new user" button
-    Then I see "Create user" on the page
-    And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
-    And I set "Email" to "<Email>"
-    And I set "Description (optional)" to "<Description>"
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see an error message "Enter an email address in the correct format, like name@example.com"
-    And I see "email" on the page
-    And I see an error message "Enter an email address in the correct format, like name@example.com"
-    Examples:
-      | Full name    | Email       | Description |
-      | global_judge | darts.judge |             |
-
-  @DMP-630-AC3-3 @regression
-  Scenario Outline: Create a new user account without full name
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Users" link
-    Then I see "Search for user" on the page
-    When I press the "Create new user" button
-    Then I see "Create user" on the page
-    And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
-    And I set "Email" to "<Email>"
-    And I set "Description (optional)" to "<Description>"
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see an error message "Enter a full name"
-    And I see "Full name" on the page
-    And I see an error message "Enter a full name"
-    Examples:
-      | Full name | Email                | Description |
-      |           | darts.judge@hmct.net |             |
-
-  @DMP-630-AC3-4 @regression
-  Scenario Outline: Create a new user account without Email address
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Users" link
-    Then I see "Search for user" on the page
-    When I press the "Create new user" button
-    Then I see "Create user" on the page
-    And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
-    And I set "Email" to "<Email>"
-    And I set "Description (optional)" to "<Description>"
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see an error message "Enter an email address"
-    And I see "email" on the page
-    And I see an error message "Enter an email address"
-    Examples:
-      | Full name | Email | Description |
-      | Test      |       |             |
-
-  @DMP-630-AC3-5 @regression
-  Scenario Outline: Create a new user account with more than 256 characters
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Users" link
-    Then I see "Search for user" on the page
-    When I press the "Create new user" button
-    Then I see "Create user" on the page
-    And I see "Enter user details" on the page
-    And I set "Full name" to "<Full name>"
-    And I set "Email" to "<Email>"
-    And I set "Description (optional)" to "<Description>"
-    And I press the "Continue" button
-    And I see "Description (optional)" on the page
-    And I see "Enter a description shorter than 256 characters" on the page
-    And I press the "Continue" button
-    Then I see "There is a problem" on the page
-    And I see an error message "Enter a description shorter than 256 characters"
-    Examples:
-      | Full name | Email             | Description                                                                                                                                                                                                                                                           |
-      | Test      | Test999@hmcts.net | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test |
+      | Full name    | Email                 | Description | Field     | ErrorMessage                                                        |
+      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        |
+      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com |
+      |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   |
+      | Test         |                       |             | email     | Enter an email address                                              |
+      | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters |
 
   @DMP-2931 @regression
   Scenario: Remove user role, single and multiple, test cancel link
     Given I am logged on to the admin portal as an ADMIN user
+    #Add users roles for test
+    Given I add user "Testuserfour" to group "Harrow Crown Court_REQUESTER"
+    Given I add user "Testuserfive" to group "Harrow Crown Court_REQUESTER"
+    Given I add user "Testusersix" to group "Harrow Crown Court_REQUESTER"
+    
     When I click on the "Courthouses" link
     And I set "Courthouse name" to "Harrow"
     And I press the "Search" button
-    And I click on the "Harrow Crown Court" link
+    And I click on the "{{upper-case-Harrow Crown Court}}" link
     And I click on the "Users" sub-menu link
     And I check the checkbox in the same row as "Testuserfour" "testuserfour@hmcts.net"
     And I press the "Remove user role" button
@@ -245,45 +173,6 @@ Feature: Admin
     And I do not see "Testuserfive" on the page
     And I do not see "Testusersix" on the page
 
-    #Add users back to roles for next run
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testuserfour"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testuserfour"
-    And I see "First user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I see "This user is not a member of any groups." on the page
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
-    And I do not see "This user is not a member of any groups." on the page
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testuserfive"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testuserfive"
-    And I see "Second user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
-
-    When I click on the "Users" link
-    And I set "Full name" to "Testusersix"
-    And I press the "Search" button
-    And I click on "View" in the same row as "Testusersix"
-    And I see "Third user for 2931" on the page
-    And I click on the "Groups" sub-menu link
-    And I press the "Assign groups" button
-    And I set "Filter by group name" to "Harrow"
-    And I check the checkbox in the same row as "Harrow Crown Court_REQUESTER" "Requester"
-    And I press the "Assign groups (1)" button
-    Then I see "Assigned 1 group" on the page
 
   @DMP-2323 @DMP-2340 @regression
   Scenario: Deactivate user and last user in group
@@ -413,12 +302,12 @@ Feature: Admin
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "H{{seq}}001"
     And I see "This transcript request is for user to be deactivated" in the same row as "Instructions"
     And I select the "Yes" radio button
     And I press the "Submit" button
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "H{{seq}}001" on the page
 
@@ -478,7 +367,7 @@ Feature: Admin
       | Media ID | Case ID  | Courthouse         | Hearing date | Owner       | Requested by | Date requested | Last accessed | File type | Size  | Filename                   |
       | 518      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | MP3       | 0.2MB | B9160006_15_Feb_2024_1.mp3 |
       | 519      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | ZIP       | 0.9MB | B9160006_15_Feb_2024_1.zip |
-      | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requester   | Requester    | 15 Feb 2024    |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
+      | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requestor   | Requestor    | 15 Feb 2024    |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
     And I see "Showing 1-3 of 3 results" on the page
 
     #DMP-2678-AC2 Single search result takes user directly to file details screen
@@ -487,7 +376,7 @@ Feature: Admin
     And I press the "Search" button
     Then I do not see "Showing" on the page
     And I see "Request details" on the page
-    And I see "Requester" in the same row as "Requested by"
+    And I see "Requestor" in the same row as "Requested by"
     And I see "17165" in the same row as "Request ID"
 
   @DMP-2695 @DMP-2679 @DMP-3475
@@ -527,7 +416,7 @@ Feature: Admin
     And I see "101" on the page
     And I see "Request details" on the page
     And I see "Owner" in the same row as "Mehta Purvi (mehta.purvi@hmcts.net)"
-    And I see "Requested by" in the same row as "Requester"
+    And I see "Requested by" in the same row as "Requestor"
     And I see "Request ID" in the same row as "8545"
     And I see "Date requested" in the same row as "20 December 2023"
     And I see "Hearing date" in the same row as "07 December 2023"
@@ -537,7 +426,7 @@ Feature: Admin
     Then I see "Case details" on the page
     And I see "Case ID" in the same row as "T20230001"
     And I see "Courthouse" in the same row as "Harrow Crown Court"
-    And I see "Judge(s)" in the same row as "test judge"
+    And I see "Judge(s)" in the same row as "{{upper-case-test judge}}"
     And I see "Defendant(s)" in the same row as "fred"
 
     Then I see "Media details" on the page
@@ -647,14 +536,14 @@ Feature: Admin
       And I see "Request method" in the same row as "Manual"
       And I see "Request ID" in the same row as "17165"
       And I see "Urgency" in the same row as "Overnight"
-      And I see "Requested by" in the same row as "Requester"
+      And I see "Requested by" in the same row as "Requestor"
       And I see "Received" in the same row as "19 Feb 2024 10:41:26"
       And I see "Judge approval" in the same row as "Yes"
 
       And I see "Case details" on the page
       And I see "Case ID" in the same row as "S1034021"
       And I see "Courthouse" in the same row as "Harrow Crown Court"
-      And I see "Judge(s)" in the same row as "S1034 judge"
+      And I see "Judge(s)" in the same row as "{{upper-case-S1034 judge}}"
       And I see "Defendant(s)" in the same row as "S1034 defendant"
 
       And I click on the "Back" link
@@ -699,7 +588,7 @@ Feature: Admin
       And I see "Request method" in the same row as "Manual"
       And I see "Request ID" in the same row as "36349"
       And I see "Urgency" in the same row as "Overnight"
-      And I see "Requested by" in the same row as "Requester"
+      And I see "Requested by" in the same row as "Requestor"
       And I see "Instructions" in the same row as "DMP-3104"
       And I see "Judge approval" in the same row as "Yes"
       And I see "Removed from user transcripts" in the same row as "No"
@@ -966,6 +855,163 @@ Feature: Admin
     And I see "Created by" in the same row as "System"
     And I see "Date last modified" in the same row as "22 Aug 2024 at 16:16:55"
     And I see "Last modified by" in the same row as "System"
+
+    @DMP-2471 @DMP-2475
+    Scenario: Create and Edit new retention policy
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "System configuration" link
+      And I click on the "Create policy" link
+      And I see "Create new policy" on the page
+      And I set "Display name" to "DMP-2471-AC1"
+      And I set "Name" to "AC1-2471"
+      And I set "Description" to ""
+      And I set "Fixed policy key" to "99"
+      And I set "Years" to "05"
+      And I set "Months" to "04"
+      And I set "Days" to "02"
+      And I see "Policy start" on the page
+      And I see "Start date" on the page
+      And I set "Start date" to "04/10/2025"
+      And I set "Hour" to "00"
+      And I set "Minutes" to "59"
+      And I click on the "Create" link
+      Then I see "Retention policy created" on the page
+      And I see "Retention policies" on the page
+      And I see "Active" on the page
+      And I see "Inactive" on the page
+    #Cancel Policy.
+      When I click on the "Create policy" link
+      Then I see "Create new policy" on the page
+      And I set "Display name" to "PMTest11"
+      And I set "Name" to "PMTest11"
+      And I set "Description" to ""
+      And I set "Fixed policy key" to "TestPM11"
+      And I set "Years" to "05"
+      And I set "Months" to "05"
+      And I set "Days" to "05"
+      And I set "Start date" to "04/10/2025"
+      And I set "Hour" to "05"
+      And I set "Minutes" to "05"
+      And I click on the "Cancel" link
+      Then I see "Retention policies" on the page
+      And I see "Active" on the page
+      And I see "Inactive" on the page
+   #Error
+      When I click on the "Create policy" link
+      Then I see "Create new policy" on the page
+      And I set "Display name" to ""
+      And I set "Name" to ""
+      And I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A"
+      And I set "Fixed policy key" to ""
+      And I set "Years" to ""
+      And I set "Months" to ""
+      And I set "Days" to ""
+      And I set "Start date" to ""
+      And I set "Hour" to ""
+      And I set "Minutes" to ""
+      And I click on the "Create" link
+      Then I see "There is a problem" on the page
+      And I see "Enter a display name" on the page
+      And I see "Enter a name" on the page
+      And I see "Enter a description shorter than 256 characters" on the page
+      And I see "Enter a fixed policy key" on the page
+      And I see "Enter a duration of at least 1 day" on the page
+      And I see "Enter a policy start date" on the page
+      And I see "Enter a start time" on the page
+    # All fields are already exist
+      And I click on the "Cancel" link
+      Then I see "Retention policies" on the page
+      When I click on the "Create policy" link
+      Then I see "Create new policy" on the page
+      And I set "Display name" to "PM-Test"
+      And I set "Name" to "PM-Test1"
+      And I set "Description" to ""
+      And I set "Fixed policy key" to "Test-PM"
+      And I set "Years" to "00"
+      And I set "Months" to "01"
+      And I set "Days" to "02"
+      And I set "Start date" to "01/01/2025"
+      And I set "Hour" to "01"
+      And I set "Minutes" to "00"
+      And I click on the "Create" link
+      Then I see "There is a problem" on the page
+      And I see "Enter a unique display name" on the page
+      And I see "Enter a unique name" on the page
+      And I see "The fixed policy key entered already exists in the database. Fixed policy keys must be unique" on the page
+      Then I click on the "Cancel" link
+      #Edit policy @DMP-2475
+    And I click on "Edit Policy" in the same row as "DMP-2471-AC1"
+    And I set "Display name" to "DMP-2475-AC1-Edit"
+    And I set "Name" to "AC1-2475-Edit"
+    And I set "Description" to "Editing DMP-2471"
+    And I set "Fixed policy key" to "92"
+    And I set "Years" to "02"
+    And I set "Months" to "12"
+    And I set "Days" to "31"
+    And I see "Policy start" on the page
+    And I see "Start date" on the page
+    And I set "Start date" to "29/04/2026"
+    And I set "Hour" to "10"
+    And I set "Minutes" to "30"
+    And I click on the "Save" link
+    Then I see "Retention policy updated" on the page
+  #Cancel policy
+    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
+    And I click on the "Cancel" link
+    Then I see "Retention policies" on the page
+  #AC3
+    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
+    And I see "Retention policy" on the page
+    And I clear the "Display name" field
+    And I set "Display name" to ""
+    And I clear the "Name" field
+    And I set "Name" to ""
+    And I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A"
+    And I clear the "Fixed policy key" field
+    And I set "Fixed policy key" to ""
+    And I clear the "Years" field
+    And I set "Years" to ""
+    And I clear the "Months" field
+    And I set "Months" to ""
+    And I clear the "Days" field
+    And I set "Days" to ""
+    And I clear the "Start date" field
+    And I set "Start date" to ""
+    And I clear the "Hour" field
+    And I set "Hour" to ""
+    And I clear the "Minutes" field
+    And I set "Minutes" to ""
+    And I click on the "Save" link
+    Then I see "There is a problem" on the page
+    And I see "Enter a display name" on the page
+    And I see "Enter a name" on the page
+    And I see "Enter a description shorter than 256 characters" on the page
+    And I see "Enter a fixed policy key" on the page
+    And I see "Enter a duration of at least 1 day" on the page
+    And I see "Enter a policy start date" on the page
+    And I see "Enter a start time" on the page
+  #fields are already exist
+    And I click on the "Cancel" link
+    Then I see "Retention policies" on the page
+    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
+    And I set "Display name" to "Custodial"
+    And I set "Name" to "DMP-2532 AC3"
+    And I set "Description" to ""
+    And I clear the "Fixed policy key" field
+    And I set "Fixed policy key" to ""
+    And I set "Years" to "00"
+    And I set "Months" to "12"
+    And I set "Days" to "31"
+    And I set "Start date" to "01/01/2024"
+    And I set "Hour" to "11"
+    And I set "Minutes" to "30"
+    And I click on the "Save" link
+    Then I see "There is a problem" on the page
+    And I see "Enter a unique display name" on the page
+    And I see "Enter a unique name" on the page
+    And I see "Enter a fixed policy key" on the page
+    And I see "Enter a policy start date in the future" on the page
+    And I see "Enter a policy start time in the future" on the page
 
     @DMP-2731
     Scenario: Transcript files marked for deletion

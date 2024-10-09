@@ -41,6 +41,7 @@ public class WaitUtils {
 		try {
 			new WebDriverWait(driver, Duration.ofSeconds(wait_time))
 				.pollingEvery(Duration.ofMillis(200))
+				.ignoring(NoSuchElementException.class)
 				.ignoring(StaleElementReferenceException.class)
 				.until(ExpectedConditions.elementToBeClickable(name));	
 			log.info("Element now clickable => "+name);
@@ -48,10 +49,31 @@ public class WaitUtils {
 			log.error("Timed out waiting for Element to be clickable => "+name);
 		}
 	}
+
+	public WebElement waitForClickableElement(By by, int wait_time) {
+		log.info("Waiting for element to be clickable =>"+wait_time+"<= seconds");
+		try {
+			WebElement webElement = new WebDriverWait(driver, Duration.ofSeconds(wait_time))
+				.pollingEvery(Duration.ofMillis(200))
+				.ignoring(StaleElementReferenceException.class)
+				.ignoring(NoSuchElementException.class)
+				.until(ExpectedConditions.elementToBeClickable(by));
+			log.info("Element now clickable => "+by);
+			return webElement;
+		} catch (Exception e) {
+			log.error("Timed out waiting for Element to be clickable => "+by);
+		}
+		return null;
+	}
+
 	public void waitForClickableElement(WebElement name) {
 		waitForClickableElement(name, TIME_IN_SECONDS);
 	}
-	
+
+	public WebElement waitForClickableElement(By by) {
+		return waitForClickableElement(by, TIME_IN_SECONDS);
+	}
+
 	public void waitForTextOnPage(String text) {
 		waitForTextOnPage(text, 10);
 	}

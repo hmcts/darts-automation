@@ -17,8 +17,8 @@ Scenario: Case Search data creation
     | {{seq}}001 | 1100  |          | {{seq}}001 | Harrow Crown Court | A{{seq}}-1  | A{{seq}}001  | A{{seq}}ABC-3  | {{timestamp-11:00:00}} |                             |                     |
     | {{seq}}001 | 1100  |          | {{seq}}001 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}002  | A{{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
     | {{seq}}001 | 1100  |          | {{seq}}001 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}003  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}001 | 1100  |          | {{seq}}001 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004  | A{{seq}}ABC-2  | {{timestamp-10:00:00}} |                             |                     |
-    | {{seq}}001 | 21200 | 11008    | {{seq}}001 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}001 | 1100  |          | {{seq}}001 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004  | A{{seq}}ABC-11  | {{timestamp-10:00:00}} |                             |                     |
+    | {{seq}}001 | 21200 | 11008    | {{seq}}001 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005  | A{{seq}}ABC-21 | {{timestamp-10:00:00}} |                             |                     |
 
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression @demo
 Scenario: Simple and Advanced Case Search
@@ -156,7 +156,7 @@ Scenario: Simple and Advanced Case Search
     And I see "adding more information to your search" on the page
     And I see "using filters to restrict the number of results" on the page
 
-  @DMP-509 @DMP-507 @DMP-860 @regression @demo
+  @DMP-509 @DMP-507 @DMP-860 @regression @demo @MissingData
   Scenario: Case details and Hearing details
 
 	#Case Details
@@ -211,7 +211,7 @@ Scenario: Simple and Advanced Case Search
     And I click on the "Advanced search" link
     And I select the "Date range" radio button
     And I set "Date from" to "{{date+7/}}"
-    And I set "Date to" to "{{date-7/}}"
+    And I set "Date to" to "{{date+7/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
 
@@ -222,6 +222,15 @@ Scenario: Simple and Advanced Case Search
     And I set "Date to" to "{{date+10/}}"
     And I press the "Search" button
     Then I see an error message "You have selected a date in the future. The hearing date must be in the past"
+
+    When I click on the "Clear search" link
+    And I click on the "Advanced search" link
+    And I select the "Date range" radio button
+    And I set "Date from" to "{{date-7/}}"
+    And I set "Date to" to "{{date-10/}}"
+    And I press the "Search" button
+    Then I see an error message "The start date must be before the end date"
+    Then I see an error message "The end date must be after the start date"
 
     When I click on the "Clear search" link
     And I click on the "Advanced search" link
@@ -429,6 +438,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
   And I set "Date from" to "{{date-7/}}"
   And I set "Date to" to "{{date+0/}}"
   And I set "Judge's name" to "JUDGE NAME"
+  And I set "Courtroom" to "3"
   And I press the "Search" button
   And I see "Next" on the page
   And I click on the pagination link "2"
@@ -475,7 +485,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
 
     When I click on the "Clear search" link
     And I click on the "Advanced search" link
-    And I set "Keywords" to "A{{seq}}ABC"
+    And I set "Keywords" to "A{{seq}}ABC-1"
     And I select the "Specific date" radio button
     And I set "Enter a date" to "{{date+0/}}"
     And I press the "Search" button

@@ -1,3 +1,4 @@
+@request_transcript
 Feature: Request Transcript
 
   @DMP-696 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-917 @DMP-925 @DMP-934 @DMP-1009 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1053 @DMP-1054 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-2123 @DMP-2124 @DMP-2740 @regression
@@ -39,7 +40,7 @@ Feature: Request Transcript
       | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2 |
       | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2 |
 
-  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-2740 @regression
+  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-2740 @regression @MissingData
   Scenario: Request Transcription, Specified Times with Event Checkboxes
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -104,12 +105,12 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}002"
     Then I see "Approve transcript request" on the page
     And I see "C{{seq}}002" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeC {{seq}}-9" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeC {{seq}}-9}}" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-9" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Specified Times" in the same row as "Request type"
@@ -121,8 +122,8 @@ Feature: Request Transcript
 
     When I select the "Yes" radio button
     And I press the "Submit" button
-    And I see "Select to apply actions" on the page
-    And I click on the "Transcript requests to review" link
+#    And I see "Select to apply actions" on the page
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}002" on the page
 
@@ -134,15 +135,15 @@ Feature: Request Transcript
     And I see "Manual" in the same row as "C{{seq}}002"
     #DMP-1198-AC2 and DMP-1234 View transcript request order
     And I click on "View" in the same row as "C{{seq}}002"
-    Then I see "Transcript Request" on the page
+    Then I see "Transcript request" on the page
     And I see "C{{seq}}002" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeC {{seq}}-9" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeC {{seq}}-9}}" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-9" in the same row as "Defendant(s)"
-    And I see "{{displaydate}}" in the same row as "Hearing Date"
-    And I see "Specified Times" in the same row as "Request Type"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Specified Times" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
-    And I see "Requester" in the same row as "From"
+    And I see "Requestor" in the same row as "Requested by"
     And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
 
@@ -215,6 +216,8 @@ Feature: Request Transcript
     And I set "Case ID" to "C{{seq}}002"
     And I press the "Search" button
     And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
+# Unexpected changed behaviour - the 'All transcripts' tab is displayed (the last tab used) rather than 'hearings'
+		And I click on the "Hearings" link
     And I click on the "{{displaydate}}" link
     And I click on the "Transcripts" link
     And I press the "Request a new transcript" button
@@ -326,12 +329,12 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}003"
     Then I see "Approve transcript request" on the page
     And I see "C{{seq}}003" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeC {{seq}}-10" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeC {{seq}}-10}}" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-10" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Court Log" in the same row as "Request type"
@@ -343,8 +346,8 @@ Feature: Request Transcript
 
     When I select the "Yes" radio button
     And I press the "Submit" button
-    And I see "Select to apply actions" on the page
-    And I click on the "Transcript requests to review" link
+#    And I see "Select to apply actions" on the page
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}003" on the page
 
@@ -354,13 +357,13 @@ Feature: Request Transcript
     And I click on the "Transcript requests" link
     And I see "Manual" in the same row as "C{{seq}}003"
     And I click on "View" in the same row as "C{{seq}}003"
-    Then I see "Transcript Request" on the page
+    Then I see "Transcript request" on the page
     And I see "C{{seq}}003" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeC {{seq}}-10" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeC {{seq}}-10}}" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-10" in the same row as "Defendant(s)"
-    And I see "{{displaydate}}" in the same row as "Hearing Date"
-    And I see "Court Log" in the same row as "Request Type"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Court Log" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio selected via manually entering time." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
@@ -425,7 +428,7 @@ Feature: Request Transcript
     Then I see "file-sample_1MB.doc" on the page
     And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
 
-  @DMP-696 @DMP-1053 @DMP-1203 @DMP-1243 @DMP-1326 @DMP-2123 @regression
+  @DMP-696 @DMP-1053 @DMP-1203 @DMP-1243 @DMP-1326 @DMP-2123 @regression @fix @MissingData
   Scenario: Request Transcription, Court Log, Assign to me and get audio, complete and single delete
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -477,12 +480,12 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}004"
     Then I see "Approve transcript request" on the page
     And I see "C{{seq}}004" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeC {{seq}}-11" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeC {{seq}}-11}}" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-11" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Court Log" in the same row as "Request type"
@@ -492,8 +495,8 @@ Feature: Request Transcript
 
     When I select the "Yes" radio button
     And I press the "Submit" button
-    And I see "Select to apply actions" on the page
-    And I click on the "Transcript requests to review" link
+#    And I see "Select to apply actions" on the page
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}004" on the page
 
@@ -503,13 +506,13 @@ Feature: Request Transcript
     And I click on the "Transcript requests" link
     And I see "Manual" in the same row as "C{{seq}}004"
     And I click on "View" in the same row as "C{{seq}}004"
-    Then I see "Transcript Request" on the page
+    Then I see "Transcript request" on the page
     And I see "C{{seq}}004" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeC {{seq}}-11" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeC {{seq}}-11}}" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-11" in the same row as "Defendant(s)"
-    And I see "{{displaydate}}" in the same row as "Hearing Date"
-    And I see "Court Log" in the same row as "Request Type"
+    And I see "{{displaydate}}" in the same row as "Hearing date"
+    And I see "Court Log" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
     And I see "Requesting transcript Court Log for one minute of audio, please request audio if needed." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
@@ -688,15 +691,15 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}006"
     Then I see "Approve transcript request" on the page
     And I see "Requesting transcript Court Log for one minute of audio, attach transcript directly." in the same row as "Instructions"
 
     When I select the "Yes" radio button
     And I press the "Submit" button
-    And I see "Select to apply actions" on the page
-    And I click on the "Transcript requests to review" link
+#    And I see "Select to apply actions" on the page
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}006" on the page
 
@@ -706,7 +709,7 @@ Feature: Request Transcript
 
     When I select the "Yes" radio button
     And I press the "Submit" button
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}007" on the page
 
@@ -717,7 +720,7 @@ Feature: Request Transcript
     And I am logged on to DARTS as a TRANSCRIBER user
     And I click on the "Transcript requests" link
     And I click on "View" in the same row as "C{{seq}}006"
-    Then I see "Transcript Request" on the page
+    Then I see "Transcript request" on the page
 
     #DMP-1243-AC4 Assign to myself and upload transcript
 
@@ -732,7 +735,7 @@ Feature: Request Transcript
 
     When I click on the "Transcript requests" link
     And I click on "View" in the same row as "C{{seq}}007"
-    Then I see "Transcript Request" on the page
+    Then I see "Transcript request" on the page
 
     When I select the "Assign to me and upload a transcript" radio button
     And I press the "Continue" button
@@ -828,12 +831,12 @@ Feature: Request Transcript
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "C{{seq}}005"
     Then I see "Approve transcript request" on the page
     And I see "C{{seq}}005" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeC {{seq}}-12" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeC {{seq}}-12}}" in the same row as "Judge(s)"
     And I see "DefC {{seq}}-12" in the same row as "Defendant(s)"
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Court Log" in the same row as "Request type"
@@ -848,8 +851,8 @@ Feature: Request Transcript
     And I set "Why can you not approve this request?" to "Rejecting this request, for specific reason"
     #And I see "You have 1956 characters remaining" on the page
     And I press the "Submit" button
-    And I see "Select to apply actions" on the page
-    And I click on the "Transcript requests to review" link
+#    And I see "Select to apply actions" on the page
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "C{{seq}}005" on the page
 
@@ -905,7 +908,7 @@ Feature: Request Transcript
     And I see "Court Log" in the same row as "Rejected"
     And I see "Specified Times" in the same row as "Awaiting Authorisation"
 
-  @DMP-872 @DMP-862 @regression
+  @DMP-872 @DMP-862 @regression @MissingData
   Scenario: No Audio Available for Transcript Request
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -933,10 +936,10 @@ Feature: Request Transcript
 
     When I click on the "Cancel and go back to the search results" link
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom | Judge(s)         | Defendant(s)   |
-      | C{{seq}}001 | Harrow Crown Court | {{seq}}-8 | JudgeC {{seq}}-8 | DefC {{seq}}-8 |
+      | Case ID     | Courthouse         | Courtroom | Judge(s)                        | Defendant(s)   |
+      | C{{seq}}001 | Harrow Crown Court | {{seq}}-8 | {{upper-case-JudgeC {{seq}}-8}} | DefC {{seq}}-8 |
 
-  @DMP-892 @DMP-917 @DMP-1012 @regression
+  @DMP-892 @DMP-917 @DMP-1012 @regression @MissingData
   Scenario: Transcript - Request a new transcript cancel links
 
     #TODO: Are cancel links working as intended? AC seems to indicate cancel takes you back to Hearing Details rather than back a screen. Check this.

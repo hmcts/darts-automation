@@ -141,7 +141,7 @@ public class Portal {
         NAV.waitForBrowserReadyState();
         WAIT.waitForTextOnPage("Sign in");
         NAV.waitForBrowserReadyState();
-        if (webDriver.findElements(By.xpath("//input[@type='" + "email" + "']")).size() == 0) {
+        if (webDriver.findElements(By.xpath("//input[@type='" + "email" + "']")).isEmpty()) {
             List<WebElement> another = webDriver.findElements(By.xpath("//*[text() = 'Use another account']"));
             if (another.size() == 1) {
                 another.get(0).click();
@@ -190,6 +190,7 @@ public class Portal {
 
     public void downloadFileMatches(String fileName) throws IOException {
         String substitutedValue = Substitutions.substituteValue(fileName);
+        WAIT.pause(60);
 
         String workspaceDir = ReadProperties.getDownloadFilepath();
         File directory = new File(workspaceDir);
@@ -213,10 +214,45 @@ public class Portal {
         }
 
         Assert.assertTrue("The expected file was not downloaded.", downloadFilePresence);
-    if (downloadFilePresence) {
-        deleteDocument_withName_fromDownloads(workspaceDir);
+	    if (downloadFilePresence) {
+	        deleteDocument_withName_fromDownloads(workspaceDir);
+	    }
     }
-    }
+
+	public void downloadFileMatches(String caseNumber, String fileName) throws IOException {
+        String substitutedValue = Substitutions.substituteValue(caseNumber) + 
+        		"_" +
+        		DateUtils.todayDisplay0().replace(" ", "_")
+        		+ "_1.mp3";
+        WAIT.pause(60);
+
+        String workspaceDir = ReadProperties.getDownloadFilepath();
+        File directory = new File(workspaceDir);
+        boolean downloadFilePresence = false;
+
+        File[] filesList = directory.listFiles();
+        if (Objects.nonNull(filesList)) {
+            for (File file : filesList) {
+                //downloadinFilePresence = file.getName().toLowerCase().contains(substitutedValue.toLowerCase());
+                if (file.getName().toLowerCase().contains(substitutedValue.toLowerCase())) {
+                    log.info("File downloaded {} found and matched as expected", substitutedValue);
+                    downloadFilePresence = true;
+                    break;
+                }
+            }
+            if (!downloadFilePresence) {
+                log.error("File {} is not downloaded and cannot be found", substitutedValue);
+            }
+        } else {
+            log.error("The directory is empty or could not be read.");
+        }
+
+        Assert.assertTrue("The expected file was not downloaded.", downloadFilePresence);
+	    if (downloadFilePresence) {
+	        deleteDocument_withName_fromDownloads(workspaceDir);
+	    }
+		
+	}
 
     private void deleteDocument_withName_fromDownloads(String workspace_dir) throws IOException {
         try {
@@ -366,16 +402,22 @@ public class Portal {
     public void waitForRequestedAudioToBeReady(String user, String courthouse, String caseNumber, String hearingDate) throws Exception {
     	log.info("Waiting for requested audio file to be ready - {} {} {} for {}", courthouse, caseNumber, hearingDate, user);
     	String userName = Credentials.userName(user);
-    	String usr_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userName, "usr_id");
+    //	String usr_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userName, "usr_id");
     	String mer_id = DB.returnSingleValue("HEARING_MEDIA_REQUEST", 
     			"courthouse_name",  courthouse, 
     			"case_number",  caseNumber,
     			"hearing_date", DateUtils.dateAsYyyyMmDd(hearingDate),
-    			"requestor", usr_id,
+    			"lower(user_email_address)", userName,
     			"max(mer_id)");
         int waitTimeInSeconds = 300;
         log.info("wait time {} for user {}, courthouse {}, case {}, date {}", waitTimeInSeconds, user, courthouse, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
-        waitForRequestedAudioToBeReady(mer_id);
+        try {
+        	waitForRequestedAudioToBeReady(mer_id);
+        } catch (Exception | AssertionError e) {
+            log.fatal("Wait complete - request not ready for user {}, courthouse {}, case {}, date {}", 
+            		user, courthouse, caseNumber, hearingDate);
+            Assertions.fail("Request not ready");
+        }
     }
     
     public void waitForRequestedAudioToBeReady(String requestId) throws Exception {
@@ -403,7 +445,8 @@ public class Portal {
             wait.until(requestedAudioIsReady);
             log.info("Audio request ready");
         } catch (TimeoutException e) {
-            log.warn("Wait complete - request not ready");
+            log.fatal("Wait complete - request not ready for request id {}", requestId);
+            Assertions.fail("Request not ready");
         }
     }
 

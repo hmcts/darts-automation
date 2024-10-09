@@ -1,4 +1,4 @@
-Feature: Requester
+Feature: End-to-end Requester
 
   @end2end @end2end2 @DMP-2206
   @reads-and-writes-system-properties

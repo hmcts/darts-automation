@@ -1,7 +1,8 @@
-Feature: Cases EndPoint using SOAP
+Feature: Add Courtlog SOAP
 
 @COURTLOG @SOAP_API @regression
 Scenario Outline: SOAP courtLog where case exists & hearing exists
+  Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
 	Given I create a case
 	| courthouse   | case_number  | defendants   | judges   | prosecutors   | defenders   |
 	| <courthouse> | <caseNumber> | <defendants> | <judges> | <prosecutors> | <defenders> |
@@ -9,14 +10,14 @@ Scenario Outline: SOAP courtLog where case exists & hearing exists
 	| courthouse   | courtroom   | case_numbers   | text                  | date       | time     |
 	| <courthouse> | <courtroom> | <caseNumber>   | log details {{seq}}-1 | {{date-0}} | 10:00:01 |
 	| <courthouse> | <courtroom> | <caseNumber>   | log details {{seq}}-2 | {{date-0}} | 11:00:01 |
-   And I select column eve_id from table EVENT where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and event_ts = "{{date-yyyymmdd-0}} 09:00:01+00"
+   And I select column eve_id from table EVENT where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and event_ts = "{{db-timestamp-{{date-yyyymmdd-0}} 10:00:01}}"
 	Then I see table EVENT column event_text is "log details {{seq}}-1" where eve_id = "{{eve_id}}"
    And I see table EVENT column event_name is "LOG" where eve_id = "{{eve_id}}"
    And I see table EVENT column interpreter_used is "f" where eve_id = "{{eve_id}}"
    And I see table EVENT column handler is "StandardEventHandler" where eve_id = "{{eve_id}}"
    And I see table EVENT column active is "t" where eve_id = "{{eve_id}}"
    And I see table EVENT column case_closed_ts is "null" where eve_id = "{{eve_id}}"
-  When I select column eve_id from table EVENT where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and event_ts = "{{date-yyyymmdd-0}} 10:00:01+00"
+  When I select column eve_id from table EVENT where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and event_ts = "{{db-timestamp-{{date-yyyymmdd-0}} 11:00:01}}"
 	Then I see table EVENT column event_text is "log details {{seq}}-2" where eve_id = "{{eve_id}}"
    And I see table EVENT column event_name is "LOG" where eve_id = "{{eve_id}}"
    And I see table EVENT column interpreter_used is "f" where eve_id = "{{eve_id}}"
@@ -26,7 +27,7 @@ Scenario Outline: SOAP courtLog where case exists & hearing exists
 
 Examples:
 	| courthouse         | courtroom    | caseNumber  | defendants                        | judges     | prosecutors     | defenders     |
-	| Harrow Crown Court | Room {{seq}} | T{{seq}}121 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
+	| Harrow Crown Court | Room {{seq}} | T{{seq}}131 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 
 
 @COURTLOG @SOAP_API @regression
@@ -36,14 +37,14 @@ Scenario Outline: SOAP courtLog where case dooes not exist and the courtlog crea
 	| courthouse   | courtroom   | case_numbers   | text                  | date       | time     |
 	| <courthouse> | <courtroom> | <caseNumber>   | log details {{seq}}-1 | {{date-0}} | 10:00:01 |
 	| <courthouse> | <courtroom> | <caseNumber>   | log details {{seq}}-2 | {{date-0}} | 11:00:01 |
-   And I select column eve_id from table EVENT where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and event_ts = "{{date-yyyymmdd-0}} 09:00:01+00"
+   And I select column eve_id from table EVENT where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and event_ts = "{{db-timestamp-{{date-yyyymmdd-0}} 10:00:01}}"
 	Then I see table EVENT column event_text is "log details {{seq}}-1" where eve_id = "{{eve_id}}"
    And I see table EVENT column event_name is "LOG" where eve_id = "{{eve_id}}"
    And I see table EVENT column interpreter_used is "f" where eve_id = "{{eve_id}}"
    And I see table EVENT column handler is "StandardEventHandler" where eve_id = "{{eve_id}}"
    And I see table EVENT column active is "t" where eve_id = "{{eve_id}}"
    And I see table EVENT column case_closed_ts is "null" where eve_id = "{{eve_id}}"
-  When I select column eve_id from table EVENT where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and event_ts = "{{date-yyyymmdd-0}} 10:00:01+00"
+  When I select column eve_id from table EVENT where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and event_ts = "{{db-timestamp-{{date-yyyymmdd-0}} 11:00:01}}"
 	Then I see table EVENT column event_text is "log details {{seq}}-2" where eve_id = "{{eve_id}}"
    And I see table EVENT column event_name is "LOG" where eve_id = "{{eve_id}}"
    And I see table EVENT column interpreter_used is "f" where eve_id = "{{eve_id}}"
@@ -53,7 +54,7 @@ Scenario Outline: SOAP courtLog where case dooes not exist and the courtlog crea
 
 Examples:
 	| courthouse         | courtroom    | caseNumber  | defendants                        | judges     | prosecutors     | defenders     |
-	| Harrow Crown Court | Room {{seq}} | T{{seq}}122 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
+	| Harrow Crown Court | Room {{seq}} | T{{seq}}132 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 	
 
 @COURTLOG @SOAP_API @regression
@@ -66,7 +67,7 @@ Scenario: addLogEntry successful baseline
   <courthouse>Harrow Crown Court</courthouse>
   <courtroom>Room 9335</courtroom>
   <case_numbers>
-    <case_number>T{{seq}}121</case_number>
+    <case_number>T{{seq}}133</case_number>
   </case_numbers>
   <text>Log Entry {{seq}} text</text>
 </log_entry>]]>

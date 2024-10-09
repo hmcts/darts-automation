@@ -563,7 +563,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}249 | 30600 |         | text {{seq}} |               |               | Hearing ended     | ex StopAndCloseHandler |
 
   
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @retention
   @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for custodial sentence - not life
 															retention is 7 years or length of sentence
@@ -605,7 +605,7 @@ Examples:
   | Harrow Crown Court | Rm {{seq}}A24 | T{{seq}}224 | {{timestamp-12:07:00}} | {{seq}}624 | {{seq}}624 | 30300 |         | text {{seq}} | 3             | 7Y3M7D        | Case closed  | 7Y3M7D            |
   
   
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @retention
   @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for LIFE sentence
 													Difference from other sentencing event is 
@@ -648,7 +648,7 @@ Examples:
   | Harrow Crown Court | Rm {{seq}}A25 | T{{seq}}225 | {{timestamp-12:07:00}} | {{seq}}625 | {{seq}}625 | 30300 |         | text {{seq}} | 4             | 4Y4M4D        | Case closed  | 99Y0M0D           |
   
   
-@EVENT_API @SOAP_EVENT @regression
+@EVENT_API @SOAP_EVENT @regression @retention
   @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for non-custodial sentence
 													Only 1 stop & close event per case works due to retentions

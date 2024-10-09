@@ -1,4 +1,4 @@
-Feature: Language Shop User
+Feature: End-to-end Language Shop User
 
   @end2end @end2end7 @DMP-2056
   @reads-and-writes-system-properties
@@ -35,11 +35,17 @@ Feature: Language Shop User
     Then I see "1 result" on the page
     Then I see "<case_number>" in the same row as "<courthouse>"
     When I click on "<case_number>" in the same row as "<courthouse>"
-    And I do not see "Transcripts" on the page
+     And I click on the "All Transcripts" link
+    Then I see "All transcripts for this case" on the page
+     And I see "There are no transcripts for this case." on the page
+    When I click on the "Hearings" link
     Then I see "<case_number>" on the page
-    Then I click on "<HearingDate>" in the same row as "<courtroom>"
-    And I do not see "Transcripts" on the page
+    When I click on "<HearingDate>" in the same row as "<courtroom>"
+     And I click on the "Transcripts" link
+    Then I see "Transcripts for this hearing" on the page
+     And I see "There are no transcripts for this hearing." on the page
     # Audio Request
+    When I click on the "Events and Audio" link
     When I select the "Audio preview and events" radio button
     And I set the time fields of "Start Time" to "<startTime>"
     And I set the time fields of "End Time" to "<endTime>"
@@ -55,14 +61,14 @@ Feature: Language Shop User
     #Wait for Requested Audio
     When I click on the "Your audio" link
     Then I wait for the requested audio file to be ready
-      | user      | courthouse   | case_number   | hearing_date |
-      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
+      | user         | courthouse   | case_number   | hearing_date |
+      | LANGUAGESHOP | <courthouse> | <case_number> | {{date+0/}}  |
     Then I click on "Request ID" in the "Ready" table header
     Then I wait for text "READY" on the same row as link "<case_number>"
     Then I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
     Then I press the "Download audio file" button
-    Then I verify the download file matches "<case_number>"
+    Then I verify the download file "<case_number>" matches "<audioFile>"
     Then I click on the "Delete audio file" link
     Then I press the "Yes - delete" button
 

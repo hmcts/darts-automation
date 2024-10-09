@@ -1,4 +1,3 @@
-@ts6
 Feature: Case Retention
 
   @DMP-1369 @DMP-1406 @DMP-1413 @DMP-1899 @regression
@@ -181,11 +180,11 @@ Feature: Case Retention
     And I see "Case retention date" on the page
 
     Examples:
-      | case_number | caseRetention | totalSentence | retention_displayname | display_retentiondate             | courtroom  | ref |
-      | R{{seq}}EF1 | 1             | 1Y0M0D        | Not Guilty            | {{displayDate-{{date+1 years}}}}  | {{seq}}-30 | 30  |
-      | R{{seq}}GH1 | 2             | 7Y0M0D        | Non Custodial         | {{displayDate-{{date+7 years}}}}  | {{seq}}-31 | 31  |
-      | R{{seq}}IJ1 | 3             | 3Y0M0D        | Custodial             | {{displayDate-{{date+7 years}}}}  | {{seq}}-32 | 32  |
-      | R{{seq}}KL1 | 3             | 8Y0M0D        | Custodial             | {{displayDate-{{date+8 years}}}}  | {{seq}}-33 | 33  |
+      | case_number | caseRetention | totalSentence | retention_displayname | display_retentiondate              | courtroom  | ref |
+      | R{{seq}}EF1 | 1             | 1Y0M0D        | Not Guilty            | {{displayDate0-{{date+1 years}}}}  | {{seq}}-30 | 30  |
+      | R{{seq}}GH1 | 2             | 7Y0M0D        | Non Custodial         | {{displayDate0-{{date+7 years}}}}  | {{seq}}-31 | 31  |
+      | R{{seq}}IJ1 | 3             | 3Y0M0D        | Custodial             | {{displayDate0-{{date+7 years}}}}  | {{seq}}-32 | 32  |
+      | R{{seq}}KL1 | 3             | 8Y0M0D        | Custodial             | {{displayDate0-{{date+8 years}}}}  | {{seq}}-33 | 33  |
 
   @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history LIFE SENTENCE
@@ -303,8 +302,8 @@ Feature: Case Retention
     And I see "Case retention date" on the page
 
     Examples:
-      | case_number | caseRetention | totalSentence | retention_displayname | display_retentiondate             | courtroom  | ref |
-      | R{{seq}}MN1 | 4             | 99Y0M0D       | Life                  | {{displayDate-{{date+99 years}}}} | {{seq}}-34 | 34  |
+      | case_number | caseRetention | totalSentence | retention_displayname | display_retentiondate              | courtroom  | ref |
+      | R{{seq}}MN1 | 4             | 99Y0M0D       | Life                  | {{displayDate0-{{date+99 years}}}} | {{seq}}-34 | 34  |
 
   @DMP-1413 @regression
   Scenario: Change Retention Date by increasing it with specific date

@@ -444,7 +444,7 @@ public class StepDef_navigation extends StepDef_base {
 			NAV.clickText_inSameRow_asText(clickText, nextToText);
 		}
 	};
-	
+
 	@Then("^I see the \"([^\"]*)\" button$")
 	public void buttonVisible(String arg1) throws Exception {
 	    if (NAV.buttonVisible(arg1)) {

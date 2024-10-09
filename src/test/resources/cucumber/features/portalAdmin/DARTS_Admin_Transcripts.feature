@@ -242,12 +242,12 @@ Feature: Admin portal transcripts
     And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     And I click on "View" in the same row as "G{{seq}}003"
     And I see "This transcript request is for approved to closed scenario" in the same row as "Instructions"
     And I select the "Yes" radio button
     And I press the "Submit" button
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "G{{seq}}003" on the page
 
@@ -255,7 +255,7 @@ Feature: Admin portal transcripts
     And I see "This transcript request is for with transcriber to approved scenario" in the same row as "Instructions"
     And I select the "Yes" radio button
     And I press the "Submit" button
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "G{{seq}}004" on the page
 
@@ -263,7 +263,7 @@ Feature: Admin portal transcripts
     And I see "This transcript request is for with transcriber to closed scenario" in the same row as "Instructions"
     And I select the "Yes" radio button
     And I press the "Submit" button
-    And I click on the "Transcript requests to review" link
+#    And I click on the "Transcript requests to review" link
     Then I see "Requests to approve or reject" on the page
     And I do not see "G{{seq}}005" on the page
 
@@ -317,6 +317,7 @@ Feature: Admin portal transcripts
     And I click on "View" in the same row as "G{{seq}}005"
     And I select the "Assign to me" radio button
     And I press the "Continue" button
+    And I click on the "To do" link
     Then I see "G{{seq}}005" on the page
 
     When I click on the "Completed today" link
@@ -366,7 +367,7 @@ Feature: Admin portal transcripts
     And I see "Case details" on the page
     And I see "G{{seq}}001" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeG {{seq}}-40" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeG {{seq}}-40}}" in the same row as "Judge(s)"
     And I see "DefG {{seq}}-40" in the same row as "Defendant(s)"
 
     #DMP-2525-AC3 and DMP-1265 Change status link and process
@@ -402,7 +403,7 @@ Feature: Admin portal transcripts
     And I see "This transcript request is for awaiting authorisation to closed scenario" in the same row as "Instructions"
     And I see "G{{seq}}002" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeG {{seq}}-41" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeG {{seq}}-41}}" in the same row as "Judge(s)"
     And I see "DefG {{seq}}-41" in the same row as "Defendant(s)"
 
     When I click on the "Change status" link
@@ -436,7 +437,7 @@ Feature: Admin portal transcripts
     And I see "This transcript request is for approved to closed scenario" in the same row as "Instructions"
     And I see "G{{seq}}003" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeG {{seq}}-42" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeG {{seq}}-42}}" in the same row as "Judge(s)"
     And I see "DefG {{seq}}-42" in the same row as "Defendant(s)"
 
     When I click on the "Change status" link
@@ -470,7 +471,7 @@ Feature: Admin portal transcripts
     And I see "This transcript request is for with transcriber to approved scenario" in the same row as "Instructions"
     And I see "G{{seq}}004" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeG {{seq}}-43" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeG {{seq}}-43}}" in the same row as "Judge(s)"
     And I see "DefG {{seq}}-43" in the same row as "Defendant(s)"
 
     When I click on the "Change status" link
@@ -506,7 +507,7 @@ Feature: Admin portal transcripts
     And I see "This transcript request is for with transcriber to closed scenario" in the same row as "Instructions"
     And I see "G{{seq}}005" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeG {{seq}}-44" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeG {{seq}}-44}}" in the same row as "Judge(s)"
     And I see "DefG {{seq}}-44" in the same row as "Defendant(s)"
 
     When I click on the "Change status" link
@@ -542,7 +543,7 @@ Feature: Admin portal transcripts
     And I see "This transcript request is for awaiting authorisation to requested scenario" in the same row as "Instructions"
     And I see "G{{seq}}001" in the same row as "Case ID"
     And I see "Harrow Crown Court" in the same row as "Courthouse"
-    And I see "JudgeG {{seq}}-40" in the same row as "Judge(s)"
+    And I see "{{upper-case-JudgeG {{seq}}-40}}" in the same row as "Judge(s)"
     And I see "DefG {{seq}}-40" in the same row as "Defendant(s)"
 
     When I click on the "Change status" link
@@ -553,7 +554,7 @@ Feature: Admin portal transcripts
     And I see "Closed" in the same row as "Status"
 
     When I click on the "History" link
-    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    Then I see "Requested by Requestor (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for awaiting authorisation to requested scenario" on the page
     And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
     And I see "Requested by Darts Admin (darts.admin@hmcts.net)" on the page

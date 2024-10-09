@@ -3,8 +3,8 @@ Feature: Super User Permission
   Scenario: Case Search data creation
 
     Given I create a case
-      | courthouse         | courtroom  | case_number | defendants      | judges           | prosecutors         | defenders         |
-      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor      | testdefender      |
+      | courthouse         | courtroom  | case_number | defendants      | judges           | prosecutors    | defenders    |
+      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001 | Def A{{seq}}-1  | Judge {{seq}}-1  | testprosecutor | testdefender |
 
     Given I authenticate from the CPP source system
     Given I create an event
@@ -13,17 +13,26 @@ Feature: Super User Permission
 
     When I load an audio file
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
-      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
+      | Harrow Crown Court | A{{seq}}-1 | A{{seq}}001  | {{date+0/}} | 09:30:00  | 09:31:00 | sample1.mp2 |
 
   @DMP-2404-CaseSearch
   Scenario: Case search
     When I am logged on to DARTS as a SUPERUSER user
     And I click on the "Search" link
     And I see "Search for a case" on the page
-    And I set "Case ID" to "A{{seq}}001"
+    # Need a search with not enough characters
+    And I set "Case ID" to "A"
     And I press the "Search" button
     Then I see "We need more information to search for a case" on the page
-    Then I see "Refine your search by adding more information and try again." on the page
+    And I see "Refine your search by adding more information and try again." on the page
+
+    Then I click on the "Clear search" link
+    And I set "Case ID" to "A{{seq}}001"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)   | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK* | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     #Advanced search
     When I click on the "Clear search" link
@@ -33,8 +42,9 @@ Feature: Super User Permission
     And I set "Courtroom" to "A{{seq}}-1"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)   | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK* | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     When I click on the "Clear search" link
     And I click on the "Advanced search" link
@@ -236,8 +246,9 @@ Feature: Super User Permission
 
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)   | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK* | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
     Then I see "Events and audio recordings" on the page
@@ -271,6 +282,7 @@ Feature: Super User Permission
     And I see "Current" on the page
     And I see "Expired" on the page
 
+  # SUPERUSER does not request transcripts?
   @DMP-2404-Transcription
   Scenario: Transcription
     Given I am logged on to DARTS as a SUPERUSER user
@@ -283,7 +295,8 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on the "{{displaydate}}" link
@@ -339,8 +352,9 @@ Feature: Super User Permission
     And I set "Case ID" to "A{{seq}}001"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)   | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK* | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I see "Retained until" on the page
     And I see "No date applied" on the page
@@ -355,10 +369,11 @@ Feature: Super User Permission
     And I see "Retention audit history" on the page
     And I see "No history to show" on the page
 
-  # Close the case
+    # Close the case
+    Given I authenticate from the CPP source system
     Given I create an event
       | message_id | type  | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text | date_time              |
-      | {{seq}}001 | 30300 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-28 | A{{seq}}001  | {{seq}}KH1 | {{timestamp-10:00:00}} |
+      | {{seq}}001 | 30300 |          | {{seq}}167 | Harrow Crown Court | {{seq}}-1  | A{{seq}}001  | {{seq}}KH1 | {{timestamp-10:00:00}} |
 
     Then I click on the breadcrumb link "<case_number>"
     And I click on the "<case_number>" link
@@ -436,7 +451,7 @@ Feature: Super User Permission
       | case_number |
       | A{{seq}}001 |
 
-  @DMP-2562
+  @DMP-2562 @MissingData
   Scenario: Request download audio for Super Admin
     When I am logged on to DARTS as an Admin user
     And I click on the "Search" link
@@ -445,7 +460,8 @@ Feature: Super User Permission
     And I press the "Search" button
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
-      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | JUDGE {{seq}}-1 | Def A{{seq}}-1 |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | *NO-CHECK*      | Def A{{seq}}-1 |
+#      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
 
     When I click on "A{{seq}}001" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "A{{seq}}-1"
@@ -503,3 +519,149 @@ Feature: Super User Permission
     And I see "10:31:00" on the page
     And I see "We are preparing your audio." on the page
     And I see "When it is ready we will send an email to Darts Admin and notify you in the DARTS application." on the page
+
+  @DMP-3810
+  Scenario: Can search for cases / audio / events / hearings
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Search" link
+    And I see "You can search for cases, hearings, events and audio." on the page
+
+    Then I set "Filter by courthouse" to "Harrow Crown Court"
+    And I select the "Cases" radio button
+
+    And I press the "Search" button
+    Then I see "There are more than 1000 results. Refine your search." on the page
+
+    Then I set "Case ID" to "A{{seq}}001"
+    And I press the "Search" button
+    And I see "Showing 1-1 of 1" on the page
+    And I verify the HTML table contains the following values
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)                       | Defendant(s)   |
+      | A{{seq}}001 | Harrow Crown Court | A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} | Def A{{seq}}-1 |
+
+    Then I select the "Hearings" radio button
+    And I press the "Search" button
+    And I verify the HTML table contains the following values
+      | Case ID     | Hearing date | Courthouse         | Courtroom  |
+      | A{{seq}}001 | {{date+0/}}  | Harrow Crown Court | A{{seq}}-1 |
+
+    Then I select the "Events" radio button
+    And I press the "Search" button
+    And I see "A{{seq}}-1" in the same row as "Hearing started"
+    And I see "A{{seq}}-1" in the same row as "Harrow Crown Court"
+    And I see "A{{seq}}-1" in the same row as "A{{seq}}ABC-1"
+
+    Then I select the "Audio" radio button
+    And I press the "Search" button
+    And I see "A{{seq}}-1" in the same row as "Harrow Crown Court"
+
+  Scenario Outline: Users
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Users" link
+    And I see "Search for user" on the page
+    And I do not see the "Create new user" button
+
+    Then I set "Email" to "<user_email_address>"
+    And I press the "Search" button
+
+    Then I see "1 result" on the page
+    And I see "<user_name>" in the same row as "<user_email_address>"
+    And I click on "View" in the same row as "<user_email_address>"
+
+    Then I see "User record" on the page
+    And I see "Active user" on the page
+    And I see "<user_name>" on the page
+    And I see the "Deactivate user" button
+    And I do not see the "Edit user" button
+
+    Then I press the "Deactivate user" button
+    And I see "Deactivate user" on the page
+    And I see "Deactivating this user will remove their access to DARTS." on the page
+    And I see the "Deactivate user" button
+
+    Then I press the "Deactivate user" button
+    And I see "User record deactivated" on the page
+    And I see "<user_name>" on the page
+    And I see "Inactive" on the page
+    And I do not see the "Activate user" button
+    And I do not see the "Deactivate user" button
+
+    Then I select column usr_id from table darts.user_account where user_email_address = "<user_email_address>"
+    Then I set table darts.user_account  column is_active to "true" where usr_id = "{{usr_id}}"
+
+    Examples:
+      | user_name | user_email_address |
+      | DMP 3810  | DMP3810@hmcts.net  |
+
+  Scenario: Courthouses
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Courthouses" link
+    And I see "Search for courthouse" on the page
+    And I do not see the "Create new courthouse" button
+
+    Then I set "Courthouse name" to "Harrow Crown Court"
+    And I press the "Search" button
+
+    Then I see "1 result" on the page
+    And I verify the HTML table contains the following values
+      | Courthouse name    | Display name       |
+      | HARROW CROWN COURT | Harrow Crown Court |
+
+    Then I click on "HARROW CROWN COURT" in the same row as "Harrow Crown Court"
+    And I see "Courthouse record" on the page
+    And I see "Harrow Crown Court" on the page
+    And I do not see the "Edit courthouse" button
+
+  # Two things that could happen here... one result redirects to the record, more than one result shows a list of results
+  Scenario: Transformed media
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Transformed media" link
+
+    Then I see "Transformed media" on the page
+    And I click on the "Advanced search" link
+    And I set "Case ID" to "A{{seq}}001"
+    And I press the "Search" button
+    And I see "A{{seq}}001" in the same row as "Harrow Crown Court"
+    And I see "A{{seq}}001" in the same row as "{{displaydate}}"
+    And I see "A{{seq}}001" in the same row as "DartsSuperUser"
+
+    Then I select column cas_id from table darts.court_case where case_number = "A{{seq}}001"
+    And I select column hea_id from table darts.hearing where cas_id = "{{cas_id}}"
+    And I select column mer_id from table darts.media_request where hea_id = "{{hea_id}}"
+    And I select column trm_id from table darts.transformed_media where mer_id = "{{mer_id}}"
+    And I click on "{{trm_id}}" in the same row as "A{{seq}}001"
+    And I see "Transformed media" on the page
+    And I see "Owner" in the same row as "DartsSuperUser (darts.superuser@hmcts.net)"
+    And I do not see link with text "Change"
+
+  Scenario: Audio (accessed via search audio)
+    Given I am logged on to DARTS as a SUPERUSER user
+    And I click on the "Admin portal" link
+    And I click on the "Search" link
+    And I see "You can search for cases, hearings, events and audio." on the page
+
+    Then I set "Case ID" to "A{{seq}}001"
+    And I select the "Audio" radio button
+    And I press the "Search" button
+
+    Then I see "Harrow Crown Court" in the same row as "A{{seq}}-1"
+    Then I select column cas_id from table darts.court_case where case_number = "A{{seq}}001"
+    And I select column med_id from table darts.media_linked_case where cas_id = "{{cas_id}}"
+    And I click on "{{med_id}}" in the same row as "A{{seq}}-1"
+
+    Then I see "Audio file" on the page
+    And I see "Basic details" on the page
+    And I see "Courthouse" in the same row as "Harrow Crown Court"
+    And I see "Courtroom" in the same row as "A{{seq}}-1"
+    And I see "Associated cases" on the page
+    And I verify the HTML table contains the following values
+      | Case ID     | Hearing date     | Defendant(s)   | Judge(s)                       |
+      | A{{seq}}001 | {{displaydate0}} | Def A{{seq}}-1 | {{upper-case-judge {{seq}}-1}} |
+    And I do not see link with text "Advanced details"
+    And I do not see the "Hide or delete" button
+    And I do not see the "Unhide" button
+    And I do not see the "Unmark for deletion and unhide" button

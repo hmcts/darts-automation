@@ -1,11 +1,18 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+
+import com.jayway.jsonpath.JsonPath;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -36,13 +43,13 @@ public class StepDef_jsonApi extends StepDef_base {
 	private static Logger log = LogManager.getLogger("StepDef_jsonApi");
 	private static String eventFields = "|message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|";
 	private JsonApi jsonApi;
-	private WaitUtils wait;
+	private WaitUtils WAIT;
 	
 	
 	public StepDef_jsonApi(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
 		jsonApi = new JsonApi();
-		wait = new WaitUtils(webDriver);
+		WAIT = new WaitUtils(webDriver);
 	}
 	
 	@Given("I authenticate as a/an {word} user") 
@@ -224,21 +231,37 @@ public class StepDef_jsonApi extends StepDef_base {
 		testdata.statusCode = apiResponse.statusCode;
 		testdata.responseString = apiResponse.responseString;
 		Assertions.assertEquals(String.valueOf("202"), testdata.statusCode, "Invalid status code");
-		wait.pause(5);
+		WAIT.pause(5);
 	}
 
 	@When("I process the daily list for courthouse {string}")
 	public void processTheDailyListForCourthouse(String courthouse) {
-//		String endpoint = "/dailylists/run?listing_courthouse=";
+        int waitTimeInSeconds = 600;
+        ApiResponse apiResponse;
 		String endpoint = "/dailylists/run";
-		ApiResponse apiResponse = jsonApi.postApiWithQueryParams(endpoint, "listing_courthouse=" + Substitutions.substituteValue(courthouse));
-		while (apiResponse.statusCode.equals("409")) {
-			apiResponse = jsonApi.postApiWithQueryParams(endpoint, "listing_courthouse=" + Substitutions.substituteValue(courthouse));
-		}
-		testdata.statusCode = apiResponse.statusCode;
-		testdata.responseString = apiResponse.responseString;
+        log.info("wait time {} for daily lisdt for courthouse {}", waitTimeInSeconds, courthouse);
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
+                .pollingEvery(Duration.ofSeconds(10));  
+        Function<WebDriver, Boolean> dailyListIsProcessed = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+            	ApiResponse apiResponse = jsonApi.postApiWithQueryParams(endpoint, "listing_courthouse=" + Substitutions.substituteValue(courthouse));
+
+        		testdata.statusCode = apiResponse.statusCode;
+        		testdata.responseString = apiResponse.responseString;
+        		return !apiResponse.statusCode.equals("409");
+            };
+        };
+        try {
+            wait.until(dailyListIsProcessed);
+            log.info("Daily list has been processed");
+        } catch (TimeoutException e) {
+            log.warn("Wait complete - Daily list has NOT been processed");
+        }
+        
 		Assertions.assertEquals(String.valueOf("202"), testdata.statusCode, "Invalid status code");
-		wait.pause(5);
+		WAIT.pause(5);
 	}
 	
 	@When("I call POST {word} API using json body:")
