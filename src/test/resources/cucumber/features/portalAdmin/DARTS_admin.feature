@@ -536,7 +536,7 @@ Feature: Admin
       And I see "Request method" in the same row as "Manual"
       And I see "Request ID" in the same row as "17165"
       And I see "Urgency" in the same row as "Overnight"
-      And I see "Requested by" in the same row as "Requester"
+      And I see "Requested by" in the same row as "Requestor"
       And I see "Received" in the same row as "19 Feb 2024 10:41:26"
       And I see "Judge approval" in the same row as "Yes"
 
@@ -588,7 +588,7 @@ Feature: Admin
       And I see "Request method" in the same row as "Manual"
       And I see "Request ID" in the same row as "36349"
       And I see "Urgency" in the same row as "Overnight"
-      And I see "Requested by" in the same row as "Requester"
+      And I see "Requested by" in the same row as "Requestor"
       And I see "Instructions" in the same row as "DMP-3104"
       And I see "Judge approval" in the same row as "Yes"
       And I see "Removed from user transcripts" in the same row as "No"
