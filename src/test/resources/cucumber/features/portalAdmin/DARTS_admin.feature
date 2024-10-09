@@ -123,15 +123,15 @@ Feature: Admin
     And I press the "Continue" button
     Then I see "There is a problem" on the page
     And I see an error message "<ErrorMessage>"
-#    And I see "<Field>" on the page
-#    And I see an error message "<ErrorMessage>"
+    And I see "<Field>" on the page
+    And I see an error message "<ErrorMessage>"
     Examples:
-      | Full name    | Email                 | Description | Field     | ErrorMessage                                                        | Ref           |
-      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        | DMP-630-AC3-1 |
-      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com | DMP-630-AC3-2 |
-      |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   | DMP-630-AC3-3 |
-      | Test         |                       |             | email     | Enter an email address                                              | DMP-630-AC3-4 |
-      | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters | DMP-630-AC3-5 |
+      | Full name    | Email                 | Description | Field     | ErrorMessage                                                        |
+      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        |
+      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com |
+      |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   |
+      | Test         |                       |             | email     | Enter an email address                                              |
+      | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters |
 
   @DMP-2931 @regression
   Scenario: Remove user role, single and multiple, test cancel link
@@ -855,3 +855,160 @@ Feature: Admin
     And I see "Created by" in the same row as "System"
     And I see "Date last modified" in the same row as "22 Aug 2024 at 16:16:55"
     And I see "Last modified by" in the same row as "System"
+
+    @DMP-2471 @DMP-2475
+    Scenario: Create and Edit new retention policy
+      When I am logged on to the admin portal as an ADMIN user
+      Then I click on the "System configuration" link
+      And I click on the "Create policy" link
+      And I see "Create new policy" on the page
+      And I set "Display name" to "DMP-2471-AC1"
+      And I set "Name" to "AC1-2471"
+      And I set "Description" to ""
+      And I set "Fixed policy key" to "99"
+      And I set "Years" to "05"
+      And I set "Months" to "04"
+      And I set "Days" to "02"
+      And I see "Policy start" on the page
+      And I see "Start date" on the page
+      And I set "Start date" to "04/10/2025"
+      And I set "Hour" to "00"
+      And I set "Minutes" to "59"
+      And I click on the "Create" link
+      Then I see "Retention policy created" on the page
+      And I see "Retention policies" on the page
+      And I see "Active" on the page
+      And I see "Inactive" on the page
+    #Cancel Policy.
+      When I click on the "Create policy" link
+      Then I see "Create new policy" on the page
+      And I set "Display name" to "PMTest11"
+      And I set "Name" to "PMTest11"
+      And I set "Description" to ""
+      And I set "Fixed policy key" to "TestPM11"
+      And I set "Years" to "05"
+      And I set "Months" to "05"
+      And I set "Days" to "05"
+      And I set "Start date" to "04/10/2025"
+      And I set "Hour" to "05"
+      And I set "Minutes" to "05"
+      And I click on the "Cancel" link
+      Then I see "Retention policies" on the page
+      And I see "Active" on the page
+      And I see "Inactive" on the page
+   #Error
+      When I click on the "Create policy" link
+      Then I see "Create new policy" on the page
+      And I set "Display name" to ""
+      And I set "Name" to ""
+      And I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A"
+      And I set "Fixed policy key" to ""
+      And I set "Years" to ""
+      And I set "Months" to ""
+      And I set "Days" to ""
+      And I set "Start date" to ""
+      And I set "Hour" to ""
+      And I set "Minutes" to ""
+      And I click on the "Create" link
+      Then I see "There is a problem" on the page
+      And I see "Enter a display name" on the page
+      And I see "Enter a name" on the page
+      And I see "Enter a description shorter than 256 characters" on the page
+      And I see "Enter a fixed policy key" on the page
+      And I see "Enter a duration of at least 1 day" on the page
+      And I see "Enter a policy start date" on the page
+      And I see "Enter a start time" on the page
+    # All fields are already exist
+      And I click on the "Cancel" link
+      Then I see "Retention policies" on the page
+      When I click on the "Create policy" link
+      Then I see "Create new policy" on the page
+      And I set "Display name" to "PM-Test"
+      And I set "Name" to "PM-Test1"
+      And I set "Description" to ""
+      And I set "Fixed policy key" to "Test-PM"
+      And I set "Years" to "00"
+      And I set "Months" to "01"
+      And I set "Days" to "02"
+      And I set "Start date" to "01/01/2025"
+      And I set "Hour" to "01"
+      And I set "Minutes" to "00"
+      And I click on the "Create" link
+      Then I see "There is a problem" on the page
+      And I see "Enter a unique display name" on the page
+      And I see "Enter a unique name" on the page
+      And I see "The fixed policy key entered already exists in the database. Fixed policy keys must be unique" on the page
+      Then I click on the "Cancel" link
+      #Edit policy @DMP-2475
+    And I click on "Edit Policy" in the same row as "DMP-2471-AC1"
+    And I set "Display name" to "DMP-2475-AC1-Edit"
+    And I set "Name" to "AC1-2475-Edit"
+    And I set "Description" to "Editing DMP-2471"
+    And I set "Fixed policy key" to "92"
+    And I set "Years" to "02"
+    And I set "Months" to "12"
+    And I set "Days" to "31"
+    And I see "Policy start" on the page
+    And I see "Start date" on the page
+    And I set "Start date" to "29/04/2026"
+    And I set "Hour" to "10"
+    And I set "Minutes" to "30"
+    And I click on the "Save" link
+    Then I see "Retention policy updated" on the page
+  #Cancel policy
+    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
+    And I click on the "Cancel" link
+    Then I see "Retention policies" on the page
+  #AC3
+    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
+    And I see "Retention policy" on the page
+    And I clear the "Display name" field
+    And I set "Display name" to ""
+    And I clear the "Name" field
+    And I set "Name" to ""
+    And I set "Description" to "q3TCS3L1WznoYgzZzrvuJf28lTuxaq5cckBrVlT0xuPN4seDgzWaX0RMuF6cAYKaZMxrQpJBzHmUzLGh32RbglWr6OOZA2b0zzTp1rKCtOKAYlVcyocDyp4yOLv1PSuFtOR73f7k2cT5vJPcQSXqdGxzlbviKj6JhQr7lSz6IpW2rxyAjV0TwpAYiJIgvK9se05x02yL6BrZUVTm0JJuuvKpjkXQrPKB8AUujfQPpRfUuLAdL8r16XolnERhgb3A"
+    And I clear the "Fixed policy key" field
+    And I set "Fixed policy key" to ""
+    And I clear the "Years" field
+    And I set "Years" to ""
+    And I clear the "Months" field
+    And I set "Months" to ""
+    And I clear the "Days" field
+    And I set "Days" to ""
+    And I clear the "Start date" field
+    And I set "Start date" to ""
+    And I clear the "Hour" field
+    And I set "Hour" to ""
+    And I clear the "Minutes" field
+    And I set "Minutes" to ""
+    And I click on the "Save" link
+    Then I see "There is a problem" on the page
+    And I see "Enter a display name" on the page
+    And I see "Enter a name" on the page
+    And I see "Enter a description shorter than 256 characters" on the page
+    And I see "Enter a fixed policy key" on the page
+    And I see "Enter a duration of at least 1 day" on the page
+    And I see "Enter a policy start date" on the page
+    And I see "Enter a start time" on the page
+  #fields are already exist
+    And I click on the "Cancel" link
+    Then I see "Retention policies" on the page
+    And I click on "Edit Policy" in the same row as "DMP-2475-AC1"
+    And I set "Display name" to "Custodial"
+    And I set "Name" to "DMP-2532 AC3"
+    And I set "Description" to ""
+    And I clear the "Fixed policy key" field
+    And I set "Fixed policy key" to ""
+    And I set "Years" to "00"
+    And I set "Months" to "12"
+    And I set "Days" to "31"
+    And I set "Start date" to "01/01/2024"
+    And I set "Hour" to "11"
+    And I set "Minutes" to "30"
+    And I click on the "Save" link
+    Then I see "There is a problem" on the page
+    And I see "Enter a unique display name" on the page
+    And I see "Enter a unique name" on the page
+    And I see "Enter a fixed policy key" on the page
+    And I see "Enter a policy start date in the future" on the page
+    And I see "Enter a policy start time in the future" on the page
