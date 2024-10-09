@@ -1,3 +1,4 @@
+@request_transcript
 Feature: Request Transcript
 
   @DMP-696 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-917 @DMP-925 @DMP-934 @DMP-1009 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1053 @DMP-1054 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-2123 @DMP-2124 @DMP-2740 @regression
@@ -142,7 +143,7 @@ Feature: Request Transcript
     And I see "{{displaydate}}" in the same row as "Hearing date"
     And I see "Specified Times" in the same row as "Request type"
     And I see "Overnight" in the same row as "Urgency"
-    And I see "Requester" in the same row as "Requested by"
+    And I see "Requestor" in the same row as "Requested by"
     And I see "Requesting transcript Specified Times for one minute of audio selected via event checkboxes." in the same row as "Instructions"
     And I see "Yes" in the same row as "Judge approval"
 
@@ -935,8 +936,8 @@ Feature: Request Transcript
 
     When I click on the "Cancel and go back to the search results" link
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom | Judge(s)         | Defendant(s)   |
-      | C{{seq}}001 | Harrow Crown Court | {{seq}}-8 | JudgeC {{seq}}-8 | DefC {{seq}}-8 |
+      | Case ID     | Courthouse         | Courtroom | Judge(s)                        | Defendant(s)   |
+      | C{{seq}}001 | Harrow Crown Court | {{seq}}-8 | {{upper-case-JudgeC {{seq}}-8}} | DefC {{seq}}-8 |
 
   @DMP-892 @DMP-917 @DMP-1012 @regression @MissingData
   Scenario: Transcript - Request a new transcript cancel links

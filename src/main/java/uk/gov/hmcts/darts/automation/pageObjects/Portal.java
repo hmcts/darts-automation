@@ -411,7 +411,13 @@ public class Portal {
     			"max(mer_id)");
         int waitTimeInSeconds = 300;
         log.info("wait time {} for user {}, courthouse {}, case {}, date {}", waitTimeInSeconds, user, courthouse, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
-        waitForRequestedAudioToBeReady(mer_id);
+        try {
+        	waitForRequestedAudioToBeReady(mer_id);
+        } catch (Exception | AssertionError e) {
+            log.fatal("Wait complete - request not ready for user {}, courthouse {}, case {}, date {}", 
+            		user, courthouse, caseNumber, hearingDate);
+            Assertions.fail("Request not ready");
+        }
     }
     
     public void waitForRequestedAudioToBeReady(String requestId) throws Exception {
@@ -439,7 +445,8 @@ public class Portal {
             wait.until(requestedAudioIsReady);
             log.info("Audio request ready");
         } catch (TimeoutException e) {
-            log.warn("Wait complete - request not ready");
+            log.fatal("Wait complete - request not ready for request id {}", requestId);
+            Assertions.fail("Request not ready");
         }
     }
 
