@@ -444,8 +444,8 @@ Scenario: Update preview button on hearing screen
     And I set "Case ID" to "B{{seq}}006"
     And I press the "Search" button
     Then I verify the HTML table contains the following values
-      | Case ID     | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)   |
-      | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | Judge B{{seq}}-6 | Def B{{seq}}-6 |
+      | Case ID     | Courthouse         | Courtroom  | Judge(s)                        | Defendant(s)   |
+      | B{{seq}}006 | Harrow Crown Court | B{{seq}}-6 | {{upper-case-Judge B{{seq}}-6}} | Def B{{seq}}-6 |
 
     When I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
     And I click on "{{displaydate}}" in the same row as "B{{seq}}-6"
