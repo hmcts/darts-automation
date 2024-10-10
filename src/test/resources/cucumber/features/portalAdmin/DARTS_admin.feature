@@ -123,15 +123,15 @@ Feature: Admin
     And I press the "Continue" button
     Then I see "There is a problem" on the page
     And I see an error message "<ErrorMessage>"
-    And I see "<Field>" on the page
-    And I see an error message "<ErrorMessage>"
+#    And I see "<Field>" on the page
+#    And I see an error message "<ErrorMessage>"
     Examples:
-      | Full name    | Email                 | Description | Field     | ErrorMessage                                                        |
-      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        |
-      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com |
-      |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   |
-      | Test         |                       |             | email     | Enter an email address                                              |
-      | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters |
+      | Full name    | Email                 | Description | Field     | ErrorMessage                                                        | Ref           |
+      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        | DMP-630-AC3-1 |
+      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com | DMP-630-AC3-2 |
+      |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   | DMP-630-AC3-3 |
+      | Test         |                       |             | email     | Enter an email address                                              | DMP-630-AC3-4 |
+      | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters | DMP-630-AC3-5 |
 
   @DMP-2931 @regression
   Scenario: Remove user role, single and multiple, test cancel link

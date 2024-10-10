@@ -63,7 +63,7 @@ Feature: Admin portal
     And I set "Email" to "automation@KH{{seq}}001.net"
     And I press the "Search" button
     And I click on "View" in the same row as "automation@KH{{seq}}001.net"
-    And I click on the "User Groups" link
+    And I click on the "Groups" link
   #AC3 - Removing user groups
     Then I see "Assign groups" on the page
 
@@ -76,7 +76,7 @@ Feature: Admin portal
     And I set "Email" to "automation@KH{{seq}}001.net"
     And I press the "Search" button
     And I click on "View" in the same row as "automation@KH{{seq}}001.net"
-    And I click on the "User Groups" link
+    And I click on the "Groups" link
   #AC1 - Assigning user groups
     And I press the "Assign groups" button
     And I check the checkbox in the same row as "Swansea_APPROVER" "Approver"
@@ -95,7 +95,7 @@ Feature: Admin portal
     And I set "Email" to "automation@KH{{seq}}001.net"
     And I press the "Search" button
     And I click on "View" in the same row as "automation@KH{{seq}}001.net"
-    Then I click on the "User Groups" link
+    Then I click on the "Groups" link
   #AC1 - Remove a group confirmation screen
     Then I check the checkbox in the same row as "Swansea_APPROVER" "Approver"
     And I press the "Remove groups" button
