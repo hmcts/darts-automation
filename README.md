@@ -43,8 +43,10 @@ To run locally, use
 	
 	RUN_LOCAL=true
 	seq_prefix=n   choose a number 2-9 to prefix the sequence number when RUN_LOCAL=true
+
+n.b. not using RUN_LOCAL=true when not run from jenkins will cause jenkins runs to fail
 	
-Also when run locally, optionally:
+When run locally, optionally:
 
 	run_Headless=true
 	seq_prefix=n   choose a number 2-9 to prefix the sequence number when RUN_LOCAL=true

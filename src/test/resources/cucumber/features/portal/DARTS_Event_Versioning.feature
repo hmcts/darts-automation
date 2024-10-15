@@ -1,7 +1,9 @@
-@ts667
+@DMP-4034 @DMP-4036 @regression
 Feature: Event Versioning
 
 Scenario Outline: Event Versioning - 3 identical events
+    Identical messages may be sent by XHIBIT / CPP if a successful response is not received.
+    They should all be loaded into DARTS but only the latest should be displayed in the event details screens
 
   Given I create a case
     | courthouse   | courtroom   | case_number  | defendants   | judges         | prosecutors         | defenders         |
@@ -33,6 +35,8 @@ Examples:
 
 
 Scenario Outline: Event Versioning - identical event id on 2 events
+    Versioned event messages may be received from XHIBIT / CPP with the same event_id. 
+    They should all be loaded into DARTS but only the latest should be displayed in the event details screens
 
   Given I create a case
     | courthouse   | courtroom   | case_number  | defendants   | judges         | prosecutors         | defenders         |
@@ -63,6 +67,7 @@ Examples:
 		| CPP    | {{seq}}2   | 1100 |         | {{seq}}21 | Harrow Crown Court | B{{seq}}-32 | B{{seq}}032 | B{{seq}}ABC-32  | 10:22:00 | Hearing started |
 
 Scenario Outline: Event NON-Versioning - identical MESSAGE id on 2 events
+    Multiple event messages with the same message_id but different event_id will all be loaded and treated as different events
 
   Given I create a case
     | courthouse   | courtroom   | case_number  | defendants   | judges         | prosecutors         | defenders         |
