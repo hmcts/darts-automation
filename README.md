@@ -39,9 +39,14 @@ Environment variables required from ide / jenkins:
 	DAR_MID_TIER_PASSWORD
 	DARTS_ADMIN_USERNAME
 	
-	RUN_LOCAL
+To run locally, use
 	
-Also when run locally, optionally:
+	RUN_LOCAL=true
+	seq_prefix=n   choose a number 2-9 to prefix the sequence number when RUN_LOCAL=true
+
+n.b. not using RUN_LOCAL=true when not run from jenkins will cause jenkins runs to fail
+	
+When run locally, optionally:
 
 	run_Headless=true
 	seq_prefix=n   choose a number 2-9 to prefix the sequence number when RUN_LOCAL=true
