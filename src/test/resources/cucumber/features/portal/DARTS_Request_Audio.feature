@@ -1,6 +1,6 @@
 Feature: Request Audio
 
-@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-1048 @DMP-2121 @DMP-2562 @regression
+@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-1048 @DMP-2121 @DMP-2562 @regression @ts667
 Scenario: Request Audio data creation
 
   Given I create a case
@@ -24,6 +24,21 @@ Scenario: Request Audio data creation
     | Harrow Crown Court | B{{seq}}-7 | B{{seq}}007  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
     | Harrow Crown Court | B{{seq}}-8 | B{{seq}}008  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
     | Harrow Crown Court | B{{seq}}-9 | B{{seq}}009  | {{date+0/}} | 10:01:00  | 10:02:00 | sample1.mp2 |
+
+@DMP-2300 @regression
+  Scenario: Audio is not available to preview message.
+
+  #NOTE: DMP-2300 NEEDS TO RUN STRAIGHT AFTER THE DATA CREATION TO GET THE PREVIEW MESSAGE
+  Given I am logged on to DARTS as a transcriber user
+  When I click on the "Search" link
+  And I set "Case ID" to "B{{seq}}006"
+  And I press the "Search" button
+  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
+  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
+  Then I see "{{seq}}ABC-6" on the page
+  And I select the "Audio preview and events" radio button
+  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
+  Then I see "This audio is not currently available in DARTS, please try again later." on the page
 
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-1048 @regression
 Scenario: Request Audio with Request Type Playback Only
@@ -294,7 +309,7 @@ Scenario Outline: Request Audio Events only available for hearing
     | Case ID                                                  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
     | CASE1009                                                 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
     | !\nRestriction\nThere are restrictions against this case | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*     |
-    | CASE1009                                                 | TS0002     | ROOM_A    |          |              |
+    | CASE1009                                                 | Liverpool  | ROOM_A    |          |              |
 
   #Case Details
 
@@ -353,7 +368,7 @@ Scenario Outline: Preview Audio Player Loading
     | Case ID                                                  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
     | CASE1009                                                 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
     | !\nRestriction\nThere are restrictions against this case | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*     |
-    | CASE1009                                                 | TS0002     | ROOM_A    |          |              |
+    | CASE1009                                                 | Liverpool  | ROOM_A    |          |              |
 
   #Case Details
 
@@ -372,7 +387,7 @@ Scenario Outline: Preview Audio Player Loading
     | StartTime            | EndTime            | Text                                 |
     | Start time: 10:00:00 | End time: 11:14:05 | Loading Audio Preview... Please Wait |
 
-@DMP-966
+@DMP-966 @review
 Scenario: Hearing table sorted with time
   Given I am logged on to DARTS as an external user
   And I click on the "Search" link
@@ -383,7 +398,7 @@ Scenario: Hearing table sorted with time
     | Case ID                                                  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
     | CASE1009                                                 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
     | !\nRestriction\nThere are restrictions against this case | *IGNORE*   | *IGNORE*  | *IGNORE* | *IGNORE*     |
-    | CASE1009                                                 | TS0002     | ROOM_A    |          |              |
+    | CASE1009                                                 | Liverpool  | ROOM_A    |          |              |
 
   #Case Details
 
@@ -436,8 +451,8 @@ Scenario: Update preview button on hearing screen
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
   Then I see "This audio is not currently available in DARTS, please try again later." on the page
 
-  @DMP-2562 @regression @MissingData
-  Scenario: Request download audio for Super Admin
+  @DMP-2562 @regression
+  Scenario: Request download audio for Admin user
     When I am logged on to DARTS as an Admin user
     And I click on the "Search" link
     And I see "Search for a case" on the page
@@ -495,3 +510,203 @@ Scenario: Update preview button on hearing screen
     And I see "10:02:00" on the page
     And I press the "Confirm" button
     Then I see "Your order is complete" on the page
+    
+
+
+@DMP-4035 @regression
+  Scenario Outline: Admin user can hide audio
+    Given I am logged on to the admin portal as an Admin user
+      And I select column med_id from table CASE_AUDIO where cas.case_number = "<caseId>" and courthouse_name = "<courthouse>"
+      And I click on the "Search" link
+      And I see "You can search for cases, hearings, events and audio." on the page
+      And I set "Case ID" to "<caseId>"
+      And I press the "Search" button
+      And I click on the "Audio" link
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                       | Channel | Hidden |
+      | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | No     |
+
+    When I click on the "{{med_id}}" link
+     And I press the "Hide or delete" button
+     And I press the "Hide or delete" button
+    Then I see "Select a reason for hiding and/or deleting the file" on the page
+
+    When I select the "Other reason to hide only" radio button
+     And I press the "Hide or delete" button
+    Then I see "Enter a ticket reference" on the page
+
+    When I set "Enter ticket reference" to "T{{seq}}001"
+     And I press the "Hide or delete" button
+    Then I see "Provide details relating to this action" on the page
+
+    When I set "Comments" to "DMP-4035"
+    Then I see "You have 248 characters remaining" on the page
+    When I press the "Hide or delete" button
+    Then I see "Files successfully hidden or marked for deletion" on the page
+     And I see "Check for associated files" on the page
+     And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+    When I press the "Continue" button
+    Then I see "Important" on the page
+     And I see "This file is hidden in DARTS" on the page
+     And I see "DARTS users cannot view this file. You can unhide the file." on the page
+     And I see "Hidden by - Darts Admin" on the page
+     And I see "Reason - Other reason to hide only" on the page
+     And I see "T{{seq}}001 - DMP-4035" on the page
+     
+    When I click on the "Back" link
+     And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
+      | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | Yes    |
+      
+		When I Sign out
+		Then I see "Sign in to the DARTS Portal" on the page
+		
+		When I am logged on to DARTS as an requester user
+     And I set "Case ID" to "<caseId>"
+     And I press the "Search" button
+     And I click on the "<caseId>" link
+     And I click on the "{{displaydate}}" link
+    Then I see "Events and audio recordings" on the page
+    Then I see "There is no audio for this hearing date" on the page
+    
+		When I Sign out
+		Then I see "Sign in to the DARTS Portal" on the page
+		
+		When I am logged on to the admin portal as an Admin user
+     And I select column med_id from table CASE_AUDIO where cas.case_number = "<caseId>" and courthouse_name = "<courthouse>"
+     And I click on the "Search" link
+     And I see "You can search for cases, hearings, events and audio." on the page
+     And I set "Case ID" to "<caseId>"
+     And I press the "Search" button
+     And I click on the "Audio" link
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
+      | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | Yes    |
+
+    When I click on the "{{med_id}}" link
+     And I press the "Unhide" button
+     And I click on the "Back" link
+     And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
+      | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | No     |
+      
+		When I Sign out
+		Then I see "Sign in to the DARTS Portal" on the page
+		
+		When I am logged on to DARTS as an requester user
+     And I set "Case ID" to "<caseId>"
+     And I press the "Search" button
+     And I click on the "<caseId>" link
+     And I click on the "{{displaydate}}" link
+    Then I see "Events and audio recordings" on the page
+  Then I verify the HTML table contains the following values
+    | *NO-CHECK* | Time                    | Event           | Text          |
+    | *NO-CHECK* | 10:00:00                | Hearing started | B{{seq}}ABC-6 |
+    | *NO-CHECK* | <startTime> - <endTime> | *NO-CHECK*      | *NO-CHECK*    |
+
+Examples:
+	| courthouse         | courtroom  | caseId      | startTime | endTime  |
+	| Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | 10:01:00  | 10:02:00 |
+
+
+
+@DMP-4035 @regression
+  Scenario Outline: Admin user can delete audio
+    Given I am logged on to the admin portal as an Admin user
+      And I select column med_id from table CASE_AUDIO where cas.case_number = "<caseId>" and courthouse_name = "<courthouse>"
+      And I click on the "Search" link
+      And I see "You can search for cases, hearings, events and audio." on the page
+      And I set "Case ID" to "<caseId>"
+      And I press the "Search" button
+      And I click on the "Audio" link
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
+      | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | No     |
+
+    When I click on the "{{med_id}}" link
+     And I press the "Hide or delete" button
+     And I press the "Hide or delete" button
+    Then I see "Select a reason for hiding and/or deleting the file" on the page
+
+    When I select the "<reason>" radio button
+     And I press the "Hide or delete" button
+    Then I see "Enter a ticket reference" on the page
+
+    When I set "Enter ticket reference" to "<ticketNo>"
+     And I press the "Hide or delete" button
+    Then I see "Provide details relating to this action" on the page
+
+    When I set "Comments" to "DMP-4035"
+    Then I see "You have 248 characters remaining" on the page
+    When I press the "Hide or delete" button
+    Then I see "Files successfully hidden or marked for deletion" on the page
+     And I see "Check for associated files" on the page
+     And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+    When I press the "Continue" button
+    Then I see "Important" on the page
+     And I see "This file is hidden in DARTS and is marked for manual deletion" on the page
+     And I see "DARTS user cannot view this file. You can unmark for deletion and it will no longer be hidden." on the page
+     And I see "Marked for manual deletion by - Darts Admin" on the page
+     And I see "Reason - <reason>" on the page
+     And I see "<ticketNo> - DMP-4035" on the page
+     
+    When I click on the "Back" link
+     And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
+      | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | Yes    |
+      
+		When I Sign out
+		Then I see "Sign in to the DARTS Portal" on the page
+		
+		When I am logged on to DARTS as an requester user
+     And I set "Case ID" to "<caseId>"
+     And I press the "Search" button
+     And I click on the "<caseId>" link
+     And I click on the "{{displaydate}}" link
+    Then I see "Events and audio recordings" on the page
+    Then I see "There is no audio for this hearing date" on the page
+    
+		When I Sign out
+		Then I see "Sign in to the DARTS Portal" on the page
+		
+		When I am logged on to the admin portal as an Admin user
+     And I select column med_id from table CASE_AUDIO where cas.case_number = "<caseId>" and courthouse_name = "<courthouse>"
+     And I click on the "Search" link
+     And I see "You can search for cases, hearings, events and audio." on the page
+     And I set "Case ID" to "<caseId>"
+     And I press the "Search" button
+     And I click on the "Audio" link
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
+      | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | Yes    |
+
+    When I click on the "{{med_id}}" link
+     And I press the "Unmark for deletion and unhide" button
+     And I click on the "Back" link
+     And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
+      | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | No     |
+      
+		When I Sign out
+		Then I see "Sign in to the DARTS Portal" on the page
+		
+		When I am logged on to DARTS as an requester user
+     And I set "Case ID" to "<caseId>"
+     And I press the "Search" button
+     And I click on the "<caseId>" link
+     And I click on the "{{displaydate}}" link
+    Then I see "Events and audio recordings" on the page
+  Then I verify the HTML table contains the following values
+    | *NO-CHECK* | Time                    | Event           | Text          |
+    | *NO-CHECK* | 10:00:00                | Hearing started | B{{seq}}ABC-6 |
+    | *NO-CHECK* | <startTime> - <endTime> | *NO-CHECK*      | *NO-CHECK*    |
+
+Examples:
+	| courthouse         | courtroom  | caseId      | startTime | endTime  | reason                    | ticketNo    |
+	| Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | 10:01:00  | 10:02:00 | Public interest immunity  | T{{seq}}002 |
+	| Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | 10:01:00  | 10:02:00 | Classified above official | T{{seq}}003 |
+	| Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | 10:01:00  | 10:02:00 | Other reason to delete    | T{{seq}}004 |

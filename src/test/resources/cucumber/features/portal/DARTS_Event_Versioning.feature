@@ -25,7 +25,7 @@ Scenario Outline: Event Versioning - 3 identical events
   And I click on the "<caseNumber>" link
   And I click on the "{{displaydate}}" link
   Then I verify the HTML table contains the following values
-    | Time       | Event   | Text    | *NO-CHECK*   |
+    | *NO-CHECK* | Time    | Event   | Text         |
     | *NO-CHECK* | <time>  | <event> | <eventText>B |
 
 Examples:
@@ -58,7 +58,7 @@ Scenario Outline: Event Versioning - identical event id on 2 events
   And I click on the "<caseNumber>" link
   And I click on the "{{displaydate}}" link
   Then I verify the HTML table contains the following values
-    | Time       | Event   | Text    | *NO-CHECK*   |
+    | *NO-CHECK* | Time    | Event   | Text         |
     | *NO-CHECK* | <time>  | <event> | <eventText>A |
 
 Examples:
@@ -89,7 +89,7 @@ Scenario Outline: Event NON-Versioning - identical MESSAGE id on 2 events
   And I click on the "<caseNumber>" link
   And I click on the "{{displaydate}}" link
   Then I verify the HTML table contains the following values
-    | Time       | Event   | Text    | *NO-CHECK*  |
+    | *NO-CHECK* | Time    | Event   | Text        |
     | *NO-CHECK* | <time>  | <event> | <eventText> |
     | *NO-CHECK* | <time>  | <event> | <eventText> |
 
