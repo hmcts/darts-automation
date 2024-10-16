@@ -53,7 +53,7 @@ public class HtmlTable {
 
         //Verify table header
         if (isFirstRowHeader) {
-            List<WebElement> headerElements = rowElements.get(0).findElements(By.xpath(".//th")); //get all the headers from the row WebElement
+            List<WebElement> headerElements = rowElements.get(0).findElements(By.xpath(".//th | .//td")); //get all the headers from the row WebElement
             compareTableData(headerElements, dataTableRows.get(0), 0);
             rowElements.remove(0);
         }

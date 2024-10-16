@@ -87,7 +87,7 @@ public class Database extends Postgres {
 				+ "inner join darts.hearing hea\r\n"
 				+ "using (ctr_id)\r\n"
 				+ "inner join darts.court_case cas\r\n"
-				+ "using (cth_id)\r\n"
+				+ "using (cas_id)\r\n"
 				+ "inner join darts.hearing_media_ae hm\r\n"
 				+ "using (hea_id)\r\n"
 				+ "left join darts.media med\r\n"
