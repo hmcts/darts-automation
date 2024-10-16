@@ -1,4 +1,4 @@
-@DMP-4034 @DMP-4036 @regression
+@DMP-4034 @DMP-4036 @regression @review
 Feature: Event Versioning
 
 Scenario Outline: Event Versioning - 3 identical events

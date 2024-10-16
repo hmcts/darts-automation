@@ -17,6 +17,7 @@ Feature: Request Audio for transcribers
       | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
 
   @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @DMP-1351 @regression @fix @MissingData
+  @review
   Scenario: Transcriber behaviour, including audio request handling
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
