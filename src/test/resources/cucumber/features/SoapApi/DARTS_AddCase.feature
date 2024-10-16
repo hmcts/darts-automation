@@ -84,7 +84,7 @@ Examples:
 	| Harrow Crown Court | T{{seq}}603 | test defendent | test judge | test prosecutor | test defender |
 
 
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706 @SOAP_API @ADD_CASE @review
 Scenario Outline: SOAP addCase with participant elements missing
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case

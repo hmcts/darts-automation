@@ -513,7 +513,7 @@ Scenario: Update preview button on hearing screen
     
 
 
-@DMP-4035 @regression
+@DMP-4035 @regression @review
   Scenario Outline: Admin user can hide audio
     Given I am logged on to the admin portal as an Admin user
       And I select column med_id from table CASE_AUDIO where cas.case_number = "<caseId>" and courthouse_name = "<courthouse>"
@@ -612,7 +612,7 @@ Examples:
 
 
 
-@DMP-4035 @regression
+@DMP-4035 @regression @review
   Scenario Outline: Admin user can delete audio
     Given I am logged on to the admin portal as an Admin user
       And I select column med_id from table CASE_AUDIO where cas.case_number = "<caseId>" and courthouse_name = "<courthouse>"

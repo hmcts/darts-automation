@@ -36,7 +36,7 @@ Feature: Admin portal transcripts
       | Harrow Crown Court | {{seq}}-44 | G{{seq}}005  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2   |
       | Harrow Crown Court | {{seq}}-45 | G{{seq}}006  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2   |
 
-  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression
+  @DMP-1265 @DMP-2525 @DMP-2538 @DMP-3133 @regression @review
   Scenario: Change manual transcription status
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -57,10 +57,10 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "09:30:00"
-    And I set the time fields below "End time" to "09:31:00"
-    #When I check the checkbox in the same row as "10:30:00" "Hearing started"
-    #And I check the checkbox in the same row as "10:31:00" "Hearing ended"
+#    When I set the time fields below "Start time" to "09:30:00"
+#    And I set the time fields below "End time" to "09:31:00"
+    When I check the checkbox in the same row as "10:30:00" "Hearing started"
+    And I check the checkbox in the same row as "10:31:00" "Hearing ended"
     And I press the "Continue" button
     Then I see "Check and confirm your transcript request" on the page
     And I see "G{{seq}}001" in the same row as "Case ID"
@@ -96,10 +96,10 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "10:00:00"
-    And I set the time fields below "End time" to "10:01:00"
-    #When I check the checkbox in the same row as "11:00:00" "Hearing started"
-    #And I check the checkbox in the same row as "11:01:00" "Hearing ended"
+#    When I set the time fields below "Start time" to "10:00:00"
+#    And I set the time fields below "End time" to "10:01:00"
+    When I check the checkbox in the same row as "11:00:00" "Hearing started"
+    And I check the checkbox in the same row as "11:01:00" "Hearing ended"
     And I press the "Continue" button
     Then I see "Check and confirm your transcript request" on the page
     And I see "G{{seq}}002" in the same row as "Case ID"
@@ -135,10 +135,10 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "10:30:00"
-    And I set the time fields below "End time" to "10:31:00"
-    #When I check the checkbox in the same row as "11:30:00" "Hearing started"
-    #And I check the checkbox in the same row as "11:31:00" "Hearing ended"
+#    When I set the time fields below "Start time" to "10:30:00"
+#    And I set the time fields below "End time" to "10:31:00"
+    When I check the checkbox in the same row as "11:30:00" "Hearing started"
+    And I check the checkbox in the same row as "11:31:00" "Hearing ended"
     And I press the "Continue" button
     Then I see "Check and confirm your transcript request" on the page
     And I see "G{{seq}}003" in the same row as "Case ID"
@@ -174,10 +174,10 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "11:00:00"
-    And I set the time fields below "End time" to "11:01:00"
-    #When I check the checkbox in the same row as "12:00:00" "Hearing started"
-    #And I check the checkbox in the same row as "12:01:00" "Hearing ended"
+#    When I set the time fields below "Start time" to "11:00:00"
+#    And I set the time fields below "End time" to "11:01:00"
+    When I check the checkbox in the same row as "12:00:00" "Hearing started"
+    And I check the checkbox in the same row as "12:01:00" "Hearing ended"
     And I press the "Continue" button
     Then I see "Check and confirm your transcript request" on the page
     And I see "G{{seq}}004" in the same row as "Case ID"
@@ -213,10 +213,10 @@ Feature: Admin portal transcripts
     And I press the "Continue" button
     Then I see "Events, audio and specific times requests" on the page
 
-    When I set the time fields below "Start time" to "11:30:00"
-    And I set the time fields below "End time" to "11:31:00"
-    #When I check the checkbox in the same row as "12:30:00" "Hearing started"
-    #And I check the checkbox in the same row as "12:31:00" "Hearing ended"
+#    When I set the time fields below "Start time" to "11:30:00"
+#    And I set the time fields below "End time" to "11:31:00"
+    When I check the checkbox in the same row as "12:30:00" "Hearing started"
+    And I check the checkbox in the same row as "12:31:00" "Hearing ended"
     And I press the "Continue" button
     Then I see "Check and confirm your transcript request" on the page
     And I see "G{{seq}}005" in the same row as "Case ID"
@@ -383,9 +383,9 @@ Feature: Admin portal transcripts
 
     #DMP-2538 Transcript request history
     When I click on the "History" link
-    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    Then I see "Requested by Requestor (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for awaiting authorisation to requested scenario" on the page
-    And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
+    And I see "Awaiting Authorisation by Requestor (darts.requester@hmcts.net)" on the page
     And I see "Requested by Darts Admin (darts.admin@hmcts.net)" on the page
     And I see "Changing status to requested for case 1" on the page
 
@@ -416,9 +416,9 @@ Feature: Admin portal transcripts
     And I see "Closed" in the same row as "Status"
 
     When I click on the "History" link
-    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    Then I see "Requested by Requestor (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for awaiting authorisation to closed scenario" on the page
-    And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
+    And I see "Awaiting Authorisation by Requestor (darts.requester@hmcts.net)" on the page
     And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
     And I see "Changing status to closed for case 2" on the page
 
@@ -450,9 +450,9 @@ Feature: Admin portal transcripts
     And I see "Closed" in the same row as "Status"
 
     When I click on the "History" link
-    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    Then I see "Requested by Requestor (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for approved to closed scenario" on the page
-    And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
+    And I see "Awaiting Authorisation by Requestor (darts.requester@hmcts.net)" on the page
     And I see "Approved by Approver (darts.approver@hmcts.net)" on the page
     And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
     And I see "Changing status to closed for case 3" on the page
@@ -484,9 +484,9 @@ Feature: Admin portal transcripts
     And I see "Approved" in the same row as "Status"
 
     When I click on the "History" link
-    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    Then I see "Requested by Requestor (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for with transcriber to approved scenario" on the page
-    And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
+    And I see "Awaiting Authorisation by Requestor (darts.requester@hmcts.net)" on the page
     And I see "Approved by Approver (darts.approver@hmcts.net)" on the page
     And I see "With Transcriber by Transcriber (darts.transcriber@hmcts.net)" on the page
     And I see "Approved by Darts Admin (darts.admin@hmcts.net)" on the page
@@ -520,9 +520,9 @@ Feature: Admin portal transcripts
     And I see "Closed" in the same row as "Status"
 
     When I click on the "History" link
-    Then I see "Requested by Requester (darts.requester@hmcts.net)" on the page
+    Then I see "Requested by Requestor (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for with transcriber to closed scenario" on the page
-    And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
+    And I see "Awaiting Authorisation by Requestor (darts.requester@hmcts.net)" on the page
     And I see "Approved by Approver (darts.approver@hmcts.net)" on the page
     And I see "With Transcriber by Transcriber (darts.transcriber@hmcts.net)" on the page
     And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
@@ -556,7 +556,7 @@ Feature: Admin portal transcripts
     When I click on the "History" link
     Then I see "Requested by Requestor (darts.requester@hmcts.net)" on the page
     And I see "This transcript request is for awaiting authorisation to requested scenario" on the page
-    And I see "Awaiting Authorisation by Requester (darts.requester@hmcts.net)" on the page
+    And I see "Awaiting Authorisation by Requestor (darts.requester@hmcts.net)" on the page
     And I see "Requested by Darts Admin (darts.admin@hmcts.net)" on the page
     And I see "Changing status to requested for case 1" on the page
     And I see "Closed by Darts Admin (darts.admin@hmcts.net)" on the page
