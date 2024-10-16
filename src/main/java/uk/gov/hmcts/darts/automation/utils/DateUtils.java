@@ -888,6 +888,21 @@ public class DateUtils {
 		}
 	}
 	
+	public static String runNoFromDate() {
+		LocalDateTime now = LocalDateTime.now();
+		long d = Long.parseLong(now.format(DateTimeFormatter.ofPattern("D", Locale.ENGLISH)));
+		long y = Long.parseLong(now.format(DateTimeFormatter.ofPattern("u", Locale.ENGLISH))) - 2024;
+		long h = Long.parseLong(now.format(DateTimeFormatter.ofPattern("k", Locale.ENGLISH))) - 7;
+		String num = "000" + Long.toString((y * 365 + d - 290) * 10 + (h < 10 ? h : 9));
+		return num.substring(num.length() - 4);
+	}
+	
+	@Test
+	public void test00() {
+		System.out.println(runNoFromDate());
+	}
+	
+	
 	@Test
 	public void test01() {
 		System.out.println("========================");
