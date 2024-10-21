@@ -41,6 +41,7 @@ Feature: Request Transcript
       | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2 |
 
   @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-2740 @regression @MissingData
+  @review
   Scenario: Request Transcription, Specified Times with Event Checkboxes
 
     Given I am logged on to DARTS as an REQUESTER user
@@ -939,7 +940,7 @@ Feature: Request Transcript
       | Case ID     | Courthouse         | Courtroom | Judge(s)                        | Defendant(s)   |
       | C{{seq}}001 | Harrow Crown Court | {{seq}}-8 | {{upper-case-JudgeC {{seq}}-8}} | DefC {{seq}}-8 |
 
-  @DMP-892 @DMP-917 @DMP-1012 @regression @MissingData
+  @DMP-892 @DMP-917 @DMP-1012 @regression @MissingData @review
   Scenario: Transcript - Request a new transcript cancel links
 
     #TODO: Are cancel links working as intended? AC seems to indicate cancel takes you back to Hearing Details rather than back a screen. Check this.

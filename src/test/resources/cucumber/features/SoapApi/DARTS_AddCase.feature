@@ -1,7 +1,7 @@
-@regression
+@SOAP_API @ADD_CASE @regression
 Feature: AddCase using SOAP
 
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706
 Scenario Outline: SOAP addCase with 1 defendant
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case
@@ -19,7 +19,7 @@ Examples:
 	| courthouse         | caseNumber  | defendantName  | judgeName  | prosecutors     | defenders     |
 	| Harrow Crown Court | T{{seq}}601 | test defendent | test judge | test prosecutor | test defender |
 	
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706
 Scenario Outline: SOAP addCase for existing case
   Given I see table COURTCASE column count(cas_id) is "1" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case
@@ -41,7 +41,7 @@ Examples:
 	| courthouse         | caseNumber  | defendantName  | judgeName  | prosecutors     | defenders     |
 	| Harrow Crown Court | T{{seq}}601 | test defendent | test judge | test prosecutor | test defender |
 	
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706
 Scenario Outline: SOAP addCase with 2 defendants
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case
@@ -61,7 +61,7 @@ Examples:
 	| Harrow Crown Court | T{{seq}}602 | test defendent | test judge | test prosecutor | test defender |
 
 
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706
 Scenario Outline: SOAP addCase with 2 of each participant
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case
@@ -84,7 +84,7 @@ Examples:
 	| Harrow Crown Court | T{{seq}}603 | test defendent | test judge | test prosecutor | test defender |
 
 
-@DMP-1706 @SOAP_API @ADD_CASE @review
+@DMP-1706
 Scenario Outline: SOAP addCase with participant elements missing
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case
@@ -103,7 +103,7 @@ Examples:
 	| Harrow Crown Court | T{{seq}}604 | MISSING         | MISSING    | MISSING         | MISSING       |
 
 
-@DMP-1706 @SOAP_API @ADD_CASE @ClientProblemException
+@DMP-1706 @ClientProblemException @review
 Scenario Outline: SOAP addCase with participant elements empty
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case
@@ -122,7 +122,7 @@ Examples:
 	| Harrow Crown Court | T{{seq}}605 |                 |            |                 |               |
 
 
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706
 Scenario Outline: SOAP addCase courtroom is ignored and still creates a case
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>"
 	When I create a case
@@ -141,7 +141,7 @@ Examples:
 	| Harrow Crown Court | T{{seq}}606 | test defendent1 | test judge | test prosecutor | test defender |
 
 
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706
 Scenario: addCase successful baseline
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addCase and body:
@@ -168,7 +168,7 @@ Scenario: addCase successful baseline
 	Then the API status code is 200
 
 
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706
 Scenario: addCase invalid court name fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addCase and body:
@@ -195,7 +195,7 @@ Scenario: addCase invalid court name fails
 	Then the API status code is 404
 
 
-@DMP-1706 @SOAP_API @ADD_CASE
+@DMP-1706
 Scenario: addCase access fron XHIBIT fails
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addCase and body:

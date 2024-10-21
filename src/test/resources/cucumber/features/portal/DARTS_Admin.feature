@@ -67,7 +67,7 @@ Feature: Admin portal
   #AC3 - Removing user groups
     Then I see "Assign groups" on the page
 
-  @DMP-2225 @regression
+  @DMP-2225 @regression @review
   Scenario: Assigning user groups
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
@@ -86,7 +86,7 @@ Feature: Admin portal
     When I set "Filter by group name" to "Swansea"
     And I press the "Assign groups (1)" button
 
-  @DMP-2224 @regression
+  @DMP-2224 @regression @review
   Scenario: Removing a group confirmation screen
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
