@@ -95,6 +95,16 @@ public class JsonApi {
         case "APPEALCOURT":
         	internalAuthenticate(ReadProperties.automationAppealCourtTestUserId, ReadProperties.automationInternalUserTestPassword);
         	break;
+        case "ADMIN":
+        	externalAuthenticate(ReadProperties.dartsAdminUserName, ReadProperties.automationExternalPassword);
+        	break;
+        case "ADMIN2":
+        	externalAuthenticate(ReadProperties.dartsAdmin2UserName, ReadProperties.automationExternalPassword);
+        	break;
+        case "SUPERUSER":
+        case "SUPER-USER":
+        	externalAuthenticate(ReadProperties.dartsSuperUserUserName, ReadProperties.automationExternalPassword);
+        	break;
         case "INTERNAL":
         	internalAuthenticate();
         	break;
