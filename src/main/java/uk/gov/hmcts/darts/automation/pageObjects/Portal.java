@@ -94,6 +94,7 @@ public class Portal {
             case "TRANSCRIBER":
             case "LANGUAGESHOP":
             case "ADMIN":
+            case "ADMIN2":
             case "SUPERUSER":
                 loginToPortal_ExternalUser(userName, password);
                 break;

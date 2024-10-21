@@ -26,6 +26,8 @@ public class Credentials {
 	        return ReadProperties.automationAppealCourtTestUserId;
 	    case "ADMIN":
 	        return ReadProperties.dartsAdminUserName;
+	    case "ADMIN2":
+	        return ReadProperties.dartsAdmin2UserName;
 	    case "SUPERUSER":
 	        return ReadProperties.dartsSuperUserUserName;
 	    default:
@@ -53,6 +55,8 @@ public class Credentials {
 	    case "APPEALCOURT":
 	        return ReadProperties.automationInternalUserTestPassword;
 	    case "ADMIN":
+	        return ReadProperties.automationExternalPassword;
+	    case "ADMIN2":
 	        return ReadProperties.automationExternalPassword;
 	    case "SUPERUSER":
 	        return ReadProperties.automationExternalPassword;
