@@ -1,6 +1,6 @@
 Feature: Request Audio
 
-@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-1048 @DMP-2121 @DMP-2562 @regression @ts667
+@DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-1048 @DMP-2121 @DMP-2562 @DMP-4035 @regression
 Scenario: Request Audio data creation
 
   Given I create a case
@@ -513,17 +513,20 @@ Scenario: Update preview button on hearing screen
     
 
 
-@DMP-4035 @regression @review
+@DMP-4035 @regression
   Scenario Outline: Admin user can hide audio
     Given I am logged on to the admin portal as an Admin user
-      And I select column med_id from table CASE_AUDIO where cas.case_number = "<caseId>" and courthouse_name = "<courthouse>"
-      And I click on the "Search" link
-      And I see "You can search for cases, hearings, events and audio." on the page
-      And I set "Case ID" to "<caseId>"
-      And I press the "Search" button
-      And I click on the "Audio" link
+		  And I select column hea_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and case_number = "<caseId>"
+      And I select column med_id from table CASE_AUDIO where hea_id = "{{hea_id}}"
+		When I get audios for hearing "{{hea_id}}"
+		Then I see "id" in the json response is "{{med_id}}"
+    When I click on the "Search" link
+    Then I see "You can search for cases, hearings, events and audio." on the page
+    When I set "Case ID" to "<caseId>"
+     And I press the "Search" button
+     And I click on the "Audio" link
     Then I verify the HTML table contains the following values
-      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                       | Channel | Hidden |
+      | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
       | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | No     |
 
     When I click on the "{{med_id}}" link
@@ -535,7 +538,7 @@ Scenario: Update preview button on hearing screen
      And I press the "Hide or delete" button
     Then I see "Enter a ticket reference" on the page
 
-    When I set "Enter ticket reference" to "T{{seq}}001"
+    When I set "Enter ticket reference" to "T{{seq}}006"
      And I press the "Hide or delete" button
     Then I see "Provide details relating to this action" on the page
 
@@ -551,7 +554,12 @@ Scenario: Update preview button on hearing screen
      And I see "DARTS users cannot view this file. You can unhide the file." on the page
      And I see "Hidden by - Darts Admin" on the page
      And I see "Reason - Other reason to hide only" on the page
-     And I see "T{{seq}}001 - DMP-4035" on the page
+     And I see "T{{seq}}006 - DMP-4035" on the page
+     
+    When I get audios for hearing "{{hea_id}}"
+    Then I see that the json response is empty
+     And I see table CASE_AUDIO column is_hidden is "t" where med_id = "{{med_id}}"
+     And I see table CASE_AUDIO column med.is_deleted is "f" where med_id = "{{med_id}}"
      
     When I click on the "Back" link
      And I press the "Search" button
@@ -683,6 +691,10 @@ Examples:
       | Audio ID   | Courthouse   | Courtroom   | Start Time                      | End Time                      | Channel | Hidden |
       | {{med_id}} | <courthouse> | <courtroom> | {{displaydate0}} at <startTime> | {{displaydate0}} at <endTime> | 1       | Yes    |
 
+		When I select column hea_id from table CASE_HEARING where courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>" and case_number = "<caseId>"
+		 And I get audios for hearing "{{hea_id}}"
+#		Then I see "" in the json response is ""
+
     When I click on the "{{med_id}}" link
      And I press the "Unmark for deletion and unhide" button
      And I click on the "Back" link
@@ -701,12 +713,12 @@ Examples:
      And I click on the "{{displaydate}}" link
     Then I see "Events and audio recordings" on the page
   Then I verify the HTML table contains the following values
-    | *NO-CHECK* | Time                    | Event           | Text          |
-    | *NO-CHECK* | 10:00:00                | Hearing started | B{{seq}}ABC-6 |
-    | *NO-CHECK* | <startTime> - <endTime> | *NO-CHECK*      | *NO-CHECK*    |
+    | *NO-CHECK* | Time                    | Event           | Text       |
+    | *NO-CHECK* | 10:00:00                | Hearing started | <text>     |
+    | *NO-CHECK* | <startTime> - <endTime> | *NO-CHECK*      | *NO-CHECK* |
 
 Examples:
-	| courthouse         | courtroom  | caseId      | startTime | endTime  | reason                    | ticketNo    |
-	| Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | 10:01:00  | 10:02:00 | Public interest immunity  | T{{seq}}002 |
-	| Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | 10:01:00  | 10:02:00 | Classified above official | T{{seq}}003 |
-	| Harrow Crown Court | B{{seq}}-6 | B{{seq}}006 | 10:01:00  | 10:02:00 | Other reason to delete    | T{{seq}}004 |
+	| courthouse         | courtroom  | caseId      | startTime | endTime  | reason                    | ticketNo    | text          |
+	| Harrow Crown Court | B{{seq}}-7 | B{{seq}}007 | 10:01:00  | 10:02:00 | Public interest immunity  | T{{seq}}007 | B{{seq}}ABC-7 |
+	| Harrow Crown Court | B{{seq}}-8 | B{{seq}}008 | 10:01:00  | 10:02:00 | Classified above official | T{{seq}}008 | B{{seq}}ABC-8 |
+	| Harrow Crown Court | B{{seq}}-9 | B{{seq}}009 | 10:01:00  | 10:02:00 | Other reason to delete    | T{{seq}}009 | B{{seq}}ABC-9 |

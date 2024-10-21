@@ -70,7 +70,17 @@ public class StepDef_jsonApi extends StepDef_base {
 	@Then("^I see \"([^\"]*)\" in the json response is \"([^\"]*)\"$")
 	public void verifyStringInJsonResponse(String path, String expectedValue) {
 		String value = JsonUtils.extractJsonValue(testdata.responseString, path);
-		Assertions.assertTrue(Substitutions.substituteValue(expectedValue).equals(value), "Actual value not as Expected: " + value + ", Expected: " + expectedValue);
+		if (value.startsWith("[") && value.endsWith("]")) {
+			value = value.substring(1, value.length() - 1);
+		}
+		String expected = Substitutions.substituteValue(expectedValue);
+		Assertions.assertTrue(expected.equals(value), "Actual value not as Expected: " + value + ", Expected: " 
+				+ (expected.equals(expectedValue) ? expected : expected + "(" + expectedValue + ")"));
+	}
+
+	@Then("^I see that the json response is empty$")
+	public void verifyJsonResponseIsEmpty() {
+		Assertions.assertTrue(testdata.responseString.equals("[]"), "Actual value not empty as Expected: " + testdata.responseString);
 	}
 
 	@When("^I call POST events API for id (\\S*) type (\\S*) (\\S*) with \"([^\"]*)\"$")
@@ -124,6 +134,28 @@ public class StepDef_jsonApi extends StepDef_base {
 			testdata.responseString = apiResponse.responseString;
 			Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 		}
+	}
+	
+/*
+ * Get audio/hearings/<hearing_id>/audios - example response: 
+ * 
+[
+  {
+    "id": 1,
+    "media_start_timestamp": "2023-07-31T14:32:24.620Z",
+    "media_end_timestamp": "2023-07-31T14:32:24.620Z",
+    "is_archived": true,
+    "is_available": true
+  }
+]
+ */
+	@When("^I get audios for hearing \"([^\"]*)\"$")
+	public void getAudiosForHearing(String hearingId) {
+		String endpoint = "audio/hearings/" + Substitutions.substituteValue(hearingId) + "/audios";
+		ApiResponse apiResponse = jsonApi.getApi(endpoint);
+		testdata.statusCode = apiResponse.statusCode;
+		testdata.responseString = apiResponse.responseString;
+		Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
 	}
 	
 // sample cucumber:
