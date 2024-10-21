@@ -559,7 +559,7 @@ Scenario: Update preview button on hearing screen
     When I get audios for hearing "{{hea_id}}"
     Then I see that the json response is empty
      And I see table CASE_AUDIO column is_hidden is "t" where med_id = "{{med_id}}"
-     And I see table CASE_AUDIO column is_deleted is "f" where med_id = "{{med_id}}"
+     And I see table CASE_AUDIO column med.is_deleted is "f" where med_id = "{{med_id}}"
      
     When I click on the "Back" link
      And I press the "Search" button
