@@ -127,7 +127,7 @@ dependencies {
 	
   implementation 'commons-io:commons-io:2.17.0'
 
-	implementation(platform("org.junit:junit-bom:5.11.2"))
+	implementation(platform("org.junit:junit-bom:5.11.3"))
 	runtimeOnly    "org.junit.platform:junit-platform-launcher"
 	implementation "org.junit.platform:junit-platform-suite"
 	implementation "org.junit.jupiter:junit-jupiter-api"
@@ -150,7 +150,7 @@ dependencies {
 	implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
 	
   // Use JUnit Jupiter for testing.
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.11.2'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
 
   // This dependency is exported to consumers, that is to say found on their compile classpath.
   api 'org.apache.commons:commons-math3:3.6.1'
