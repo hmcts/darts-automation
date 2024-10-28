@@ -69,9 +69,6 @@ Feature: Admin
 
   @DMP-2178 @DMP-630-AC1-AC2 @regression
   Scenario Outline: New user account - Check user details
-
-    #TODO: This needs fresh data each time or it will fail due to details not being unique
-
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
     Then I see "Search for user" on the page

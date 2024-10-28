@@ -1,6 +1,8 @@
+@case-retention @regression
 Feature: Case Retention
 
-  @DMP-1369 @DMP-1406 @DMP-1413 @DMP-1899 @regression
+  @DMP-1369 @DMP-1406 @DMP-1413 @DMP-1899
+  @data-creation
   Scenario: Case retention data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants     | judges           | prosecutors               | defenders               |
@@ -19,7 +21,7 @@ Feature: Case Retention
       | {{seq}}001 | 1100 |          | {{seq}}172 | Harrow Crown Court | {{seq}}-33 | R{{seq}}KL1  | {{seq}}ABC-33 | {{timestamp-10:05:00}} |
       | {{seq}}001 | 1100 |          | {{seq}}173 | Harrow Crown Court | {{seq}}-34 | R{{seq}}MN1  | {{seq}}ABC-34 | {{timestamp-10:06:00}} |
 
-  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
+  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history
     #Case is open
     Given I am logged on to DARTS as an JUDGE user
@@ -186,7 +188,7 @@ Feature: Case Retention
       | R{{seq}}IJ1 | 3             | 3Y0M0D        | Custodial             | {{displayDate0-{{date+7 years}}}}  | {{seq}}-32 | 32  |
       | R{{seq}}KL1 | 3             | 8Y0M0D        | Custodial             | {{displayDate0-{{date+8 years}}}}  | {{seq}}-33 | 33  |
 
-  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439 @regression
+  @DMP-1406 @DMP-1899 @DMP-1369 @DMP-2161 @DMP-1437 @DMP-1439
   Scenario Outline: Case Retention Date - Case Details, Current retention details, audit history LIFE SENTENCE
     #Case is open
     Given I am logged on to DARTS as an JUDGE user
@@ -305,7 +307,7 @@ Feature: Case Retention
       | case_number | caseRetention | totalSentence | retention_displayname | display_retentiondate              | courtroom  | ref |
       | R{{seq}}MN1 | 4             | 99Y0M0D       | Life                  | {{displayDate0-{{date+99 years}}}} | {{seq}}-34 | 34  |
 
-  @DMP-1413 @regression
+  @DMP-1413
   Scenario: Change Retention Date by increasing it with specific date
     Given I create a case
       | courthouse         | courtroom  | case_number  | defendants     | judges           | prosecutors               | defenders               |
@@ -378,9 +380,9 @@ Feature: Case Retention
     Then I see "Case retention date changed." on the page
     And I see "{{displaydate0}}" in the same row as "Date applied"
     Then I verify the HTML table "Retention audit history" contains the following values
-      | Date retention changed | Retention date | Amended by   | Retention policy | Comments                                            | Status   |
-      | *NO-CHECK*             | *NO-CHECK*     | *NO-CHECK*   | Custodial        |                                                     | COMPLETE |
-      | *NO-CHECK*             | *NO-CHECK*     | global_judge | Manual           | This is my reason for increasing the retention date | COMPLETE |
+      | Date retention changed | Retention date                 | Amended by   | Retention policy | Comments                                            | Status   |
+      | *NO-CHECK*             | {{displaydate-{{date+3285/}}}} | global_judge | Manual           | This is my reason for increasing the retention date | COMPLETE |
+      | *NO-CHECK*             | *NO-CHECK*                     | CPP          | Custodial        |                                                     | COMPLETE |
 
   #DMP-1413-AC3 Reducing retention date, specific date
 
@@ -413,10 +415,10 @@ Feature: Case Retention
     And I see "Harrow Crown Court" in the same row as "Courthouse"
     And I see "{{displaydate0}}" in the same row as "Date applied"
     Then I verify the HTML table "Retention audit history" contains the following values
-      | Date retention changed | Retention date | Amended by   | Retention policy | Comments                                            | Status   |
-      | *NO-CHECK*             | *NO-CHECK*     | *NO-CHECK*   | Custodial        |                                                     | COMPLETE |
-      | *NO-CHECK*             | *NO-CHECK*     | global_judge | Manual           | This is my reason for increasing the retention date | COMPLETE |
-      | *NO-CHECK*             | *NO-CHECK*     | global_judge | Manual           | Reason for reducing retention date by one year      | COMPLETE |
+      | Date retention changed | Retention date                   | Amended by   | Retention policy | Comments                                            | Status   |
+      | *NO-CHECK*             | {{displaydate-{{date+2920/}}}}   | global_judge | Manual           | Reason for reducing retention date by one year      | COMPLETE |
+      | *NO-CHECK*             | {{displaydate-{{date+3285/}}}}   | global_judge | Manual           | This is my reason for increasing the retention date | COMPLETE |
+      | *NO-CHECK*             | {{displaydate-{{date+7years/}}}} | CPP          | Custodial        |                                                     | COMPLETE |
 
   #DMP-1413-AC2 Mark for permanent retention
 
@@ -436,8 +438,9 @@ Feature: Case Retention
     And I see "{{displaydate0}}" in the same row as "Date applied"
     And I see "DARTS Permanent Policy" in the same row as "DARTS Retention policy applied"
     Then I verify the HTML table "Retention audit history" contains the following values
-      | Date retention changed | Retention date | Amended by   | Retention policy | Comments                                            | Status   |
-      | *NO-CHECK*             | *NO-CHECK*     | *NO-CHECK*   | Custodial        |                                                     | COMPLETE |
-      | *NO-CHECK*             | *NO-CHECK*     | global_judge | Manual           | This is my reason for increasing the retention date | COMPLETE |
-      | *NO-CHECK*             | *NO-CHECK*     | global_judge | Manual           | Reason for reducing retention date by one year      | COMPLETE |
-      | *NO-CHECK*             | *NO-CHECK*     | global_judge | Permanent        | Reason for retaining this case permanently          | COMPLETE |
+      | Date retention changed | Retention date                    | Amended by   | Retention policy | Comments                                            | Status   |
+      | *NO-CHECK*             | {{displaydate-{{date+99years/}}}} | global_judge | Permanent        | Reason for retaining this case permanently          | COMPLETE |
+      | *NO-CHECK*             | {{displaydate-{{date+2920/}}}}    | global_judge | Manual           | Reason for reducing retention date by one year      | COMPLETE |
+      | *NO-CHECK*             | {{displaydate-{{date+3285/}}}}    | global_judge | Manual           | This is my reason for increasing the retention date | COMPLETE |
+      | *NO-CHECK*             | {{displaydate-{{date+7years/}}}}  | CPP          | Custodial        |                                                     | COMPLETE |
+      

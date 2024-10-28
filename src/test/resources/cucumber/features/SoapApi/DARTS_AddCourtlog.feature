@@ -1,6 +1,7 @@
+@COURTLOG @SOAP_API
 Feature: Add Courtlog SOAP
 
-@COURTLOG @SOAP_API @regression
+@regression
 Scenario Outline: SOAP courtLog where case exists & hearing exists
   Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
 	Given I create a case
@@ -30,7 +31,7 @@ Examples:
 	| Harrow Crown Court | Room {{seq}} | T{{seq}}131 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 
 
-@COURTLOG @SOAP_API @regression
+@regression
 Scenario Outline: SOAP courtLog where case dooes not exist and the courtlog creates the case
   Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>"
 	 When I add courtlogs
@@ -57,7 +58,7 @@ Examples:
 	| Harrow Crown Court | Room {{seq}} | T{{seq}}132 | test defendent11~test defendent22 | test judge | test prosecutor | test defender |
 	
 
-@COURTLOG @SOAP_API @regression
+@regression
 Scenario: addLogEntry successful baseline
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addLogEntry and body:
@@ -76,7 +77,7 @@ Scenario: addLogEntry successful baseline
 	Then the API status code is 200
 	
 
-@COURTLOG @SOAP_API @regression
+@regression
 Scenario: addLogEntry with invalid court fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addLogEntry and body:
@@ -94,7 +95,7 @@ Scenario: addLogEntry with invalid court fails
 	"""
 	Then the API status code is 404
 
-@COURTLOG @SOAP_API @regression
+@regression
 Scenario: addLogEntry with authenticating from XHIBIT fails
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action addLogEntry and body:
