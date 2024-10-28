@@ -1,7 +1,7 @@
-@regression
+@SOAP_API @REGISTER_NODE @regression
 Feature: REGISTER NODE using SOAP
 
-@SOAP_API @REGISTER_NODE
+
 Scenario Outline: SOAP registerNode including create courtroom
 	When I register a node
 	| courthouse   | courtroom   | hostname   | ip_address   | mac_address   | type   |
@@ -25,7 +25,7 @@ Examples:
 	| Harrow Crown Court | reg{{seq}} | Harrow_DAR_{{seq}}2 | {{ip-address-10.101.101.112}} | {{mac-address-12-34-56-78-90-12}} | DAR  |
 
 
-@SOAP_API @REGISTER_NODE
+
 Scenario Outline: SOAP registerNode successful baseline
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action registerNode and body:
@@ -43,7 +43,7 @@ Scenario Outline: SOAP registerNode successful baseline
 """
 	Then the API status code is 200
 
-@SOAP_API @REGISTER_NODE
+
 Scenario Outline: SOAP registerNode invalid courthouse
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action registerNode and body:
@@ -61,7 +61,7 @@ Scenario Outline: SOAP registerNode invalid courthouse
 """
 	Then the API status code is 404
 
-@SOAP_API @REGISTER_NODE
+
 Scenario Outline: SOAP registerNode cannot be accessed from XHIBIT
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap action registerNode and body:

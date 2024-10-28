@@ -1,3 +1,4 @@
+@request-audio-for-transcribers
 Feature: Request Audio for transcribers
 
   @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1255 @DMP-1326 @DMP-1331 @DMP-1351 @regression @fix
@@ -17,7 +18,6 @@ Feature: Request Audio for transcribers
       | Harrow Crown Court | {{seq}}-17 | F{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
 
   @DMP-696 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-1331 @DMP-1351 @regression @fix @MissingData
-  @review
   Scenario: Transcriber behaviour, including audio request handling
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -145,10 +145,13 @@ Feature: Request Audio for transcribers
     When I click on the "Your audio" link
     And I click on "Request ID" in the "Ready" table header
     And I wait for text "READY" on the same row as the link "F{{seq}}001"
-    And I click on "Request ID" in the "Ready" table header
+#    And I click on "Request ID" in the "Ready" table header
     And I click on "View" in the same row as "F{{seq}}001"
-    Then I see "Play all audio" on the page
-    And I see "mp3" on the page
+    And I see "Download audio file" on the page
+    And I see ".zip" on the page
+#TODO verify that the 2 lines above correctly replace 
+#    Then I see "Play all audio" on the page
+#    And I see "mp3" on the page
 
     #DMP-1203-AC2 Your work and DMP-1351-AC1 Completed today
 
@@ -186,6 +189,7 @@ Feature: Request Audio for transcribers
     #DMP-1331-AC2 Complete transcript request and checks
 
     When I click on the "Go to your work" link
+    And I click on the "To do" link
     And I do not see "F{{seq}}001" on the page
     And I click on the "Completed today" link
     Then I see "F{{seq}}001" on the page

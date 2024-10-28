@@ -1,7 +1,7 @@
-@regression
+@SOAP_API @GET_CASES @regression
 Feature: GetCases using SOAP
 
-@SOAP_API @GET_CASES
+
 Scenario Outline: SOAP getCases
 	* I call SOAP getCases
 	| courthouse   | courtroom   | date   |
@@ -16,7 +16,7 @@ Examples:
 
 
 
-@SOAP_API @GET_CASES
+
 Scenario: getCases successful baseline
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap body:
@@ -30,7 +30,7 @@ Scenario: getCases successful baseline
 	Then the API status code is 200
 	
 
-@SOAP_API @GET_CASES
+
 Scenario: getCases invalid court name fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap body:
@@ -44,7 +44,7 @@ Scenario: getCases invalid court name fails
 	Then the API status code is 404
 	
 
-@SOAP_API @GET_CASES
+
 Scenario: getCases authentication from XHIBIT fails 
   Given I authenticate from the XHIBIT source system
 	When I call POST SOAP API using soap body:
@@ -59,7 +59,7 @@ Scenario: getCases authentication from XHIBIT fails
 	
 
 
-@SOAP_API @GET_CASES
+
 Scenario Outline: SOAP getCases verifying result
 	Given I use caseNumber <caseNumber>
   Given I see table COURTCASE column count(cas_id) is "0" where courthouse_name = "<courthouse>" and case_number = "<caseNumber>1"
