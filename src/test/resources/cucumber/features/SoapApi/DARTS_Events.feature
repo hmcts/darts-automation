@@ -1,14 +1,14 @@
-@DMP-3060 @SOAP_API
+@SOAP_API @EVENT_API @SOAP_EVENT @DMP-3060
 Feature: Test operation of SOAP events
 
 Based on spreadsheet "handler mapping colour coded - modernised - pre-updates - 19122023.xlsx"
 			
-			All event types can be added to the same case (though only 1 stopAndClose)
+			All event types can be added to the same case
 			interpreter_used field is true where appropriate
 			hearing_is_actual field on the hearing is set to true
 			handler, event_name & event_text is as expected
 
-@EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
+@STANDARD_EVENT @regression
   @reads-and-writes-system-properties
 Scenario Outline: Create a case for event tests
   Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
@@ -23,7 +23,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201  | 
 
 
-@EVENT_API @SOAP_EVENT @STANDARD_EVENT @regression
+@STANDARD_EVENT @regression
 Scenario Outline: Create standard events
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -284,7 +284,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:16:40}} | {{seq}}231 | {{seq}}231 | 407132 |         | text {{seq}} |               |               | Case to be listed                                                                                                                      |       |
 
 
-@EVENT_API @SOAP_EVENT @regression
+@regression
 Scenario Outline: Create a LOG event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -306,7 +306,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:17:00}} | {{seq}}232  | {{seq}}232 | LOG    |         | log text     |               |               | LOG         |       |
 
         
-@EVENT_API @SOAP_EVENT @regression
+@regression
 Scenario Outline: Create a SetReportingRestriction event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -338,7 +338,7 @@ Examples:
 #   Lift restrictions
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:21:20}} | {{seq}}243 | {{seq}}243 | 21201 |         | text {{seq}} |               |               | Restrictions lifted                                                          |       |
 
-@EVENT_API @SOAP_EVENT @regression
+@regression
 Scenario Outline: Create a SetInterpreterUsed event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -361,7 +361,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:22:20}} | {{seq}}245 | {{seq}}244 | 20612 |         | text {{seq}} |               |               | Appeal interpreter sworn in |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}244 | 20917 |         | text {{seq}} |               |               | Interpretor sworn           |       |
 
-@EVENT_API @SOAP_EVENT @regression @obsolete
+@regression @obsolete
 Scenario Outline: Create a TranscriptionRequest event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -383,7 +383,7 @@ Examples:
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text {{seq}} |               |               | Sentence Transcription Required |       |
 
   
-@EVENT_API @SOAP_EVENT @SENTENCING_EVENT @regression
+@SENTENCING_EVENT @regression
 Scenario Outline: Create a Sentencing event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -510,7 +510,7 @@ Examples:
 #  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-12:02:40}} | {{seq}}364 | {{seq}}364 | STS1821 | 11532   | [Defendant: DEFENDANT ONE] | 4             | 26Y0M0D       | Serious Terrorism Sentence 18 to 21                                                            |       |
 
   
-@EVENT_API @SOAP_EVENT @regression
+@regression
 Scenario Outline: Create a DarStart event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -537,7 +537,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-12:04:40}} | {{seq}}370 | {{seq}}370 | 20913 |         | text {{seq}} |               |               | Jury returns    |       |
   
   
-@EVENT_API @SOAP_EVENT @regression
+@regression
 Scenario Outline: Create a DarStop event
   Given I authenticate from the XHIBIT source system
   Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
@@ -563,11 +563,11 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:23:40}} | {{seq}}249 | {{seq}}249 | 30600 |         | text {{seq}} |               |               | Hearing ended     | ex StopAndCloseHandler |
 
   
-@EVENT_API @SOAP_EVENT @regression @retention
+@regression @retention
   @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for custodial sentence - not life
 															retention is 7 years or length of sentence
-													Only 1 stop & close event per case works due to retentions
+													Only 1 stop & close event per case is used to verify that a case_retention row is created
 													Test creates a courtroom & hearing for each case
   Given I wait until there is not a daily list waiting for "<courthouse>"
   Given I authenticate from the XHIBIT source system
@@ -605,13 +605,13 @@ Examples:
   | Harrow Crown Court | Rm {{seq}}A24 | T{{seq}}224 | {{timestamp-12:07:00}} | {{seq}}624 | {{seq}}624 | 30300 |         | text {{seq}} | 3             | 7Y3M7D        | Case closed  | 7Y3M7D            |
   
   
-@EVENT_API @SOAP_EVENT @regression @retention
+@regression @retention
   @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for LIFE sentence
 													Difference from other sentencing event is 
 															table CASE_RETENTION column total_sentence is not set
 															retention is 99 years
-													Only 1 stop & close event per case works due to retentions
+													Only 1 stop & close event per case is used to verify that a case_retention row is created
 													Test creates a courtroom & hearing for each case
   Given that courthouse "<courthouse>" case "<caseNumbers>" does not exist
   Given I wait until there is not a daily list waiting for "<courthouse>"
@@ -648,7 +648,7 @@ Examples:
   | Harrow Crown Court | Rm {{seq}}A25 | T{{seq}}225 | {{timestamp-12:07:00}} | {{seq}}625 | {{seq}}625 | 30300 |         | text {{seq}} | 4             | 4Y4M4D        | Case closed  | 99Y0M0D           |
   
   
-@EVENT_API @SOAP_EVENT @regression @retention
+@regression @retention
   @reads-and-writes-system-properties
 Scenario Outline: Create a StopAndClose event for non-custodial sentence
 													Only 1 stop & close event per case works due to retentions
@@ -689,7 +689,7 @@ Examples:
   | Harrow Crown Court | Rm {{seq}}A22 | T{{seq}}222 | {{timestamp-12:07:00}} | {{seq}}622 | {{seq}}622 | 30300 |         | text {{seq}} | 2             |               | Case closed  | 7Y0M0D            |
   
   
-@EVENT_API @SOAP_EVENT @regression @TODO
+@regression @TODO
 Scenario Outline: Create a Null event
 # An event row is not created
   Given I authenticate from the XHIBIT source system
@@ -702,7 +702,7 @@ Examples:
   | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId    | type  | subType | eventText    | caseRetention | totalSentence | text    | notes |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-12:08:00}} | {{seq}}376 | {{seq}}376 | 40790 |         | text {{seq}} |               |               | Results |       |
 
-@EVENT_API @SOAP_EVENT @regression
+@regression
 Scenario Outline: Create case with an event
   Given that courthouse "<courthouse>" case "<caseNumber>" does not exist
   Given I see table COURTCASE column COUNT(cas_id) is "0" where cas.case_number = "<caseNumber>" and courthouse_name = "<courthouse>"
@@ -722,7 +722,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}}Z | T{{seq}}231 | {{timestamp-12:04:00}} | {{seq}}41 | {{seq}}41 | 10100 |         | text {{seq}}1 |               |               | Case called on  |       |
 
 
-@EVENT_API @SOAP_EVENT @regression
+@regression
 Scenario Outline: Event creates a courtroom / hearing
   Given that courthouse "<courthouse>" case "<caseNumber>" does not exist
   Given I create a case
@@ -890,7 +890,7 @@ Scenario: Create an event using invalid type / subtype
 	Then the API status code is 404
 
 
-@EVENT_API @SOAP_EVENT @regression
+@regression
   @reads-and-writes-system-properties
 Scenario Outline: Verify that a hearing courtroom can be modified by an event
 																									where a case is added via daily lists (so a hearing record exists)
@@ -920,7 +920,7 @@ Examples:
   | Harrow Crown Court | Room {{seq}}A | 1             | T{{seq}}259 | {{timestamp-10:00:00}} | {{seq}}45 | {{seq}}45 | 1000   | 1001    | text {{seq}}E |               |               | Offences put to defendant                                                                                                              |       |
 
 
-@EVENT_API @SOAP_EVENT @regression @DMP-1941 @DMP-1928
+@regression @DMP-1941 @DMP-1928
 Scenario Outline: Create Poll Check events
   These tests will help populate the relevant section of the DARTS Dynatrace Dashboard each time they are executed
   NB: The usual 'Then' step is missing as the 'When' step includes the assertion of the API response code

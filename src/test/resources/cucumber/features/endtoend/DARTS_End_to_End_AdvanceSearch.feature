@@ -1,6 +1,7 @@
+@end2end @end2end6 @end2end-advanced-search 
 Feature: End-to-end Advance Search
 
-  @end2end @end2end6 @DMP-1927 @demo
+@DMP-1927 @demo
   Scenario Outline: Advance Search for a case details created using Case and Courtlogs
     Given I create a case
       | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -364,7 +365,7 @@ Feature: End-to-end Advance Search
 #    Then I see "There are more than 500 results" on the page
 #    Then I see "Refine your search by:" on the page
 #    Then I see "adding more information to your search" on the page
-#    Then I see "using filters to restrict the number of results" on the page
+#    Then I see "using filters to restrict the number of results" on the pagew
 
     Examples:
       | user        | courthouse      | case_number   | defendants              | judges              | prosecutors           | defenders           | courtroom  | keywords             | dateTime      | todaysDate  |
@@ -373,7 +374,7 @@ Feature: End-to-end Advance Search
       | TRANSCRIBER | {{courthouse1}} | S{{seq}}083-B | S{{seq}} defendant-B083 | S{{seq}} judge-B083 | S{{seq}} prosecutor-B | S{{seq}} defender-B | C{{seq}}83 | SIT LOG-83-{{seq}}-B | {{timestamp}} | {{date+0/}} |
 
 
-  @end2end @end2end6 @DMP-1927 @demo
+@DMP-1927 @demo
   Scenario Outline: Advance Search for a case details created using events
     Given I create a case
       | courthouse   | courtroom   | case_number   | defendants   | judges                  | prosecutors   | defenders   |

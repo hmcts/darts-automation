@@ -1,6 +1,7 @@
+@end2end @end2end4 @end2end-transcriber
 Feature: Transcriber
 
-  @end2end @end2end4 @DMP-2055
+@DMP-2055
   Scenario Outline: Transcriber - TranscriptionType - Sentencing Remarks - Audio requestType -Download
     Given I create a case
       | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -101,8 +102,8 @@ Feature: Transcriber
       | courthouse      | courtroom   | case_number   | judges            | defendants            | prosecutors         | defenders         | HearingDate     | transcription-type | urgency   | message_id | eventId    | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | filename            |
       | {{courthouse1}} | C{{seq}}-84 | S{{seq}}084-B | S{{seq}} judge-84 | S{{seq}} defendant-84 | S{{seq}} prosecutor | S{{seq}} defender | {{displaydate}} | Sentencing remarks | Overnight | {{seq}}031 | {{seq}}031 |               |               | {{timestamp}} | sample1.mp2 | 08:04:00  | 08:05:00 | file-sample_1MB.doc |
 
-  @end2end @end2end4 @DMP-2055
-  @review
+@DMP-2055
+@review
   Scenario Outline: Transcriber TranscriptionType - Court Logs - Audio requestType -Playback
     Given I create a case
       | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -177,8 +178,8 @@ Feature: Transcriber
     Then I click on the "Your audio" link
 
     Then I wait for the requested audio file to be ready
-      | user      | courthouse   | case_number   | hearing_date |
-      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
+      | user        | courthouse   | case_number   | hearing_date |
+      | TRANSCRIBER | <courthouse> | <case_number> | {{date+0/}}  |
     Then I click on "Request ID" in the "Ready" table header
 
     #Then I wait for text "READY" on the same row as link "<case_number>"
