@@ -911,13 +911,17 @@ public class NavigationShared {
 		waitForBrowserReadyState();
 	}
 
+	public void waitForBrowserReadyState() {
+		waitForBrowserReadyState(30);
+	}
+
 /*
  * Wait for browser ready state to be complete - call when button / checkbox / radio button selected
  * 
  * TODO consider waiting for not complete first (1 sec)
  * TODO Add gap between checks say 2000 to 
  */
-	public void waitForBrowserReadyState() {
+	public void waitForBrowserReadyState(int seconds) {
 		log.info("Wait for document.readyState");
 		log.info("Waiting for NOT ready state");
 //	Wait for browser NOT to be ready - not too long because it may be ready again already
@@ -932,7 +936,7 @@ public class NavigationShared {
 		}
 		try {
 			log.info("Waiting for ready state");
-		    new WebDriverWait(driver, Duration.ofSeconds(30), Duration.ofMillis(200)).until((ExpectedCondition<Boolean>) wd ->
+		    new WebDriverWait(driver, Duration.ofSeconds(seconds), Duration.ofMillis(200)).until((ExpectedCondition<Boolean>) wd ->
 		            ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 			log.info("Finished waiting for ready state");
 		} catch (Exception e) {

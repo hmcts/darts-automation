@@ -249,7 +249,9 @@ public class ReadProperties {
 		} catch (Exception e) {
 			log.info("Property >"+property+"< NOT FOUND (exception) for environment >"+environment);
 			try {
-				return getProperty("feature_" + property, environmentProperties, environmentPropertiesParameterFileName).equals("1");
+				String returnValue =  getProperty("feature_" + property, environmentProperties, environmentPropertiesParameterFileName);
+				log.info("Returned property >"+property+"< value >"+returnValue);
+				return returnValue.equals("1") || returnValue.equalsIgnoreCase("Y");
 			} catch (Exception e1) {
 				return false;
 			}

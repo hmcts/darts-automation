@@ -11,7 +11,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.After;
+import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
+import io.cucumber.java.BeforeAll;
 import uk.gov.hmcts.darts.automation.utils.DateUtils;
 import uk.gov.hmcts.darts.automation.utils.JsonApi;
 import uk.gov.hmcts.darts.automation.utils.NavigationShared;
@@ -112,11 +114,23 @@ public class StepDef_hooks extends StepDef_base {
 		String build = JsonApi.buildInfo();
 		if (!ReadProperties.buildNo.equals(build)) {
 			log.warn("Automation started with build {} but is now Build {}", ReadProperties.buildNo, build);
+			scenario.attach("Warning - build number has changed since testing started, was Build: " + ReadProperties.buildNo 
+					+ ", now: " + build, "text/plain", "Build-No_Changed");
 		}
 		scenario.attach("Environment: " + ReadProperties.environment + ", Build: " + ReadProperties.buildNo 
 				+ ", seq: " + ReadProperties.seq
 				+ ", " + DateUtils.timestamp(), "text/plain", "Run-details");
 		testdata.setProperty("started", DateUtils.timestamp());
+	}
+	
+	@BeforeAll
+	public static void beforeAll() {
+		log.info("Before all");
+	}
+	
+	@AfterAll
+	public static void afterAll() {
+		log.info("After all");
 	}
 	
 }

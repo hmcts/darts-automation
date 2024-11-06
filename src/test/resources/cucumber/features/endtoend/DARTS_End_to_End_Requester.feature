@@ -1,6 +1,7 @@
+@end2end @end2end2 @end2end-requester
 Feature: End-to-end Requester
 
-  @end2end @end2end2 @DMP-2206
+@DMP-2206
   @reads-and-writes-system-properties
   Scenario Outline: Requester
     Given that courthouse "<courthouse>" case "<case_number>" does not exist

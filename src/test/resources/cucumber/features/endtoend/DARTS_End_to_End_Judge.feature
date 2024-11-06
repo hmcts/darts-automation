@@ -1,7 +1,8 @@
+@end2end @end2end5 @end2end-judge
 Feature: End-to-end Judge
 
-  @end2end @end2end5 @DMP-2200
-  @reads-and-writes-system-properties
+@DMP-2200
+@reads-and-writes-system-properties
   Scenario Outline: Judge
     #Given I create a case
      # | courthouse   | |case_number   | defendants   | judges   | prosecutors   | defenders   |

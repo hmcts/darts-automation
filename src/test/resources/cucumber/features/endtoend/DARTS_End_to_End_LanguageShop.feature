@@ -1,6 +1,7 @@
+@end2end @end2end7 @end2endlanguage-shop-user
 Feature: End-to-end Language Shop User
 
-  @end2end @end2end7 @DMP-2056
+  @DMP-2056
   @review
   @reads-and-writes-system-properties
   Scenario Outline: Language Shop User
