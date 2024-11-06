@@ -202,8 +202,8 @@ public class StepDef_portal extends StepDef_base {
  	
  	@Then("^I wait for the audio Request ID to be ready$")
  	public void waitForAudioRequestIdToBeReady() throws Exception {
-    	if (savedRequestId.isBlank()) {
-    		log.fatal("Request ID must already have been already captured by the step \"* I see the Request ID\"");
+    	if (savedRequestId == null || savedRequestId.isBlank() || savedRequestId.equalsIgnoreCase("null")) {
+    		log.fatal("Request ID must already have been already captured by the step \"* I see the Request ID\" but is {}", savedRequestId);
     		Assert.fail("Request ID must already have been captured by \"* I see the Request ID\"");
     	}
 		portal.waitForRequestedAudioToBeReady(savedRequestId);

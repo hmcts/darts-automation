@@ -36,6 +36,8 @@ public class Portal {
     private Database DB;
     private JsonApi jsonApi;
 
+	private static int AUDIO_WAIT_TIME_IN_SECONDS = 900;
+
     public Portal(WebDriver driver, TestData testdata) {
         this.webDriver = driver;
         this.TD = testdata;
@@ -85,7 +87,7 @@ public class Portal {
     public void logonAsUser(String type) throws Exception {
     	String userName = Credentials.userName(type);
     	String password = Credentials.password(type);
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(60);
         WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
         WAIT.waitForTextOnPage("except where otherwise stated");
         NAV.waitForPageLoad();
@@ -345,7 +347,7 @@ public class Portal {
 				"cas.case_number", caseNumber,
 				"hearing_date", hearingDate,
 				"max(med_id)");
-        int waitTimeInSeconds = 300;
+        int waitTimeInSeconds = AUDIO_WAIT_TIME_IN_SECONDS;
         log.info("wait time {} courthouse {}, courtroom {}, case {}, date {}", waitTimeInSeconds, courthouse, courtroom, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
@@ -369,7 +371,7 @@ public class Portal {
     	log.info("Waiting for audio file to be loaded - {} {} {} for {}", courthouse, caseNumber, hearingDate, user);
     	String userName = Credentials.userName(user);
     	String user_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userName, "usr_id");
-        int waitTimeInSeconds = 300;
+        int waitTimeInSeconds = AUDIO_WAIT_TIME_IN_SECONDS;
         String jsonQuery = new StringBuilder("$..[?(@.case_number=='")
         		.append(caseNumber)
         		.append("' && @.courthouse_name=='")
@@ -410,7 +412,7 @@ public class Portal {
     			"hearing_date", DateUtils.dateAsYyyyMmDd(hearingDate),
     			"lower(user_email_address)", userName,
     			"max(mer_id)");
-        int waitTimeInSeconds = 300;
+        int waitTimeInSeconds = AUDIO_WAIT_TIME_IN_SECONDS;
         log.info("wait time {} for user {}, courthouse {}, case {}, date {}", waitTimeInSeconds, user, courthouse, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
         try {
         	waitForRequestedAudioToBeReady(mer_id);
@@ -422,7 +424,7 @@ public class Portal {
     }
     
     public void waitForRequestedAudioToBeReady(String requestId) throws Exception {
-        int waitTimeInSeconds = 300;
+        int waitTimeInSeconds = AUDIO_WAIT_TIME_IN_SECONDS;
     	log.info("Waiting {} secs for requested audio file to be ready requestId: {}", waitTimeInSeconds, requestId);
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
                 .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
@@ -454,7 +456,7 @@ public class Portal {
     public void waitForUpdatedRow(String text, String link) {
         String substitutedValueLink = Substitutions.substituteValue(link);
         String substitutedValueText = Substitutions.substituteValue(text);
-        int waitTimeInSeconds = 600;
+        int waitTimeInSeconds = AUDIO_WAIT_TIME_IN_SECONDS;
         log.info("WAIT TIME {}", waitTimeInSeconds);
 
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
@@ -482,7 +484,7 @@ public class Portal {
         try {
             wait.until(checkForRowFieldsPresent);
         } catch (TimeoutException e) {
-            log.warn("Link " + link + " NOT found for " + text + " within the specified wait time.");
+            log.fatal("Link " + link + " NOT found for " + text + " within the specified wait time.");
         }
     }
     
@@ -490,6 +492,7 @@ public class Portal {
     	String requestId = webDriver.findElement(By.xpath("//h1[text()='Your order is complete']"
     			+ "/following-sibling::div[starts-with(normalize-space(text()),'Your request ID')]"
     			+ "/strong")).getText();
+    	log.info("Request ID found: {}", requestId);
     	return requestId;
     }
 
