@@ -31,6 +31,7 @@ import uk.gov.hmcts.darts.automation.utils.JsonApi;
 import uk.gov.hmcts.darts.automation.utils.JsonUtils;
 import uk.gov.hmcts.darts.automation.utils.ApiResponse;
 import uk.gov.hmcts.darts.automation.utils.DateUtils;
+import uk.gov.hmcts.darts.automation.pageObjects.UcfTestHarness;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,12 +44,14 @@ public class StepDef_jsonApi extends StepDef_base {
 	private static Logger log = LogManager.getLogger("StepDef_jsonApi");
 	private static String eventFields = "|message_id|type|sub_type|event_id|courthouse|courtroom|case_numbers|event_text|date_time|case_retention_fixed_policy|case_total_sentence|";
 	private JsonApi jsonApi;
+	private UcfTestHarness ucfTestHarness;
 	private WaitUtils WAIT;
 	
 	
 	public StepDef_jsonApi(SeleniumWebDriver driver, TestData testdata) {
 		super(driver, testdata);
 		jsonApi = new JsonApi();
+		ucfTestHarness = new UcfTestHarness();
 		WAIT = new WaitUtils(webDriver);
 	}
 	
@@ -110,7 +113,23 @@ public class StepDef_jsonApi extends StepDef_base {
 
 	@When("^I load an audio file$")
 	public void loadAudioFile(List<Map<String,String>> dataTable) {
-		loadAudioFileUsingJson(dataTable);
+		if (ReadProperties.feature("useUcfTestHarness")) {
+			for (Map<String, String> map : dataTable) {
+				String date = getValue(map, "date");
+
+				ApiResponse apiResponse = ucfTestHarness.addAudioUsingUcfTestHarness(getValue(map, "courthouse"),
+						getValue(map, "courtroom"),
+						getValue(map, "case_numbers"),
+						DateUtils.makeTimestamp(date, getValue(map, "startTime")),
+						DateUtils.makeTimestamp(date, getValue(map, "endTime")));
+				testdata.statusCode = apiResponse.statusCode;
+				testdata.responseString = apiResponse.responseString;
+				Assertions.assertEquals("200", apiResponse.statusCode, "Invalid API response " + apiResponse.statusCode);
+			}
+			
+		} else {
+			loadAudioFileUsingJson(dataTable);
+		}
 	}
 	
 // sample cucumber:
