@@ -1009,3 +1009,26 @@ Feature: Admin
     And I see "Enter a fixed policy key" on the page
     And I see "Enter a policy start date in the future" on the page
     And I see "Enter a policy start time in the future" on the page
+
+    @DMP-2731
+    Scenario: Transcript files marked for deletion
+      When I am logged on to the admin portal as an ADMIN user
+      And I click on the "File deletion" link
+      And I see "Audio files" in the same row as "Transcripts"
+      Then I click on the "Transcripts" sub-menu link
+      And I see "Transcripts" on the page
+      Then I verify the HTML table contains the following values
+      | Transcript ID| Case ID               | Hearing date| Courthouse| Courtroom         | Marked by  | Comments                             | *IGNORE* |
+      | 8149         | DMP-3364-Disable-User | 24 Sep 2024 | Swansea   | OURTROOM-DMP-3364 | Darts Admin| Public interest immunity\nTest\nTest | Delete   |
+
+      Then I press the "Delete" button
+      And I see "You cannot delete this transcript file" on the page
+      And I see "You cannot delete a transcript file that you marked for deletion." on the page
+      And I see "Another administrator will need to check the file can be deleted and can complete this step." on the page
+      And I see "Go back" on the page
+
+      Then I click on the "Go back" link
+      And I see "Transcripts" on the page
+      And I verify the HTML table contains the following values
+        | Transcript ID| Case ID               | Hearing date| Courthouse| Courtroom         | Marked by  | Comments                             | *IGNORE* |
+        | 8149         | DMP-3364-Disable-User | 24 Sep 2024 | Swansea   | OURTROOM-DMP-3364 | Darts Admin| Public interest immunity\nTest\nTest | Delete   |
