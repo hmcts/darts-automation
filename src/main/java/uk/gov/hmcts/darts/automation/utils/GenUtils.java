@@ -100,7 +100,7 @@ public class GenUtils {
 			log.warn("Process Failed >" + command );
 
 		}
-		return "Version not available";
+		return "";
 	}
 	
 	public String browserVersion() {

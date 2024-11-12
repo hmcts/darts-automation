@@ -71,6 +71,7 @@ public class Postgres {
 			} catch (SQLException e) {
 				log.fatal(e.getMessage());
 			}
+			conn = null;
 		}
 	}
 	
@@ -204,7 +205,7 @@ public class Postgres {
 	public ResultSet executeSql(String sql) throws Exception {
 		connect();
 		try (Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql)) {
+			ResultSet rs = stmt.executeQuery(sql)) {
 			return rs;
 		}
 	}
@@ -406,7 +407,11 @@ public class Postgres {
 		Assertions.assertEquals(pg.returnSingleValue("darts.court_case", "cth_id", "2", "case_number"), "461_Case1");
 	}
 
-
+	@Test
+	public void test3() throws Exception {
+		Postgres pg = new Postgres();
+		System.out.println(pg.returnSingleValue("darts.case_retention car", "cmr_id", "82826", "retain_until_ts"));
+	}
 
 
 
