@@ -51,7 +51,7 @@ public class NavigationShared {
 		log.info("Instance count: " + ++instanceCount);
 	}
 
-	public void navigateToUrl(String url) throws Exception {
+	public void navigateToUrl(String url) {
 		driver.navigate().to(url);
 		waitForBrowserReadyState();
 		log.info("Navigated to =>" + url);
@@ -734,6 +734,7 @@ public class NavigationShared {
 
 		driver.navigate().refresh();
 		log.info("Refreshed the page");
+    	waitForPageLoad();
 		waitForBrowserReadyState();
 
 		return this;

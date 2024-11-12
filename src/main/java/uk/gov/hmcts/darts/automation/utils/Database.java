@@ -217,6 +217,10 @@ public class Database extends Postgres {
 		return super.setSingleValue(tableName(table), keyCol1, keyVal1, keyCol2, keyVal2, keyCol3, keyVal3, updateCol, updateVal);
 	}
 	
+	public String returnSingleValue(String sql) throws Exception {
+		return super.returnSingleValue(sql);
+	}
+	
 	public String returnSingleValue(String table, String keyCol1, String keyVal1, String returnCol) throws Exception {
 		return super.returnSingleValue(tableName(table), keyCol1, keyVal1, returnCol);
 	}

@@ -70,28 +70,27 @@ public class Portal {
     	}
     }
 
-    public void logonToDartsPortal(String type) throws Exception {
-    	log.info("About to navigate to admin portal & login as user type " + type);
-    	NAV.navigateToUrl(ReadProperties.main("portal_url"));
-    	allowCookies(false);
-    	logonAsUser(type);
+    public void logonToDartsPortal(String userType) throws Exception {
+    	log.info("About to navigate to admin portal & login as user type " + userType);
+    	logonAsUser(ReadProperties.main("portal_url"), userType);
     }
 
-    public void logonToAdminPortal(String type) throws Exception {
-    	log.info("About to navigate to DARTS portal & login as user type " + type);
-    	NAV.navigateToUrl(ReadProperties.main("portal_url") + "/admin");
-    	allowCookies(false);
-    	logonAsUser(type);
+    public void logonToAdminPortal(String userType) throws Exception {
+    	log.info("About to navigate to DARTS portal & login as user type " + userType);
+    	logonAsUser(ReadProperties.main("portal_url") + "/admin", userType);
     }
 
-    public void logonAsUser(String type) throws Exception {
-    	String userName = Credentials.userName(type);
-    	String password = Credentials.password(type);
-        NAV.waitForBrowserReadyState(60);
-        WAIT.waitForTextOnPage("I have an account for DARTS through my organisation.");
-        WAIT.waitForTextOnPage("except where otherwise stated");
-        NAV.waitForPageLoad();
-        switch (type.toUpperCase()) {
+    public void logonAsUser(String url, String userType) throws Exception {
+    	NAV.navigateToUrl(url);
+        NAV.waitForBrowserReadyState(20);
+        waitForNavigation(url, "Sign in to the DARTS Portal");
+    	allowCookies(false);
+    	String userName = Credentials.userName(userType);
+    	String password = Credentials.password(userType);
+        WAIT.waitForTextOnPage("I have an account for DARTS through my organisation."); // body
+        WAIT.waitForTextOnPage("except where otherwise stated");						// footer
+//        NAV.waitForPageLoad();
+        switch (userType.toUpperCase()) {
             case "EXTERNAL":
             case "TRANSCRIBER":
             case "LANGUAGESHOP":
@@ -108,7 +107,7 @@ public class Portal {
                 loginToPortal_InternalUser(userName, password);
                 break;
             default:
-                log.fatal("Unknown user type - {}" + type.toUpperCase());
+                log.fatal("Unknown user type - {}" + userType);
         }
 
     }
@@ -118,12 +117,12 @@ public class Portal {
         TD.userId = "";
         NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(90);
         WAIT.waitForTextOnPage("This sign in page is for users who do not work for HMCTS.");
         NAV.set_valueTo("Enter your email", username);
         NAV.set_valueTo("Enter your password", password);
         NAV.press_buttonByName("Continue");
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(90);
         WAIT.waitForTextOnPage("except where otherwise stated");
     }
 
@@ -141,38 +140,38 @@ public class Portal {
         TD.userId = username;
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(90);
         WAIT.waitForTextOnPage("Sign in");
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(90);
         if (webDriver.findElements(By.xpath("//input[@type='" + "email" + "']")).isEmpty()) {
             List<WebElement> another = webDriver.findElements(By.xpath("//*[text() = 'Use another account']"));
             if (another.size() == 1) {
                 another.get(0).click();
             }
-            NAV.waitForBrowserReadyState();
+            NAV.waitForBrowserReadyState(90);
         }
 
 // Following line fails when run from Jenkins but would be preferable
 //        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Email address, phone number or Skype"), username);
         setInputField("email", username);
         NAV.press_buttonByName("Next");
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(90);
         WAIT.waitForTextOnPage("Enter password");
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(90);
 // Following line fails when run from Jenkins but would be preferable
 //        NAV.setElementValueTo(GEN.lookupWebElement_byPlaceholder("Password"), password);
         setInputField("password", password);
         NAV.press_buttonByName("Sign in");
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(90);
 // When signing in for a second time, the stay signed in box may not appear
         WAIT.waitForTextOnPage("Stay signed in?", "Search for a case");
 		if (webDriver.findElements(By.xpath("//*[text() ='" + "Stay signed in?" + "']")).size() == 1) {
 	        NAV.waitForBrowserReadyState();
 	        NAV.press_buttonByName("No");
-	        NAV.waitForBrowserReadyState();
+	        NAV.waitForBrowserReadyState(90);
 		}
 	        WAIT.waitForTextOnPage("except where otherwise stated");
-	        NAV.waitForBrowserReadyState();
+	        NAV.waitForBrowserReadyState(90);
     }
 
     public void signOut() throws Exception {
@@ -182,7 +181,7 @@ public class Portal {
             webElement.click();
         }
         NAV.waitForBrowserReadyState();
-        NAV.waitForBrowserReadyState();
+        NAV.waitForBrowserReadyState(90);
         WAIT.waitForTextOnPage("Sign in", 15);
     }
 
@@ -318,6 +317,39 @@ public class Portal {
         } catch (Exception e) {
             log.error("Error uploading document: {}", e.getMessage());
             throw e;
+        }
+    }
+
+    public void waitForNavigation(String url, String text) {
+        int waitTimeInSeconds = 150;
+        log.info("WAIT TIME {}", waitTimeInSeconds);
+		By byXpath = By.xpath("//*[contains(.,'" 
+				+ text
+				+ "')]");
+
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver)
+                .withTimeout(Duration.ofSeconds(waitTimeInSeconds))
+                .pollingEvery(Duration.ofSeconds(30))
+                .ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class);
+
+        Function<WebDriver, Boolean> checkForTextPresent = new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                NAV.waitForBrowserReadyState();
+                if (webDriver.findElements(byXpath).size() != 0) {
+                    log.info("url {} with text {} found", url, text);
+                    return true; // Element is present
+                } else {
+                	webDriver.navigate().to(url); // Refresh the page if element not found
+                    return false;
+                }
+            }
+        };
+        try {
+            wait.until(checkForTextPresent);
+        } catch (TimeoutException e) {
+            log.fatal("url {} with text {} not reached within the specified wait time.", url, text);
         }
     }
     

@@ -47,6 +47,27 @@ public class AdminPortal {
         portal = new Portal(webDriver, testdata);
     }
     
+    public void reactivateUser(String userName) throws Exception {
+		if (DB.returnSingleValue("select is_active "
+				+ "from darts.user_account "
+				+ "where lower(user_name) = '" + userName.toLowerCase() + "'") == "f") {
+    		try {
+		    	NAV.click_link_by_text("Users");
+		    	NAV.set_valueTo("Full name", userName);
+		    	NAV.checkRadioButton("All");
+		    	NAV.press_buttonByName("Search");
+		    	NAV.clickText_inSameRow_asText("View", userName);
+		    	NAV.press_buttonByName("Activate user");
+		    	NAV.press_buttonByName("Reactivate user");
+		    	log.info("User {} set to active", userName);
+	    	} catch (Exception e) {
+	    		log.warn("User {} not set to active", userName);
+	    	}
+    	} else {
+	    	log.info("User {} already active", userName);
+    	}
+    }
+    
     public void addGroupsToUser(String userName, String group) throws Exception {
     	try {
 	    	NAV.click_link_by_text("Users");

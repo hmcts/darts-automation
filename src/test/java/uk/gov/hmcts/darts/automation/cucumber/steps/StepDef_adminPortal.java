@@ -44,6 +44,15 @@ public class StepDef_adminPortal extends StepDef_base {
         }
     }
 
+    @Given("I reactivate user \"([^\"]*)\"$")
+    public void reactivateUser(String userName) {
+        try {
+        	adminPortal.reactivateUser(userName);
+        } catch (Exception exception){
+            log.error("user {} failed to reactivate", userName);
+        }
+    }
+
 	
 	
 }
