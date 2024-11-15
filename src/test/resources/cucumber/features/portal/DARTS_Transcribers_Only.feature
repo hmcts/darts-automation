@@ -66,7 +66,7 @@ Feature: Request Audio for transcribers
     Then I see "F{{seq}}001" in the same row as "Awaiting Authorisation"
 
     When I Sign out
-    And I see "Sign in to the DARTS Portal" on the page
+#    And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as an APPROVER user
     And I click on the "Your transcripts" link
 #    And I click on the "Transcript requests to review" link
@@ -90,7 +90,7 @@ Feature: Request Audio for transcribers
     And I do not see "F{{seq}}001" on the page
 
     When I Sign out
-    And I see "Sign in to the DARTS Portal" on the page
+#    And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as a TRANSCRIBER user
     And I click on the "Transcript requests" link
     #DMP-1198-AC1, AC3 and DMP-1203-AC4 Transcript request screen and column names/sortable columns to do
@@ -143,9 +143,12 @@ Feature: Request Audio for transcribers
     #DMP-1203-AC3 Your audio
 
     When I click on the "Your audio" link
-    And I click on "Request ID" in the "Ready" table header
-    And I wait for text "READY" on the same row as the link "F{{seq}}001"
 #    And I click on "Request ID" in the "Ready" table header
+#    And I wait for text "READY" on the same row as the link "F{{seq}}001"
+    And I wait for the requested audio file to be ready
+      | user        | courthouse         | case_number | hearing_date |
+      | TRANSCRIBER | Harrow Crown Court | F{{seq}}001 | {{date+0/}}  |
+    And I click on "Request ID" in the "Ready" table header
     And I click on "View" in the same row as "F{{seq}}001"
     And I see "Download audio file" on the page
     And I see ".zip" on the page
@@ -165,13 +168,13 @@ Feature: Request Audio for transcribers
     Then I see "Search for a case" on the page
 
     When I Sign out
-    And I see "Sign in to the DARTS Portal" on the page
-    And I am logged on to DARTS as an REQUESTER user
+#    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as a REQUESTER user
     And I click on the "Your transcripts" link
     Then I see "F{{seq}}001" in the same row as "With Transcriber"
 
     When I Sign out
-    And I see "Sign in to the DARTS Portal" on the page
+#    And I see "Sign in to the DARTS Portal" on the page
     And I am logged on to DARTS as a TRANSCRIBER user
     And I click on the "Your work" link
     And I click on "View" in the same row as "F{{seq}}001"

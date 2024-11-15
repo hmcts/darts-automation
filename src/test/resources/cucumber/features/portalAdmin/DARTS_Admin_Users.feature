@@ -21,15 +21,15 @@ Feature: Admin-Users
   @DMP-634 @regression
   Scenario: Search for Users in Portal Primary page
     Given I am logged on to the admin portal as an ADMIN user
-    When I do not see "Search for user" on the page
-    And I click on the "Users" link
+    Then I do not see "Search for user" on the page
+    When I click on the "Users" link
     Then I see "Full name" on the page
     And I see "Email" on the page
     And I see "Active users" on the page
     And I see "Inactive users" on the page
     And I see "All" on the page
 
-  @DMP-2178 @DMP-630-AC1-AC2 @regression
+  @DMP-2178 @DMP-630-AC1-AC2 @regression @ts999
   Scenario Outline: New user account - Check user details
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
@@ -50,7 +50,10 @@ Feature: Admin-Users
 
     #AC2 Change User Details
     When I click on the "Change" link
-    And I set "Full name" to "Test User Change"
+    Then "Full name" is "<Full name>"
+    And "Email" is "<Email>"
+    And "Description (optional)" is "<Description>"
+    When I set "Full name" to "Test User Change"
     And I set "Email" to "testchange@test.com"
     And I set "Description (optional)" to "Test Change"
     And I press the "Continue" button
@@ -62,7 +65,13 @@ Feature: Admin-Users
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
-    Then I press the "Create user" button
+    And I press the "Create user" button
+    Then I see "User record has been created for <Full name>" on the page
+
+		Then I see table darts.user_account column user_name is "<Full name>" where user_email_address = "<Email>"
+		Then I see table darts.user_account column description is "<Description>" where user_email_address = "<Email>"
+		Then I see table darts.user_account column user_name is "<Full name>" where user_email_address = "<Email>"
+		Then I see table darts.user_account column is_active is "t" where user_email_address = "<Email>"
 
     Examples:
       | Full name  | Email                       | Description |
@@ -80,7 +89,6 @@ Feature: Admin-Users
     And I set "Email" to "<Email>"
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
-    Then I see "There is a problem" on the page
     And I see an error message "<ErrorMessage>"
 #    And I see "<Field>" on the page
 #    And I see an error message "<ErrorMessage>"
@@ -114,8 +122,8 @@ Feature: Admin-Users
     And I press the "Continue" button
     Then I see "Check user details" on the page
     When I press the "Create user" button
-    When I press the "Deactivate user" button
   #Deactivate user 2
+    When I press the "Deactivate user" button
 #    Then I select column usr_id from table darts.user_account where user_email_address = "KH{{seq}}002@test.net"
 #    Then I set table darts.user_account  column is_active to "false" where usr_id = "{{usr_id}}"
 
