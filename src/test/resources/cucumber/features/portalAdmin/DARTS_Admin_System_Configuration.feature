@@ -400,8 +400,7 @@ Feature: Admin System configuration
       And I set "Hour" to "01"
       And I set "Minutes" to "00"
       And I click on the "Create" link
-      Then I see "There is a problem" on the page
-      And I see "Enter a unique display name" on the page
+    	Then I see an error message "Enter a unique display name"
       And I see "Enter a unique name" on the page
       And I see "The fixed policy key entered already exists in the database. Fixed policy keys must be unique" on the page
       Then I click on the "Cancel" link
@@ -472,8 +471,7 @@ Feature: Admin System configuration
     And I set "Hour" to "11"
     And I set "Minutes" to "30"
     And I click on the "Save" link
-    Then I see "There is a problem" on the page
-    And I see "Enter a unique display name" on the page
+    Then I see an error message "Enter a unique display name"
     And I see "Enter a unique name" on the page
     And I see "Enter a fixed policy key" on the page
     And I see "Enter a policy start date in the future" on the page

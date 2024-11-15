@@ -176,9 +176,12 @@ public class StepDef_portal extends StepDef_base {
  	}
  	
 	
- // sample cucumber:
+ // sample cucumber: (2 alternatives)
  // Then I wait for the requested audio file to be ready
- // |user|courthouse|case_number|hearing_date|
+ //   | user | courthouse | case_number | hearing_date |
+ //             -- OR --
+ // Then I wait for the requested audio file to be ready
+ //   | requestId |
  	@Then("^I wait for the requested audio file to be ready$")
  	public void waitForRequestedAudioFileToBeReady(List<Map<String,String>> dataTable) throws Exception {
  		for (Map<String, String> map : dataTable) {

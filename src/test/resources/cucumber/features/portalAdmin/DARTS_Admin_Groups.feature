@@ -35,8 +35,7 @@ Feature: Admin Groups
     #AC2 - Error Handling
     And I set "Group name" to "Xhibit Group"
     And I press the "Save changes" button
-    And I see "There is a problem" on the page
-    And I see "There is an existing group with this name" on the page
+    Then I see an error message "There is an existing group with this name"
 
   @DMP-2305 @regression
   Scenario: Removing users from a group confirmation screen
@@ -104,8 +103,7 @@ Feature: Admin Groups
     And I see "Cancel" on the page
     Then I press the "Create group" button
     #AC2 - Error Handling
-    And I see "There is a problem" on the page
-    And I see "Enter a group name" on the page
+    Then I see an error message "Enter a group name"
     And I see "Select a role" on the page
     And I see "Enter a group name" on the page
     And I see "Select a role" on the page

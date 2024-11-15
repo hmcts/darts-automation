@@ -1006,7 +1006,6 @@ Feature: Request Transcript
     And I press the "Request a new transcript" button
     And I select "Overnight" from the "Urgency" dropdown
     And I press the "Continue" button
-    And I see "There is a problem" on the page
     Then I see an error message "Please select a transcription type"
 
     When I select "Court Log" from the "Request Type" dropdown

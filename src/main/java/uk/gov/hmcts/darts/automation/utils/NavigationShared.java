@@ -650,7 +650,7 @@ public class NavigationShared {
 		log.info("Current value =>" + current_value);
 
 		String substitutedValue = Substitutions.substituteValue(expected_value);
-		assertEquals(current_value, expected_value);
+		assertEquals(current_value, substitutedValue);
 		log.info("Saw Expected Value =>" + current_value);
 
 	}

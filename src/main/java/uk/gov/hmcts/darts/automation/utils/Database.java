@@ -34,24 +34,23 @@ public class Database extends Postgres {
 			"inner join darts.courthouse cth\r\n" +
 			"on cth.cth_id = cas.cth_id\r\n";
 	
-	final String eventJoin = 
-			"darts.court_case cas\r\n" +
-			"left join darts.hearing hea\r\n" +
-			"--on hea.cas_id = cas.cas_id\r\n" +
-			"using (cas_id)\r\n" +
-			"left join darts.hearing_event_ae he\r\n" +
-			"--on he.hea_id = hea.hea_id\r\n" +
-			"using (hea_id)\r\n" +
-			"left join darts.event eve\r\n" +
-			"--on eve.eve_id = he.eve_id\r\n" +
-			"using (eve_id)\r\n" +
-			"left join darts.event_handler evh\r\n" +
-			"on evh.evh_id = eve.evh_id\r\n" +
-			"left join darts.courtroom ctr\r\n" +
-			"on ctr.ctr_id = hea.ctr_id\r\n" +
-			"-- or ctr.ctr_id = eve.ctr_id\r\n" +
-			"left join darts.courthouse cth\r\n" +
-			"on ctr.cth_id = cth.cth_id\r\n";
+	final String eventJoin = "darts.court_case cas\r\n" 
+			+ "left join darts.hearing hea\r\n"
+			+ "--on hea.cas_id = cas.cas_id\r\n"
+			+ "using (cas_id)\r\n"
+			+ "left join darts.hearing_event_ae he\r\n"
+			+ "--on he.hea_id = hea.hea_id\r\n"
+			+ "using (hea_id)\r\n"
+			+ "left join darts.event eve\r\n"
+			+ "--on eve.eve_id = he.eve_id\r\n"
+			+ "using (eve_id)\r\n"
+			+ "left join darts.event_handler evh\r\n"
+			+ "on evh.evh_id = eve.evh_id\r\n"
+			+ "left join darts.courtroom ctr\r\n"
+			+ "on ctr.ctr_id = hea.ctr_id\r\n"
+			+ "-- or ctr.ctr_id = eve.ctr_id\r\n"
+			+ "left join darts.courthouse cth\r\n"
+			+ "on ctr.cth_id = cth.cth_id\r\n";
 
 	final String caseHearingJoin = "darts.courthouse cth\r\n"
 			+ "inner join darts.courtroom ctr\r\n"
@@ -81,69 +80,69 @@ public class Database extends Postgres {
 			+ "inner join darts.judge jud\r\n"
 			+ "using (jud_id)\r\n";
 
-	  final String caseAudioJoin = "darts.courthouse cth\r\n"
-				+ "inner join darts.courtroom ctr\r\n"
-				+ "using(cth_id)\r\n"
-				+ "inner join darts.hearing hea\r\n"
-				+ "using (ctr_id)\r\n"
-				+ "inner join darts.court_case cas\r\n"
-				+ "using (cas_id)\r\n"
-				+ "inner join darts.hearing_media_ae hm\r\n"
-				+ "using (hea_id)\r\n"
-				+ "left join darts.media med\r\n"
-				+ "using (med_id)\r\n";
+	final String caseAudioJoin = "darts.courthouse cth\r\n"
+			+ "inner join darts.courtroom ctr\r\n"
+			+ "using(cth_id)\r\n"
+			+ "inner join darts.hearing hea\r\n"
+			+ "using (ctr_id)\r\n"
+			+ "inner join darts.court_case cas\r\n"
+			+ "using (cas_id)\r\n"
+			+ "inner join darts.hearing_media_ae hm\r\n"
+			+ "using (hea_id)\r\n"
+			+ "left join darts.media med\r\n"
+			+ "using (med_id)\r\n";
 		
-		final String hearingMediaRequestJoin = "darts.court_case cas\n"
-				+ "inner join darts.hearing hea\n"
-				+ "using (cas_id)\n"
-				+ "inner join darts.courtroom ctr\n"
-				+ "using (ctr_id)\n"
-				+ "inner join darts.courthouse cth\n"
-				+ "on ctr.cth_id = cth.cth_id\n"
-				+ "left join darts.media_request mer\n"
-				+ "using (hea_id)\n"
-				+ "left join darts.user_account usr\n"
-				+ "on usr.usr_id = mer.requestor\r\n";
+	final String hearingMediaRequestJoin = "darts.court_case cas\n"
+			+ "inner join darts.hearing hea\n"
+			+ "using (cas_id)\n"
+			+ "inner join darts.courtroom ctr\n"
+			+ "using (ctr_id)\n"
+			+ "inner join darts.courthouse cth\n"
+			+ "on ctr.cth_id = cth.cth_id\n"
+			+ "left join darts.media_request mer\n"
+			+ "using (hea_id)\n"
+			+ "left join darts.user_account usr\n"
+			+ "on usr.usr_id = mer.requestor\r\n";
 		
-		final String caseManagementRetentionJoin = "darts.case_management_retention cmr\r\n"
-				+ "join darts.retention_policy_type rpt\r\n"
-				+ "using(rpt_id)\r\n";
+	final String caseManagementRetentionJoin = "darts.case_management_retention cmr\r\n"
+			+ "join darts.retention_policy_type rpt\r\n"
+			+ "using(rpt_id)\r\n";
 		
-		final String caseRetentionJoin = "darts.case_retention car\r\n"
-				+ "join darts.retention_policy_type rpt\r\n"
-				+ "using(rpt_id)\r\n";
-		
-		final String transcriptionJoin = "darts.transcription\r\n"
-				+ "left join darts.transcription_status\r\n"
-				+ "using (trs_id)\r\n"
-				+ "left join darts.transcription_urgency\r\n"
-				+ "using (tru_id)\r\n"
-				+ "left join darts.transcription_type\r\n"
-				+ "using (trt_id)\r\n";
-		
-		final String caseTranscriptionJoin = "darts.court_case cas\r\n"
-				+ "left join darts.hearing hea\r\n"
-				+ "using(cas_id)"
-				+ "inner join darts.courtroom ctr\r\n"
-				+ "using(ctr_id)\r\n"
-				+ "left join darts.courthouse cth\r\n"
-				+ "on ctr.cth_id = cth.cth_id\r\n"
-				+ "left join darts.hearing_transcription_ae\r\n"
-				+ "using(hea_id)\r\n"
-				+ "left join darts.transcription tra\r\n"
-				+ "using(tra_id)\r\n"
-				+ "left join darts.transcription_status trs\r\n"
-				+ "using (trs_id)\r\n"
-				+ "left join darts.transcription_urgency tru\r\n"
-				+ "using (tru_id)\r\n"
-				+ "left join darts.transcription_type trt\r\n"
-				+ "using (trt_id)\r\n";
-		
-		final String nodeRegisterJoin = "darts.node_register\r\n"
-				+ "left join darts.courtroom\r\n"
-				+ "using(ctr_id)\r\n"
-				+ "left join darts.courthouse\r\n"
-				+ "using(cth_id)\r\n";
+	final String caseRetentionJoin = "darts.case_retention car\r\n"
+			+ "join darts.retention_policy_type rpt\r\n"
+			+ "using(rpt_id)\r\n";
+	
+	final String transcriptionJoin = "darts.transcription\r\n"
+			+ "left join darts.transcription_status\r\n"
+			+ "using (trs_id)\r\n"
+			+ "left join darts.transcription_urgency\r\n"
+			+ "using (tru_id)\r\n"
+			+ "left join darts.transcription_type\r\n"
+			+ "using (trt_id)\r\n";
+	
+	final String caseTranscriptionJoin = "darts.court_case cas\r\n"
+			+ "left join darts.hearing hea\r\n"
+			+ "using(cas_id)"
+			+ "inner join darts.courtroom ctr\r\n"
+			+ "using(ctr_id)\r\n"
+			+ "left join darts.courthouse cth\r\n"
+			+ "on ctr.cth_id = cth.cth_id\r\n"
+			+ "left join darts.hearing_transcription_ae\r\n"
+			+ "using(hea_id)\r\n"
+			+ "left join darts.transcription tra\r\n"
+			+ "using(tra_id)\r\n"
+			+ "left join darts.transcription_status trs\r\n"
+			+ "using (trs_id)\r\n"
+			+ "left join darts.transcription_urgency tru\r\n"
+			+ "using (tru_id)\r\n"
+			+ "left join darts.transcription_type trt\r\n"
+			+ "using (trt_id)\r\n";
+	
+	final String nodeRegisterJoin = "darts.node_register\r\n"
+			+ "left join darts.courtroom\r\n"
+			+ "using(ctr_id)\r\n"
+			+ "left join darts.courthouse\r\n"
+			+ "using(cth_id)\r\n";
 
 	public Database(){
 		super();

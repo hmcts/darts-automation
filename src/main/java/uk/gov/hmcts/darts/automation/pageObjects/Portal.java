@@ -182,7 +182,7 @@ public class Portal {
         }
         NAV.waitForBrowserReadyState();
         NAV.waitForBrowserReadyState(90);
-        WAIT.waitForTextOnPage("Sign in", 15);
+        WAIT.waitForTextOnPage("Sign in", 30);
     }
 
     public void notificationCount(String count) {
@@ -430,19 +430,19 @@ public class Portal {
             wait.until(audioIsLoaded);
             log.info("Audio loaded");
         } catch (TimeoutException e) {
-            log.warn("Wait complete - not found");
+            log.fatal("Wait complete - not found");
         }
     }
     
     public void waitForRequestedAudioToBeReady(String user, String courthouse, String caseNumber, String hearingDate) throws Exception {
     	log.info("Waiting for requested audio file to be ready - {} {} {} for {}", courthouse, caseNumber, hearingDate, user);
-    	String userName = Credentials.userName(user);
-    //	String usr_id = DB.returnSingleValue("darts.user_account", "user_email_address",  userName, "usr_id");
+    	String userEmail = Credentials.userName(user);
+// Access courtroom & hearing for case using hearing date rather than explicit courtroom etc
     	String mer_id = DB.returnSingleValue("HEARING_MEDIA_REQUEST", 
     			"courthouse_name",  courthouse, 
     			"case_number",  caseNumber,
     			"hearing_date", DateUtils.dateAsYyyyMmDd(hearingDate),
-    			"lower(user_email_address)", userName,
+    			"lower(user_email_address)", userEmail.toLowerCase(),
     			"max(mer_id)");
         int waitTimeInSeconds = AUDIO_WAIT_TIME_IN_SECONDS;
         log.info("wait time {} for user {}, courthouse {}, case {}, date {}", waitTimeInSeconds, user, courthouse, caseNumber, DateUtils.dateAsYyyyMmDd(hearingDate));
