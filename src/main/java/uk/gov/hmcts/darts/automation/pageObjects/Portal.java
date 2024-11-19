@@ -72,7 +72,7 @@ public class Portal {
 
     public void logonToDartsPortal(String userType) throws Exception {
     	log.info("About to navigate to admin portal & login as user type " + userType);
-    	logonAsUser(ReadProperties.main("portal_url"), userType);
+    	logonAsUser(ReadProperties.main("portal_url") + "/login", userType);
     }
 
     public void logonToAdminPortal(String userType) throws Exception {
@@ -113,7 +113,7 @@ public class Portal {
     }
 
 
-    public void loginToPortal_ExternalUser(String username, String password) throws Exception {
+    public String loginToPortal_ExternalUser(String username, String password) throws Exception {
         TD.userId = "";
         NAV.checkRadioButton("I work with the HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
@@ -124,6 +124,7 @@ public class Portal {
         NAV.press_buttonByName("Continue");
         NAV.waitForBrowserReadyState(90);
         WAIT.waitForTextOnPage("except where otherwise stated");
+        return "";
     }
 
     // Following is a workaround for placeholder not being recognised when run from Jenkins
@@ -136,7 +137,7 @@ public class Portal {
         return webElement;
     }
 
-    public void loginToPortal_InternalUser(String username, String password) throws Exception {
+    public String loginToPortal_InternalUser(String username, String password) throws Exception {
         TD.userId = username;
         NAV.checkRadioButton("I'm an employee of HM Courts and Tribunals Service");
         NAV.press_buttonByName("Continue");
@@ -170,19 +171,26 @@ public class Portal {
 	        NAV.press_buttonByName("No");
 	        NAV.waitForBrowserReadyState(90);
 		}
-	        WAIT.waitForTextOnPage("except where otherwise stated");
-	        NAV.waitForBrowserReadyState(90);
+        WAIT.waitForTextOnPage("except where otherwise stated");
+        NAV.waitForBrowserReadyState(90);
+	    return username;
     }
 
     public void signOut() throws Exception {
+    	log.info("About to Sign out");
         NAV.click_link_by_text("Sign out");
         if (!TD.userId.isBlank()) {
-            WebElement webElement = webDriver.findElement(By.xpath("//div//*[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + TD.userId.toLowerCase() + "\"]"));
+        	log.info("Waiting for Azure sign out internal user");
+//            WebElement webElement = webDriver.findElement(By.xpath("//div//*[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" + TD.userId.toLowerCase() + "\"]"));
+            WebElement webElement = WAIT.waitForClickableElement(By.xpath(
+            		"//div//small[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')=\"" 
+            		+ TD.userId.toLowerCase() + "\"]"), 90);
             webElement.click();
         }
         NAV.waitForBrowserReadyState();
         NAV.waitForBrowserReadyState(90);
-        WAIT.waitForTextOnPage("Sign in", 30);
+    	log.info("Waiting for Sign in page");
+        WAIT.waitForTextOnPage("Sign in", 60);
     }
 
     public void notificationCount(String count) {
