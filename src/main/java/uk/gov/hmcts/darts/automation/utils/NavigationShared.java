@@ -984,32 +984,39 @@ public class NavigationShared {
 		log.info("About to clicked on link with link text =>" + arg1);
 		arg1 = Substitutions.substituteValue(arg1);
 		waitForLoadingIcon(15);
-		WebElement linkText;
+		WebElement linkElement;
 		try {
 			log.info("try 1 - linkText");
-			linkText = return_oneVisibleFromList(driver.findElements(By.linkText(arg1)));
+			linkElement = return_oneVisibleFromList(driver.findElements(By.linkText(arg1)));
 			log.info("link found on try 1");
-			clickLink(linkText, arg1);
+			clickLink(linkElement, arg1);
 		} catch (Exception e1) {
 			try {
 				log.info("element not found on try 1 so try 2 - xpath =text or xpath = lower case text");
-				linkText = return_oneVisibleFromList(driver.findElements(By.xpath("//*[text()[(normalize-space(.)=\"" + arg1
+				linkElement = return_oneVisibleFromList(driver.findElements(By.xpath("//*[text()[(normalize-space(.)=\"" + arg1
 						+ "\")]]" + "|" + "//*[text()[(normalize-space(.)=\"" + arg1.toLowerCase() + "\")]]")));
 				log.info("element found on try 2");
-				clickLink(linkText, arg1);
+				clickLink(linkElement, arg1);
 			} catch (Exception e2) {
 				try {
 				log.info("element not found on try 2 so try 3 - partialLinkText");
 				wait.activateImplicitWait();
-				linkText = return_oneVisibleFromList(driver.findElements(By.partialLinkText(arg1)));
+				linkElement = return_oneVisibleFromList(driver.findElements(By.partialLinkText(arg1)));
 				log.info("element found on try 3");
-				clickLink(linkText, arg1);
+				clickLink(linkElement, arg1);
 				} catch (Exception e3) {
+					try {
 					log.info("element not found on try 3 so try4 - xpath contains text");
-					linkText = return_oneVisibleFromList(
+					linkElement = return_oneVisibleFromList(
 							driver.findElements(By.xpath("//*[text()[contains(., '" + arg1 + "')]]")));
-					clickLink(linkText, arg1);
+					clickLink(linkElement, arg1);
 					log.info("element found on try 4");
+					} catch (Exception e4) {
+						log.info("element not found on try 4 so try5 - xpath contains text");
+						linkElement = wait.waitForClickableElement(By.xpath("//nav//a[normalize-space(text())=\"" + arg1 + "\"]"));
+						clickLink(linkElement, arg1);
+						log.info("element found on try 5");
+					}
 				}
 			}
 		}
