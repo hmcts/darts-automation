@@ -778,7 +778,7 @@ Feature: Request Transcript
     And I do not see "C{{seq}}006" on the page
     And I do not see "C{{seq}}007" on the page
 
-  @DMP-1009 @DMP-1011 @DMP-1025 @DMP-1028 @regression
+  @DMP-1009 @DMP-1011 @DMP-1025 @DMP-1028 @DMP-4073 @regression
   Scenario: Request Transcription, Rejected by Approver
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -878,6 +878,8 @@ Feature: Request Transcript
     And I click on "View" in the same row as "C{{seq}}005"
     Then I see "Your request was rejected" on the page
     And I see "Rejecting this request, for specific reason" on the page
+    And I click on the breadcrumb link "C{{seq}}005"
+    And I do not see "Document not found" on the page
     And I see "Requesting transcript Court Log for one minute of audio, this will test negative path." in the same row as "Instructions"
 
     #DMP-1028-AC3 Cancel link takes user back to Your Transcripts screen
