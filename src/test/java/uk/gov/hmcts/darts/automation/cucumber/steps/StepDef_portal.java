@@ -318,4 +318,10 @@ public class StepDef_portal extends StepDef_base {
 		}
 		Assertions.assertEquals(0, errorCount, "Errors found verifying links: " + errorLinks);
 	}
+	
+	@When("I click on the last pagination link")
+	public void clickOnLastPaginationLink() throws Exception {
+		int results = portal.getResultCount();
+        NAV.click_link_by_text("" + ((results + 24) / 25));
+	}
 }
