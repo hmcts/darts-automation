@@ -435,17 +435,21 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
   And I click on the "Advanced search" link
   And I set "Courthouse" to "Harrow Crown Court"
   And I select the "Date range" radio button
-  And I set "Date from" to "{{date-7/}}"
-  And I set "Date to" to "{{date+0/}}"
+#  Date range changed from {{date-7/}} - {{date+0/}} as more than 500 results sometines
+  And I set "Date from" to "{{date-4/}}"
+  And I set "Date to" to "{{date-1/}}"
   And I set "Judge's name" to "JUDGE NAME"
   And I set "Courtroom" to "3"
   And I press the "Search" button
-  And I see "Next" on the page
-  And I click on the pagination link "2"
-  And I see "Next" on the page
-  And I see "Previous" on the page
-  And I click on the pagination link "Previous"
-  And I click on the pagination link "Next"
+  Then I do not see link with text "Previous"
+  And I see link with text "Next"
+  When I click on the pagination link "2"
+  Then I see link with text "Previous"
+  And I see link with text "Next"
+  When I click on the pagination link "Previous"
+  Then I do not see link with text "Previous"
+  When I click on the pagination link "Next"
+  Then I see link with text "Previous"
 
 @DMP-2769 @regression
   Scenario: Advanced Search Restrictions

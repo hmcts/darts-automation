@@ -29,7 +29,7 @@ Feature: Admin-Users
     And I see "Inactive users" on the page
     And I see "All" on the page
 
-  @DMP-2178 @DMP-630-AC1-AC2 @regression @ts999
+  @DMP-2178 @DMP-630-AC1-AC2 @regression
   Scenario Outline: New user account - Check user details
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
