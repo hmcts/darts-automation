@@ -68,6 +68,7 @@ public class ReadProperties {
 	public static String automationPassword = getSystemValue("AUTOMATION_PASSWORD");
 
 	public static String automationTranscriberUserId = getSystemValue("AUTOMATION_TRANSCRIBER_USERNAME");
+	public static String automationTranscriber2UserId = getSystemValue("AUTOMATION_TRANSCRIBER2_USERNAME");
 	public static String automationLanguageShopTestUserId = getSystemValue("AUTOMATION_LANGUAGE_SHOP_TEST_USERNAME");
 	public static String automationExternalPassword = getSystemValue("AUTOMATION_EXTERNAL_PASSWORD");
 	public static String automationJudgeTestUserId = getSystemValue("AUTOMATION_JUDGE_TEST_USERNAME");

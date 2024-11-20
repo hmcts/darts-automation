@@ -12,6 +12,8 @@ public class Credentials {
 	        return ReadProperties.automationUserId;
 	    case "TRANSCRIBER":
 	        return ReadProperties.automationTranscriberUserId;
+	    case "TRANSCRIBER2":
+	        return ReadProperties.automationTranscriber2UserId;
 	    case "LANGUAGESHOP":
 	        return ReadProperties.automationLanguageShopTestUserId;
 	    case "REQUESTER":
@@ -41,6 +43,7 @@ public class Credentials {
 	    case "EXTERNAL":
 	        return ReadProperties.automationPassword;
 	    case "TRANSCRIBER":
+	    case "TRANSCRIBER2":
 	        return ReadProperties.automationExternalPassword;
 	    case "LANGUAGESHOP":
 	        return ReadProperties.automationExternalPassword;

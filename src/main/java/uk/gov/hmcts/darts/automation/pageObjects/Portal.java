@@ -93,6 +93,7 @@ public class Portal {
         switch (userType.toUpperCase()) {
             case "EXTERNAL":
             case "TRANSCRIBER":
+            case "TRANSCRIBER2":
             case "LANGUAGESHOP":
             case "ADMIN":
             case "ADMIN2":
@@ -583,4 +584,18 @@ public class Portal {
 				.split(",")[0]
 				.split("\"" + name + "\":")[1];
 	}
+	
+	public int getResultCount() {
+		try {
+			WebElement webElement = WAIT.waitForClickableElement(By.xpath("//caption[contains(.,\" results\")]"));
+			String [] result = webElement.getText().split(" ");
+			if (result[1].equals("results")) {
+				return Integer.parseInt(result[0]);
+			}
+			return 0;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+	
 }
