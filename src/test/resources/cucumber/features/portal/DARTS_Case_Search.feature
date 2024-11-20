@@ -450,6 +450,9 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
   Then I do not see link with text "Previous"
   When I click on the pagination link "Next"
   Then I see link with text "Previous"
+  When I click on the last pagination link
+  Then I do not see link with text "Next"
+  And I see link with text "Previous"
 
 @DMP-2769 @regression
   Scenario: Advanced Search Restrictions
