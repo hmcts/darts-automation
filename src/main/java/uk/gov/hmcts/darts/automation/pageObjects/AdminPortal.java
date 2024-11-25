@@ -50,7 +50,7 @@ public class AdminPortal {
     public void reactivateUser(String userName) throws Exception {
 		if (DB.returnSingleValue("select is_active "
 				+ "from darts.user_account "
-				+ "where lower(user_name) = '" + userName.toLowerCase() + "'") == "f") {
+				+ "where lower(user_name) = '" + userName.toLowerCase() + "'").equals("f")) {
     		try {
 		    	NAV.click_link_by_text("Users");
 		    	NAV.set_valueTo("Full name", userName);
@@ -68,20 +68,29 @@ public class AdminPortal {
     	}
     }
     
-    public void addGroupsToUser(String userName, String group) throws Exception {
-    	try {
-	    	NAV.click_link_by_text("Users");
-	    	NAV.set_valueTo("Full name", userName);
-	    	NAV.press_buttonByName("Search");
-	    	NAV.clickText_inSameRow_asText("View", userName);
-	    	portal.clickOnSubMenuLink("Groups");
-	    	NAV.press_buttonByName("Assign groups");
-	    	NAV.set_valueTo("Filter by group name", group);
-	    	NAV.checkUncheckCheckboxInTableRow(group, "Requester", "check");
-	    	NAV.press_buttonByName("Assign groups (1)");
-	    	log.info("User {} added to group {}", userName, group);
-    	} catch (Exception e) {
-    		log.warn("User {} not added to group {}", userName, group);
-    	}
+    public void addGroupsToUser(String userName, String group, String role) throws Exception {
+		if (DB.returnSingleValue("select count(group_name) "
+				+ "from " + DB.tableName("USER_GROUP") + " "
+				+ "where lower(user_name) = '" + userName.toLowerCase() + "' "
+				+ "and lower(group_name) = '" + group.toLowerCase() + "'").equals("0")) {
+	    	try {
+		    	NAV.click_link_by_text("Users");
+		    	NAV.set_valueTo("Full name", userName);
+		    	NAV.press_buttonByName("Search");
+		    	NAV.clickText_inSameRow_asText("View", userName);
+		    	portal.clickOnSubMenuLink("Groups");
+		    	NAV.press_buttonByName("Assign groups");
+		    	NAV.set_valueTo("Filter by group name", group);
+		    	if (role.isBlank()) {
+		    		NAV.checkUncheckCheckboxInTableRow(group, "check");
+		    	} else {
+		    		NAV.checkUncheckCheckboxInTableRow(group, role, "check");
+		    	}
+		    	NAV.press_buttonByName("Assign groups (1)");
+		    	log.info("User {} added to group {}", userName, group);
+	    	} catch (Exception e) {
+	    		log.warn("User {} not added to group {}", userName, group);
+	    	}
+		}
     }
 }

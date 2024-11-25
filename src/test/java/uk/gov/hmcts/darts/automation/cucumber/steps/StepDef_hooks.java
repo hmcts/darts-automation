@@ -42,6 +42,7 @@ public class StepDef_hooks extends StepDef_base {
 		    jse.executeScript("document.body.style.zoom = '50%';");
 			byte[] screenshot = ((TakesScreenshot)webDriver).getScreenshotAs(OutputType.BYTES);
 			scenario.attach(screenshot, "image/png", "Screenshot");
+		    jse.executeScript("document.body.style.zoom = '100%';");
 		} catch (Exception e) {
 			log.info("Failed getting screenshot");
 		}
@@ -62,6 +63,7 @@ public class StepDef_hooks extends StepDef_base {
 			    jse.executeScript("document.body.style.zoom = '50%';");
 				byte[] screenshot = ((TakesScreenshot)webDriver).getScreenshotAs(OutputType.BYTES);
 				scenario.attach(screenshot, "image/png", "Screenshot");
+			    jse.executeScript("document.body.style.zoom = '100%';");
 			} catch (Exception e) {
 				log.info("Failed getting screenshot");
 			}			
