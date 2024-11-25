@@ -50,31 +50,47 @@ Feature: Admin Courthouse
     And I see "© Crown copyright" on the page
 
 
-  @DMP-1192 @regression
+  @DMP-1192 @regression @DMP-4209
   Scenario: View Courthouse - Details Tab
     When I am logged on to the admin portal as an ADMIN user
     Then I click on the "Courthouses" navigation link
-    And I set "Courthouse name" to "Test Courthouse 1192"
+    And I set "Courthouse name" to "Harrow"
     And I press the "Search" button
-    And I click on "TEST COURTHOUSE 1192" in the same row as "Test Courthouse 1192"
+    And I see "HARROW CROWN COURT" in the same row as "Harrow Crown Court"
+    And I click on "HARROW CROWN COURT" in the same row as "Harrow Crown Court"
+    #DMP-4209
+    And I see link with text "Back"
+    Then I click on the "Back" link
+    And I see "Search for courthouse" on the page
+    And I see "HARROW CROWN COURT" in the same row as "Harrow Crown Court"
+    And I click on "HARROW CROWN COURT" in the same row as "Harrow Crown Court"
     #AC1
     Then I see "Courthouse record" on the page
-    And I see "Test Courthouse 1192" on the page
+    And I see "Harrow Crown Court" on the page
     And I see the "Edit courthouse" button
     And I see "Date created" on the page
-    And I see "Tue 26 Mar 2024" on the page
+    And I see "Thu 17 Aug 2023" on the page
     And I see "Last updated" on the page
-    And I see "Thu 1 Aug 2024" on the page
+    And I see "Thu 17 Aug 2023" on the page
     And I see "Details" on the page
     And I see link with text "Users"
     And I see "Details" on the page
-    And I see "Database ID" in the same row as "1232"
-    And I see "Courthouse name" in the same row as "Test Courthouse 1192"
-    And I see "Region" in the same row as "Midlands"
-    And I see "Groups" in the same row as "TEST_COURTHOUSE_APPROVER"
-    And I see "Groups" in the same row as "TEST_COURTHOUSE_REQUESTER"
-    And I see "Groups" in the same row as "LEEDS_DMP381_TRANSCRIBER"
-    And I see "Details" on the page
+    And I see "Database ID" in the same row as "1356"
+    And I see "Courthouse name" in the same row as "Harrow Crown Court"
+    And I see "Region" in the same row as "No region"
+    And I see "Groups" in the same row as "Testgroupone"
+    And I see "Groups" in the same row as "Testgrouptwo"
+    And I see "Groups" in the same row as "hmcts_staff_2"
+    And I see "Groups" in the same row as "hmcts_staff_5"
+    And I see "Groups" in the same row as "Harrow Crown Court_REQUESTER"
+    And I see "Groups" in the same row as "ITHC_Test"
+    And I see "Groups" in the same row as "hmcts_staff_1"
+    And I see "Groups" in the same row as "hmcts_staff_4"
+    And I see "Groups" in the same row as "hmcts_staff_6"
+    And I see "Groups" in the same row as "Harrow Crown Court_SUPER_ADMIN"
+    And I see "Groups" in the same row as "hmcts_staff_3"
+    And I see "Groups" in the same row as "Harrow Crown Court_APPROVER"
+    And I see "Groups" in the same row as "Harrow Crown Court_JUDGE"
     And I see "© Crown copyright" on the page
 
 #TODO update to edit a different courthouse & save
