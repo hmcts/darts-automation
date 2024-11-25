@@ -93,12 +93,12 @@ Feature: Admin-Users
 #    And I see "<Field>" on the page
 #    And I see an error message "<ErrorMessage>"
     Examples:
-      | Full name    | Email                 | Description | Field     | ErrorMessage                                                        | Ref           |
-      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        | DMP-630-AC3-1 |
-      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com | DMP-630-AC3-2 |
-      |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   | DMP-630-AC3-3 |
-      | Test         |                       |             | email     | Enter an email address                                              | DMP-630-AC3-4 |
-      | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters | DMP-630-AC3-5 |
+      | Full name    | Email                 | Description | ErrorMessage                                                        |
+      | global_judge | darts.judge@hmcts.net |             | Enter a unique email address                                        |
+      | global_judge | darts.judge           |             | Enter an email address in the correct format, like name@example.com |
+      |              | darts.judge@hmct.net  |             | Enter a full name                                                   |
+      | Test         |                       |             | Enter an email address                                              |
+      | Test         | Test999@hmcts.net     | Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis,.| Enter a description shorter than 256 characters |
 
   @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression
   Scenario: Create Users
@@ -377,3 +377,28 @@ Feature: Admin-Users
     And I click on the "Transcript requests" link
     And I see "Manual" in the same row as "H{{seq}}001"
 
+    @DMP-4209
+    Scenario: Back link
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "Users" link
+      Then I see "Full name" on the page
+      And I see "Email" on the page
+      And I see "Active users" on the page
+      And I see "Inactive users" on the page
+      And I see "All" on the page
+
+      Then I set "Full name" to "judge"
+      And I select the "All" radio button
+      And I press the "Search" button
+      Then I verify the HTML table contains the following values
+      | Full name    | Email                  | Status | View |
+      | Local Judge  | darts.judge1@hmcts.net | Active | View |
+      | global_judge | darts.judge@hmcts.net  | Active | View |
+
+      And I click on "View" in the same row as "Local Judge"
+      And I see link with text "Back"
+      Then I click on the "Back" link
+      And I verify the HTML table contains the following values
+      | Full name    | Email                  | Status | View |
+      | Local Judge  | darts.judge1@hmcts.net | Active | View |
+      | global_judge | darts.judge@hmcts.net  | Active | View |

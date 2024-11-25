@@ -3,18 +3,34 @@ Feature: Admin Groups
 
 
 
-  @DMP-2299 @regression @TODO
+  @DMP-2299 @regression @TODO @DMP-4209
   Scenario: Viewing Group Details
-    When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "Groups" navigation link
-    Then I select "XHIBIT" from the dropdown
-    And I click on the "Xhibit Group" link
-    And I see "Xhibit Group" on the page
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Groups" navigation link
+    And I set "Filter by name" to "Harrow"
+    Then I click on the "Harrow Crown Court_APPROVER" link
+    #Back Link
+    And I see link with text "Back"
+    Then I click on the "Back" link
+    And I see "Groups" on the page
+    And I see "Filter by name" on the page
+    And I see "Harrow" on the page
+    #View Group Details
+    Then I click on the "Harrow Crown Court_APPROVER" link
+    And I see "View group" on the page
+    And I see "Group details" on the page
+    And I see "Group name" on the page
+    And I see "Harrow Crown Court_APPROVER" on the page
+    And I see "Description" on the page
     And I see "-" on the page
-    And I see "XHIBIT" on the page
-    And I click on the "Remove" link
-    Then I select "Swansea" from the dropdown
-    And I press the "Add courthouse" button
+    And I see "Role" on the page
+    And I see "Approver" on the page
+    And I see link with text "Courthouse"
+    And I see link with text "Users"
+    And I see "Courthouses" on the page
+    And I see "Select courthouses" on the page
+    And I see "You can select and add multiple courthouses" on the page
+    And I see "Add courthouse" on the page
 
   @DMP-2302 @regression @TODO
   Scenario: Edit a Group
@@ -112,4 +128,3 @@ Feature: Admin Groups
     Then I press the "Create group" button
     And I see "There is an existing group with this name" on the page
     And I see "Description must be less than 256 characters" on the page
-
