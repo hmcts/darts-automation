@@ -143,6 +143,12 @@ public class Database extends Postgres {
 			+ "using(ctr_id)\r\n"
 			+ "left join darts.courthouse\r\n"
 			+ "using(cth_id)\r\n";
+	
+	final String userGroupJoin = "darts.user_account\r\n"
+			+ "left join darts.security_group_user_account_ae\r\n"
+			+ "using(usr_id)\r\n"
+			+ "left join darts.security_group\r\n"
+			+ "using(grp_id)\r\n";
 
 	public Database(){
 		super();
@@ -176,6 +182,8 @@ public class Database extends Postgres {
 			return caseTranscriptionJoin;
 		case "NODE_REGISTER":
 			return nodeRegisterJoin;
+		case "USER_GROUP":
+			return userGroupJoin;
 		default:
 			return input;
 		}

@@ -375,6 +375,13 @@ public class NavigationShared {
 		set_unset_checkbox(checkbox, action);
 	}
 	
+	public void checkUncheckCheckboxInTableRow(String rowData1, String action) throws Exception {
+		String xpathBit = "(./td[contains(.,\"%s\")])";
+		WebElement checkbox = driver.findElement(By.xpath(String.format("//table//tr[" + xpathBit + "]//input[@type='checkbox']",
+				Substitutions.substituteValue(rowData1))));
+		set_unset_checkbox(checkbox, action);
+	}
+	
 	public void checkUncheckCheckboxInTable(String rowData, String header, String action) throws Exception {
 		WebElement checkbox = returnCellFromColumnByValue(findTableContainingText(rowData), rowData, header).findElement(By.xpath("./descendant::input[@type='checkbox']"));
 		set_unset_checkbox(checkbox, action);
@@ -655,49 +662,58 @@ public class NavigationShared {
 
 	}
 
-	public WebElement press_buttonByName(String button_name) throws Exception {
-		log.info("About to click on button =>" + button_name);
+	public WebElement press_buttonByName(String buttonText) throws Exception {
+		log.info("About to click on button =>" + buttonText);
 		waitForLoadingIcon();
 		WebElement button = null;
 		
 		List<WebElement> buttons = driver.findElements(By.xpath(
-				"//button/descendant-or-self::*[normalize-space(.) = \"" + button_name + "\"]" ));
+//				"//button/descendant-or-self::*[normalize-space(.) = \"" + buttonText + "\"]" ));
+				"//button[./descendant-or-self::*[normalize-space(.) = \"" + buttonText + "\"]]" ));
 
 		try {
 			button = return_oneVisibleFromList(buttons);
 			wait.waitForClickableElement(button, 10);
-			log.info("element found - try 1");
+			log.info("button found - try 1");
 		} catch (Error | Exception e) {
 			try {
-				log.info("element not found - try 2");
+				log.info("button not found - try 2");
 				buttons = driver.findElements(By.xpath(
-						"//button/descendant-or-self::*[text()[contains(., \"" + button_name + "\")]]" ));
+						"//button/descendant-or-self::*[contains(normalize-space(text()), \"" + buttonText + "\")]" ));
 				button = return_oneVisibleFromList(buttons);
-				log.info("element found - try 2");
+				log.info("button found - try 2");
 			} catch (Error | Exception e2) {
-				log.info("element not found - try 3");
+				log.info("button not found - try 3");
 				buttons = driver.findElements(By.xpath(
-						"//input[(@type='button' and contains(@value,\"" + button_name + "\")) or " +
-						"(@type='submit' and contains(@value,\"" + button_name + "\"))]"));
+						"//input[(@type='button' and contains(normalize-space(@value),\"" + buttonText + "\")) or " +
+						"(@type='submit' and contains(normalize-space(@value),\"" + buttonText + "\"))]"));
 				button = return_oneVisibleFromList(buttons);
-				log.info("element found - try 3");
+				log.info("button found - try 3");
 				
 			}
 		}
 
 		try {
+			log.info("About to click on button element");
 			button.click();
-		} catch (Exception e) {
-			log.warn(e);
-			log.info("Could not do initial click on element - Going to move to element then try again");
+			log.info("click method on button successful");
+		} catch (Exception e1) {
+			try {
+				log.warn(e1);
+				log.warn("Could not do initial click on button - Going to use action click");
+				Actions action = new Actions(driver);
+				action.moveToElement(button).click().perform();
+				log.info("Action click ok");
+			} catch (Exception e2) {
+				log.warn(e2);
+				log.warn("Could not do action click on button - Going to use sendkeys");
+				button.sendKeys(Keys.ENTER);
+				log.info("Sent Enter key to button");
+			}
 
-			Actions action = new Actions(driver);
-			action.moveToElement(button).click().perform();
-
-			log.info("Move to element action successful");
 		}
 
-		log.info("Clicked on button with name =>" + button_name);
+		log.info("Clicked on button with name =>" + buttonText);
 
 		waitForPageLoad();
 		
@@ -1413,53 +1429,6 @@ public class NavigationShared {
 			}
 		}
 		waitForBrowserReadyState();
-
-	}
-/*
- * 
- * Generic FILTER for users / organisations (so not a search)
- *        ========
- * 
- */
-	public void generic_searchForText(String searchText) {
-		WebElement searchInput;
-		Keys endKey;
-		try {
-			searchInput = driver.findElement(By.xpath("//*[@id='userSearch']  | //*[@id='orgSummaryTable'] | //div[@id='orgSummaryTable_filter']//input | //*[@placeholder='Filter users...'] | //*[@id='alphabetSearch']"));
-			log.info("filter field found");
-			endKey = Keys.TAB;
-		} catch (Exception e) {
-			log.info("filter not found - try search");
-			searchInput = driver.findElement(By.xpath("//*[@id='searchBox'] | //*[@placeholder='Search case...']"));
-			log.info("search found");
-			endKey = Keys.ENTER;
-		}
-
-		searchInput.clear();
-		searchInput.sendKeys(searchText);
-		searchInput.sendKeys(endKey);
-		log.info("Found filter field and sent it =>" + searchText);
-		waitForPageLoad();
-
-	}
-
-	public void generic_filterResults(String filterText) {
-		WebElement filterInput;
-		try {
-			filterInput = find_inputBy_labelName("Filter:");
-			log.info("filter field found - try 1");
-		} catch (Exception e) {
-			log.info("filter field not found - try 2");
-			filterInput = driver.findElement(By.xpath("//*[@placeholder='Filter...'] | //*[@placeholder='Filter users...']"));
-			log.info("search found - try 2");
-		}
-
-		filterInput.clear();
-// TODO - remove hack for @ sign not working in automation
-		filterInput.sendKeys(filterText.split("@")[0]);
-		filterInput.sendKeys(Keys.TAB);
-		log.info("Found filter field and sent it =>" + filterText);
-		waitForPageLoad();
 
 	}
 

@@ -19,10 +19,11 @@ Feature: Admin-Users
 
 
   @DMP-634 @regression
-  Scenario: Search for Users in Portal Primary page
+  Scenario: Verify screen contents - Search for Users
     Given I am logged on to the admin portal as an ADMIN user
     Then I do not see "Search for user" on the page
     When I click on the "Users" link
+    Then I see "Search for user" on the page
     Then I see "Full name" on the page
     And I see "Email" on the page
     And I see "Active users" on the page
@@ -122,10 +123,15 @@ Feature: Admin-Users
     And I press the "Continue" button
     Then I see "Check user details" on the page
     When I press the "Create user" button
+    Then I see table darts.user_account column user_name is "KH{{seq}}002" where user_email_address = "KH{{seq}}002@test.net"
+    And I see table darts.user_account column user_full_name is "KH{{seq}}002" where user_email_address = "KH{{seq}}002@test.net"
+    And I see table darts.user_account column is_active is "t" where user_email_address = "KH{{seq}}002@test.net"
   #Deactivate user 2
     When I press the "Deactivate user" button
-#    Then I select column usr_id from table darts.user_account where user_email_address = "KH{{seq}}002@test.net"
-#    Then I set table darts.user_account  column is_active to "false" where usr_id = "{{usr_id}}"
+    Then I see "Deactivating this user will remove their access to DARTS." on the page
+    When I press the "Deactivate user" button
+    Then I see "User record deactivated" on the page
+    And I see table darts.user_account column is_active is "f" where user_email_address = "KH{{seq}}002@test.net"
 
   @DMP-724 @regression
   Scenario: Update user personal detail
@@ -179,6 +185,8 @@ Feature: Admin-Users
   #AC3 - Filter
     When I set "Filter by group name" to "Swansea"
     And I press the "Assign groups (1)" button
+    Then I see "Assigned 1 group" on the page
+    And I see "Approver" in the same row as "Swansea_APPROVER"
 
   @DMP-2224 @regression @review
   Scenario: Removing a group confirmation screen
@@ -204,6 +212,8 @@ Feature: Admin-Users
     Given I reactivate user "Testuserone"
     Given I reactivate user "Testusertwo"
     Given I reactivate user "Testuserthree"
+    Given I add user "Testuserone" to group "Testgroupone"
+    Given I add user "Testusertwo" to group "Testgroupone"
 
     #DMP-2323-AC1 Deactivate user
 
@@ -211,14 +221,16 @@ Feature: Admin-Users
     And I set "Full name" to "Testuserone"
     And I press the "Search" button
     And I click on "View" in the same row as "Testuserone"
-    And I see "Active user" on the page
-    And I press the "Deactivate user" button
+    Then I see "Active user" on the page
+    When I press the "Deactivate user" button
     Then I see "Deactivating this user will remove their access to DARTS." on the page
     And I see "Testuserone" on the page
 
     When I press the "Deactivate user" button
     Then I see "User record deactivated" on the page
     And I see "Inactive" on the page
+		And I see table darts.user_account column is_active is "f" where user_name = "Testuserone"
+		And I see table USER_GROUP column group_name is "null" where user_name = "Testuserone"
 
     #DMP-2323-AC2 Deactivate last user in group
 
@@ -235,6 +247,8 @@ Feature: Admin-Users
     When I press the "Deactivate user" button
     Then I see "User record deactivated" on the page
     And I see "Inactive" on the page
+		And I see table darts.user_account column is_active is "f" where user_name = "Testusertwo"
+		And I see table USER_GROUP column group_name is "null" where user_name = "Testusertwo"
 
     #Reactivate users and assign group for next run
     #DMP-2340-AC1 and AC2 Activate user button and reactivate user confirmation
@@ -273,6 +287,7 @@ Feature: Admin-Users
 
     When I click on the "Users" link
     And I set "Full name" to "Testusertwo"
+    And I select the "Active users" radio button
     And I press the "Search" button
     And I click on "View" in the same row as "Testusertwo"
     Then I see "Active user" on the page

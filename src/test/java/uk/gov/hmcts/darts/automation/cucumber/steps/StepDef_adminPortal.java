@@ -38,9 +38,18 @@ public class StepDef_adminPortal extends StepDef_base {
     @Given("I add user \"([^\"]*)\" to group \"([^\"]*)\"$")
     public void addGroupsToUser(String userName, String group) {
         try {
-        	adminPortal.addGroupsToUser(userName, group);
+        	adminPortal.addGroupsToUser(userName, group, "");
         } catch (Exception exception){
             log.error("group add error {} {}", userName, group);
+        }
+    }
+
+    @Given("I add user \"([^\"]*)\" role \"([^\"]*)\" to group \"([^\"]*)\"$")
+    public void addGroupsToUser(String userName, String role, String group) {
+        try {
+        	adminPortal.addGroupsToUser(userName, group, role);
+        } catch (Exception exception){
+            log.error("group add error {} {} {}", userName, group, role);
         }
     }
 

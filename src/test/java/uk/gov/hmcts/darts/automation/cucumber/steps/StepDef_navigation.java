@@ -254,21 +254,6 @@ public class StepDef_navigation extends StepDef_base {
 	public void text_hasClass(String text, String className) {
 	    NAV.text_hasClass(text, className);
 	};
-	
-	@When("^I search for \"([^\"]*)\"$")
-	public void searchFor(String arg1) {
-	    try {
-	    	NAV.generic_searchForText(arg1);
-	    } catch (Exception e) {
-	    	NAV.waitForPageLoad();
-	    	NAV.generic_searchForText(arg1);
-	    }
-	};
-	
-	@When("^I filter results for \"([^\"]*)\"$")
-	public void filterFor(String arg1) {
-	    NAV.generic_filterResults(arg1);
-	};
 
 	@Then("^I see the \"([^\"]*)\" ([^\"]*) in \"([^\"]*)\" area is ([^\"]*)$")
 	public void verifyCheckboxState(String labelText, String element, String header, String expected) throws Exception {
@@ -410,6 +395,11 @@ public class StepDef_navigation extends StepDef_base {
     @When("^I ([^\"]*) the checkbox in the same row as \"([^\"]*)\" \"([^\"]*)\"$")
     public void checkUncheckCheckboxInTableRowContainingString(String action, String rowData1, String rowData2) throws Exception {
         NAV.checkUncheckCheckboxInTableRow(rowData1, rowData2, action);
+    }
+
+    @When("^I ([^\"]*) the checkbox in the same row as \"([^\"]*)\"$")
+    public void checkUncheckCheckboxInTableRowContainingString(String action, String rowData1) throws Exception {
+        NAV.checkUncheckCheckboxInTableRow(rowData1, action);
     }
 
 
