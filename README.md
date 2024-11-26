@@ -38,6 +38,7 @@ Environment variables required from ide / jenkins:
 	DAR_MID_TIER_USERNAME
 	DAR_MID_TIER_PASSWORD
 	DARTS_ADMIN_USERNAME
+	DARTS_ADMIN2_USERNAME
 	
 To run locally, use
 	
@@ -60,3 +61,7 @@ To run on other environments e.g. demo when running locally, set Environment var
 	environment
 	DARTS_API_DB_HOST_<environment> 
 	DARTS_API_DB_PASSWORD_<environment>
+
+Files to exclude from version control:
+	testdata.properties
+	TestRunner_Cucumber.java
