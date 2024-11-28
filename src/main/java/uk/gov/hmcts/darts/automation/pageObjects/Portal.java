@@ -597,5 +597,28 @@ public class Portal {
 			return 0;
 		}
 	}
+
+	public void verifyErrorMessage (String labelText, String message) {
+		message = Substitutions.substituteValue(message);
+		try {
+			WAIT.waitForVisibleElement(By.xpath(String.format(
+					"//div/label[contains(normalize-space(.), \"%s\")]/following::*[contains(normalize-space(.), \"%s\")]",
+					labelText, message
+					)), 5);
+			log.info("Found error message =>{}<== for label ==>{}<==", message, labelText);
+		} catch (Exception e) {
+			Assertions.fail("Label " + labelText + " does not have expected Error message =>" + message);
+		}
+	}
+
+	public void verifyNoErrorMessage (String labelText, String message) {
+		message = Substitutions.substituteValue(message);
+		Assertions.assertTrue(webDriver.findElements(By.xpath(String.format(
+				"//div/label[contains(normalize-space(.), \"%s\")]/following::*[contains(normalize-space(.), \"%s\")]",
+				labelText, message
+				))).size()==0,
+						"Error message exists when not expected =>"+message);
+		log.info("Error message does not exist - as expected =>"+message);
+	}
 	
 }

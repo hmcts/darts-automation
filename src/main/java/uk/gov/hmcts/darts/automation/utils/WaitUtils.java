@@ -66,6 +66,22 @@ public class WaitUtils {
 		return null;
 	}
 
+	public WebElement waitForVisibleElement(By by, int wait_time) {
+		log.info("Waiting for element to be visible =>"+wait_time+"<= seconds");
+		try {
+			WebElement webElement = new WebDriverWait(driver, Duration.ofSeconds(wait_time))
+				.pollingEvery(Duration.ofMillis(200))
+				.ignoring(StaleElementReferenceException.class)
+				.ignoring(NoSuchElementException.class)
+				.until(ExpectedConditions.visibilityOfElementLocated(by));
+			log.info("Element now visible => "+by);
+			return webElement;
+		} catch (Exception e) {
+			log.error("Timed out waiting for Element to be visible => "+by);
+		}
+		return null;
+	}
+
 	public void waitForClickableElement(WebElement name) {
 		waitForClickableElement(name, TIME_IN_SECONDS);
 	}

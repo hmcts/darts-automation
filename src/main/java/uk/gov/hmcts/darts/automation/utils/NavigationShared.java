@@ -1884,6 +1884,7 @@ public class NavigationShared {
 			Assertions.assertTrue(driver.findElements(By.xpath("//div[./h2[text()[contains(., \"There is a problem\")]]]")).size()==0,
 					"Error message exists when not expected");
 		} else {
+			message = Substitutions.substituteValue(message);
 			Assertions.assertTrue(driver.findElements(By.xpath(String.format(
 							"//div[./h2[text()[contains(., \"There is a problem\")]]]//li/*[text()[contains(., \"%s\")]]",
 							message))).size()==0,
