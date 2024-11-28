@@ -94,12 +94,12 @@ Feature: Admin-Users
 #    And I see "<Field>" on the page
 #    And I see an error message "<ErrorMessage>"
     Examples:
-      | Full name    | Email                 | Description | ErrorMessage                                                        |
-      | global_judge | darts.judge@hmcts.net |             | Enter a unique email address                                        |
-      | global_judge | darts.judge           |             | Enter an email address in the correct format, like name@example.com |
-      |              | darts.judge@hmct.net  |             | Enter a full name                                                   |
-      | Test         |                       |             | Enter an email address                                              |
-      | Test         | Test999@hmcts.net     | Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis,.| Enter a description shorter than 256 characters |
+      | Full name    | Email                 | Description | Field     | ErrorMessage                                                        | Ref           |
+      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        | DMP-630-AC3-1 |
+      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com | DMP-630-AC3-2 |
+      |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   | DMP-630-AC3-3 |
+      | Test         |                       |             | email     | Enter an email address                                              | DMP-630-AC3-4 |
+      | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters | DMP-630-AC3-5 |
 
   @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression
   Scenario: Create Users
@@ -154,20 +154,7 @@ Feature: Admin-Users
     When I press the "Yes - continue" button
     Then I see "User updated" on the page
 
-  @DMP-2222 @regresion
-  Scenario: Viewing a users groups
-  #Login admin
-    Given I am logged on to the admin portal as an ADMIN user
-  #AC1 - Viewing user groups
-    When I click on the "Users" navigation link
-    And I set "Email" to "automation@KH{{seq}}001.net"
-    And I press the "Search" button
-    And I click on "View" in the same row as "automation@KH{{seq}}001.net"
-    And I click on the "Groups" link
-  #AC3 - Removing user groups
-    Then I see "Assign groups" on the page
-
-  @DMP-2225 @regression @review
+  @DMP-2225 @regression
   Scenario: Assigning user groups
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
@@ -176,7 +163,7 @@ Feature: Admin-Users
     And I set "Email" to "automation@KH{{seq}}001.net"
     And I press the "Search" button
     And I click on "View" in the same row as "automation@KH{{seq}}001.net"
-    And I click on the "Groups" link
+    And I click on the "Groups" sub-menu link
   #AC1 - Assigning user groups
     And I press the "Assign groups" button
     And I check the checkbox in the same row as "Swansea_APPROVER" "Approver"
@@ -188,7 +175,7 @@ Feature: Admin-Users
     Then I see "Assigned 1 group" on the page
     And I see "Approver" in the same row as "Swansea_APPROVER"
 
-  @DMP-2224 @regression @review
+  @DMP-2224 @regression
   Scenario: Removing a group confirmation screen
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
@@ -197,7 +184,7 @@ Feature: Admin-Users
     And I set "Email" to "automation@KH{{seq}}001.net"
     And I press the "Search" button
     And I click on "View" in the same row as "automation@KH{{seq}}001.net"
-    Then I click on the "Groups" link
+    Then I click on the "Groups" sub-menu link
   #AC1 - Remove a group confirmation screen
     Then I check the checkbox in the same row as "Swansea_APPROVER" "Approver"
     And I press the "Remove groups" button
@@ -250,7 +237,7 @@ Feature: Admin-Users
 		And I see table darts.user_account column is_active is "f" where user_name = "Testusertwo"
 		And I see table USER_GROUP column group_name is "null" where user_name = "Testusertwo"
 
-    #Reactivate users and assign group for next run
+    #Reactivate users and assign to a group
     #DMP-2340-AC1 and AC2 Activate user button and reactivate user confirmation
 
     When I press the "Activate user" button
@@ -300,7 +287,8 @@ Feature: Admin-Users
     Then I see "Assigned 1 group" on the page
 
 
-  @DMP-2323
+  @DMP-2323 @TODO
+# requires a second transcriber
   Scenario: Deactivate user with transcript
 
     #Create transcript request and assign to user
@@ -392,7 +380,7 @@ Feature: Admin-Users
     And I click on the "Transcript requests" link
     And I see "Manual" in the same row as "H{{seq}}001"
 
-    @DMP-4209
+    @DMP-4209 @regression
     Scenario: Back link
       Given I am logged on to the admin portal as an ADMIN user
       When I click on the "Users" link

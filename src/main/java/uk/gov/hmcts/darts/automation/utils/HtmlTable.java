@@ -50,29 +50,30 @@ public class HtmlTable {
         Assert.assertEquals("Datatable rows should match the HtmlTable rows", dataTableRows.size(), rowElements.size());
         errorCount = 0;
         errorText = "";
+        int startIndex = 0;
 
         //Verify table header
         if (isFirstRowHeader) {
             List<WebElement> headerElements = rowElements.get(0).findElements(By.xpath(".//th | .//td")); //get all the headers from the row WebElement
-            compareTableData(headerElements, dataTableRows.get(0), 0);
-            rowElements.remove(0);
+            compareTableRowData(headerElements, dataTableRows.get(0), 0);
+            startIndex = 1;
         }
 
-        int startIndex = isFirstRowHeader ? 1 : 0; // Skip the first row if it's a header
-        for (int i = startIndex; i <= rowElements.size(); i++) {
+        for (int i = startIndex; i < rowElements.size(); i++) {
             List<String> dataTableColumns = dataTableRows.get(i);
-            WebElement rowElem = rowElements.get(i - startIndex);
+            WebElement rowElem = rowElements.get(i);
             List<WebElement> cellElements = rowElem.findElements(By.xpath(".//td"));
-            compareTableData(cellElements, dataTableColumns, i);
+            compareTableRowData(cellElements, dataTableColumns, i);
         }
         Assert.assertEquals("Table error: " + errorText, 0, errorCount);
         log.error("Html Table and Datatable has {} error count", errorCount);
     }
 
-
-    private void compareTableData(List<WebElement> cellElements, List<String> dataTableColumns, int rowIdx) {
+    private void compareTableRowData(List<WebElement> cellElements, List<String> dataTableColumns, int rowIdx) {
         int htmlIndex = 0;
-        for (int dataTableIndex = 0; dataTableIndex < dataTableColumns.size(); dataTableIndex++) { //loop through every cell in the current DataTable row
+// loop through every cell in the current DataTable row ignoring data table *IGNORE* & *SKIP* (eg containing checkboxes only)
+// and not comparing those with *NO-CHECK*
+        for (int dataTableIndex = 0; dataTableIndex < dataTableColumns.size(); dataTableIndex++) {
             String expectedCell = dataTableColumns.get(dataTableIndex);
             expectedCell = (expectedCell != null) ? Substitutions.substituteValue(expectedCell) : "";
             if (expectedCell.equalsIgnoreCase("*NO-CHECK*")) {
@@ -93,6 +94,112 @@ public class HtmlTable {
             }
         }
     }
+
+/*
+ *  Verify that html table includes matching rows in data table but may include other rows
+ */
+    public void verifyHtmlTableIncludesRows(DataTable dataTable, boolean isFirstRowHeader) {
+        NAV.waitForPageLoad();
+        WebElement htmlTableElement = webDriver.findElement(By.cssSelector(".govuk-table"));
+        verifyHtmlTableIncludesRows(dataTable, isFirstRowHeader, htmlTableElement);
+    }
+
+    public void verifyHtmlTableIncludesRows(DataTable dataTable, boolean isFirstRowHeader, String tablename) {
+        NAV.waitForPageLoad();
+        WebElement htmlTableElement = webDriver.findElement(By.xpath("//*[text()=\""+tablename+"\"]/following::table[1]"));
+        verifyHtmlTableIncludesRows(dataTable, isFirstRowHeader, htmlTableElement);
+	}
+
+    public void verifyHtmlTableIncludesRows(DataTable dataTable, boolean isFirstRowHeader, WebElement htmlTableElement) {
+        List<WebElement> rowElements = htmlTableElement.findElements(By.tagName("tr"));
+        List<List<String>> dataTableRows = dataTable.asLists(); //outer List<> is rows, inner List<> is cells
+
+        errorCount = 0;
+        errorText = "";
+        int startIndex = 0;
+        int htmlPage = 1;
+
+        //Verify table header
+        if (isFirstRowHeader) {
+            List<WebElement> headerElements = rowElements.get(0).findElements(By.xpath(".//th | .//td"));
+            compareTableRowData(headerElements, dataTableRows.get(0), 0);
+            startIndex = 1;
+        }
+        
+        int htmlIndex = startIndex;
+        int dataIndex = startIndex;
+//        for (int dataIndex = startIndex; dataIndex <= dataTableRows.size(); dataIndex++) {
+        while (dataIndex < dataTableRows.size() 
+        		&& htmlIndex < rowElements.size()) {
+        	log.info("Data table row {}", dataIndex);
+            List<String> dataTableColumns = dataTableRows.get(dataIndex);
+            boolean rowsMatch = false;
+            while (!rowsMatch
+            		&& htmlIndex <= rowElements.size()) {
+            	log.info("HTML table row {}", htmlIndex);
+	            WebElement rowElem = rowElements.get(htmlIndex);
+	            List<WebElement> cellElements = rowElem.findElements(By.xpath(".//td"));
+	            if (TableDataRowsMatch(cellElements, dataTableColumns)) {
+	            	rowsMatch = true;
+	            	log.info("Data table row {} matches html row {}", dataIndex, htmlIndex);
+	            }
+	            
+	            htmlIndex++;
+	            	
+            } ;
+            
+            dataIndex++;
+            
+        } 
+        if (dataTableRows.size() == dataIndex && errorCount == 0) {
+        	log.info("All data table rows found in HTML table - {} rows", dataTableRows.size());
+        } else {
+            if (dataTableRows.size() != dataIndex) {
+            	log.error("Table error: only {} rows found from {}", dataTableRows.size(), dataIndex);
+                if (errorCount == 0) {
+        	        Assert.assertEquals("Table error: only " + dataIndex + " rows found from " + dataTableRows.size(), 
+        	        		dataTableRows.size(), dataIndex);
+                } else {
+                	log.error("Table header error {} cols", errorCount);
+                	log.error("Table header error: {}", errorText);
+        	        Assert.assertEquals("Header error: " + errorText + " & Table error: only " + dataIndex + " rows found from " + dataTableRows.size(), 
+        	        		dataTableRows.size(), dataIndex);
+                }
+            } else {
+            	log.info("All data table rows found in HTML table - {} rows", dataTableRows.size());
+            	log.error("Table header error {} cols", errorCount);
+            	log.error("Table header error: {}", errorText);
+    	        Assert.fail("Header error: " + errorText);
+            }
+        }
+    }
+
+    private boolean TableDataRowsMatch(List<WebElement> cellElements, List<String> dataTableColumns) {
+        int htmlIndex = 0;
+
+        for (int dataTableIndex = 0; dataTableIndex < dataTableColumns.size(); dataTableIndex++) {
+            String expectedCell = dataTableColumns.get(dataTableIndex);
+            expectedCell = (expectedCell != null) ? Substitutions.substituteValue(expectedCell) : "";
+            if (expectedCell.equalsIgnoreCase("*NO-CHECK*")) {
+                htmlIndex++;
+            } else if (!expectedCell.equalsIgnoreCase("*IGNORE*") && !expectedCell.equalsIgnoreCase("*SKIP*")) {
+                String actualCell = cellElements.get(htmlIndex).getText().trim();
+                actualCell = (actualCell != null) ? actualCell : "";
+
+                if (expectedCell.equals(actualCell)) {
+                	log.info("Data matches at column {} ({}): {}", dataTableIndex, htmlIndex, expectedCell);
+                } else {
+                	log.info("Mismatch at column {} ({}); Expected {}, Actual: {}", dataTableIndex, htmlIndex, expectedCell, actualCell);
+                    return false;
+                } 
+                htmlIndex++;
+            }
+        }
+        log.info("**** Rows match ****");
+        return true;
+    }
+    
+    
     public void clickOnTableHeaderWithTablename(String tableheaderText, String tablename) {
         log.info("Attempting to click on Table header => " + tableheaderText + " in table => " + tablename);
 

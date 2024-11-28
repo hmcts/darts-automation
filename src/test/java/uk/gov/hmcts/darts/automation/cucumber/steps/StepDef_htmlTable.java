@@ -16,10 +16,31 @@ public class StepDef_htmlTable extends StepDef_base {
     }
 
     HtmlTable htmlTable = new HtmlTable(webDriver);
-
+    
+/*
+ *  Verify that ALL rows in html table match data table
+ */
     @Then("I verify the HTML table contains the following values")
     public void verify_html_table_contains_the_following_values(DataTable dataTable) {
         htmlTable.verifyHtmlTableData(dataTable, true);
+    }
+
+    @Then("I verify the HTML table \"([^\"]*)\" contains the following values$")
+    public void iVerifyTheHTMLTableContainsTheFollowingValues(String tableName, DataTable dataTable) {
+        htmlTable.verifyHtmlTableData(dataTable, true, tableName);
+    }
+
+/*
+ *  Verify that ALL rows in data table match html table though additional rows may exist in html table
+ */
+    @Then("I verify the HTML table includes the following values")
+    public void verify_html_table_includes_the_following_values(DataTable dataTable) {
+        htmlTable.verifyHtmlTableIncludesRows(dataTable, true);
+    }
+
+    @Then("I verify the HTML table \"([^\"]*)\" includes the following values$")
+    public void iVerifyTheHTMLTableIncludesTheFollowingValues(String tableName, DataTable dataTable) {
+        htmlTable.verifyHtmlTableIncludesRows(dataTable, true, tableName);
     }
 
     @Then("^I click on \"([^\"]*)\" in the table header$")
@@ -34,10 +55,5 @@ public class StepDef_htmlTable extends StepDef_base {
     @Then("\"([^\"]*)\" has sort \"([^\"]*)\" icon$")
     public void HasSortIcon(String tableheaderText, String sortOrder) {
         htmlTable.hasSortIcon(tableheaderText, sortOrder);
-    }
-
-    @Then("I verify the HTML table \"([^\"]*)\" contains the following values$")
-    public void iVerifyTheHTMLTableContainsTheFollowingValues(String tableName,DataTable dataTable) {
-        htmlTable.verifyHtmlTableData(dataTable, true, tableName);
     }
 }

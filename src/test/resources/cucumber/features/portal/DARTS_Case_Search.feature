@@ -1,3 +1,4 @@
+@portal @portal_case_search
 Feature: Case Search
 
 @DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @DMP-2769 @regression @demo
@@ -436,7 +437,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
   And I set "Courthouse" to "Harrow Crown Court"
   And I select the "Date range" radio button
 #  Date range changed from {{date-7/}} - {{date+0/}} as more than 500 results sometines
-  And I set "Date from" to "{{date-4/}}"
+  And I set "Date from" to "{{date-5/}}"
   And I set "Date to" to "{{date-1/}}"
   And I set "Judge's name" to "JUDGE NAME"
   And I set "Courtroom" to "3"
