@@ -1,10 +1,11 @@
+@SOAP_API @Daily_List @DAILY_LIST
 Feature: Add Daily List using SOAP
 
 #
 # n.b. for CPP, case number is held in the URN field
 #
 	
-@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+@DMP-2968 @regression
   @reads-and-writes-system-properties
 Scenario Outline: Daily List Single Case Scenario - lists for today and tomorrow
 		First is replaced
@@ -86,7 +87,7 @@ Examples:
   | CPP    | 58b211f5-426d-81be-00{{seq}}01 | CPPDL | DL      | DL {{date+0/}} {{seq}}01 | Harrow Crown Court | 1         | T{{seq}}111 | {{date+0}}   | 10:00:00  | {{date+0}} | {{timestamp}} | T{{seq}}111 defendant |
 
 	
-@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+@DMP-2968 @regression
 Scenario: Daily List VIQ User fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -178,7 +179,7 @@ Scenario: Daily List VIQ User fails
 	"""
 	Then the API status code is 500
 	
-@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+@DMP-2968 @regression
 Scenario: Daily List malformed fails
   Given I authenticate from the VIQ source system
 	When I call POST SOAP API using soap action addDocument and body:
@@ -270,7 +271,7 @@ Scenario: Daily List malformed fails
 	"""
 	Then the API status code is 400
 	
-@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+@DMP-2968 @regression
   @reads-and-writes-system-properties
 Scenario: Daily List successful
   Given that courthouse "YORK" case "T{{seq}}110" does not exist
@@ -456,7 +457,7 @@ Scenario: Daily List successful
   
 
 	
-@Daily_List @SOAP_API @DMP-2968 @regression @DAILY_LIST
+@DMP-2968 @regression
   @reads-and-writes-system-properties
 Scenario: Daily List successful with TimeMarkingNote 3:00 PM
   Given that courthouse "YORK" case "T{{seq}}120" does not exist

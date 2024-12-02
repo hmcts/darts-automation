@@ -101,7 +101,7 @@ Feature: Admin-Users
       | Test         |                       |             | Email     | Enter an email address                                              | DMP-630-AC3-4 |
       | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters | DMP-630-AC3-5 |
 
-  @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression @ts999
+  @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression
   Scenario: Create Users
   #Login admin
     Given that user email "KH{{seq}}001@test.net" does not exist
@@ -135,7 +135,7 @@ Feature: Admin-Users
     Then I see "User record deactivated" on the page
     And I see table darts.user_account column is_active is "f" where user_email_address = "KH{{seq}}002@test.net"
 
-  @DMP-724 @regression @ts999
+  @DMP-724 @regression
   Scenario: Update user personal detail
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
