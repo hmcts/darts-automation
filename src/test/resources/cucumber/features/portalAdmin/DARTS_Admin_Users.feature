@@ -32,6 +32,7 @@ Feature: Admin-Users
 
   @DMP-2178 @DMP-630-AC1-AC2 @regression
   Scenario Outline: New user account - Check user details
+    Given that user email "<Email>" does not exist
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
     Then I see "Search for user" on the page
@@ -79,7 +80,7 @@ Feature: Admin-Users
       | Joe Bloggs | darts.test{{seq}}@hmcts.net | Test        |
 
   @DMP-630 @regression
-  Scenario Outline: Create a new user account with existing email address
+  Scenario Outline: Create a new user account to verify error messages
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
     Then I see "Search for user" on the page
@@ -91,19 +92,20 @@ Feature: Admin-Users
     And I set "Description (optional)" to "<Description>"
     And I press the "Continue" button
     And I see an error message "<ErrorMessage>"
-#    And I see "<Field>" on the page
-#    And I see an error message "<ErrorMessage>"
+    And I see "<Field>" has error message "<ErrorMessage>"
     Examples:
       | Full name    | Email                 | Description | Field     | ErrorMessage                                                        | Ref           |
-      | global_judge | darts.judge@hmcts.net |             | email     | Enter a unique email address                                        | DMP-630-AC3-1 |
-      | global_judge | darts.judge           |             | email     | Enter an email address in the correct format, like name@example.com | DMP-630-AC3-2 |
+      | global_judge | darts.judge@hmcts.net |             | Email     | Enter a unique email address                                        | DMP-630-AC3-1 |
+      | global_judge | darts.judge           |             | Email     | Enter an email address in the correct format, like name@example.com | DMP-630-AC3-2 |
       |              | darts.judge@hmct.net  |             | Full name | Enter a full name                                                   | DMP-630-AC3-3 |
-      | Test         |                       |             | email     | Enter an email address                                              | DMP-630-AC3-4 |
+      | Test         |                       |             | Email     | Enter an email address                                              | DMP-630-AC3-4 |
       | Test         | Test999@hmcts.net     | Test. Test. Test. Test. Test. Test. Test. Test. Test. Test. Test v. Test.   Test.   Test. Test.   Test. Test. v. Test. Test TestTestTestvvvvvvvTest Test Test Test TestTest Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test | Description | Enter a description shorter than 256 characters | DMP-630-AC3-5 |
 
   @DMP-724 @DMP-2222 @DMP-2225 @DMP-2224 @regression
   Scenario: Create Users
   #Login admin
+    Given that user email "KH{{seq}}001@test.net" does not exist
+    Given that user email "KH{{seq}}002@test.net" does not exist
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Users" link
   #Create new user 1
@@ -147,12 +149,43 @@ Feature: Admin-Users
   #AC2 - Editing a user name
     And I set "Full name" to "automation_KH{{seq}}001"
   #AC3 - Editing a user email address
-    And I set "Email" to "automation@KH{{seq}}001.net"
+    
+    When I set "Email" to "automation@KH{{seq}}001.net"
   #AC4 - Save changes
     And I press the "Save changes" button
     Then I see "Are you sure you want to change this user’s email address?" on the page
     When I press the "Yes - continue" button
     Then I see "User updated" on the page
+    
+  @DMP-724 @regression @ts999
+  Scenario: Update user personal detail - error messages
+  #Login admin
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" link
+  #AC1 - Edit user screen
+    When I click on the "Users" navigation link
+    When I set "Email" to "automation@KH{{seq}}001.net"
+    And I press the "Search" button
+    And I click on "View" in the same row as "automation_KH{{seq}}001"
+    And I press the "Edit user" button
+  #AC2 - Editing a user name
+    And I clear the "Full name" field
+    Then I see "Full name" has error message "Enter an full name"
+    When I set "Full name" to "something"
+  #AC3 - Editing a user email address
+    And I clear the "Email" field
+    Then I see "Email" has error message "Enter an email address"
+    
+    When I set "Email" to "KH{{seq}}002@test.net"
+    Then I see "Email" has error message "Enter a unique email address"
+    
+    When I set "Email" to "something"
+    Then I see "Email" has error message "Enter an email address in the correct format, like name@example.com"
+    
+    When I set "Description (optional)" to "abcdefghijklmnopqrstuvwxy1abcdefghijklmnopqrstuvwxy2abcdefghijklmnopqrstuvwxy3abcdefghijklmnopqrstuvwxy4abcdefghijklmnopqrstuvwxy5abcdefghijklmnopqrstuvwxy6abcdefghijklmnopqrstuvwxy7abcdefghijklmnopqrstuvwxy8abcdefghijklmnopqrstuvwxy9abcdefghijklmnopqrstuvwxy0abcdefg"
+    Then I see "Description" has error message "Enter a description shorter than 256 characters"
+    
+    
 
   @DMP-2225 @regression
   Scenario: Assigning user groups
@@ -194,7 +227,7 @@ Feature: Admin-Users
     Then I see "This user is not a member of any groups." on the page
 
   @DMP-2323 @DMP-2340 @regression
-  Scenario: Deactivate user and last user in group
+  Scenario: Deactivate user and last user in group and reactivate
     Given I am logged on to the admin portal as an ADMIN user
     Given I reactivate user "Testuserone"
     Given I reactivate user "Testusertwo"

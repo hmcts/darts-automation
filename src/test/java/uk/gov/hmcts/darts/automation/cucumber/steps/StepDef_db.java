@@ -152,6 +152,12 @@ public class StepDef_db extends StepDef_base {
 		String count = DB.returnSingleValue("COURTCASE", "courthouse_name", Substitutions.substituteValue(courthouse), "case_number", Substitutions.substituteValue(caseNumber), "count(cas_id)");
 		Assertions.assertEquals("0", count, "Case already exists");
 	}
+	
+	@Given("^that user email \"([^\"]*)\" does not exist$")
+	public void userDoesNotExist(String email) throws Exception {
+		String count = DB.returnSingleValue("darts.user_account", "lower(user_email_address)", Substitutions.substituteValue(email).toLowerCase(), "count(usr_id)");
+		Assertions.assertEquals("0", count, "User email already exists");
+	}
 
 	@When("I wait for case {string} courthouse {string}")
 	public void processTheDailyListForCourthouseCase(String caseNumber, String courthouse) {

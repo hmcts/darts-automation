@@ -324,4 +324,13 @@ public class StepDef_portal extends StepDef_base {
 		int results = portal.getResultCount();
         NAV.click_link_by_text("" + ((results + 24) / 25));
 	}
+	@Then("^I see \"([^\"]*)\" has error message \"([^\"]*)\"$")
+	public void verifyErrorMessage(String labelText, String message) {
+	   portal.verifyErrorMessage(labelText, message);
+	};
+	
+	@Then("^I do not see \"([^\"]*)\" has error message \"([^\"]*)\"$")
+	public void verifyNoErrorMessage(String labelText, String message) {
+	   portal.verifyNoErrorMessage(labelText, message);
+	};
 }
