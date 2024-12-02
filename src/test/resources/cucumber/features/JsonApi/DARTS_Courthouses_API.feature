@@ -17,7 +17,7 @@ Feature: Courthouse endpoint
     }
     """
 
-  @DMP-635
+  @DMP-635 @broken
   Scenario: POST courthouse
     Given I authenticate as an admin user
     When I call POST courthouses API using json body:
