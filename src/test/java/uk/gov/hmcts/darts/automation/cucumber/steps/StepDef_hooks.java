@@ -91,11 +91,30 @@ public class StepDef_hooks extends StepDef_base {
 		} catch (Exception e) {
 			log.error("Error handling possible alert");
 		}
+		
+		try {
+			if (NAV.textIsPresentOnPage("There is a problem with the service")) {
+				log.error("There is a problem with the service");
+				scenario.attach("Warning Error due to \"There is a problem with the service\"", "text/plain", "There is a problem with the service");
+			}
+			if (NAV.textIsPresentOnPage("Internal Server Error")) {
+				log.error("Internal Server Error");
+				scenario.attach("Warning Error due to \"Internal Server Error\"", "text/plain", "Internal Server Error");
+			}
+			if (NAV.textIsPresentOnPage("An error has occurred")) {
+				log.error("An error has occurred");
+				scenario.attach("Warning Error due to \"An error has occurred\"", "text/plain", "An error has occurred");
+			}
+		} catch (Exception e) {
+			log.error("Error handling possible problem with a service");
+		}
+		
 		try {
 	        scenario.attach("URL: " + webDriver.getCurrentUrl(), "text/plain", "Current url");
 		} catch (Exception e) {
 			log.info("Failed getting url");
 		}
+		
 		scenario.attach(("Scenario: " + scenario.getName()+"-"+scenario.getId()).getBytes(), "text/plain", "Details");
 		scenario.attach(("Scenario: " + scenario.getName()+"-"+scenario.getId()).getBytes().toString()
 				+ " Thread Id: " + Thread.currentThread().getId(), "text/plain", "Thread");

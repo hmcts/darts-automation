@@ -344,12 +344,18 @@ public class NavigationShared {
 	
 	public void verifyTextInTableRow(String text, String rowData1, String rowData2) throws Exception {
 		String rowXpath = "(./td/descendant-or-self::*[normalize-space(.)=\"%s\"])";
-		int findCount = driver.findElements(By.xpath(String.format("//table//tr[" + rowXpath + " and " + rowXpath + "]" + 
+		String path = String.format("//table//tr[" + rowXpath + " and " + rowXpath + "]" + 
 				"/td/descendant-or-self::*[normalize-space(.)=\"%s\"]",
 				Substitutions.substituteValue(rowData1),
 				Substitutions.substituteValue(rowData2),
-				Substitutions.substituteValue(text)))).size();
-		Assertions.assertTrue(findCount > 0, "String not found in table");
+				Substitutions.substituteValue(text));
+		try {
+			wait.waitForVisibleElement(By.xpath(path), 5);
+		} catch (Exception e) {
+			Assertions.fail("String not found in table: " + text);
+		}
+//		int findCount = driver.findElements(By.xpath(path)).size();
+//		Assertions.assertTrue(findCount > 0, "String not found in table: " + text);
 	}
 	
 	public void clickButtonInTableRow(String buttonText, String rowData1, String rowData2) throws Exception {
@@ -1792,9 +1798,7 @@ public class NavigationShared {
 		log.info("About to look for text =>"+searchText+"<= in the same row as =>"+nextToText);
 		String substitutedValue = Substitutions.substituteValue(searchText);
 		nextToText = Substitutions.substituteValue(nextToText);
-		driver.findElement(
-				By.xpath(
-						"//table//tr[.//*[contains(normalize-space(text()),\""+substitutedValue+"\")]]//*[text()[contains(normalize-space(.), \""+nextToText+"\")]]"
+		String xpath = "//table//tr[.//*[contains(normalize-space(text()),\""+substitutedValue+"\")]]//*[text()[contains(normalize-space(.), \""+nextToText+"\")]]"
 						+ " | "
 						+ "//table//tr[.//*[contains(text(),\""+nextToText+"\")]]//*[text()[contains(., \""+substitutedValue+"\")]]"
 						+ " | "
@@ -1806,9 +1810,14 @@ public class NavigationShared {
 						+ " | "
 						+ String.format(
 							"//*[.//*[text()[contains(normalize-space(.),\"%s\")]]]//*[text()[contains(normalize-space(.),\"%s\")]]",
-							nextToText, substitutedValue)
-					));
-		log.info("Found text =>"+substitutedValue+"<= in the same row as =>"+nextToText);		
+							nextToText, substitutedValue);
+//		driver.findElement(By.xpath(xpath));
+		try {
+			wait.waitForVisibleElement(By.xpath(xpath), 5);
+		} catch (Exception e) {
+			Assertions.fail("String not found in table: " + searchText);
+		}
+		log.info("Found text =>"+substitutedValue+"<= in the same row as =>"+nextToText);
 	}
 	
 	public void clickText_inSameRow_asText(String clickText, String nextToText) throws Exception {

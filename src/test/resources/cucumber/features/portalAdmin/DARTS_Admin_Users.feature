@@ -157,7 +157,7 @@ Feature: Admin-Users
     When I press the "Yes - continue" button
     Then I see "User updated" on the page
     
-  @DMP-724 @regression @ts999
+  @DMP-724 @regression
   Scenario: Update user personal detail - error messages
   #Login admin
     Given I am logged on to the admin portal as an ADMIN user
