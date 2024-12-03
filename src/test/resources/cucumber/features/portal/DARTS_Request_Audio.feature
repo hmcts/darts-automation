@@ -1,3 +1,4 @@
+@portal @portal_request_audio
 Feature: Request Audio
 
 @DMP-685 @DMP-651 @DMP-658 @DMP-696 @DMP-695 @DMP-686 @DMP-694 @DMP-1048 @DMP-2121 @DMP-2562 @DMP-4035 @regression
@@ -31,11 +32,11 @@ Scenario: Request Audio data creation
   #NOTE: DMP-2300 NEEDS TO RUN STRAIGHT AFTER THE DATA CREATION TO GET THE PREVIEW MESSAGE
   Given I am logged on to DARTS as a transcriber user
   When I click on the "Search" link
-  And I set "Case ID" to "B{{seq}}006"
+  And I set "Case ID" to "B{{seq}}009"
   And I press the "Search" button
-  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-  Then I see "{{seq}}ABC-6" on the page
+  And I click on "B{{seq}}009" in the same row as "Harrow Crown Court"
+  And I click on "{{displaydate}}" in the same row as "{{seq}}-9"
+  Then I see "{{seq}}ABC-9" on the page
   And I select the "Audio preview and events" radio button
   And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
   Then I see "This audio is not currently available in DARTS, please try again later." on the page
@@ -298,7 +299,7 @@ Scenario: Request Audio by setting Start Time and End Time
   And I see "We are preparing your audio." on the page
   And I see "When it is ready we will send an email to Transcriber and notify you in the DARTS application." on the page
 
-@DMP-658 @regression @review
+@DMP-658 @regression
 Scenario Outline: Request Audio Events only available for hearing
   Given I am logged on to DARTS as an external user
   And I click on the "Search" link
@@ -322,8 +323,8 @@ Scenario Outline: Request Audio Events only available for hearing
   And I see "ROOM_A" on the page
 
   When I select the "Events only" radio button
-  And I check the checkbox in the same row as "14:07:33" "Interpreter sworn-in"
-  And I set the time fields below "End Time" to "14:08:33"
+  And I check the checkbox in the same row as "<StartTime>" "Interpreter sworn-in"
+  And I set the time fields below "End Time" to "<EndTime>"
   And I select the "Playback Only" radio button
   And I press the "Get Audio" button
 
@@ -355,9 +356,9 @@ Scenario Outline: Request Audio Events only available for hearing
   And I see "When it is ready we will send an email to" on the page
   Examples:
     | CaseID   | Courthouse | Defendants | HearingDate | StartTime | EndTime  | Restriction                              |
-    | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 14:07:33  | 14:08:33 | There are restrictions against this case |
+    | CASE1009 | Swansea    | Jow Bloggs | 15 Aug 2023 | 11:44:01  | 11:45:01 | There are restrictions against this case |
 
-@DMP-692
+@DMP-692 @regression
 Scenario Outline: Preview Audio Player Loading
   Given I am logged on to DARTS as an external user
   And I click on the "Search" link
@@ -381,13 +382,14 @@ Scenario Outline: Preview Audio Player Loading
   And I see "ROOM_A" on the page
 
   When I select the "Audio preview and events" radio button
-  And I press the "Play preview" button in the same row as "<StartTime>" "<EndTime>"
+  And I click on "Play preview" in the same row as "<StartTime> - <EndTime>"
   Then I see "<Text>" in the same row as "<StartTime>" "<EndTime>"
   Examples:
-    | StartTime            | EndTime            | Text                                 |
-    | Start time: 10:00:00 | End time: 11:14:05 | Loading Audio Preview... Please Wait |
+    | StartTime | EndTime  | Text            |
+#    | 11:00:00  | 12:14:05 | Loading preview |
+    | 15:00:00  | 15:01:00 | Loading preview |
 
-@DMP-966 @review
+@DMP-966 @regression
 Scenario: Hearing table sorted with time
   Given I am logged on to DARTS as an external user
   And I click on the "Search" link
@@ -410,19 +412,21 @@ Scenario: Hearing table sorted with time
   And I see "Swansea" on the page
   And I see "ROOM_A" on the page
   Then I verify the HTML table contains the following values
-    | *NO-CHECK* | Time                 | Event                | Text                    |
-    | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
-    | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
-    | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
-    | *NO-CHECK* | Start time: 10:00:00 | Preview Audio        | End time: 11:14:05      |
+    | *NO-CHECK* | Time                | Event                | Text         |
+    | *NO-CHECK* | 11:44:01	           | Interpreter sworn-in |              |
+    | *NO-CHECK* | 14:00:00 - 14:01:00 | Audio recording      | Play preview |
+    | *NO-CHECK* | 15:00:00 - 15:01:00 | Audio recording      | Play preview |
+    | *NO-CHECK* | 11:00:00 - 12:14:05 | Audio recording      | Play preview |
+    | *NO-CHECK* | 11:33:23 - 11:33:23 | Audio recording      | Play preview |
 
   When I click on "Time" in the table header
   Then I verify the HTML table contains the following values
-    | *NO-CHECK* | Time                 | Event                | Text                    |
-    | *NO-CHECK* | Start time: 10:00:00 | Preview Audio        | End time: 11:14:05      |
-    | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
-    | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
-    | *NO-CHECK* | 13:07:33             | Interpreter sworn-in | Update interpreter flag |
+    | *NO-CHECK* | Time                | Event                | Text         |
+    | *NO-CHECK* | 11:33:23 - 11:33:23 | Audio recording      | Play preview |
+    | *NO-CHECK* | 11:00:00 - 12:14:05 | Audio recording      | Play preview |
+    | *NO-CHECK* | 15:00:00 - 15:01:00 | Audio recording      | Play preview |
+    | *NO-CHECK* | 14:00:00 - 14:01:00 | Audio recording      | Play preview |
+    | *NO-CHECK* | 11:44:01	           | Interpreter sworn-in |              |
 
 @DMP-2121
 Scenario: Update preview button on hearing screen
@@ -435,21 +439,6 @@ Scenario: Update preview button on hearing screen
   And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
   And I see "{{seq}}ABC-6" on the page
   Then I see "Play preview" on the page
-
-  @DMP-2300
-  Scenario: Audio is not available to preview message.
-
-  #NOTE: DMP-2300 NEEDS TO RUN STRAIGHT AFTER THE DATA CREATION TO GET THE PREVIEW MESSAGE
-  Given I am logged on to DARTS as a transcriber user
-  When I click on the "Search" link
-  And I set "Case ID" to "B{{seq}}006"
-  And I press the "Search" button
-  And I click on "B{{seq}}006" in the same row as "Harrow Crown Court"
-  And I click on "{{displaydate}}" in the same row as "{{seq}}-6"
-  Then I see "{{seq}}ABC-6" on the page
-  And I select the "Audio preview and events" radio button
-  And I check the checkbox in the same row as "10:01:00 - 10:02:00" "Audio recording"
-  Then I see "This audio is not currently available in DARTS, please try again later." on the page
 
   @DMP-2562 @regression
   Scenario: Request download audio for Admin user
