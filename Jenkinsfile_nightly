@@ -1,8 +1,8 @@
 #!groovy
 
 properties([
-  // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-  pipelineTriggers([cron('H 08 * * 1-5')])
+  // Run at 6:30pm, aiming to be outside of working hours before the env shuts down at 8pm
+  pipelineTriggers([cron('30 18 * * 1-5')])
 ])
 
 @Library("Infrastructure")
