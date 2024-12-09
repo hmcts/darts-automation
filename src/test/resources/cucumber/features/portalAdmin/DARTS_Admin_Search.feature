@@ -114,7 +114,7 @@ Feature: Admin Search
       | T99662621 | Harrow Crown Court | GET99662  | test judge | test defendent1 |
       | T99662622 | Harrow Crown Court | GET99662  | test judge | test defendent2 |
 
-  @DMP-2728
+  @DMP-2728 @regression
   Scenario: Associated Audio files for deletion/hidden
     When I am logged on to the admin portal as an ADMIN user
     When I set "Case ID" to "CASE1009"
@@ -130,7 +130,6 @@ Feature: Admin Search
     Then I see "There are other audio files associated with the file you are hiding and/or deleting" on the page
     Then I press the "Continue" button
     Then I see an error message "Choose if you want to include associated files or not"
-
 
     @DMP-3315
     Scenario: Hearings search results
@@ -351,8 +350,6 @@ Feature: Admin Search
     And I click on "Hidden" in the table header
     Then "Hidden" has sort "descending" icon
 
-
-
   @3309
   Scenario:Event_ID Screen
     When I am logged on to the admin portal as an ADMIN user
@@ -363,7 +360,7 @@ Feature: Admin Search
     And I press the "Search" button
     Then I see "Events" on the page
     #Back Link
-    And I click on "490225" in the same row as "01 Jan 2024 at 06:00:00	"
+    And I click on "490225" in the same row as "01 Jan 2024 at 06:00:00"
     And I see link with text "Back"
     Then I click on the "Back" link
     And I see "Events" on the page
@@ -396,5 +393,3 @@ Feature: Admin Search
     And I see "Created by" in the same row as "System"
     And I see "Date last modified" in the same row as "07 Nov 2024 at 10:23:48"
     And I see "Last modified by" in the same row as "System"
-
-
