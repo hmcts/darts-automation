@@ -360,28 +360,6 @@ Examples:
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:22:00}} | {{seq}}244 | {{seq}}244 | 2917  | 3979    | text {{seq}} |               |               | Interpreter sworn-in        |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:22:20}} | {{seq}}245 | {{seq}}244 | 20612 |         | text {{seq}} |               |               | Appeal interpreter sworn in |       |
   | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:22:40}} | {{seq}}246 | {{seq}}244 | 20917 |         | text {{seq}} |               |               | Interpretor sworn           |       |
-
-@regression @obsolete
-Scenario Outline: Create a TranscriptionRequest event
-  Given I authenticate from the XHIBIT source system
-  Given I select column cas.cas_id from table COURTCASE where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>"
-    And I set table darts.court_case column interpreter_used to "false" where cas_id = "{{cas.cas_id}}"
-    And I set table darts.court_case column case_closed_ts to "null" where cas_id = "{{cas.cas_id}}"
-    And I set table darts.hearing column hearing_is_actual to "false" where cas_id = "{{cas.cas_id}}"
-  When  I create an event
-    | message_id  | type   | sub_type  | event_id  | courthouse   | courtroom   | case_numbers  | event_text  | date_time  | case_retention_fixed_policy | case_total_sentence |
-    | <msgId>     | <type> | <subType> | <eventId> | <courthouse> | <courtroom> | <caseNumbers> | <eventText> | <dateTime> | <caseRetention>             | <totalSentence>     |
-  Then I see table EVENT column event_text is "<eventText>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-   And I see table EVENT column event_name is "<text>" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-   And I see table EVENT column handler is "TranscriptionRequestHandler" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-   And I see table EVENT column active is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-   And I see table EVENT column case_closed_ts is "null" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-   And I see table EVENT column interpreter_used is "f" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and message_id = "<msgId>"
-   And I see table CASE_HEARING column hearing_is_actual is "t" where cas.case_number = "<caseNumbers>" and courthouse_name = "<courthouse>" and courtroom_name = "<courtroom>"
-Examples:
-  | courthouse         | courtroom    | caseNumbers | dateTime               | msgId      | eventId     | type  | subType | eventText    | caseRetention | totalSentence | text                            | notes |
-#  | Harrow Crown Court | Room {{seq}} | T{{seq}}201 | {{timestamp-11:24:00}} | {{seq}}250 | {{seq}}1250 | 3010  |         | text {{seq}} |               |               | Sentence Transcription Required |       |
-
   
 @SENTENCING_EVENT @regression
 Scenario Outline: Create a Sentencing event

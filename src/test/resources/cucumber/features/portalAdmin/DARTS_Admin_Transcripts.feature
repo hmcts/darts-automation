@@ -347,8 +347,6 @@ Feature: Admin portal transcripts
     And I click on the "Advanced search" link
     And I set "Case ID" to "G{{seq}}001"
     And I press the "Search" button
-    #TODO: This requires a way for auto to know the request ID
-    #And I click on the "Request ID" link
     #DMP-2525-AC1 and AC2 Transcript request details and stages
     Then I see "Current status" on the page
     And I see "Awaiting Authorisation" in the same row as "Status"
@@ -396,8 +394,6 @@ Feature: Admin portal transcripts
     And I click on the "Advanced search" link
     And I set "Case ID" to "G{{seq}}002"
     And I press the "Search" button
-    #TODO: This requires a way for auto to know the request ID
-    #And I click on the "Request ID" link
     Then I see "Awaiting Authorisation" in the same row as "Status"
     And I do not see "Associated groups" on the page
     And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
@@ -429,8 +425,6 @@ Feature: Admin portal transcripts
     And I click on the "Advanced search" link
     And I set "Case ID" to "G{{seq}}003"
     And I press the "Search" button
-    #TODO: This requires a way for auto to know the request ID
-    #And I click on the "Request ID" link
     #DMP-3133-AC1 Check status is "Approved" and not "With Transcriber"
     Then I see "Approved" in the same row as "Status"
     And I see "Associated groups" on the page
@@ -464,8 +458,6 @@ Feature: Admin portal transcripts
     And I click on the "Advanced search" link
     And I set "Case ID" to "G{{seq}}004"
     And I press the "Search" button
-    #TODO: This requires a way for auto to know the request ID
-    #And I click on the "Request ID" link
     Then I see "With Transcriber" in the same row as "Status"
     And I see "Associated groups" on the page
     And I see "Start time 12:00:00 - End time 12:01:00" in the same row as "Audio for transcript"
@@ -499,8 +491,6 @@ Feature: Admin portal transcripts
     And I click on the "Advanced search" link
     And I set "Case ID" to "G{{seq}}005"
     And I press the "Search" button
-    #TODO: This requires a way for auto to know the request ID
-    #And I click on the "Request ID" link
     #DMP-3133-AC2 Check status is still "With Transcriber"
     Then I see "With Transcriber" in the same row as "Status"
     And I see "Associated groups" on the page
@@ -535,8 +525,6 @@ Feature: Admin portal transcripts
     And I click on the "Advanced search" link
     And I set "Case ID" to "G{{seq}}001"
     And I press the "Search" button
-    #TODO: This requires a way for auto to know the request ID
-    #And I click on the "Request ID" link
     Then I see "Current status" on the page
     And I see "Requested" in the same row as "Status"
     And I do not see "Associated groups" on the page

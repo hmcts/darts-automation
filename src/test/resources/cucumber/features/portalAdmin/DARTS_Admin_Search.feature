@@ -1,44 +1,118 @@
 @admin @admin_search
 Feature: Admin Search
 
-  @DMP-3129
+  @DMP-3129 @regression
   Scenario: Search Results - Cases
     When I am logged on to the admin portal as an ADMIN user
-      #Filter by courthouse
-    Then I set "Filter by courthouse" to "Swansea"
-    Then I press the "Search" button
+    #Filter by courthouse
+    And I set "Filter by courthouse" to "Swansea"
+    And I press the "Search" button
+    And I see "There are more than 1000 results. Refine your search." on the page
+    And I click on the "Hearings" link
+    And I see "There are more than 1000 results. Refine your search." on the page
+    And I click on the "Cases" link
     Then I see "There are more than 1000 results. Refine your search." on the page
-    Then I click on the "Hearings" link
-    Then I see "There are more than 1000 results. Refine your search." on the page
-    Then I click on the "Cases" link
-    Then I see "There are more than 1000 results. Refine your search." on the page
+    And I click on the "Clear search" link
+
+    #Case ID
+    When I set "Case ID" to "CASE1009"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
+      | CASE1009 | Liverpool  | ROOM_A    | *IGNORE* | *IGNORE*     |
+
+    When I click on the "Hearings" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Hearing date | Courthouse                  | Courtroom       |
+      | CASE1009 | 15/08/2023   | Leeds Combined Court Centre | ROOM_A          |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_A          |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_A12434     |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_XYZ        |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_XYZHHIHIHI |
+      | CASE1009 | 05/12/2023   | Swansea                     | ROOMA           |
+      | CASE1009 | 05/12/2023   | Swansea                     | ROOM_A          |
+      | CASE1009 | 07/12/2023   | Swansea                     | ROOM_A          |
+      | CASE1009 | 19/09/2023   | Swansea                     | ROOM_A          |
+      | CASE1009 | 01/01/2023   | Swansea                     | CR1             |
+
+    When I click on the "Cases" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
+      | CASE1009 | Liverpool  | ROOM_A    | *IGNORE* | *IGNORE*     |
+    And I click on the "Clear search" link
+
+    #Courtroom
+    When I set "Courtroom" to "ROOM_A"
+    And I select the "Specific date" radio button
+    And I set "Enter a date" to "15/08/2023"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea            | Multiple  | Mr Judge | Jow Bloggs   |
+      | CASE1009 | Liverpool          | ROOM_A    | *IGNORE* | *IGNORE*     |
+      | 141      | DMP-770-Courthouse | ROOM_A    | Judge 1  | DAVE-D1      |
+
+    When I click on the "Hearings" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Hearing date | Courthouse                  | Courtroom   |
+      | CASE1009 | 15/08/2023   | Leeds Combined Court Centre | ROOM_A      |
+      | 141      | 15/08/2023   | Liverpool                   | ROOM_A      |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_A      |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_A12434 |
+
+    When I click on the "Cases" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea            | Multiple  | Mr Judge | Jow Bloggs   |
+      | CASE1009 | Liverpool          | ROOM_A    | *IGNORE* | *IGNORE*     |
+      | 141      | DMP-770-Courthouse | ROOM_A    | Judge 1  | DAVE-D1      |
+    And I click on the "Clear search" link
+
+    #Hearing Date-Specific Date
+    When I set "Case ID" to "CASE1009"
+    And I select the "Specific date" radio button
+    And I set "Enter a date" to "05/12/2023"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea            | Multiple  | Mr Judge | Jow Bloggs   |
+
+    When I click on the "Hearings" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Hearing date | Courthouse | Courtroom |
+      | CASE1009 | 05/12/2023   | Swansea    | ROOMA     |
+      | CASE1009 | 05/12/2023   | Swansea    | ROOM_A    |
+
+    When I click on the "Cases" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea            | Multiple  | Mr Judge | Jow Bloggs   |
     Then I click on the "Clear search" link
-      #Case ID
-    Then I set "Case ID" to "CASE1009"
-    Then I press the "Search" button
-    Then I click on the "Hearings" link
-    Then I click on the "Cases" link
-    Then I click on the "Clear search" link
-      #Courtroom
-    Then I set "Courtroom" to "ROOM_A"
-    Then I press the "Search" button
-    Then I click on the "Hearings" link
-    Then I click on the "Cases" link
-    Then I click on the "Clear search" link
-      #Hearing Date-Specific Date
-    Then I select the "Specific date" radio button
-    Then I set "Enter a date" to "03/07/2024"
-    Then I press the "Search" button
-    Then I click on the "Hearings" link
-    Then I click on the "Cases" link
-    Then I click on the "Clear search" link
-      #Hearing Date-Date Range
-    Then I select the "Date range" radio button
-    Then I set "Date from" to "02/07/2024"
-    Then I set "Date to" to "03/07/2024"
-    Then I press the "Search" button
-    Then I click on the "Hearings" link
-    Then I click on the "Cases" link
+
+    #Hearing Date-Date Range
+    When I select the "Date range" radio button
+    And I set "Date from" to "02/07/2024"
+    And I set "Date to" to "03/07/2024"
+    And I set "Courtroom" to "GET99662"
+    And  I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID   | Courthouse         | Courtroom | Judge(s)   | Defendant(s)    |
+      | T99662621 | Harrow Crown Court | GET99662  | test judge | test defendent1 |
+      | T99662622 | Harrow Crown Court | GET99662  | test judge | test defendent2 |
+
+    When I click on the "Hearings" link
+    Then I verify the HTML table contains the following values
+      | Case ID   | Hearing date | Courthouse         | Courtroom |
+      | T99662621 | 02/07/2024   | Harrow Crown Court | GET99662  |
+      | T99662622 | 02/07/2024   | Harrow Crown Court | GET99662  |
+
+    When I click on the "Cases" link
+    Then I verify the HTML table contains the following values
+      | Case ID   | Courthouse         | Courtroom | Judge(s)   | Defendant(s)    |
+      | T99662621 | Harrow Crown Court | GET99662  | test judge | test defendent1 |
+      | T99662622 | Harrow Crown Court | GET99662  | test judge | test defendent2 |
 
   @DMP-2728
   Scenario: Associated Audio files for deletion/hidden
