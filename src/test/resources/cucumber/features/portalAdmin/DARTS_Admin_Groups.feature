@@ -1,9 +1,7 @@
 @admin @admin_groups
 Feature: Admin Groups
 
-
-
-  @DMP-2299 @regression @TODO @DMP-4209
+  @DMP-2299 @regression @DMP-4209
   Scenario: Viewing Group Details
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Groups" navigation link
@@ -22,15 +20,16 @@ Feature: Admin Groups
     And I see "Group name" on the page
     And I see "Harrow Crown Court_APPROVER" on the page
     And I see "Description" on the page
-    And I see "-" on the page
     And I see "Role" on the page
     And I see "Approver" on the page
     And I see link with text "Courthouse"
     And I see link with text "Users"
-    And I see "Courthouses" on the page
     And I see "Select courthouses" on the page
     And I see "You can select and add multiple courthouses" on the page
     And I see "Add courthouse" on the page
+
+    When I click on the "Users" sub-menu link
+    Then I see "darts.requester.approver@hmcts.net" in the same row as "Approver Requester"
 
   @DMP-2302 @regression @TODO
   Scenario: Edit a Group

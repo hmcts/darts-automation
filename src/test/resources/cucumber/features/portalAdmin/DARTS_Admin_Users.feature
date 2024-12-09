@@ -184,8 +184,21 @@ Feature: Admin-Users
     
     When I set "Description (optional)" to "abcdefghijklmnopqrstuvwxy1abcdefghijklmnopqrstuvwxy2abcdefghijklmnopqrstuvwxy3abcdefghijklmnopqrstuvwxy4abcdefghijklmnopqrstuvwxy5abcdefghijklmnopqrstuvwxy6abcdefghijklmnopqrstuvwxy7abcdefghijklmnopqrstuvwxy8abcdefghijklmnopqrstuvwxy9abcdefghijklmnopqrstuvwxy0abcdefg"
     Then I see "Description" has error message "Enter a description shorter than 256 characters"
-    
-    
+
+  @regression
+  Scenario: Viewing a user's groups
+
+    Given I am logged on to the admin portal as an ADMIN user
+    When I click on the "Users" navigation link
+    And I set "Email" to "dartsautomationuser@HMCTS.net"
+    And I press the "Search" button
+    And I click on "View" in the same row as "dartsautomationuser@HMCTS.net"
+    And I click on the "Groups" sub-menu link
+    Then I see "hmcts_staff_3" in the same row as "	Judiciary"
+    And I see "hmcts_staff_4" in the same row as "Transcriber"
+    And I see "hmcts_staff_5" in the same row as "Translation QA"
+    And I see "hmcts_staff_6" in the same row as "RCJ Appeals"
+    And I see "hmcts_staff_1" in the same row as "Approver"
 
   @DMP-2225 @regression
   Scenario: Assigning user groups
