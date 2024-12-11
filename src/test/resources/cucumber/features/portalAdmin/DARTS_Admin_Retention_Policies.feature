@@ -1,8 +1,6 @@
 @admin @admin_retention_policies
 Feature: Admin Retention Policies
 
-
-
 @DMP-2466 @regression
   Scenario: Retention Policies primary page
     Given I am logged on to the admin portal as an ADMIN user

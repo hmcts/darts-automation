@@ -1,46 +1,120 @@
 @admin @admin_search
 Feature: Admin Search
 
-  @DMP-3129
+  @DMP-3129 @regression
   Scenario: Search Results - Cases
     When I am logged on to the admin portal as an ADMIN user
-      #Filter by courthouse
-    Then I set "Filter by courthouse" to "Swansea"
-    Then I press the "Search" button
+    #Filter by courthouse
+    And I set "Filter by courthouse" to "Swansea"
+    And I press the "Search" button
+    And I see "There are more than 1000 results. Refine your search." on the page
+    And I click on the "Hearings" link
+    And I see "There are more than 1000 results. Refine your search." on the page
+    And I click on the "Cases" link
     Then I see "There are more than 1000 results. Refine your search." on the page
-    Then I click on the "Hearings" link
-    Then I see "There are more than 1000 results. Refine your search." on the page
-    Then I click on the "Cases" link
-    Then I see "There are more than 1000 results. Refine your search." on the page
-    Then I click on the "Clear search" link
-      #Case ID
-    Then I set "Case ID" to "CASE1009"
-    Then I press the "Search" button
-    Then I click on the "Hearings" link
-    Then I click on the "Cases" link
-    Then I click on the "Clear search" link
-      #Courtroom
-    Then I set "Courtroom" to "ROOM_A"
-    Then I press the "Search" button
-    Then I click on the "Hearings" link
-    Then I click on the "Cases" link
-    Then I click on the "Clear search" link
-      #Hearing Date-Specific Date
-    Then I select the "Specific date" radio button
-    Then I set "Enter a date" to "03/07/2024"
-    Then I press the "Search" button
-    Then I click on the "Hearings" link
-    Then I click on the "Cases" link
-    Then I click on the "Clear search" link
-      #Hearing Date-Date Range
-    Then I select the "Date range" radio button
-    Then I set "Date from" to "02/07/2024"
-    Then I set "Date to" to "03/07/2024"
-    Then I press the "Search" button
-    Then I click on the "Hearings" link
-    Then I click on the "Cases" link
+    And I click on the "Clear search" link
 
-  @DMP-2728
+    #Case ID
+    When I set "Case ID" to "CASE1009"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
+      | CASE1009 | Liverpool  | ROOM_A    | *IGNORE* | *IGNORE*     |
+
+    When I click on the "Hearings" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Hearing date | Courthouse                  | Courtroom       |
+      | CASE1009 | 15/08/2023   | Leeds Combined Court Centre | ROOM_A          |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_A          |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_A12434     |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_XYZ        |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_XYZHHIHIHI |
+      | CASE1009 | 05/12/2023   | Swansea                     | ROOMA           |
+      | CASE1009 | 05/12/2023   | Swansea                     | ROOM_A          |
+      | CASE1009 | 07/12/2023   | Swansea                     | ROOM_A          |
+      | CASE1009 | 19/09/2023   | Swansea                     | ROOM_A          |
+      | CASE1009 | 01/01/2023   | Swansea                     | CR1             |
+
+    When I click on the "Cases" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
+      | CASE1009 | Liverpool  | ROOM_A    | *IGNORE* | *IGNORE*     |
+    And I click on the "Clear search" link
+
+    #Courtroom
+    When I set "Courtroom" to "ROOM_A"
+    And I select the "Specific date" radio button
+    And I set "Enter a date" to "15/08/2023"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea            | Multiple  | Mr Judge | Jow Bloggs   |
+      | CASE1009 | Liverpool          | ROOM_A    | *IGNORE* | *IGNORE*     |
+      | 141      | DMP-770-Courthouse | ROOM_A    | Judge 1  | DAVE-D1      |
+
+    When I click on the "Hearings" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Hearing date | Courthouse                  | Courtroom   |
+      | CASE1009 | 15/08/2023   | Leeds Combined Court Centre | ROOM_A      |
+      | 141      | 15/08/2023   | Liverpool                   | ROOM_A      |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_A      |
+      | CASE1009 | 15/08/2023   | Swansea                     | ROOM_A12434 |
+
+    When I click on the "Cases" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea            | Multiple  | Mr Judge | Jow Bloggs   |
+      | CASE1009 | Liverpool          | ROOM_A    | *IGNORE* | *IGNORE*     |
+      | 141      | DMP-770-Courthouse | ROOM_A    | Judge 1  | DAVE-D1      |
+    And I click on the "Clear search" link
+
+    #Hearing Date-Specific Date
+    When I set "Case ID" to "CASE1009"
+    And I select the "Specific date" radio button
+    And I set "Enter a date" to "05/12/2023"
+    And I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea            | Multiple  | Mr Judge | Jow Bloggs   |
+
+    When I click on the "Hearings" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Hearing date | Courthouse | Courtroom |
+      | CASE1009 | 05/12/2023   | Swansea    | ROOMA     |
+      | CASE1009 | 05/12/2023   | Swansea    | ROOM_A    |
+
+    When I click on the "Cases" link
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse         | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Swansea            | Multiple  | Mr Judge | Jow Bloggs   |
+    Then I click on the "Clear search" link
+
+    #Hearing Date-Date Range
+    When I select the "Date range" radio button
+    And I set "Date from" to "02/07/2024"
+    And I set "Date to" to "03/07/2024"
+    And I set "Courtroom" to "GET99662"
+    And  I press the "Search" button
+    Then I verify the HTML table contains the following values
+      | Case ID   | Courthouse         | Courtroom | Judge(s)   | Defendant(s)    |
+      | T99662621 | Harrow Crown Court | GET99662  | test judge | test defendent1 |
+      | T99662622 | Harrow Crown Court | GET99662  | test judge | test defendent2 |
+
+    When I click on the "Hearings" link
+    Then I verify the HTML table contains the following values
+      | Case ID   | Hearing date | Courthouse         | Courtroom |
+      | T99662621 | 02/07/2024   | Harrow Crown Court | GET99662  |
+      | T99662622 | 02/07/2024   | Harrow Crown Court | GET99662  |
+
+    When I click on the "Cases" link
+    Then I verify the HTML table contains the following values
+      | Case ID   | Courthouse         | Courtroom | Judge(s)   | Defendant(s)    |
+      | T99662621 | Harrow Crown Court | GET99662  | test judge | test defendent1 |
+      | T99662622 | Harrow Crown Court | GET99662  | test judge | test defendent2 |
+
+  @DMP-2728 @regression
   Scenario: Associated Audio files for deletion/hidden
     When I am logged on to the admin portal as an ADMIN user
     When I set "Case ID" to "CASE1009"
@@ -56,7 +130,6 @@ Feature: Admin Search
     Then I see "There are other audio files associated with the file you are hiding and/or deleting" on the page
     Then I press the "Continue" button
     Then I see an error message "Choose if you want to include associated files or not"
-
 
     @DMP-3315
     Scenario: Hearings search results
@@ -106,7 +179,7 @@ Feature: Admin Search
         | DMP-2747        | 20/06/2024   | Swansea    | 1              |
 
   @DMP-2709 @DMP-3384
-  Scenario: Audio file-Details page
+  Scenario: Super Admin Audio file-Details page
     When I am logged on to the admin portal as a SUPERUSER user
     And I see "Search" on the page
     And I set "Filter by courthouse" to "DMP-3438_Courthouse"
@@ -124,7 +197,7 @@ Feature: Admin Search
     And I do not see " Hide or delete " on the page
 
   @DMP-2709 @DMP-3384
-  Scenario: Audio file-Details page
+  Scenario: Admin Audio file-Details page
     When I am logged on to the admin portal as an ADMIN user
     And I see "Search" on the page
     And I set "Filter by courthouse" to "DMP-3438_Courthouse"
@@ -277,10 +350,8 @@ Feature: Admin Search
     And I click on "Hidden" in the table header
     Then "Hidden" has sort "descending" icon
 
-
-
   @3309
-  Scenario:Event_ID Screen
+  Scenario: Event_ID Screen
     When I am logged on to the admin portal as an ADMIN user
     And I see "Search" on the page
     And I select the "Specific date" radio button
@@ -289,7 +360,7 @@ Feature: Admin Search
     And I press the "Search" button
     Then I see "Events" on the page
     #Back Link
-    And I click on "490225" in the same row as "01 Jan 2024 at 06:00:00	"
+    And I click on "490225" in the same row as "01 Jan 2024 at 06:00:00"
     And I see link with text "Back"
     Then I click on the "Back" link
     And I see "Events" on the page
@@ -322,5 +393,3 @@ Feature: Admin Search
     And I see "Created by" in the same row as "System"
     And I see "Date last modified" in the same row as "07 Nov 2024 at 10:23:48"
     And I see "Last modified by" in the same row as "System"
-
-
