@@ -1,7 +1,6 @@
 @admin @admin_courthouse
 Feature: Admin Courthouse
 
-
   @DMP-2263 @DMP-635 @regression
   Scenario: Create a Courthouse Page - Check Details
     Given I am logged on to the admin portal as an ADMIN user
@@ -123,10 +122,11 @@ Feature: Admin Courthouse
     And I press the "Continue" button
     Then I see "Update courthouse" on the page
 
-  @DMP-2269 @regression
+  @DMP-725 @DMP-2269 @regression
   Scenario: Search Courthouse
     When I am logged on to the admin portal as an ADMIN user
-    Then I click on the "Courthouses" navigation link
+    And I click on the "Courthouses" navigation link
+    And I see "Search for courthouse" on the page
     And I set "Courthouse name" to "Bristol"
     Then I press the "Search" button
     And I see "4 result" on the page
@@ -217,17 +217,6 @@ Feature: Admin Courthouse
     And I press the "Search" button
     Then I see "No search results" on the page
     And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page
-
-
-
-  @DMP-725 @regression
-  Scenario: Search page for Courthouses
-    Given I am logged on to the admin portal as an ADMIN user
-    When I click on the "Courthouses" link
-    Then I see "Search for courthouse" on the page
-    And I see "Courthouse name" on the page
-    And I see "Display name" on the page
-    And I see "Region" on the page  
 
 @DMP-2931 @regression
   Scenario: Remove user role from courthouse, single and multiple, test cancel link

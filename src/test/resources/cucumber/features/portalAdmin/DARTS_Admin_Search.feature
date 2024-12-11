@@ -179,7 +179,7 @@ Feature: Admin Search
         | DMP-2747        | 20/06/2024   | Swansea    | 1              |
 
   @DMP-2709 @DMP-3384
-  Scenario: Audio file-Details page
+  Scenario: Super Admin Audio file-Details page
     When I am logged on to the admin portal as a SUPERUSER user
     And I see "Search" on the page
     And I set "Filter by courthouse" to "DMP-3438_Courthouse"
@@ -197,7 +197,7 @@ Feature: Admin Search
     And I do not see " Hide or delete " on the page
 
   @DMP-2709 @DMP-3384
-  Scenario: Audio file-Details page
+  Scenario: Admin Audio file-Details page
     When I am logged on to the admin portal as an ADMIN user
     And I see "Search" on the page
     And I set "Filter by courthouse" to "DMP-3438_Courthouse"
@@ -351,7 +351,7 @@ Feature: Admin Search
     Then "Hidden" has sort "descending" icon
 
   @3309
-  Scenario:Event_ID Screen
+  Scenario: Event_ID Screen
     When I am logged on to the admin portal as an ADMIN user
     And I see "Search" on the page
     And I select the "Specific date" radio button
