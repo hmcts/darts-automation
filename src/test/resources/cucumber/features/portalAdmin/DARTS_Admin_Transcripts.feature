@@ -819,3 +819,16 @@ Feature: Admin portal transcripts
       And I see "Date hidden" in the same row as ""
       And I see "Retain until" in the same row as ""
 
+      @DMP-4210
+      Scenario: Back link for completed Transcript
+        Given I am logged on to the admin portal as an ADMIN user
+        When I click on the "Transcripts" link
+        Then I click on the "Completed transcripts" link
+        And I set "Case ID" to "C400361003"
+        And I press the "Search" button
+        Then I see "Back" on the page
+        And I see "Transcript file" on the page
+        And I click on the "Back" link
+        Then I verify the HTML table contains the following values
+        | Transcript ID| Request ID| Case ID    | Courthouse         | Hearing date| Request method| Is hidden |
+        | 12781        | 127654    | C400361003 | Harrow Crown Court | 21 Nov 2024 | Manual        | No        |

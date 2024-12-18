@@ -123,7 +123,7 @@ Feature: Admin Search
     And I see "52849" on the page
     And I do not see " Hide or delete " on the page
 
-  @DMP-2709 @DMP-3384
+  @DMP-2709 @DMP-3384 @DMP-4210-AC3 @DMP-4240
   Scenario: Audio file-Details page
     When I am logged on to the admin portal as an ADMIN user
     And I see "Search" on the page
@@ -136,10 +136,12 @@ Feature: Admin Search
   #Back
     Then I click on the "Back" link
     And I see "Search" on the page
+    And I see "Audio" on the page
+    And I see "Showing 1-2 of 2" on the page
     And I click on the "52849" link
     And I see "Audio file" on the page
     And I see "52849" on the page
-    And I do not see " Hide or delete " on the page
+    And I see " Hide or delete " on the page
   #Basic details
     And I see "Basic details" on the page
     And I see "Courthouse" in the same row as "DMP-3438_Courthouse"
@@ -204,17 +206,18 @@ Feature: Admin Search
     And I see "Clip ID" in the same row as ""
     And I see "Checksum" in the same row as "d6df4486865e46f60d6bcebda3950760"
     And I see "Media status" in the same row as ""
+    And I see "Is current?" in the same row as "Yes"
     And I see "Audio hidden?" in the same row as "No"
     And I see "Audio deleted?" in the same row as "No"
 
-    And I see "Version data" in the same row as "Show versions"
+    And I see "Version data" on the page
     And I see "Version" in the same row as ""
     And I see "Chronicle ID" in the same row as "52849"
     And I see "Antecedent ID" in the same row as ""
     And I see "Retain until" in the same row as ""
     And I see "Date created" in the same row as "28 Jun 2024 at 1:40:41PM"
     And I see "Created by" in the same row as ""
-    And I see "Date last modified" in the same row as "28 Jun 2024 at 1:40:41PM"
+    And I see "Date last modified" in the same row as "11 Jul 2024 at 5:16:20PM"
     And I see "Last modified by" in the same row as ""
   #Hide audio file
     When I press the " Hide or delete " button
@@ -322,5 +325,3 @@ Feature: Admin Search
     And I see "Created by" in the same row as "System"
     And I see "Date last modified" in the same row as "07 Nov 2024 at 10:23:48"
     And I see "Last modified by" in the same row as "System"
-
-

@@ -477,3 +477,120 @@ Feature: Admin System configuration
     And I see "Enter a policy start date in the future" on the page
     And I see "Enter a policy start time in the future" on the page
 
+      @DMP-3817-AC1 @DMP-4454 @DMP-4228-AC1 @regression
+      Scenario: ProcessE2EArmRpoPending automated task change link
+        Given I am logged on to the admin portal as an ADMIN user
+        When I click on the "System configuration" link
+        And I click on the "Automated tasks" link
+        And I see "Automated tasks" on the page
+
+        Then I click on "28" in the same row as "ProcessE2EArmRpoPending"
+        And I see "Automated task" on the page
+        And I see "ProcessE2EArmRpoPending" on the page
+        And I see "Task ID" in the same row as "28"
+        And I see "Name" in the same row as "ProcessE2EArmRpoPending"
+        And I see "Description" in the same row as "RPO job to trigger the asynchronous search in ARM"
+        And I see "Cron expression" in the same row as "0 18 23 * * ?"
+        And I see "Cron editable" in the same row as "Yes"
+        And I see "Batch size" in the same row as "0"
+        And I see "RPO CSV start hour" in the same row as "Change"
+        And I see "RPO CSV end hour" in the same row as "Change"
+        And I see "Date created" in the same row as "Fri 25 Oct 2024 at 11:06:11"
+        And I see "Created by" in the same row as "System"
+        And I see "Date modified" in the same row as "Fri 25 Oct 2024 at 11:06:11"
+        And I see "Modified by" in the same row as "System"
+
+        Then I click on "Change" in the same row as "RPO CSV start hour"
+        And I clear the "RPO CSV start hour" field
+        And I set "RPO CSV start hour" to "2"
+        And I press the "Confirm" button
+        Then I see "RPO CSV start hour successfully updated" on the page
+
+        And I click on "Change" in the same row as "RPO CSV end hour"
+        And I clear the "RPO CSV end hour" field
+        And I set "RPO CSV end hour" to "1"
+        And I press the "Confirm" button
+        Then I see "RPO CSV end hour successfully updated" on the page
+
+        Then I click on "Change" in the same row as "RPO CSV start hour"
+        And I see "RPO CSV start hour" on the page
+        And I clear the "RPO CSV start hour" field
+        And I press the "Confirm" button
+        Then I see an error message "RPO CSV start hour must be set"
+        And I click on the "Cancel" link
+
+        Then I click on "Change" in the same row as "RPO CSV end hour"
+        And I see "RPO CSV end hour" on the page
+        And I clear the "RPO CSV end hour" field
+        And I press the "Confirm" button
+        Then I see an error message "RPO CSV end hour must be set"
+        And I click on the "Cancel" link
+
+        Then I click on "Change" in the same row as "RPO CSV start hour"
+        And I see "RPO CSV start hour" on the page
+        And I clear the "RPO CSV start hour" field
+        And I set "RPO CSV start hour" to "0"
+        And I press the "Confirm" button
+        Then I see an error message "RPO CSV start hour must be greater than 0"
+        And I click on the "Cancel" link
+
+        Then I click on "Change" in the same row as "RPO CSV end hour"
+        And I see "RPO CSV end hour" on the page
+        And I clear the "RPO CSV end hour" field
+        And I set "RPO CSV end hour" to "0"
+        And I press the "Confirm" button
+        Then I see an error message "RPO CSV end hour must be greater than 0"
+        And I click on the "Cancel" link
+
+        Then I click on "Change" in the same row as "RPO CSV start hour"
+        And I see "RPO CSV start hour" on the page
+        And I clear the "RPO CSV start hour" field
+        And I set "RPO CSV start hour" to "Test"
+        And I press the "Confirm" button
+        Then I see an error message "RPO CSV start hour must be an integer"
+        And I click on the "Cancel" link
+
+        Then I click on "Change" in the same row as "RPO CSV end hour"
+        And I see "RPO CSV end hour" on the page
+        And I clear the "RPO CSV end hour" field
+        And I set "RPO CSV end hour" to "Test"
+        And I press the "Confirm" button
+        Then I see an error message "RPO CSV end hour must be an integer"
+        And I click on the "Cancel" link
+
+        @DMP-4228 @regression
+        Scenario: ArmRpoReplay automated task change link
+          Given I am logged on to the admin portal as an ADMIN user
+          When I click on the "System configuration" link
+          And I click on the "Automated tasks" link
+          And I see "Automated tasks" on the page
+
+          Then I click on "30" in the same row as "ArmRpoReplay"
+          And I see "Automated task" on the page
+          And I see "ArmRpoReplay" on the page
+          And I see "ARM Replay start time" in the same row as "Change"
+          And I see "ARM Replay end time" in the same row as "Change"
+
+          Then I click on "Change" in the same row as "ARM Replay start time"
+          And I see "Enter a date" on the page
+          And I clear the "date" field
+          And I set "Enter a date" to "23/11/2024"
+          And I see "Enter a time" on the page
+          And I set "Hour" to "07"
+          And I set "Minutes" to "22"
+          And I set "Seconds" to "30"
+          And I press the "Confirm" button
+          Then I see "ARM Replay start time successfully updated" on the page
+          And I see "ARM Replay start time" in the same row as "Sat 23 Nov 2024 at 07:22:30"
+
+          And I click on "Change" in the same row as "ARM Replay end time"
+          And I see "Enter a date" on the page
+          And I clear the "date" field
+          And I set "Enter a date" to "23/11/2024"
+          And I see "Enter a time" on the page
+          And I set "Hour" to "07"
+          And I set "Minutes" to "30"
+          And I set "Seconds" to "50"
+          And I press the "Confirm" button
+          Then I see "ARM Replay end time successfully updated" on the page
+          And I see "ARM Replay end time" in the same row as "Sat 23 Nov 2024 at 07:30:50"

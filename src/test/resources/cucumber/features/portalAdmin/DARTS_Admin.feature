@@ -237,3 +237,33 @@ Feature: Admin portal
     Then I click on the "Your transcripts" link
     Then I click on the "Admin portal" link
 
+    @DMP-4210-AC1-AC2
+    Scenario: File deletion back link
+      Given I am logged on to the admin portal as an ADMIN user
+      When I click on the "File deletion" link
+      And I see "Files marked for deletion" on the page
+      #AC1
+      Then I click on the "Audio files" link
+      And I see "94034" in the same row as "21 Oct 2024" "B911266-7"
+      And I click on the "94034" link
+      And I see link with text "Back"
+      And I see "Important" on the page
+      And I see "This file is hidden in DARTS and is marked for manual deletion" on the page
+      And I click on the "Back" link
+      Then I see "Files marked for deletion" on the page
+      And I see link with text "Audio files"
+      And I see "94034" in the same row as "21 Oct 2024" "B911266-7"
+      #AC2
+      And I see "Files marked for deletion" on the page
+      And I see "Transcripts" in the same row as "Audio files"
+      Then I click on the "Transcripts" sub-menu link
+      And I see "Transcripts" on the page
+      And I see "13821" in the same row as "C400481006" "Harrow Crown Court"
+      Then I click on the "13821" link
+      And I see link with text "Back"
+      And I see "Important" on the page
+      And I see "This file is hidden in DARTS and is marked for manual deletion" on the page
+      And I click on the "Back" link
+      Then I see "Files marked for deletion" on the page
+      And I see link with text "Transcripts"
+      And I see "13821" in the same row as "C400481006" "Harrow Crown Court"

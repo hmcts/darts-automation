@@ -2,16 +2,19 @@
 Feature: Admin-Transformed Media
 
 
-  @DMP-2678 @regression
+  @DMP-2678-AC2 @regression @DMP-4210-AC4
   Scenario: Transformed media search
-
     Given I am logged on to the admin portal as an ADMIN user
     When I click on the "Transformed media" link
     And I press the "Search" button
     Then I see "results" on the page
-
+    #Pagination
+    And I click on the pagination link "1"
+    And I click on the "Next" link
+    Then I click on the "Previous" link
+    And I do not see "Previous" on the page
+    And I click on the "Clear search" link
     #DMP-2678-AC1 View search results
-
     When I click on the "Advanced search" link
     And I set "Courthouse" to "Harrow Crown Court"
     And I set "Hearing date" to "15/02/2024"
@@ -21,17 +24,29 @@ Feature: Admin-Transformed Media
       | 518      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | MP3       | 0.2MB | B9160006_15_Feb_2024_1.mp3 |
       | 519      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | ZIP       | 0.9MB | B9160006_15_Feb_2024_1.zip |
       | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requestor   | Requestor    | 15 Feb 2024    |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
-    And I see "Showing 1-3 of 3" on the page
-    And I see "results" on the page
-
+    #Back link
+    And I click on the "557" link
+    And I see "Back" on the page
+    Then I click on the "Back" link
+    And I verify the HTML table contains the following values
+      | Media ID | Case ID  | Courthouse         | Hearing date | Owner       | Requested by | Date requested | Last accessed | File type | Size  | Filename                   |
+      | 518      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | MP3       | 0.2MB | B9160006_15_Feb_2024_1.mp3 |
+      | 519      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | ZIP       | 0.9MB | B9160006_15_Feb_2024_1.zip |
+      | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requestor   | Requestor    | 15 Feb 2024    |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
+    And I click on the "Clear search" link
     #DMP-2678-AC2 Single search result takes user directly to file details screen
-
     When I set "Request ID" to "17165"
     And I press the "Search" button
     Then I do not see "Showing" on the page
+    #Back link
+    And I see "Back" on the page
     And I see "Request details" on the page
     And I see "Requestor" in the same row as "Requested by"
     And I see "17165" in the same row as "Request ID"
+    Then I click on the "Back" link
+    And I verify the HTML table contains the following values
+    | Media ID | Case ID  | Courthouse         | Hearing date | Owner     | Requested by | Date requested | Last accessed | File type | Size  | Filename                   |
+    | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requestor | Requestor    | 	15 Feb 2024   |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
 
   @DMP-2695 @DMP-2679 @DMP-3475
   Scenario: Transformed media-Change owner
@@ -92,4 +107,3 @@ Feature: Admin-Transformed Media
     Then I verify the HTML table contains the following values
       |Audio ID|Case ID    |Hearing date|Courthouse         |Start time|End time|Courtroom    |Channel number|
       |3833    |T20230001  |07 Dec 2023 |Harrow Crown Court |2:00PM    |2:01PM  |Rayners room |1             |
-
