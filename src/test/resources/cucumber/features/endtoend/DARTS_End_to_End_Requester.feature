@@ -10,7 +10,7 @@ Feature: End-to-end Requester
       | messageId       | type      | subType      | documentName   | courthouse   | courtroom   | caseNumber    | startDate   | startTime      | endDate   | timeStamp   | defendant    | urn           |
       | <DL_message_id> | <DL_type> | <DL_subType> | <documentName> | <courthouse> | <courtroom> | <case_number> | <startDate> | <DL_startTime> | <endDate> | <timeStamp> | <defendants> | <case_number> |
     When I process the daily list for courthouse "<courthouse>"
-     And I wait for case "<case_number>" courthouse "<courthouse>"
+    And I wait for case "<case_number>" courthouse "<courthouse>"
     Then I create an event
       | message_id | type  | sub_type | event_id  | courthouse   | courtroom   | case_numbers  | event_text                    | date_time  | case_retention_fixed_policy | case_total_sentence |
       | {{seq}}001 | 21200 | 11000    | <eventId> | <courthouse> | <courtroom> | <case_number> | Reporting Restriction {{seq}} | <dateTime> | <caseRetention>             | <totalSentence>     |
@@ -53,12 +53,12 @@ Feature: End-to-end Requester
     When I click on the "HMCTS" link
     # Wait for Requested Audio
     When I click on the "Your audio" link
+    Then I wait for text "READY" on the same row as link "<case_number>"
     Then I click on "Request ID" in the "Ready" table header
 #   Then I wait for the requested audio file to be ready
 #      | user      | courthouse   | case_number   | hearing_date |
 #      | REQUESTER | <courthouse> | <case_number> | {{date+0/}}  |
 
-    Then I wait for text "READY" on the same row as link "<case_number>"
     # Stream the Audio
     And  I click on "View" in the same row as "<case_number>"
     Then I see "<case_number>" on the page
