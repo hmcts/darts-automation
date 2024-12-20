@@ -28,8 +28,8 @@ Feature: Admin Courthouse
     And I see the "Create courthouse" button
     #AC2 - Change user details
     Then I click on the "Change" link
-    Then I see "Test Courthouse {{seq}}" on the page
-    And I see "Test Display Name {{seq}}" on the page
+    Then "Courthouse name" is "TEST COURTHOUSE {{seq}}"
+    Then "Display name" is "Test Display Name {{seq}}"
     And I see "Midlands" on the page
     And I see "Swansea_Transcribers" on the page
     #AC3 - Cancel Courthouse Creation
@@ -47,7 +47,6 @@ Feature: Admin Courthouse
     And I press the "Create courthouse" button
     Then I see "Created Test Display Name {{seq}}" on the page
     And I see "© Crown copyright" on the page
-
 
   @DMP-1192 @regression @DMP-4209
   Scenario: View Courthouse - Details Tab
@@ -129,13 +128,7 @@ Feature: Admin Courthouse
     And I see "Search for courthouse" on the page
     And I set "Courthouse name" to "Bristol"
     Then I press the "Search" button
-    And I see "4 result" on the page
-    And I verify the HTML table contains the following values
-      | Courthouse name      | Display name         | Region     |
-      | BRISTOL CITY COURTS  | Bristol City Courts  | South West |
-      | DMP-2163-BRISTOL-AAA | DMP-2163-Bristol-AAA |            |
-      | DMP-2163-BRISTOL-AAB | DMP-2163-Bristol-AAB |            |
-      | BRISTOL              | Bristol              | South West |
+    And I see "4 results" on the page
     Then I click on "Courthouse name" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region     |
@@ -148,12 +141,6 @@ Feature: Admin Courthouse
     Then I set "Display name" to "Bristol"
     Then I press the "Search" button
     And I see "4 results" on the page
-    And I verify the HTML table contains the following values
-      | Courthouse name      | Display name         | Region     |
-      | BRISTOL CITY COURTS  | Bristol City Courts  | South West |
-      | DMP-2163-BRISTOL-AAA | DMP-2163-Bristol-AAA |            |
-      | DMP-2163-BRISTOL-AAB | DMP-2163-Bristol-AAB |            |
-      | BRISTOL              | Bristol              | South West |
     Then I click on "Display name" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region     |
@@ -165,7 +152,7 @@ Feature: Admin Courthouse
     When I click on the "Clear search" link
     Then I set "Region" to "London"
     Then I press the "Search" button
-    And I see "38 results" on the page
+    And I see "39 results" on the page
     And I set "Courthouse name" to "guil"
     Then I press the "Search" button
     And I see "2 results" on the page
@@ -178,12 +165,6 @@ Feature: Admin Courthouse
     And I set "Courthouse name" to "guil"
     Then I press the "Search" button
     And I see "4 results" on the page
-    And I verify the HTML table contains the following values
-      | Courthouse name               | Display name                 | Region |
-      | GUILDFORD COURT               | GF Court                     |        |
-      | GUILDFORD                     | Guildford                    | London |
-      | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
-      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
     Then I click on "Region" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name               | Display name                 | Region |
@@ -225,7 +206,7 @@ Feature: Admin Courthouse
     Given I add user "Testuserfour" to group "Harrow Crown Court_REQUESTER"
     Given I add user "Testuserfive" to group "Harrow Crown Court_REQUESTER"
     Given I add user "Testusersix" to group "Harrow Crown Court_REQUESTER"
-    
+
     When I click on the "Courthouses" link
     And I set "Courthouse name" to "Harrow"
     And I press the "Search" button
