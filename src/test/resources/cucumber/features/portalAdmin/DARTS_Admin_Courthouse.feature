@@ -127,9 +127,10 @@ Feature: Admin Courthouse
     And I click on the "Courthouses" navigation link
     And I see "Search for courthouse" on the page
     And I set "Courthouse name" to "Bristol"
-    Then I press the "Search" button
-    And I see "4 results" on the page
-    Then I click on "Courthouse name" in the table header
+    And I press the "Search" button
+    Then I see "4 results" on the page
+    And I click on "Courthouse name" in the table header
+    And I click on "Courthouse name" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region     |
       | DMP-2163-BRISTOL-AAB | DMP-2163-Bristol-AAB |            |
@@ -138,10 +139,11 @@ Feature: Admin Courthouse
       | BRISTOL              | Bristol              | South West |
 
     When I click on the "Clear search" link
-    Then I set "Display name" to "Bristol"
-    Then I press the "Search" button
-    And I see "4 results" on the page
-    Then I click on "Display name" in the table header
+    And I set "Display name" to "Bristol"
+    And I press the "Search" button
+    Then I see "4 results" on the page
+    And I click on "Display name" in the table header
+    And I click on "Display name" in the table header
     And I verify the HTML table contains the following values
       | Courthouse name      | Display name         | Region     |
       | DMP-2163-BRISTOL-AAB | DMP-2163-Bristol-AAB |            |
@@ -150,39 +152,40 @@ Feature: Admin Courthouse
       | BRISTOL              | Bristol              | South West |
 
     When I click on the "Clear search" link
-    Then I set "Region" to "London"
-    Then I press the "Search" button
-    And I see "39 results" on the page
-    And I set "Courthouse name" to "guil"
-    Then I press the "Search" button
-    And I see "2 results" on the page
+    And I set "Region" to "London"
+    And I press the "Search" button
+    And I see "40 results" on the page
+    And I set "Courthouse name" to "guild"
+    And I press the "Search" button
+    Then I see "2 results" on the page
     And I verify the HTML table contains the following values
       | Courthouse name              | Display name                 | Region |
       | GUILDFORD                    | Guildford                    | London |
       | GUILDFORD CROWN COURT SITE B | Guildford Crown Court Site B | London |
-    When I click on the "Clear search" link
-#    Then I set "Region" to "London"
-    And I set "Courthouse name" to "guil"
-    Then I press the "Search" button
-    And I see "4 results" on the page
-    Then I click on "Region" in the table header
-    And I verify the HTML table contains the following values
-      | Courthouse name               | Display name                 | Region |
-      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
-      | GUILDFORD                     | Guildford                    | London |
-      | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
-      | GUILDFORD COURT               | GF Court                     |        |
-    Then I click on "Region" in the table header
-    And I verify the HTML table contains the following values
-      | Courthouse name               | Display name                 | Region |
-      | GUILDFORD COURT               | GF Court                     |        |
-      | GUILDFORD                     | Guildford                    | London |
-      | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
-      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
-    When I click on the "Clear search" link
 
+    When I click on the "Clear search" link
+    And I set "Courthouse name" to "guild"
+    And I press the "Search" button
+    Then I see "4 results" on the page
+    And I click on "Region" in the table header
+    And I verify the HTML table contains the following values
+      | Courthouse name               | Display name                 | Region |
+      | GUILDFORD COURT               | GF Court                     |        |
+      | GUILDFORD                     | Guildford                    | London |
+      | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
+      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
+
+    When I click on "Region" in the table header
+    Then I verify the HTML table contains the following values
+      | Courthouse name               | Display name                 | Region |
+      | THE CRIMINAL COURT, GUILDHALL | Swansea sitting at Guildhall | Wales  |
+      | GUILDFORD                     | Guildford                    | London |
+      | GUILDFORD CROWN COURT SITE B  | Guildford Crown Court Site B | London |
+      | GUILDFORD COURT               | GF Court                     |        |
+
+    When I click on the "Clear search" link
     #AC2 Search Courthouse-No results
-    When I set "Courthouse name" to "111"
+    And I set "Courthouse name" to "111"
     And I press the "Search" button
     Then I see "No search results" on the page
     And I see "No courthouses can be found with the search details provided. Review your search criteria and try again." on the page

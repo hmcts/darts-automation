@@ -217,19 +217,19 @@ Feature: Request Audio for transcribers
 
     When I click on the "Transcript requests" link
     And I click on "Case ID" in the table header
-    And "Case ID" has sort "descending" icon
+    And "Case ID" has sort "ascending" icon
     And I click on "Courthouse" in the table header
-    And "Courthouse" has sort "descending" icon
+    And "Courthouse" has sort "ascending" icon
     And I click on "Hearing date" in the table header
-    And "Hearing date" has sort "descending" icon
+    And "Hearing date" has sort "ascending" icon
     And I click on "Type" in the table header
-    And "Type" has sort "descending" icon
+    And "Type" has sort "ascending" icon
     And I click on "Requested on" in the table header
-    And "Requested on" has sort "descending" icon
+    And "Requested on" has sort "ascending" icon
     And I click on "Method" in the table header
-    And "Method" has sort "descending" icon
+    And "Method" has sort "ascending" icon
     And I click on "Urgency" in the table header
-    And "Urgency" has sort "descending" icon
+    And "Urgency" has sort "ascending" icon
     And I click on "Urgency" in the table header
     Then "Urgency" has sort "ascending" icon
 
@@ -238,33 +238,33 @@ Feature: Request Audio for transcribers
     When I click on the "Your work" link
     And I click on the "Completed today" link
     And I click on "Case ID" in the table header
-    And "Case ID" has sort "descending" icon
+    And "Case ID" has sort "ascending" icon
     And I click on "Courthouse" in the table header
-    And "Courthouse" has sort "descending" icon
+    And "Courthouse" has sort "ascending" icon
     And I click on "Hearing date" in the table header
-    And "Hearing date" has sort "descending" icon
+    And "Hearing date" has sort "ascending" icon
     And I click on "Type" in the table header
-    And "Type" has sort "descending" icon
+    And "Type" has sort "ascending" icon
     And I click on "Requested on" in the table header
-    And "Requested on" has sort "descending" icon
+    And "Requested on" has sort "ascending" icon
     And I click on "Urgency" in the table header
-    Then "Urgency" has sort "descending" icon
+    Then "Urgency" has sort "ascending" icon
 
     #DMP-1255-AC2 Sortable columns for To do
 
     When I click on the "To do" link
     And I click on "Case ID" in the table header
-    And "Case ID" has sort "descending" icon
+    And "Case ID" has sort "ascending" icon
     And I click on "Courthouse" in the table header
-    And "Courthouse" has sort "descending" icon
+    And "Courthouse" has sort "ascending" icon
     And I click on "Hearing date" in the table header
-    And "Hearing date" has sort "descending" icon
+    And "Hearing date" has sort "ascending" icon
     And I click on "Type" in the table header
-    And "Type" has sort "descending" icon
+    And "Type" has sort "ascending" icon
     And I click on "Requested on" in the table header
-    And "Requested on" has sort "descending" icon
+    And "Requested on" has sort "ascending" icon
     And I click on "Urgency" in the table header
-    Then "Urgency" has sort "descending" icon
+    Then "Urgency" has sort "ascending" icon
 
   @DMP-1255-AC1 @later
   Scenario: Transcriber's Your Work - List all to do items

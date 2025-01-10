@@ -20,18 +20,17 @@ Feature: Admin-Transformed Media
       | Media ID | Case ID  | Courthouse         | Hearing date | Owner       | Requested by | Date requested | Last accessed | File type | Size  | Filename                   |
       | 518      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | MP3       | 0.2MB | B9160006_15_Feb_2024_1.mp3 |
       | 519      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | ZIP       | 0.9MB | B9160006_15_Feb_2024_1.zip |
-      | 557      | S1029021 | Harrow Crown Court | 15 Feb 2024  | Requestor   | Requestor    | 15 Feb 2024    |               | MP3       | 0.2MB | S1029021_15_Feb_2024_1.mp3 |
-    And I see "Showing 1-3 of 3" on the page
+    And I see "Showing 1-2 of 2" on the page
     And I see "results" on the page
 
     #DMP-2678-AC2 Single search result takes user directly to file details screen
 
-    When I set "Request ID" to "17165"
+    When I set "Request ID" to "16965"
     And I press the "Search" button
     Then I do not see "Showing" on the page
     And I see "Request details" on the page
-    And I see "Requestor" in the same row as "Requested by"
-    And I see "17165" in the same row as "Request ID"
+    And I see "Transcriber" in the same row as "Requested by"
+    And I see "16965" in the same row as "Request ID"
 
   @DMP-2695 @DMP-2679 @DMP-3475
   Scenario: Transformed media-Change owner
