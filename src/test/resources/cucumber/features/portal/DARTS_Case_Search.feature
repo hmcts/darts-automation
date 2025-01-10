@@ -1,7 +1,7 @@
 @portal @portal_case_search
 Feature: Case Search
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @DMP-2769 @DMP- @regression @demo
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @DMP-2769 @DMP-4545 @regression @demo
 Scenario: Case Search data creation
   Given I create a case
     | courthouse         | courtroom   | case_number | defendants      | judges           | prosecutors         | defenders         |
@@ -21,7 +21,7 @@ Scenario: Case Search data creation
     | {{seq}}005 | 1100  |          | {{seq}}005 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
     | {{seq}}006 | 21200 | 11008    | {{seq}}006 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005  | A{{seq}}ABC-21 | {{timestamp-10:00:00}} |                             |                     |
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression @demo
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-4545 @regression @demo
 Scenario: Simple and Advanced Case Search
 
   #Simple search
