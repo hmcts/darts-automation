@@ -1,9 +1,10 @@
 @admin @admin_search
 Feature: Admin Search
 
-  @DMP-3129 @regression
+  @DMP-3129 @DMP-4532 @regression
   Scenario: Search Results - Cases
     When I am logged on to the admin portal as an ADMIN user
+
     #Filter by courthouse
     And I set "Filter by courthouse" to "Swansea"
     And I press the "Search" button
@@ -17,10 +18,19 @@ Feature: Admin Search
     #Case ID
     When I set "Case ID" to "CASE1009"
     And I press the "Search" button
+    And I click on "Case ID" in the table header
+    And "Case ID" has sort "ascending" icon
     Then I verify the HTML table contains the following values
       | Case ID  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
       | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
       | CASE1009 | Liverpool  | ROOM_A    | *IGNORE* | *IGNORE*     |
+
+    When I click on "Courthouse" in the table header
+    And "Courthouse" has sort "ascending" icon
+    Then I verify the HTML table contains the following values
+      | Case ID  | Courthouse | Courtroom | Judge(s) | Defendant(s) |
+      | CASE1009 | Liverpool  | ROOM_A    | *IGNORE* | *IGNORE*     |
+      | CASE1009 | Swansea    | Multiple  | Mr Judge | Jow Bloggs   |
 
     When I click on the "Hearings" link
     Then I verify the HTML table contains the following values
@@ -131,52 +141,44 @@ Feature: Admin Search
     Then I press the "Continue" button
     Then I see an error message "Choose if you want to include associated files or not"
 
-    @DMP-3315
+    @DMP-3315 @DMP-4532 @regression
     Scenario: Hearings search results
       When I am logged on to the admin portal as an ADMIN user
       Then I see "Search" on the page
- 	    When I set "Courtroom" to "ROOM_A"
+      When I set "Case ID" to "B"
+      And I select the "Date range" radio button
+      And I set "Date from" to "01/12/2024"
+      And I set "Date to" to "03/12/2024"
       And I select the "Hearings" radio button
       And I press the "Search" button
-      Then I see "Hearings" on the page
       And I click on the pagination link "2"
-      And I see "Next" on the page
-      And I see "Previous" on the page
       And I click on the pagination link "Previous"
       And I click on the pagination link "Next"
 
-      And I select the "Date range" radio button
-      And I set "Date from" to "20/06/2024"
-      And I set "Date to" to "24/06/2024"
+      When I set "Case ID" to "A400471"
+      And I select the "Cases" radio button
       And I press the "Search" button
-      And I see "Showing 1-3 of 3" on the page
+      And I see "Showing 1-5 of 5" on the page
       Then I verify the HTML table contains the following values
-        | Case ID         | Hearing date | Courthouse | Courtroom      |
-        | DMP-2747        | 20/06/2024   | Swansea    | 1              |
-        | DMP-2799-Case6  | 20/06/2024   | Swansea    | Room6-DMP-2799 |
-        | DMP-2799-AC3    | 20/06/2024   | Swansea    | DMP-2799-AC3   |
+        | Case ID    | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
+        | A400471001 | Harrow Crown Court | A400471-1  | JUDGE 400471-1  | Def A400471-1  |
+        | A400471005 | Harrow Crown Court | A400471-2  | JUDGE 400471-2  | Def A400471-11 |
+        | A400471002 | Harrow Crown Court | A400471-11 | JUDGE 400471-11 | Def A400471-11 |
+        | A400471004 | Harrow Crown Court | A400471-11 | JUDGE 400471-2  | Def A400471-22 |
+        | A400471003 | Harrow Crown Court | A400471-2  | JUDGE 400471-11 | Def A400471-2  |
 
       And I click on "Case ID" in the table header
-      And "Case ID" has sort "descending" icon
+      And "Case ID" has sort "ascending" icon
       Then I verify the HTML table contains the following values
-        | Case ID         | Hearing date | Courthouse | Courtroom      |
-        | DMP-2799-Case6  | 20/06/2024   | Swansea    | Room6-DMP-2799 |
-        | DMP-2799-AC3    | 20/06/2024   | Swansea    | DMP-2799-AC3   |
-        | DMP-2747        | 20/06/2024   | Swansea    | 1              |
-
-      And I click on "Hearing date" in the table header
-      Then "Hearing date" has sort "descending" icon
+        | Case ID    | Courthouse         | Courtroom  | Judge(s)        | Defendant(s)   |
+        | A400471001 | Harrow Crown Court | A400471-1  | JUDGE 400471-1  | Def A400471-1  |
+        | A400471002 | Harrow Crown Court | A400471-11 | JUDGE 400471-11 | Def A400471-11 |
+        | A400471003 | Harrow Crown Court | A400471-2  | JUDGE 400471-11 | Def A400471-2  |
+        | A400471004 | Harrow Crown Court | A400471-11 | JUDGE 400471-2  | Def A400471-22 |
+        | A400471005 | Harrow Crown Court | A400471-2  | JUDGE 400471-2  | Def A400471-11 |
 
       And I click on "Courthouse" in the table header
-      Then "Courthouse" has sort "descending" icon
-
-      And I click on "Courtroom" in the table header
-      And "Courtroom" has sort "descending" icon
-      Then I verify the HTML table contains the following values
-        | Case ID         | Hearing date | Courthouse | Courtroom      |
-        | DMP-2799-Case6  | 20/06/2024   | Swansea    | Room6-DMP-2799 |
-        | DMP-2799-AC3    | 20/06/2024   | Swansea    | DMP-2799-AC3   |
-        | DMP-2747        | 20/06/2024   | Swansea    | 1              |
+      Then "Courthouse" has sort "ascending" icon
 
   @DMP-2709 @DMP-3384
   Scenario: Super Admin Audio file-Details page
@@ -188,6 +190,7 @@ Feature: Admin Search
     Then I see "Audio" on the page
     And I see "Showing 1-2 of 2" on the page
     And I click on the "52849" link
+
   #Back
     Then I click on the "Back" link
     And I see "Search" on the page
@@ -206,6 +209,7 @@ Feature: Admin Search
     Then I see "Audio" on the page
     And I see "Showing 1-2 of 2" on the page
     And I click on the "52849" link
+
   #Back
     Then I click on the "Back" link
     And I see "Search" on the page
@@ -213,6 +217,7 @@ Feature: Admin Search
     And I see "Audio file" on the page
     And I see "52849" on the page
     And I do not see " Hide or delete " on the page
+
   #Basic details
     And I see "Basic details" on the page
     And I see "Courthouse" in the same row as "DMP-3438_Courthouse"
@@ -231,6 +236,7 @@ Feature: Admin Search
       | Case ID        | Hearing date| Defendants(s) | Judges(s) |
       | DMP-3438_case1 | 28 Jun 2024 |               |           |
     When I Sign out
+
   #Super Admin
     And I am logged on to the admin portal as an ADMIN user
     Then I see "Search" on the page
@@ -240,6 +246,7 @@ Feature: Admin Search
     Then I see "Audio" on the page
     And I see "Showing 1-2 of 2" on the page
     When I click on the "52849" link
+
   #Back
     And I click on the "Back" link
     Then I see "Search" on the page
@@ -252,6 +259,7 @@ Feature: Admin Search
     Then I see "Audio file" on the page
     And I see "52849" on the page
     And I see " Hide or delete " on the page
+
   #Basic details
     And I see "Basic details" on the page
     And I see "Courthouse" in the same row as "DMP-3438_Courthouse"
@@ -269,6 +277,7 @@ Feature: Admin Search
     Then I verify the HTML table contains the following values
       | Case ID        | Hearing date| Defendants(s) | Judges(s) |
       | DMP-3438_case1 | 28 Jun 2024 |               |           |
+
   #Advanced details
     When I click on the "Advanced details" link
     Then I see "Advanced details" on the page
@@ -289,6 +298,7 @@ Feature: Admin Search
     And I see "Created by" in the same row as ""
     And I see "Date last modified" in the same row as "28 Jun 2024 at 1:40:41PM"
     And I see "Last modified by" in the same row as ""
+
   #Hide audio file
     When I press the " Hide or delete " button
     And I select the "Other reason to hide only" radio button
@@ -308,6 +318,7 @@ Feature: Admin Search
     And I see "Reason - Other reason to hide only" on the page
     And I see "Testing DMP-2709 AC-3" on the page
     And I see "Unhide" on the page
+
   #Unhide audio file
     When I click on the "unhide" link
     Then I do not see "Important" on the page
@@ -315,40 +326,59 @@ Feature: Admin Search
     Then I see "Audio hidden?" in the same row as "No"
     And I see " Hide or delete " on the page
 
-  @DMP-3317
-  Scenario: Audio search results
+  @DMP-3317 @DMP-4532 @regression
+  Scenario: Audio and events search results
     Given I am logged on to the admin portal as an ADMIN user
     Then I see "Search" on the page
-    When I set "Filter by courthouse" to "Bristol"
+    When I set "Filter by courthouse" to "Harrow Crown Court"
+    And I set "Case ID" to "C"
+    And I select the "Specific date" radio button
+    And I set "Enter a date" to "14/01/2025"
     And I select the "Audio" radio button
     And I press the "Search" button
-    Then I see "Audio" on the page
     And I click on the pagination link "2"
-    And I see "Next" on the page
-    And I see "Previous" on the page
     And I click on the pagination link "Previous"
     And I click on the pagination link "Next"
 
     When I click on "Audio ID" in the table header
-    Then "Audio ID" has sort "descending" icon
+    Then "Audio ID" has sort "ascending" icon
 
-    And I click on "Courthouse" in the table header
-    Then "Courthouse" has sort "descending" icon
+    When I click on "Courthouse" in the table header
+    Then "Courthouse" has sort "ascending" icon
 
-    And I click on "Courtroom" in the table header
-    Then "Courtroom" has sort "descending" icon
+    When I click on "Courtroom" in the table header
+    Then "Courtroom" has sort "ascending" icon
 
-    And I click on "Start Time" in the table header
+    When I click on "Start Time" in the table header
     Then "Start Time" has sort "descending" icon
 
-    And I click on "End Time" in the table header
+    When I click on "End Time" in the table header
     Then "End Time" has sort "descending" icon
 
-    And I click on "Channel" in the table header
-    Then "Channel" has sort "descending" icon
+    When I click on "Channel" in the table header
+    Then "Channel" has sort "ascending" icon
 
-    And I click on "Hidden" in the table header
-    Then "Hidden" has sort "descending" icon
+    When I click on "Hidden" in the table header
+    Then "Hidden" has sort "ascending" icon
+
+    When I click on the "Events" link
+    And I click on "Event ID" in the table header
+    Then "Event ID" has sort "ascending" icon
+
+    When I click on "Time stamp" in the table header
+    Then "Time stamp" has sort "descending" icon
+
+    When I click on "Name" in the table header
+    Then "Name" has sort "ascending" icon
+
+    When I click on "Courthouse" in the table header
+    Then "Courthouse" has sort "ascending" icon
+
+    When I click on "Courtroom" in the table header
+    Then "Courtroom" has sort "ascending" icon
+
+    When I click on "Text" in the table header
+    Then "Text" has sort "ascending" icon
 
   @3309
   Scenario: Event_ID Screen
@@ -359,11 +389,13 @@ Feature: Admin Search
     And I select the "Events" radio button
     And I press the "Search" button
     Then I see "Events" on the page
+
     #Back Link
     And I click on "490225" in the same row as "01 Jan 2024 at 06:00:00"
     And I see link with text "Back"
     Then I click on the "Back" link
     And I see "Events" on the page
+
     #Basic details
     Then I click on "490225" in the same row as "22 Aug 2024 at 04:16:55"
     And I see "Event" on the page
@@ -374,6 +406,7 @@ Feature: Admin Search
     And I see "Courthouse" in the same row as "Harrow Crown Court"
     And I see "Courtroom" in the same row as "132311"
     And I see "Time stamp" in the same row as "01 Jan 2024 at 06:00:00"
+
     #Advanced details
     Then I click on the "Advanced details" link
     And I see "Documentum ID" in the same row as ""
