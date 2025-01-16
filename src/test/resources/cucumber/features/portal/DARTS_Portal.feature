@@ -83,8 +83,8 @@ Scenario Outline: Requester-Approver links
 		| Your audio  | Your transcripts  | Search   | Transcript requests  | Your work  |
 		| <yourAudio> | <yourTranscripts> | <search> | <transcriptRequests> | <yourWork> |
 	 And I verify sub-menu links for "Your transcripts":
-		| Transcript requests | Transcript requests to review |
-		| In Progress         | Requests to approve or reject |
+		 | Transcript requests | Transcript requests to authorise |
+		 | In Progress         | Requests to approve or reject    |
 	 And I see link with text "HMCTS"
 	 And I see link with text "DARTS"
 	 And I see link with text "Sign out"
@@ -115,7 +115,7 @@ Scenario: Admin User
 	Then I see link with text "HMCTS"
 	 And I see link with text "DARTS"
 	 And I see link with text "Sign out"
-	When I click on the "User portal" link
+	When I click on the "Switch to User Portal" link
 	Then I see link with text "Your audio"
-	When I click on the "Admin portal" link
+	When I click on the "Switch to Admin Portal" link
 	Then I see "You can search for cases, hearings, events and audio." on the page

@@ -107,7 +107,7 @@ Feature: End-to-end Approver
       | courthouse         | courtroom | case_number   | judges         | defendants          | prosecutors          | defenders          | HearingDate     | transcription-type | urgency   | message_id | eventId    | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  | Reason             |
       | Harrow Crown Court | {{seq}}   | S{{seq}}052-B | S{{seq}} judge | S{{seq}} defendants | S{{seq}} prosecutors | S{{seq}} defenders | {{displayDate}} | Sentencing remarks | Overnight | {{seq}}001 | {{seq}}001 |               |               | {{timestamp}} | sample1.mp2 | 18:03:00  | 18:04:00 | Reject for testing |
 
-@DMP-2201
+@DMP-2201 @DMP-4102
   Scenario Outline: Requester Approver
     Given I create a case
       | courthouse   | courtroom   | case_number   | defendants   | judges   | prosecutors   | defenders   |
@@ -143,7 +143,7 @@ Feature: End-to-end Approver
     Then I click on the "Your transcripts" link
     Then I click on the "Transcript requests" link
     Then I see "<case_number>" on the page
-    Then I click on the "Transcript requests to review" link
+    Then I click on the "Transcript requests to authorise" link
     Then I do not see "<case_number>" on the page
     Examples:
       | courthouse      | courtroom  | case_number   | judges              | defendants               | prosecutors            | defenders            | HearingDate     | transcription-type | urgency   | message_id | eventId    | caseRetention | totalSentence | dateTime      | audioFile   | startTime | endTime  |

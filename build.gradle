@@ -4,7 +4,7 @@ plugins {
   id 'org.owasp.dependencycheck' version '10.0.4'
   id 'org.sonarqube' version '5.1.0.4882'
   id 'jacoco'
-  id 'org.gradle.test-retry' version '1.6.0'
+  //id 'org.gradle.test-retry' version '1.6.0'
 }
 
 group = 'uk.gov.hmcts'
@@ -28,118 +28,118 @@ tasks.withType(JavaExec).configureEach {
 def tags = System.getenv("INCLUDE_TAGS") ?: 'smoketest'
 
 test {
-  failFast = false
+    failFast = false
 
-  doFirst {
-    System.out.println("Running features with tags: " + tags)
-  }
-
-  useJUnitPlatform {
-    includeTags tags
-  }
-
-  testLogging {
-    exceptionFormat = 'full'
-    events 'started', 'passed', 'skipped', 'failed'
-  }
-
-  retry {
-        failOnPassedAfterRetry = false
-        maxFailures = 2
-        maxRetries = 1
+    doFirst {
+        System.out.println("Running features with tags: " + tags)
     }
-}
+
+    useJUnitPlatform {
+        includeTags tags
+    }
+
+    testLogging {
+        exceptionFormat = 'full'
+        events 'started', 'passed', 'skipped', 'failed'
+    }
+
+    //retry {
+    //      failOnPassedAfterRetry = false
+    //      maxFailures = 2
+    //      maxRetries = 1
+    // }
+//}
 
 // this functional task is here for the Jenkins pipeline which runs ./gradlew functional
-task functional {
-  dependsOn test
-}
+    task functional {
+        dependsOn test
+    }
 
-jacocoTestReport {
-  reports {
-    xml.required = true
-    csv.required = false
-    html.required = true
-  }
-}
+    jacocoTestReport {
+        reports {
+            xml.required = true
+            csv.required = false
+            html.required = true
+        }
+    }
 
-project.tasks['sonarqube'].dependsOn jacocoTestReport
+    project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 // exclude everything
-def sonarExclusions = [
-  '**/uk/gov/hmcts/darts/**',
-]
+    def sonarExclusions = [
+            '**/uk/gov/hmcts/darts/**',
+    ]
 
-sonarqube {
-  properties {
-    property "sonar.projectName", "Reform :: darts-automation"
-    property "sonar.projectKey", "uk.gov.hmcts.reform:darts-automation"
-    property "sonar.exclusions", sonarExclusions.join(', ')
-  }
-}
+    sonarqube {
+        properties {
+            property "sonar.projectName", "Reform :: darts-automation"
+            property "sonar.projectKey", "uk.gov.hmcts.reform:darts-automation"
+            property "sonar.exclusions", sonarExclusions.join(', ')
+        }
+    }
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
-dependencyCheck {
-  // Specifies if the build should be failed if a CVSS score above a specified level is identified.
-  // range of 0-10 fails the build, anything greater and it doesn't fail the build
-  failBuildOnCVSS = 0
-  suppressionFile = 'config/owasp/suppressions.xml'
+    dependencyCheck {
+        // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+        // range of 0-10 fails the build, anything greater and it doesn't fail the build
+        failBuildOnCVSS = 0
+        suppressionFile = 'config/owasp/suppressions.xml'
 
-  analyzers {
-    // Disable scanning of .NET related binaries
-    assemblyEnabled = false
-  }
-  skipConfigurations = [
-    "compileOnly",
-    "contractTestRuntimeClasspath",
-    "contractTestCompileClasspath"
-  ]
-}
+        analyzers {
+            // Disable scanning of .NET related binaries
+            assemblyEnabled = false
+        }
+        skipConfigurations = [
+                "compileOnly",
+                "contractTestRuntimeClasspath",
+                "contractTestCompileClasspath"
+        ]
+    }
 
-repositories {
-  mavenLocal()
-  mavenCentral()
-  maven { url 'https://jitpack.io' }
-}
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
 
-ext {
-  log4JVersion = "2.20.0"
-}
+    ext {
+        log4JVersion = "2.20.0"
+    }
 
-ext['snakeyaml.version'] = '2.0'
-ext['spring-security.version'] = '6.0.3' // https://spring.io/security/cve-2023-20862
+    ext['snakeyaml.version'] = '2.0'
+    ext['spring-security.version'] = '6.0.3' // https://spring.io/security/cve-2023-20862
 
-dependencies {
+    dependencies {
 
-	implementation(platform("org.apache.logging.log4j:log4j-bom:2.24.3"))
-	implementation 'org.apache.logging.log4j:log4j-api'
-	implementation 'org.apache.logging.log4j:log4j-core'
-	testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl'
-	
-	implementation 'org.seleniumhq.selenium:selenium-java:4.27.0'
-	
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
-	
-	implementation(platform("io.cucumber:cucumber-bom:7.20.1"))
-	implementation 'io.cucumber:cucumber-picocontainer'
-	implementation 'io.cucumber:cucumber-java'
-	implementation 'io.cucumber:cucumber-junit'
-	implementation 'io.cucumber:cucumber-core'
-	implementation 'io.cucumber:cucumber-junit-platform-engine'
-	implementation 'io.cucumber:cucumber-gherkin'
-	
+        implementation(platform("org.apache.logging.log4j:log4j-bom:2.24.3"))
+        implementation 'org.apache.logging.log4j:log4j-api'
+        implementation 'org.apache.logging.log4j:log4j-core'
+        testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl'
+
+        implementation 'org.seleniumhq.selenium:selenium-java:4.27.0'
+
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+
+        implementation(platform("io.cucumber:cucumber-bom:7.20.1"))
+        implementation 'io.cucumber:cucumber-picocontainer'
+        implementation 'io.cucumber:cucumber-java'
+        implementation 'io.cucumber:cucumber-junit'
+        implementation 'io.cucumber:cucumber-core'
+        implementation 'io.cucumber:cucumber-junit-platform-engine'
+        implementation 'io.cucumber:cucumber-gherkin'
+
 //	implementation(platform("org.hamcrest:hamcrest-bom:2.2"))
-	implementation "org.hamcrest:hamcrest:3.0"
-	implementation "org.hamcrest:hamcrest-core:3.0"
-	
-  implementation 'commons-io:commons-io:2.18.0'
+        implementation "org.hamcrest:hamcrest:3.0"
+        implementation "org.hamcrest:hamcrest-core:3.0"
 
-	implementation(platform("org.junit:junit-bom:5.11.4"))
-	runtimeOnly    "org.junit.platform:junit-platform-launcher"
-	implementation "org.junit.platform:junit-platform-suite"
-	implementation "org.junit.jupiter:junit-jupiter-api"
-	implementation "org.junit.jupiter:junit-jupiter-engine"
-	implementation "org.junit.jupiter:junit-jupiter"
+        implementation 'commons-io:commons-io:2.18.0'
+
+        implementation(platform("org.junit:junit-bom:5.11.4"))
+        runtimeOnly "org.junit.platform:junit-platform-launcher"
+        implementation "org.junit.platform:junit-platform-suite"
+        implementation "org.junit.jupiter:junit-jupiter-api"
+        implementation "org.junit.jupiter:junit-jupiter-engine"
+        implementation "org.junit.jupiter:junit-jupiter"
 
 //	implementation "org.slf4j:slf4j-api:2.0.7"
 //	implementation "org.slf4j:slf4j-simple:2.0.7"
@@ -148,31 +148,32 @@ dependencies {
 	implementation group: 'com.opencsv', name: 'opencsv', version: '5.10'
 	
 //	implementation group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: '19.20.0.0'	
-	
-	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.4'
-	
-	// Rest assured
-	implementation 'io.rest-assured:rest-assured:5.5.0'
-	
-	implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
-	
-  // Use JUnit Jupiter for testing.
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
 
-  // This dependency is exported to consumers, that is to say found on their compile classpath.
-  api 'org.apache.commons:commons-math3:3.6.1'
+        implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.4'
 
-  // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-  implementation 'com.google.guava:guava:33.4.0-jre'
-}
+        // Rest assured
+        implementation 'io.rest-assured:rest-assured:5.5.0'
 
-wrapper {
-  distributionType = Wrapper.DistributionType.ALL
-}
+        implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
 
-task smoketest(type: Test, dependsOn: testClasses) {
-   
-    include '**/TestRunner_Cucumber.class'
-    
-    outputs.upToDateWhen { false }
+        // Use JUnit Jupiter for testing.
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+
+        // This dependency is exported to consumers, that is to say found on their compile classpath.
+        api 'org.apache.commons:commons-math3:3.6.1'
+
+        // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+        implementation 'com.google.guava:guava:33.4.0-jre'
+    }
+
+    wrapper {
+        distributionType = Wrapper.DistributionType.ALL
+    }
+
+    task smoketest(type: Test, dependsOn: testClasses) {
+
+        include '**/TestRunner_Cucumber.class'
+
+        outputs.upToDateWhen { false }
+    }
 }

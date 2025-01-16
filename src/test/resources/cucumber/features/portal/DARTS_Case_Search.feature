@@ -1,7 +1,7 @@
 @portal @portal_case_search
 Feature: Case Search
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @DMP-2769 @regression @demo
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-963 @DMP-997 @DMP-2769 @DMP-4545 @regression @demo
 Scenario: Case Search data creation
   Given I create a case
     | courthouse         | courtroom   | case_number | defendants      | judges           | prosecutors         | defenders         |
@@ -21,7 +21,7 @@ Scenario: Case Search data creation
     | {{seq}}005 | 1100  |          | {{seq}}005 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
     | {{seq}}006 | 21200 | 11008    | {{seq}}006 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005  | A{{seq}}ABC-21 | {{timestamp-10:00:00}} |                             |                     |
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @regression @demo
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-4545 @regression @demo
 Scenario: Simple and Advanced Case Search
 
   #Simple search
@@ -31,6 +31,7 @@ Scenario: Simple and Advanced Case Search
     And I see "Also known as a case reference or court reference. There should be no spaces." on the page
     And I set "Case ID" to "A{{seq}}00"
     And I press the "Search" button
+    And I click on "Case ID" in the table header
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
@@ -50,6 +51,7 @@ Scenario: Simple and Advanced Case Search
     And I set "Courtroom" to "A{{seq}}-1"
     And I press the "Search" button
     And I click on "Case ID" in the table header
+    And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
       | A{{seq}}004 | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-2  | Def A{{seq}}-22 |
@@ -64,6 +66,7 @@ Scenario: Simple and Advanced Case Search
     And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
+    And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
       | A{{seq}}004 | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-2  | Def A{{seq}}-22 |
@@ -75,6 +78,7 @@ Scenario: Simple and Advanced Case Search
     And I set "Judge's name" to "JUDGE {{seq}}-1"
     And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
+    And I click on "Case ID" in the table header
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID     | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
@@ -89,6 +93,7 @@ Scenario: Simple and Advanced Case Search
     And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
+    And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
       | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-2  | Def A{{seq}}-22 |
@@ -97,6 +102,7 @@ Scenario: Simple and Advanced Case Search
 
     When I click on the "Your audio" link
     And I click on the "Search" link
+    And I click on "Case ID" in the table header
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom  | Judge(s)         | Defendant(s)    |
@@ -114,6 +120,7 @@ Scenario: Simple and Advanced Case Search
     And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
+    And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
       | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-2  | Def A{{seq}}-11 |
@@ -130,6 +137,7 @@ Scenario: Simple and Advanced Case Search
     And I set "Date to" to "{{date+0/}}"
     And I set "Case ID" to "A{{seq}}"
     And I press the "Search" button
+    And I click on "Case ID" in the table header
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
@@ -275,6 +283,7 @@ Scenario: Simple and Advanced Case Search
     And I set "Case ID" to "A{{seq}}00"
     And I press the "Search" button
     And I click on "Case ID" in the table header
+    And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
       | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-2  | Def A{{seq}}-11 |
@@ -288,6 +297,7 @@ Scenario: Simple and Advanced Case Search
     And I see "Prosecutor(s)" on the page
 
     And I click on the breadcrumb link "Search"
+    And I click on "Case ID" in the table header
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
@@ -469,6 +479,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     And I set "Enter a date" to "{{date+0/}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
+    And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
       | A{{seq}}004                                              | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-2  | Def A{{seq}}-22 |
@@ -485,6 +496,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     When I set "Judge's name" to "JUDGE {{seq}}-2"
     And I press the "Search" button
     And I click on "Case ID" in the table header
+    And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
       | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-2  | Def A{{seq}}-11 |
@@ -498,6 +510,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     And I set "Enter a date" to "{{date+0/}}"
     And I press the "Search" button
     And I click on "Case ID" in the table header
+    And I click on "Case ID" in the table header
       #Then I see "We need more information to search for a case" on the page
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
@@ -508,6 +521,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
 #    When I set "Courthouse" to "Harrow Crown Court"
 #    And I press the "Search" button
 #    And I click on "Case ID" in the table header
+#    And I click on "Case ID" in the table header
 #    Then I verify the HTML table contains the following values
 #      | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
 #      | A{{seq}}005                                              | Harrow Crown Court | A{{seq}}-2  | JUDGE {{seq}}-2  | Def A{{seq}}-11 |
@@ -517,7 +531,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
 #      | A{{seq}}002                                              | Harrow Crown Court | A{{seq}}-11 | JUDGE {{seq}}-11 | Def A{{seq}}-11 |
 #      | A{{seq}}001                                              | Harrow Crown Court | A{{seq}}-1  | JUDGE {{seq}}-1  | Def A{{seq}}-1  |
 
-  @DMP-2963
+  @DMP-2963 @regression
   Scenario: Add a CourtLog into Case file screen
     Given I am logged on to DARTS as a TRANSCRIBER user
     And I click on the "Search" link
@@ -536,10 +550,10 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     | {{displaydate}} | 10:00:00  | Hearing started  | A{{seq}}ABC-2 |
     
     Then I click on "Hearing date" in the table header
-    And "Hearing date" has sort "descending" icon
+    And "Hearing date" has sort "ascending" icon
 
     Then I click on "Time" in the table header
-    And "Time" has sort "descending" icon
+    And "Time" has sort "ascending" icon
 
     Then I click on "Event" in the table header
-    And "Event" has sort "descending" icon
+    And "Event" has sort "ascending" icon
