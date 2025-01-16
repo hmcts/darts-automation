@@ -1,6 +1,7 @@
 package uk.gov.hmcts.darts.automation.cucumber.steps;
 
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import uk.gov.hmcts.darts.automation.utils.SeleniumWebDriver;
@@ -513,6 +514,21 @@ public class StepDef_navigation extends StepDef_base {
 	@When("I set {string} to {string} and click away")
 	public void i_set_to_and_click_away(String location_name, String value) throws Exception {
 		NAV.clickAway(NAV.set_valueTo(location_name, value));
+	}
+
+	@When("I select the checkbox by name {string}")
+	public void SelectTheCheckboxByName(String checkboxName) {
+		NAV.selectCheckboxByName(checkboxName);
+	}
+
+	@And("checkbox with name {string} is checked")
+	public void checkboxWithNameIsChecked(String checkboxName) {
+		NAV.assertCheckboxStatus(checkboxName, true);
+	}
+
+	@And("checkbox with name {string} is unchecked")
+	public void checkboxWithNameIsUnchecked(String checkboxName) {
+		NAV.assertCheckboxStatus(checkboxName, false);
 	}
 
 }

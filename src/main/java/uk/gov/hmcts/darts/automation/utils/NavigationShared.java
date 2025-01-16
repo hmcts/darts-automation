@@ -2049,4 +2049,20 @@ public class NavigationShared {
 		Assertions.assertEquals(0, errorCount);
 	}
 
+	public void selectCheckboxByName(String checkboxName) {
+		WebElement checkbox = driver.findElement(By.name(checkboxName));
+		checkbox.click();
+		log.info("Checkbox with name =>" + checkboxName + "<= selected");
+	}
+
+	public void assertCheckboxStatus(String checkboxName, boolean status) {
+		WebElement checkbox = driver.findElement(By.name(checkboxName));
+		if (status) {
+			Assertions.assertTrue(checkbox.isSelected(), "Checkbox with name =>" + checkboxName + "<= is not checked");
+			log.info("Checkbox with name =>" + checkboxName + "<= is checked");
+		} else {
+			Assertions.assertFalse(checkbox.isSelected(), "Checkbox with name =>" + checkboxName + "<= is checked");
+			log.info("Checkbox with name =>" + checkboxName + "<= is not checked");
+		}
+	}
 }

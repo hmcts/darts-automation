@@ -114,22 +114,94 @@ Feature: Admin Search
       | T99662621 | Harrow Crown Court | GET99662  | test judge | test defendent1 |
       | T99662622 | Harrow Crown Court | GET99662  | test judge | test defendent2 |
 
-  @DMP-2728 @regression
-  Scenario: Associated Audio files for deletion/hidden
+  @DMP-2728 @DMP-4257 @regression
+  Scenario: Associated Audio files for deletion/hidden and unhidden
     When I am logged on to the admin portal as an ADMIN user
-    When I set "Case ID" to "CASE1009"
-    Then I press the "Search" button
-    Then I click on the "Audio" link
-    Then I click on "Audio ID" in the table header
-    Then I click on the "1313" link
-    Then I press the "Hide or delete" button
-    Then I select the "Other reason to hide only" radio button
-    Then I set "Enter ticket reference" to "Test"
-    Then I set "Comments" to "Test"
-    Then I press the "Hide or delete" button
+    And I set "Case ID" to "CASE1009"
+    And I press the "Search" button
+    And I click on the "Audio" link
+    And I click on "Audio ID" in the table header
+    And I click on the "1313" link
+    And I press the "Hide or delete" button
+    And I select the "Other reason to hide only" radio button
+    And I set "Enter ticket reference" to "Test"
+    And I set "Comments" to "Test"
+    And I press the "Hide or delete" button
     Then I see "There are other audio files associated with the file you are hiding and/or deleting" on the page
-    Then I press the "Continue" button
-    Then I see an error message "Choose if you want to include associated files or not"
+    And I verify the HTML table contains the following values
+      | *NO-CHECK* | Audio ID   | Courthouse | Courtroom  | Start time | End time   | Channel number | Is current? |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK*     | *NO-CHECK*  |
+
+    When checkbox with name "selectAll" is checked
+    And I select the checkbox by name "selectAll"
+    And checkbox with name "selectAll" is unchecked
+    And I press the "Continue" button
+    Then I see an error message "Select files to include"
+
+    When I select the checkbox by name "selectAll"
+    And I press the "Continue" button
+    Then I see "Files successfully hidden or marked for deletion" on the page
+    And I see "Check for associated files" on the page
+    And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+
+    #AC1 & AC3 Screen as per wireframe & channels listed
+
+    When I press the "Continue" button
+    And I press the "Unhide" button
+    Then I see "There are other audio files associated with the file you are unhiding/unmarking for deletion" on the page
+    And I see "Select any files that you want to include in this action" on the page
+    And I see "The files you are unhiding and/or unmarking for deletion" on the page
+    And I verify the HTML table contains the following values
+      | *NO-CHECK* | Audio ID   | Courthouse | Courtroom  | Start time | End time   | Channel number | Is current? |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+      | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | *NO-CHECK* | 1              | *NO-CHECK*  |
+
+    #AC5 & AC6 Test cancel link
+
+    When I click on the "Cancel" link
+    Then I see "This file is hidden in DARTS" on the page
+    And I see "Basic details" on the page
+
+    #AC2 & AC4 All rows checked by default & Continue completes action
+
+    When I press the "Unhide" button
+    And I see "There are other audio files associated with the file you are unhiding/unmarking for deletion" on the page
+    And checkbox with name "selectAll" is checked
+    And I select the checkbox by name "selectAll"
+    And checkbox with name "selectAll" is unchecked
+    And I press the "Continue" button
+    Then I see an error message "Select files to include"
+
+    When I select the checkbox by name "selectAll"
+    And I press the "Continue" button
+    Then I see "Audio file(s) unhidden / unmarked for deletion" on the page
 
     @DMP-3315
     Scenario: Hearings search results
