@@ -116,7 +116,7 @@ test {
         implementation 'org.apache.logging.log4j:log4j-core'
         testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl'
 
-        implementation 'org.seleniumhq.selenium:selenium-java:4.27.0'
+        implementation 'org.seleniumhq.selenium:selenium-java:4.28.0'
 
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
 
