@@ -1,7 +1,7 @@
 @request_transcript
 Feature: Request Transcript
 
-  @DMP-696 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-917 @DMP-925 @DMP-934 @DMP-1009 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1053 @DMP-1054 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-2123 @DMP-2124 @DMP-2740 @regression
+  @DMP-696 @DMP-862 @DMP-868 @DMP-872 @DMP-892 @DMP-917 @DMP-925 @DMP-934 @DMP-1009 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1028 @DMP-1033 @DMP-1053 @DMP-1054 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-1326 @DMP-2123 @DMP-2124 @DMP-2740 @DMP-4129 @DMP-4318 @regression
   Scenario: Request Transcription data creation
     Given I create a case
       | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors            | defenders            |
@@ -40,7 +40,7 @@ Feature: Request Transcript
       | Harrow Crown Court | {{seq}}-13 | C{{seq}}006  | {{date+0/}} | 12:30:00  | 12:31:00 | sample1.mp2 |
       | Harrow Crown Court | {{seq}}-14 | C{{seq}}007  | {{date+0/}} | 13:00:00  | 13:01:00 | sample1.mp2 |
 
-  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-2740 @regression @MissingData
+  @DMP-862 @DMP-917 @DMP-925 @DMP-934 @DMP-1011 @DMP-1012 @DMP-1025 @DMP-1033 @DMP-1138 @DMP-1198 @DMP-1203 @DMP-1234 @DMP-1243 @DMP-2740 @DMP-4318 @regression @MissingData
   @review
   Scenario: Request Transcription, Specified Times with Event Checkboxes
 
@@ -218,7 +218,7 @@ Feature: Request Transcript
     And I press the "Search" button
     And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
 # Unexpected changed behaviour - the 'All transcripts' tab is displayed (the last tab used) rather than 'hearings'
-		And I click on the "Hearings" link
+    And I click on the "Hearings" link
     And I click on the "{{displaydate}}" link
     And I click on the "Transcripts" link
     And I press the "Request a new transcript" button
@@ -243,13 +243,58 @@ Feature: Request Transcript
     And I see "C{{seq}}002" on the page
     And I see "Start time 10:30:00 - End time 10:31:00" in the same row as "Audio for transcript"
 
+    #DMP-4318 Column sorting
+
     When I click on the "Search" link
     And I set "Case ID" to "C{{seq}}002"
     And I press the "Search" button
     And I click on "C{{seq}}002" in the same row as "Harrow Crown Court"
-    And I click on the "{{displaydate}}" link
-    And I click on the "Transcripts" link
-    And I press the "Request a new transcript" button
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Judge" in the table header
+    And "Judge" has sort "ascending" icon
+    And I click on "Courtroom" in the table header
+    And "Courtroom" has sort "ascending" icon
+    And I click on "No. of transcripts" in the table header
+    Then "No. of transcripts" has sort "ascending" icon
+
+    When I click on the "Court log" link
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Time" in the table header
+    And "Time" has sort "descending" icon
+    And I click on "Event" in the table header
+    Then "Event" has sort "ascending" icon
+
+    When I click on the "All Transcripts" link
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Type" in the table header
+    And "Type" has sort "ascending" icon
+    And I click on "Requested on" in the table header
+    And "Requested on" has sort "descending" icon
+    And I click on "Requested by" in the table header
+    And "Requested by" has sort "ascending" icon
+    And I click on "Status" in the table header
+    Then "Status" has sort "ascending" icon
+
+    #Continue scenario and sorting for Hearing Details
+
+    When I click on the "{{displaydate}}" link
+    And I click on "Time" in the table header
+    Then "Time" has sort "descending" icon
+
+    When I click on the "Transcripts" link
+    And I click on "Type" in the table header
+    And "Type" has sort "ascending" icon
+    And I click on "Requested on" in the table header
+    And "Requested on" has sort "descending" icon
+    And I click on "Requested by" in the table header
+    And "Requested by" has sort "ascending" icon
+    And I click on "Status" in the table header
+    Then "Status" has sort "ascending" icon
+
+    When I press the "Request a new transcript" button
     And I select "Specified Times" from the "Request Type" dropdown
     And I select "Overnight" from the "Urgency" dropdown
     And I press the "Continue" button
@@ -429,7 +474,7 @@ Feature: Request Transcript
     Then I see "file-sample_1MB.doc" on the page
     And I see "Start time 11:00:00 - End time 11:01:00" in the same row as "Audio for transcript"
 
-  @DMP-696 @DMP-1053 @DMP-1203 @DMP-1243 @DMP-1326 @DMP-2123 @regression @fix @MissingData @review
+  @DMP-696 @DMP-1053 @DMP-1203 @DMP-1243 @DMP-1326 @DMP-2123 @DMP-4129 @regression @fix @MissingData @review
   Scenario: Request Transcription, Court Log, Assign to me and get audio, complete and single delete
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -612,6 +657,7 @@ Feature: Request Transcript
     And I press the "Remove transcript request" button
     Then I see "Are you sure you want to remove this transcript request?" on the page
     And I see "This action will remove this transcript request from your transcripts. You can still access it by searching at the hearing and case levels." on the page
+    And I see "Approved on" on the page
 
     When I click on the "Cancel" link
     And I see "Your transcripts" on the page
@@ -621,7 +667,7 @@ Feature: Request Transcript
     Then I see "Your transcripts" on the page
     And I do not see "C{{seq}}004" on the page
 
-  @DMP-1054 @DMP-1243 @DMP-2124 @regression
+  @DMP-1054 @DMP-1243 @DMP-2124 @DMP-4129 @regression
   Scenario: Request two transcriptions, assign to me and attach transcript, complete and multiple delete
     Given I am logged on to DARTS as an REQUESTER user
     And I click on the "Search" link
@@ -767,6 +813,7 @@ Feature: Request Transcript
     And I press the "Remove transcript request" button
     Then I see "Are you sure you want to remove these transcript requests?" on the page
     And I see "This action will remove these transcript requests from your transcripts. You can still access them by searching at the hearing and case levels." on the page
+    And I see "Approved on" on the page
 
     When I click on the "Cancel" link
     And I see "Your transcripts" on the page

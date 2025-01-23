@@ -21,7 +21,7 @@ Scenario: Case Search data creation
     | {{seq}}005 | 1100  |          | {{seq}}005 | Harrow Crown Court | A{{seq}}-11 | A{{seq}}004  | A{{seq}}ABC-11 | {{timestamp-10:00:00}} |                             |                     |
     | {{seq}}006 | 21200 | 11008    | {{seq}}006 | Harrow Crown Court | A{{seq}}-2  | A{{seq}}005  | A{{seq}}ABC-21 | {{timestamp-10:00:00}} |                             |                     |
 
-@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-4545 @regression @demo
+@DMP-509 @DMP-507 @DMP-508 @DMP-517 @DMP-515 @DMP-860 @DMP-702 @DMP-561 @DMP-4318 @DMP-4545 @regression @demo
 Scenario: Simple and Advanced Case Search
 
   #Simple search
@@ -31,7 +31,10 @@ Scenario: Simple and Advanced Case Search
     And I see "Also known as a case reference or court reference. There should be no spaces." on the page
     And I set "Case ID" to "A{{seq}}00"
     And I press the "Search" button
+    And I click on "Courthouse" in the table header
+    And "Courthouse" has sort "ascending" icon
     And I click on "Case ID" in the table header
+    And "Case ID" has sort "ascending" icon
     And I click on "Case ID" in the table header
     Then I verify the HTML table contains the following values
       | Case ID                                                  | Courthouse         | Courtroom   | Judge(s)         | Defendant(s)    |
@@ -550,10 +553,153 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     | {{displaydate}} | 10:00:00  | Hearing started  | A{{seq}}ABC-2 |
     
     Then I click on "Hearing date" in the table header
-    And "Hearing date" has sort "ascending" icon
+    And "Hearing date" has sort "descending" icon
 
     Then I click on "Time" in the table header
     And "Time" has sort "ascending" icon
 
     Then I click on "Event" in the table header
     And "Event" has sort "ascending" icon
+
+  @DMP-4129 @DMP-4318 @regression
+  Scenario: Column sorting for User and Admin Portal
+    Given I am logged on to DARTS as a REQUESTER user
+
+    #Your audio
+
+    And I click on the "Your audio" link
+    And I click on "Case ID" in the table header
+    And "Case ID" has sort "ascending" icon
+    And I click on "Courthouse" in the table header
+    And "Courthouse" has sort "ascending" icon
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Start time" in the table header
+    And "Start time" has sort "descending" icon
+    And I click on "End time" in the table header
+    And "End time" has sort "descending" icon
+    And I click on "Request ID" in the table header
+    And "Request ID" has sort "ascending" icon
+    And I click on "Last accessed" in the table header
+    And "Last accessed" has sort "descending" icon
+    And I click on "Status" in the table header
+    Then "Status" has sort "ascending" icon
+
+    #Same for Ready? Can click the column for Ready but can't verify sorting status
+
+    When I click on "Case ID" in the "Ready" table header
+    #And "Case ID" has sort "ascending" icon
+
+    When I click on the "Expired" link
+    And I click on "Case ID" in the table header
+    And "Case ID" has sort "ascending" icon
+    And I click on "Courthouse" in the table header
+    And "Courthouse" has sort "ascending" icon
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Start time" in the table header
+    And "Start time" has sort "descending" icon
+    And I click on "End time" in the table header
+    And "End time" has sort "descending" icon
+    And I click on "Request ID" in the table header
+    And "Request ID" has sort "ascending" icon
+    And I click on "Expiry date" in the table header
+    And "Expiry date" has sort "descending" icon
+    And I click on "Status" in the table header
+    Then "Status" has sort "ascending" icon
+
+    #Your transcripts
+
+    When I click on the "Your transcripts" link
+    And I click on "Case ID" in the table header
+    And "Case ID" has sort "ascending" icon
+    And I click on "Courthouse" in the table header
+    And "Courthouse" has sort "ascending" icon
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Type" in the table header
+    And "Type" has sort "ascending" icon
+    And I click on "Requested on" in the table header
+    And "Requested on" has sort "descending" icon
+    And I click on "Approved on" in the table header
+    #And "Approved on" has sort "descending" icon
+    And I click on "Status" in the table header
+    Then "Status" has sort "ascending" icon
+    And I click on "Urgency" in the table header
+    Then "Urgency" has sort "ascending" icon
+
+    #Same for Ready? Can click the column for Ready but can't verify sorting status
+
+    When I click on "Case ID" in the "Ready" table header
+    #And "Case ID" has sort "ascending" icon
+
+    #Retention
+
+    When I click on the "Search" link
+    And I set "Case ID" to "retention"
+    And I press the "Search" button
+    And I click on "T20240001_retention1" in the same row as "Harrow Crown Court"
+    And I click on the "View or change" link
+    And I click on "Date retention changed" in the table header
+    Then "Date retention changed" has sort "descending" icon
+
+    #Approver transcript requests
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an APPROVER user
+    And I click on the "Your transcripts" link
+    And I click on "Case ID" in the table header
+    And "Case ID" has sort "ascending" icon
+    And I click on "Courthouse" in the table header
+    And "Courthouse" has sort "ascending" icon
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "Type" in the table header
+    And "Type" has sort "ascending" icon
+    And I click on "Requested on" in the table header
+    And "Requested on" has sort "descending" icon
+    And I click on "Request ID" in the table header
+    And "Request ID" has sort "ascending" icon
+    And I click on "Urgency" in the table header
+    Then "Urgency" has sort "ascending" icon
+
+    #Judge annotations
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to DARTS as an JUDGE user
+    And I set "Case ID" to "K61076002"
+    And I press the "Search" button
+    And I click on the "K61076002" link
+    And I click on the "All annotations" link
+    And I click on "Hearing date" in the table header
+    And "Hearing date" has sort "descending" icon
+    And I click on "File name" in the table header
+    And "File name" has sort "ascending" icon
+    And I click on "Format" in the table header
+    And "Format" has sort "ascending" icon
+    And I click on "Date created" in the table header
+    Then "Date created" has sort "descending" icon
+
+    When I click on the "Hearings" link
+    And I click on the "14 Jan 2025" link
+    And I click on the "Annotations" link
+    And I click on "File name" in the table header
+    And "File name" has sort "ascending" icon
+    And I click on "Format" in the table header
+    And "Format" has sort "ascending" icon
+    And I click on "Date created" in the table header
+    Then "Date created" has sort "descending" icon
+
+    #Admin - user profile
+
+    When I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
+    And I am logged on to the admin portal as an ADMIN user
+    And I click on the "Users" link
+    And I set "Email" to "darts.requester@hmcts.net"
+    And I press the "Search" button
+    And I click on "View" in the same row as "Requestor"
+    And I click on the "Transcript requests" link
+    And I see "Approved on" on the page
