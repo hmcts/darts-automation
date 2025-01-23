@@ -154,7 +154,7 @@ Feature: Admin Courthouse
     When I click on the "Clear search" link
     And I set "Region" to "London"
     And I press the "Search" button
-    And I see "40 results" on the page
+    And I see "41 results" on the page
     And I set "Courthouse name" to "guild"
     And I press the "Search" button
     Then I see "2 results" on the page

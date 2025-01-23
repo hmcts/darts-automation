@@ -16,6 +16,7 @@ Feature: Admin-Transformed Media
     And I set "Courthouse" to "Harrow Crown Court"
     And I set "Hearing date" to "15/02/2024"
     And I press the "Search" button
+    And I click on "Media ID" in the table header
     Then I verify the HTML table contains the following values
       | Media ID | Case ID  | Courthouse         | Hearing date | Owner       | Requested by | Date requested | Last accessed | File type | Size  | Filename                   |
       | 518      | B9160006 | Harrow Crown Court | 15 Feb 2024  | Transcriber | Transcriber  | 15 Feb 2024    |               | MP3       | 0.2MB | B9160006_15_Feb_2024_1.mp3 |
