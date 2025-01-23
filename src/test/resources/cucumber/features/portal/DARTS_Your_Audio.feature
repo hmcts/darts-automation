@@ -174,14 +174,6 @@ Feature: Your Audio Screen
     And I click on the "Cancel" link
     And I see "Your Audio" on the page
 
-  @DMP-837
-  Scenario: Verify Your Audio Screen - Expired Tab Delete Confirm
-    When I click on the "Your Audio" link
-    And I click on the "Expired" link
-    When I check the checkbox in the same row as "Swansea" "2601"
-#    And I press the "Delete" button
-#    And I see "Are you sure you want to delete this item?" on the page
-
   @DMP-840
   Scenario Outline: Verify download playback file
     When I click on the "Your audio" link
