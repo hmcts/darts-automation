@@ -1,5 +1,21 @@
 Feature: Admin portal
 
+  @DMP-4442
+  Scenario: Data creation for Audio file deletion
+    Given I create a case
+      | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors               | defenders               |
+      | Harrow Crown Court | {{seq}}-47 | I{{seq}}001 | DefI {{seq}}-47 | JudgeI {{seq}}-47 | testprosecutorfourtyseven | testdefenderfourtyseven |
+
+    Given I authenticate from the CPP source system
+    Given I create an event
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}075 | Harrow Crown Court | {{seq}}-47 | I{{seq}}001  | {{seq}}ABC-47 | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}076 | Harrow Crown Court | {{seq}}-47 | I{{seq}}001  | {{seq}}GHI-47 | {{timestamp-10:31:00}} |                             |                     |
+
+    When I load an audio file
+      | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
+      | Harrow Crown Court | {{seq}}-47 | I{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
+
   @DMP-2959 @review
   Scenario: Add error messaging to Search Transcripts screen
     Given I am logged on to the admin portal as an ADMIN user
@@ -480,3 +496,210 @@ Feature: Admin portal
     Then I click on the "Your transcripts" link
     Then I click on the "Admin portal" link
 
+  @DMP-4442
+  Scenario: Data creation for Audio file deletion
+    Given I create a case
+      | courthouse         | courtroom  | case_number | defendants      | judges            | prosecutors               | defenders               |
+      | Harrow Crown Court | {{seq}}-47 | I{{seq}}001 | DefI {{seq}}-47 | JudgeI {{seq}}-47 | testprosecutorfourtyseven | testdefenderfourtyseven |
+
+    Given I authenticate from the CPP source system
+    Given I create an event
+      | message_id | type | sub_type | event_id   | courthouse         | courtroom  | case_numbers | event_text    | date_time              | case_retention_fixed_policy | case_total_sentence |
+      | {{seq}}001 | 1100 |          | {{seq}}075 | Harrow Crown Court | {{seq}}-47 | I{{seq}}001  | {{seq}}ABC-47 | {{timestamp-10:30:00}} |                             |                     |
+      | {{seq}}001 | 1200 |          | {{seq}}076 | Harrow Crown Court | {{seq}}-47 | I{{seq}}001  | {{seq}}GHI-47 | {{timestamp-10:31:00}} |                             |                     |
+
+    When I load an audio file
+      | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
+      | Harrow Crown Court | {{seq}}-47 | I{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
+
+  @DMP-4442
+  Scenario: Admin user can delete audio
+    Given I am logged on to the admin portal as an ADMIN user
+    And I set "Case ID" to "I{{seq}}001"
+    And I select the "Audio" radio button
+    And I press the "Search" button
+    And I click on "1" in the same row as "Harrow Crown Court"
+    And I press the "Hide or delete" button
+    And I select the "Public interest immunity" radio button
+    And I set "Enter ticket reference" to "A{{seq}}"
+    And I set "Comments" to "Rejecting audio deletion request" and click away
+    And I press the "Hide or delete" button
+    Then I see "Files successfully hidden or marked for deletion" on the page
+    And I see "Check for associated files" on the page
+    And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+
+    And I press the "Continue" button
+    Then I see "This file is hidden in DARTS and is marked for manual deletion" on the page
+    And I see "Marked for manual deletion by - Darts Admin" on the page
+    And I see "Reason - Public interest immunity" on the page
+    And I see "A{{seq}} - Rejecting audio deletion request" on the page
+    And I Sign out
+
+    #Sign in as as Admin 2 to reject audio deletion request
+    And I am logged on to the admin portal as an ADMIN2 user
+    And I click on the "File deletion" link
+    And I press the "Delete" button in the same row as "Harrow Crown Court" "{{seq}}-47"
+    And I see "Delete audio file" on the page
+    And I see "Audio file deletion details" on the page
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "{{seq}}-47" in the same row as "Courtroom"
+    And I see "{{displaydate}} 10:30:00" in the same row as "Start time"
+    And I see "{{displaydate}} 10:31:00" in the same row as "End time"
+    And I see "Darts Admin" in the same row as "Marked by"
+    And I see "Public interest immunity" in the same row as "Deletion reason"
+    And I see "A{{seq}}" in the same row as "Ticket reference"
+    And I see "Rejecting audio deletion request" in the same row as "Comments"
+
+    Then I verify the HTML table contains the following values
+    | Audio ID   | Channel| Max channel| Is current?| No. of versions|
+    | *NO-CHECK* | 1      | 1          | Yes        | 1              |
+
+    And I see "By checking this box, you are confirming that you have reviewed all versions of the above audio" on the page
+    And I see "file(s) marked to be deleted and understand that by deleting the audio file(s), all versions of the" on the page
+    And I see "the file(s) will be deleted." on the page
+
+    And I see "Approve or reject file deletion?" on the page
+    And I see "Approve" on the page
+    And I see "Reject and unhide" on the page
+    And I press the "Confirm" button
+
+    Then I see "You must confirm that you have reviewed all versions and understand that all versions of the listed audio file(s) will be deleted" on the page
+    And I see "Select your decision" on the page
+
+    Then I check the "By checking this box, you are confirming that you have reviewed all versions of the above audio" checkbox
+    And I select the "Reject and unhide" radio button
+    And I press the "Confirm" button
+
+    Then I see "There are other audio files associated with the file" on the page
+    And I see "you are unhiding/unmarking for deletion" on the page
+    And I see "The files you are unhiding and/or unmarking for deletion" on the page
+    Then I verify the HTML table contains the following values
+    | *NO-CHECK* | Audio ID   | Courthouse          | Courtroom  | Start time           | End time             | Channel number  | Is current?|
+    | *NO-CHECK* | *NO-CHECK* | Harrow Crown Court  | {{seq}}-47 | {{displaydate}} 10:30:00 | {{displaydate}} 10:31:00 | 1               | Yes        |
+
+    And I press the "Continue" button
+    Then I see "Audio file(s) unhidden / unmarked for deletion" on the page
+
+    #Request deletion
+    And I press the "Hide or delete" button
+    And I select the "Public interest immunity" radio button
+    And I set "Enter ticket reference" to "A{{seq}}"
+    And I set "Comments" to "Approving audio deletion request" and click away
+    And I press the "Hide or delete" button
+    Then I see "Files successfully hidden or marked for deletion" on the page
+    And I see "Check for associated files" on the page
+    And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+
+    And I press the "Continue" button
+    Then I see "This file is hidden in DARTS and is marked for manual deletion" on the page
+    And I see "Marked for manual deletion by - Darts Admin2" on the page
+    And I see "Reason - Public interest immunity" on the page
+    And I see "A{{seq}} - Approving audio deletion request" on the page
+    And I Sign out
+
+    #Sign in as an Admin to approve audio deletion request
+    And I am logged on to the admin portal as an ADMIN user
+    And I click on the "File deletion" link
+    And I press the "Delete" button in the same row as "Harrow Crown Court" "{{seq}}-47"
+    And I check the "By checking this box, you are confirming that you have reviewed all versions of the above audio" checkbox
+    And I select the "Approve" radio button
+    And I press the "Confirm" button
+
+    Then I see "Audio file deleted" on the page
+    And I do not see "{{seq}}-47" on the page
+
+  @DMP-4442
+  Scenario: Admin user can delete audio
+    Given I am logged on to the admin portal as an ADMIN user
+    And I set "Case ID" to "I{{seq}}001"
+    And I select the "Audio" radio button
+    And I press the "Search" button
+    And I click on "1" in the same row as "Harrow Crown Court"
+    And I press the "Hide or delete" button
+    And I select the "Public interest immunity" radio button
+    And I set "Enter ticket reference" to "A{{seq}}"
+    And I set "Comments" to "Rejecting audio deletion request" and click away
+    And I press the "Hide or delete" button
+    Then I see "Files successfully hidden or marked for deletion" on the page
+    And I see "Check for associated files" on the page
+    And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+
+    And I press the "Continue" button
+    Then I see "This file is hidden in DARTS and is marked for manual deletion" on the page
+    And I see "Marked for manual deletion by - Darts Admin" on the page
+    And I see "Reason - Public interest immunity" on the page
+    And I see "A{{seq}} - Rejecting audio deletion request" on the page
+    And I Sign out
+
+  #Sign in as as Admin 2 to reject audio deletion request
+    And I am logged on to the admin portal as an ADMIN2 user
+    And I click on the "File deletion" link
+    And I press the "Delete" button in the same row as "Harrow Crown Court" "{{seq}}-47"
+    And I see "Delete audio file" on the page
+    And I see "Audio file deletion details" on the page
+    And I see "Harrow Crown Court" in the same row as "Courthouse"
+    And I see "{{seq}}-47" in the same row as "Courtroom"
+    And I see "{{displaydate}} 10:30:00" in the same row as "Start time"
+    And I see "{{displaydate}} 10:31:00" in the same row as "End time"
+    And I see "Darts Admin" in the same row as "Marked by"
+    And I see "Public interest immunity" in the same row as "Deletion reason"
+    And I see "A{{seq}}" in the same row as "Ticket reference"
+    And I see "Rejecting audio deletion request" in the same row as "Comments"
+
+    Then I verify the HTML table contains the following values
+      | Audio ID   | Channel| Max channel| Is current?| No. of versions|
+      | *NO-CHECK* | 1      | 1          | Yes        | 1              |
+
+    And I see "By checking this box, you are confirming that you have reviewed all versions of the above audio" on the page
+    And I see "file(s) marked to be deleted and understand that by deleting the audio file(s), all versions of the" on the page
+    And I see "the file(s) will be deleted." on the page
+
+    And I see "Approve or reject file deletion?" on the page
+    And I see "Approve" on the page
+    And I see "Reject and unhide" on the page
+    And I press the "Confirm" button
+
+    Then I see "You must confirm that you have reviewed all versions and understand that all versions of the listed audio file(s) will be deleted" on the page
+    And I see "Select your decision" on the page
+
+    Then I check the "By checking this box, you are confirming that you have reviewed all versions of the above audio" checkbox
+    And I select the "Reject and unhide" radio button
+    And I press the "Confirm" button
+
+    Then I see "There are other audio files associated with the file" on the page
+    And I see "you are unhiding/unmarking for deletion" on the page
+    And I see "The files you are unhiding and/or unmarking for deletion" on the page
+    Then I verify the HTML table contains the following values
+      | *NO-CHECK* | Audio ID   | Courthouse          | Courtroom  | Start time           | End time             | Channel number  | Is current?|
+      | *NO-CHECK* | *NO-CHECK* | Harrow Crown Court  | {{seq}}-47 | {{displaydate}} 10:30:00 | {{displaydate}} 10:31:00 | 1               | Yes        |
+
+    And I press the "Continue" button
+    Then I see "Audio file(s) unhidden / unmarked for deletion" on the page
+
+  #Request deletion
+    And I press the "Hide or delete" button
+    And I select the "Public interest immunity" radio button
+    And I set "Enter ticket reference" to "A{{seq}}"
+    And I set "Comments" to "Approving audio deletion request" and click away
+    And I press the "Hide or delete" button
+    Then I see "Files successfully hidden or marked for deletion" on the page
+    And I see "Check for associated files" on the page
+    And I see "There may be other associated audio or transcript files that also need hiding or deleting." on the page
+
+    And I press the "Continue" button
+    Then I see "This file is hidden in DARTS and is marked for manual deletion" on the page
+    And I see "Marked for manual deletion by - Darts Admin2" on the page
+    And I see "Reason - Public interest immunity" on the page
+    And I see "A{{seq}} - Approving audio deletion request" on the page
+    And I Sign out
+
+  #Sign in as an Admin to approve audio deletion request
+    And I am logged on to the admin portal as an ADMIN user
+    And I click on the "File deletion" link
+    And I press the "Delete" button in the same row as "Harrow Crown Court" "{{seq}}-47"
+    And I check the "By checking this box, you are confirming that you have reviewed all versions of the above audio" checkbox
+    And I select the "Approve" radio button
+    And I press the "Confirm" button
+
+    Then I see "Audio file deleted" on the page
+    And I do not see "{{seq}}-47" on the page
