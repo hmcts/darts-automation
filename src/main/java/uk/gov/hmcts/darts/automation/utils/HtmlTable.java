@@ -112,61 +112,61 @@ public class HtmlTable {
 
     public void verifyHtmlTableIncludesRows(DataTable dataTable, boolean isFirstRowHeader, WebElement htmlTableElement) {
         List<WebElement> rowElements = htmlTableElement.findElements(By.tagName("tr"));
-        List<List<String>> dataTableRows = dataTable.asLists(); //outer List<> is rows, inner List<> is cells
+        List<List<String>> expectedRowsList = dataTable.asLists(); //outer List<> is rows, inner List<> is cells
 
         errorCount = 0;
         errorText = "";
         int startIndex = 0;
-        int htmlPage = 1;
 
         //Verify table header
         if (isFirstRowHeader) {
             List<WebElement> headerElements = rowElements.get(0).findElements(By.xpath(".//th | .//td"));
-            compareTableRowData(headerElements, dataTableRows.get(0), 0);
+            compareTableRowData(headerElements, expectedRowsList.get(0), 0);
             startIndex = 1;
         }
         
-        int htmlIndex = startIndex;
-        int dataIndex = startIndex;
+        int htmlRableIndex = startIndex;
+        int expectedDataTableIndex = startIndex;
 //        for (int dataIndex = startIndex; dataIndex <= dataTableRows.size(); dataIndex++) {
-        while (dataIndex < dataTableRows.size() 
-        		&& htmlIndex < rowElements.size()) {
-        	log.info("Data table row {}", dataIndex);
-            List<String> dataTableColumns = dataTableRows.get(dataIndex);
+        while (expectedDataTableIndex < expectedRowsList.size()
+        		&& htmlRableIndex < rowElements.size()) {
+        	log.info("Data table row {}", expectedDataTableIndex);
+            List<String> dataTableColumns = expectedRowsList.get(expectedDataTableIndex);
             boolean rowsMatch = false;
             while (!rowsMatch
-            		&& htmlIndex <= rowElements.size()) {
-            	log.info("HTML table row {}", htmlIndex);
-	            WebElement rowElem = rowElements.get(htmlIndex);
+            		&& htmlRableIndex <= rowElements.size()) {
+            	log.info("HTML table row {}", htmlRableIndex);
+	            WebElement rowElem = rowElements.get(htmlRableIndex);
 	            List<WebElement> cellElements = rowElem.findElements(By.xpath(".//td"));
 	            if (TableDataRowsMatch(cellElements, dataTableColumns)) {
 	            	rowsMatch = true;
-	            	log.info("Data table row {} matches html row {}", dataIndex, htmlIndex);
+                    htmlRableIndex = startIndex;//restart searching from top of html table
+	            	log.info("Data table row {} matches html row {}", expectedDataTableIndex, htmlRableIndex);
 	            }
 	            
-	            htmlIndex++;
+	            htmlRableIndex++;
 	            	
             } ;
             
-            dataIndex++;
+            expectedDataTableIndex++;
             
         } 
-        if (dataTableRows.size() == dataIndex && errorCount == 0) {
-        	log.info("All data table rows found in HTML table - {} rows", dataTableRows.size());
+        if (expectedRowsList.size() == expectedDataTableIndex && errorCount == 0) {
+        	log.info("All data table rows found in HTML table - {} rows", expectedRowsList.size());
         } else {
-            if (dataTableRows.size() != dataIndex) {
-            	log.error("Table error: only {} rows found from {}", dataTableRows.size(), dataIndex);
+            if (expectedRowsList.size() != expectedDataTableIndex) {
+            	log.error("Table error: only {} rows found from {}", expectedRowsList.size(), expectedDataTableIndex);
                 if (errorCount == 0) {
-        	        Assert.assertEquals("Table error: only " + dataIndex + " rows found from " + dataTableRows.size(), 
-        	        		dataTableRows.size(), dataIndex);
+        	        Assert.assertEquals("Table error: only " + expectedDataTableIndex + " rows found from " + expectedRowsList.size(),
+        	        		expectedRowsList.size(), expectedDataTableIndex);
                 } else {
                 	log.error("Table header error {} cols", errorCount);
                 	log.error("Table header error: {}", errorText);
-        	        Assert.assertEquals("Header error: " + errorText + " & Table error: only " + dataIndex + " rows found from " + dataTableRows.size(), 
-        	        		dataTableRows.size(), dataIndex);
+        	        Assert.assertEquals("Header error: " + errorText + " & Table error: only " + expectedDataTableIndex + " rows found from " + expectedRowsList.size(),
+        	        		expectedRowsList.size(), expectedDataTableIndex);
                 }
             } else {
-            	log.info("All data table rows found in HTML table - {} rows", dataTableRows.size());
+            	log.info("All data table rows found in HTML table - {} rows", expectedRowsList.size());
             	log.error("Table header error {} cols", errorCount);
             	log.error("Table header error: {}", errorText);
     	        Assert.fail("Header error: " + errorText);
@@ -174,7 +174,7 @@ public class HtmlTable {
         }
     }
 
-    private boolean TableDataRowsMatch(List<WebElement> cellElements, List<String> dataTableColumns) {
+    public boolean TableDataRowsMatch(List<WebElement> cellElements, List<String> dataTableColumns) {
         int htmlIndex = 0;
 
         for (int dataTableIndex = 0; dataTableIndex < dataTableColumns.size(); dataTableIndex++) {
@@ -242,4 +242,89 @@ public class HtmlTable {
             log.error("Table header element with text '" + tableheaderText + "' does not have " + sortOrder_attribute);
         }
     }
+
+    /// Requires all headers, without skip, no-check or ignore. Applies only to headers
+    /// If expected row is not found, this step goes through all pages and starts from page 1 after finding a row
+    public void verifyHtmlTableIncludesRowsOnAnyPage(DataTable expectedDataTable) {
+
+        List<List<String>> expectedListOfRows = expectedDataTable.asLists();
+
+        verifyTableHeader(expectedListOfRows);
+
+        for (int i = 1; i < expectedListOfRows.size(); i++) {
+            goToFirstPage();
+            boolean pageContains = false;
+            do {
+                NAV.waitForPageLoad();
+                WebElement htmlTableElement = webDriver.findElement(By.cssSelector(".govuk-table"));
+
+                pageContains = htmlTablePageContainsRow(expectedListOfRows.get(i), htmlTableElement);
+
+            }
+            while (!pageContains && canGoToNextPage());
+
+            if(!pageContains) {
+                log.error("Expected row not found in any page");
+                Assert.fail("Expected row not found in any page");
+            }
+
+        }
+    }
+
+    private boolean htmlTablePageContainsRow(List<String> expectedRow, WebElement htmlTableElement) {
+        List<WebElement> rowElements = htmlTableElement.findElements(By.tagName("tr"));
+
+        for (int i = 1; i < rowElements.size(); i++) {
+            WebElement rowElem = rowElements.get(i);
+            List<WebElement> cellElements = rowElem.findElements(By.xpath(".//td"));
+
+            if (TableDataRowsMatch(cellElements, expectedRow)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    private void verifyTableHeader(List<List<String>> expectedListOfRows) {
+        WebElement page1HtmlTableElement = webDriver.findElement(By.cssSelector(".govuk-table"));
+        List<WebElement> rowElements = page1HtmlTableElement.findElements(By.tagName("tr"));
+        var headerRow = rowElements.get(0);
+        List<WebElement> headerCells = headerRow.findElements(By.xpath(".//th | .//td"));
+        var expectedHeaderRow = expectedListOfRows.get(0);
+
+        for (int i = 0; i < headerCells.size(); i++) {
+            String actualCell = headerCells.get(i).getText().trim();
+            actualCell = (actualCell != null) ? actualCell : "";
+            String expected = expectedHeaderRow.get(i);
+            Assert.assertEquals("Header row is not what's expected",actualCell, expected);
+        }
+
+    }
+
+    private void goToFirstPage() {
+        try {
+            WebElement link = webDriver.findElement(By.linkText("1"));
+            link.click();
+        } catch (Exception e) {
+            log.error("Error clicking on first page link");
+        }
+    }
+
+    private boolean canGoToNextPage() {
+        try {
+            NAV.click_link_by_text("Next");
+        } catch (Exception e) {
+            NAV.waitForPageLoad();
+            try {
+                NAV.click_link_by_text("Next");
+            } catch (Exception ex) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }

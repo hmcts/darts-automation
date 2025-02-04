@@ -439,15 +439,15 @@ Feature: Admin-Users
       Then I set "Full name" to "judge"
       And I select the "All" radio button
       And I press the "Search" button
+      And I click on "Full name" in the table header
       Then I verify the HTML table contains the following values
       | Full name    | Email                  | Status | View |
-      | Local Judge  | darts.judge1@hmcts.net | Active | View |
       | global_judge | darts.judge@hmcts.net  | Active | View |
+      | Local Judge  | darts.judge1@hmcts.net | Active | View |
 
       And I click on "View" in the same row as "Local Judge"
-      And I see link with text "Back"
       Then I click on the "Back" link
       And I verify the HTML table contains the following values
       | Full name    | Email                  | Status | View |
-      | Local Judge  | darts.judge1@hmcts.net | Active | View |
       | global_judge | darts.judge@hmcts.net  | Active | View |
+      | Local Judge  | darts.judge1@hmcts.net | Active | View |

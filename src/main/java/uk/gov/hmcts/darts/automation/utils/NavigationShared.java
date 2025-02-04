@@ -2065,4 +2065,10 @@ public class NavigationShared {
 			log.info("Checkbox with name =>" + checkboxName + "<= is not checked");
 		}
 	}
+
+	private boolean htmlTablePageContainsRow(List<String> strings, WebElement htmlTableElement) {
+		return false;
+		//TableDataRowsMatch
+	}
+
 }

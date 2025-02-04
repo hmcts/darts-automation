@@ -35,7 +35,7 @@ public class StepDef_htmlTable extends StepDef_base {
  */
     @Then("I verify the HTML table includes the following values")
     public void verify_html_table_includes_the_following_values(DataTable dataTable) {
-        htmlTable.verifyHtmlTableIncludesRows(dataTable, true);
+       htmlTable.verifyHtmlTableIncludesRowsOnAnyPage(dataTable);
     }
 
     @Then("I verify the HTML table \"([^\"]*)\" includes the following values$")
