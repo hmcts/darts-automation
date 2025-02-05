@@ -8,16 +8,19 @@ Feature: Admin Retention Policies
     And I click on the "System configuration" navigation link
     And I click on the "Retention policies" link
     And I see "Retention policies" on the page
-    Then I verify the HTML table includes the following values
-      | Display name  | Name                       | Description | Fixed policy key | Duration  | Policy start | Policy end | *SKIP* |
-      | Not Guilty    | DARTS Not Guilty Policy    | *NO-CHECK*  | 1                | 1y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
-      | Non Custodial | DARTS Non Custodial Policy | *NO-CHECK*  | 2                | 7y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
-      | Custodial     | DARTS Custodial Policy     | *NO-CHECK*  | 3                | 7y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
-      | Default       | DARTS Default Policy       | *NO-CHECK*  | 0                | 7y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
-      | Permanent     | DARTS Permanent Policy     | *NO-CHECK*  | PERM             | 99y 0m 0d | *NO-CHECK*   | -          | *SKIP* |
+
+    When I verify the HTML table includes the following values
+      | Display name  | Name                       | Description | Fixed policy key | Duration  | Policy start | Policy end | Action |
       | Manual        | DARTS Manual Policy        | *NO-CHECK*  | MANUAL           | 0y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
+      | Permanent     | DARTS Permanent Policy     | *NO-CHECK*  | PERM             | 99y 0m 0d | *NO-CHECK*   | -          | *SKIP* |
+      | Custodial     | DARTS Custodial Policy     | *NO-CHECK*  | 3                | 7y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
+      | Non Custodial | DARTS Non Custodial Policy | *NO-CHECK*  | 2                | 7y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
+      | Not Guilty    | DARTS Not Guilty Policy    | *NO-CHECK*  | 1                | 1y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
+      | Default       | DARTS Default Policy       | *NO-CHECK*  | 0                | 7y 0m 0d  | *NO-CHECK*   | -          | *SKIP* |
       | Life          | DARTS Life Policy          | *NO-CHECK*  | 4                | 99y 0m 0d | *NO-CHECK*   | -          | *SKIP* |
 
       #AC 2 - View inactive polices
     And I click on the "Inactive" link
-    Then I do not see "No data to display." on the page
+    Then I verify the HTML table includes the following values
+      | Display name    | Name                        | Description | Fixed policy key | Duration | Policy start | Policy end |
+      | Legacy Standard | DARTS Standard Retention v3 | *NO-CHECK*  | -2               | 7y 0m 0d | *NO-CHECK*   | *NO-CHECK* |

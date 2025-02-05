@@ -348,8 +348,8 @@ Feature: Admin portal
     Then I see "Events and audio recordings" on the page
     Then I verify the HTML table contains the following values
       | *NO-CHECK* | Time                    | Event           | Text          |
-      | *NO-CHECK* | 10:00:00                | Hearing started | B{{seq}}ABC-6 |
       | *NO-CHECK* | <startTime> - <endTime> | *NO-CHECK*      | *NO-CHECK*    |
+      | *NO-CHECK* | 10:00:00                | Hearing started | B{{seq}}ABC-6 |
 
     Examples:
       | courthouse         | courtroom  | caseId      | startTime | endTime  |
@@ -512,7 +512,7 @@ Feature: Admin portal
       | courthouse         | courtroom  | case_numbers | date        | startTime | endTime  | audioFile   |
       | Harrow Crown Court | {{seq}}-47 | I{{seq}}001  | {{date+0/}} | 10:30:00  | 10:31:00 | sample1.mp2 |
 
-  @DMP-4442
+  @DMP-4442 @DMP-4573
   Scenario: Admin user can delete audio
     Given I am logged on to the admin portal as an ADMIN user
     And I set "Case ID" to "I{{seq}}001"
@@ -534,10 +534,16 @@ Feature: Admin portal
     And I see "Reason - Public interest immunity" on the page
     And I see "A{{seq}} - Rejecting audio deletion request" on the page
     And I Sign out
+    And I see "Sign in to the DARTS Portal" on the page
 
-    #Sign in as as Admin 2 to reject audio deletion request
-    And I am logged on to the admin portal as an ADMIN2 user
+    #Sign in as as Admin 2 to reject audio deletion request and DMP-4573 Cancel link
+    When I am logged on to the admin portal as an ADMIN2 user
     And I click on the "File deletion" link
+    And I press the "Delete" button in the same row as "Harrow Crown Court" "{{seq}}-47"
+    And I see "Delete audio file" on the page
+    And I see "Audio file deletion details" on the page
+    And I click on the "Cancel" link
+    And I see "Files marked for deletion" on the page
     And I press the "Delete" button in the same row as "Harrow Crown Court" "{{seq}}-47"
     And I see "Delete audio file" on the page
     And I see "Audio file deletion details" on the page

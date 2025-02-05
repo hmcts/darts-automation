@@ -2,7 +2,7 @@
 Feature: Admin System configuration
 
 
-  @DMP-2669 @DMP2668
+  @DMP-2669 @DMP-2668
   Scenario: Automated tasks- primary & details page
       #DMP-2668-AC1-AC2
     When I am logged on to the admin portal as an ADMIN user
@@ -165,37 +165,37 @@ Feature: Admin System configuration
     And I see "Active and inactive" on the page
     And I see "With restrictions" on the page
     And I see "Without restrictions" on the page
-     And I verify the HTML table contains the following values
+    And I click on "Type" in the table header
+    And I verify the HTML table contains the following values
       | Type                   | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
-      | 3000                   |          | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | DMP-3913               | ttt      | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | 30300                  |          | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
       | 1000                   | 999      | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 3000                   |          | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | 30300                  |          | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
       | DMP-2764-Accessibility | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | DMP-3913               | ttt      | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
     When  I select the "Active and inactive" radio button
     And I click on the "With restrictions" link
+    And I click on "Type" in the table header
     Then I verify the HTML table contains the following values
       | Type                   | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
-      | DMP-3913               | ttt      | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
       | 3000                   | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
-      | DMP-3913               | ttt      | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
       | 30300                  | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
       | DMP-2764-Accessibility | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | DMP-3913               | ttt      | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | DMP-3913               | ttt      | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
     When I click on the "With restrictions" link
     And I click on the "Without restrictions" link
     Then I verify the HTML table contains the following values
-      | Type | Subtype  | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
-      | 1000 | *IGNORE* | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
+      | Type | Subtype | Event name | Event handler | Restrictions | Date created | Status   | *SKIP* |
+      | 1000 | 999     | *IGNORE*   | *IGNORE*      | *IGNORE*     | *IGNORE*     | *IGNORE* | *SKIP* |
 
     When I select "All" from the "Filter by event handler" dropdown
     And I click on the "Without restrictions" link
-    And I see "Next" on the page
     And I click on the pagination link "Next"
     And I click on the pagination link "3"
     And I see "Next" on the page
-    And I see "Previous" on the page
     And I click on the pagination link "Previous"
     And I click on the pagination link "1"
     And I set "Filter by type, subtype, or name" to "DMP-2746-Automation-Type2"

@@ -545,8 +545,8 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
       | Case ID     | Courthouse         | Courtroom    | Judge(s)         | Defendant(s)       |
       | A{{seq}}002 | Harrow Crown Court | A{{seq}}-11  |JUDGE {{seq}}-11  | Def A{{seq}}-11    |
     And I click on "A{{seq}}002" in the same row as "Harrow Crown Court"
-    Then I see " Court log " on the page
-    And I click on the " Court log " link
+    Then I see "Court log" on the page
+    And I click on the "Court log" link
     Then I see "Court log for this case" on the page
     And I verify the HTML table contains the following values
     | Hearing date    | Time      | Event            | Text          |
@@ -556,7 +556,7 @@ Scenario: Restrictions banner on hearing details screen - No restrictions
     And "Hearing date" has sort "descending" icon
 
     Then I click on "Time" in the table header
-    And "Time" has sort "ascending" icon
+    And "Time" has sort "descending" icon
 
     Then I click on "Event" in the table header
     And "Event" has sort "ascending" icon
