@@ -120,7 +120,7 @@ test {
 
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
 
-        implementation(platform("io.cucumber:cucumber-bom:7.21.0"))
+        implementation(platform("io.cucumber:cucumber-bom:7.21.1"))
         implementation 'io.cucumber:cucumber-picocontainer'
         implementation 'io.cucumber:cucumber-java'
         implementation 'io.cucumber:cucumber-junit'
