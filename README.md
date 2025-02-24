@@ -1,6 +1,9 @@
 # darts-automation
 Automated test framework for DARTS
 
+Framework retired as of 21/02/2025 and will no longer be maintained.
+New Playwright framework is available at: https://github.com/hmcts/darts-automation-playwright
+
 Environment variables required from ide / jenkins:
 
 	FUNC_TEST_ROPC_USERNAME
